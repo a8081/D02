@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!-- 
+ * tiles.xml
+ *
+ * Copyright (C) 2019 Universidad de Sevilla
+ * 
+ * The use of this project is hereby constrained to the conditions of the 
+ * TDG Licence, a copy of which you may download from 
+ * http://www.tdg-seville.info/License.html
+ -->
+
+<!DOCTYPE tiles-definitions PUBLIC
+       "-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN"
+       "http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
+       
+<tiles-definitions>
+
+	<definition name="administrator/display" extends="master.page">	
+		<put-attribute name="title" value="Administrator: Dispaly" />
+		<put-attribute name="body" value="/views/administrator/display.jsp" />
+	</definition>
+	
+	<definition name="administrator/edit" extends="master.page">	
+		<put-attribute name="title" value="Administrator: Manage Administrator" />
+		<put-attribute name="body" value="/views/administrator/edit.jsp" />
+	</definition>
+	
+	<definition name="administrator/error" extends="master.page">
+        <put-attribute name="title" value="Ups... han error has ocurred"/>
+        <put-attribute name="body" value="/views/administrator/error.jsp"/>
+    </definition>
+    
+    <definition name="administrator/congratulation" extends="master.page">	
+		<put-attribute name="title" value="Congratulation! You have sent your broadcast" />
+		<put-attribute name="body" value="/views/administrator/congratulation.jsp" />
+	</definition>
+	
+	<definition name="administrator/congratulationMove" extends="master.page">	
+		<put-attribute name="title" value="You have moved your message" />
+		<put-attribute name="body" value="/views/administrator/congratulationMove.jsp" />
+	</definition>
+	
+	<definition name="administrator/congratulationCopy" extends="master.page">	
+		<put-attribute name="title" value="You have copied your message" />
+		<put-attribute name="body" value="/views/administrator/congratulationCopy.jsp" />
+	</definition>
+	
+</tiles-definitions>
