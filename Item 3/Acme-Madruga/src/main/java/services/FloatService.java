@@ -14,7 +14,7 @@ import security.Authority;
 import domain.Actor;
 import domain.Brotherhood;
 import domain.Float;
-import domain.Procession;
+import domain.Parade;
 
 @Service
 @Transactional
@@ -24,7 +24,7 @@ public class FloatService {
 	private FloatRepository					floatRepository;
 
 	@Autowired
-	private ProcessionService				processionService;
+	private ParadeService					paradeService;
 
 	@Autowired
 	private ConfigurationParametersService	configuracionParametersService;
@@ -39,13 +39,13 @@ public class FloatService {
 	//Métodos CRUD
 
 	public Float create() {
-		final Float fProcession = new Float();
+		final Float fParade = new Float();
 		final Collection<String> pictures = new ArrayList<>();
 		final Brotherhood bhood = this.brotherhoodService.findByPrincipal();
-		fProcession.setBrotherhood(bhood);
-		fProcession.setPictures(pictures);
-		Assert.notNull(fProcession);
-		return fProcession;
+		fParade.setBrotherhood(bhood);
+		fParade.setPictures(pictures);
+		Assert.notNull(fParade);
+		return fParade;
 	}
 	public Collection<Float> findAll() {
 		final Collection<Float> res = this.floatRepository.findAll();
@@ -88,12 +88,12 @@ public class FloatService {
 		}
 	}
 
-	public Collection<Procession> find(final String fProcession) {
-		final Collection<Procession> res;
+	public Collection<Parade> find(final String fParade) {
+		final Collection<Parade> res;
 
 		try {
-			final Collection<Procession> aux = this.processionService.findAll();
-			aux.retainAll(this.floatRepository.findForFloat(fProcession));
+			final Collection<Parade> aux = this.paradeService.findAll();
+			aux.retainAll(this.floatRepository.findForFloat(fParade));
 			//			if (aux.size() > numberOfElementInList)
 			//				res = new ArrayList<>(aux.subList(0, numberOfElementInList));
 			//			else

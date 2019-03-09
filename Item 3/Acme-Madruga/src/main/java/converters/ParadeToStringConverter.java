@@ -6,21 +6,21 @@ import javax.transaction.Transactional;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
-import domain.Procession;
+import domain.Parade;
 
 @Component
 @Transactional
-public class ProcessionToStringConverter implements Converter<Procession, String> {
+public class ParadeToStringConverter implements Converter<Parade, String> {
 
 	@Override
-	public String convert(final Procession procession) {
+	public String convert(final Parade parade) {
 
 		String result;
 
-		if (procession == null)
+		if (parade == null)
 			result = null;
 		else
-			result = String.valueOf(procession.getId());
+			result = String.valueOf(parade.getId());
 
 		return result;
 	}

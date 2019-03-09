@@ -16,7 +16,7 @@ import org.springframework.util.Assert;
 
 import utilities.AbstractTest;
 import domain.Finder;
-import domain.Procession;
+import domain.Parade;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {
@@ -29,13 +29,13 @@ public class FinderServiceTest extends AbstractTest {
 	private FinderService		finderService;
 
 	@Autowired
-	private ProcessionService	processionService;
+	private ParadeService	processionService;
 
 
 	@Test
 	public void testCreate() {
 		final Finder finder = this.finderService.create();
-		final Collection<Procession> processions = this.processionService.findAll();
+		final Collection<Parade> processions = this.processionService.findAll();
 		finder.setProcessions(processions);
 		Assert.notNull(finder);
 	}

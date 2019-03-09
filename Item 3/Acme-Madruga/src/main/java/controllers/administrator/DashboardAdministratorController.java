@@ -18,14 +18,14 @@ import services.AreaService;
 import services.BrotherhoodService;
 import services.FinderService;
 import services.MemberService;
+import services.ParadeService;
 import services.PositionService;
-import services.ProcessionService;
 import services.RequestService;
 import controllers.AbstractController;
 import domain.Brotherhood;
 import domain.Member;
+import domain.Parade;
 import domain.Position;
-import domain.Procession;
 
 @Controller
 @RequestMapping(value = "/dashboard/administrator")
@@ -44,7 +44,7 @@ public class DashboardAdministratorController extends AbstractController {
 	private AreaService			areaService;
 
 	@Autowired
-	private ProcessionService	processionService;
+	private ParadeService		paradeService;
 
 	@Autowired
 	private RequestService		requestService;
@@ -92,7 +92,7 @@ public class DashboardAdministratorController extends AbstractController {
 		for (final Brotherhood b : this.brotherhoodService.getLargestBrotherhood())
 			largestBrotherhood.add(b.getName());
 		final List<String> soon = new ArrayList<String>();
-		for (final Procession p : this.processionService.getProcessionsThirtyDays())
+		for (final Parade p : this.paradeService.getParadesThirtyDays())
 			soon.add(p.getTitle());
 		final Double requestApproved = this.requestService.findApprovedRequestRadio();
 		final Double requestPending = this.requestService.findPendingRequestRadio();
@@ -101,7 +101,7 @@ public class DashboardAdministratorController extends AbstractController {
 		final List<String> membersTenPercent = new ArrayList<String>();
 		for (final Member m : this.memberService.getMembersTenPercent())
 			membersTenPercent.add(m.getName());
-		final Collection<Procession> processions = this.processionService.findAll();
+		final Collection<Parade> parades = this.paradeService.findAll();
 		final Double ratioBrotherhoodsPerArea = this.areaService.getRatioBrotherhoodsPerArea();
 
 		result = new ModelAndView("dashboard/statistics"); //lleva al list.jsp
@@ -129,15 +129,15 @@ public class DashboardAdministratorController extends AbstractController {
 		result.addObject("maxResults", maxResults);
 		result.addObject("desviationResults", desviationResults);
 		result.addObject("ratioFinders", ratioFinders);
-		result.addObject("processions", processions);
+		result.addObject("parades", parades);
 
 		if (id != null) {
-			final Double requestProcessionApproved = this.requestService.findApprovedRequestByProcessionRadio(id);
-			final Double requestProcessionPending = this.requestService.findPendingRequestByProcessionRadio(id);
-			final Double requestProcessionRejected = this.requestService.findRejectedRequestByProcessionRadio(id);
-			result.addObject("requestsProcessionApproved", requestProcessionApproved);
-			result.addObject("requestsProcessionPending", requestProcessionPending);
-			result.addObject("requestsProcessionRejected", requestProcessionRejected);
+			final Double requestParadeApproved = this.requestService.findApprovedRequestByParadeRadio(id);
+			final Double requestParadePending = this.requestService.findPendingRequestByParadeRadio(id);
+			final Double requestParadeRejected = this.requestService.findRejectedRequestByParadeRadio(id);
+			result.addObject("requestsParadeApproved", requestParadeApproved);
+			result.addObject("requestsParadePending", requestParadePending);
+			result.addObject("requestsParadeRejected", requestParadeRejected);
 		}
 
 		final Map<Position, Long> positionsFrequency = this.positionService.getPositionsFrequency();
@@ -158,16 +158,16 @@ public class DashboardAdministratorController extends AbstractController {
 
 	@RequestMapping(value = "/calculate", method = RequestMethod.GET)
 	public ModelAndView calculate(@RequestParam final int id) {
-		final Double requestApproved = this.requestService.findApprovedRequestByProcessionRadio(id);
-		final Double requestPending = this.requestService.findPendingRequestByProcessionRadio(id);
-		final Double requestRejected = this.requestService.findRejectedRequestByProcessionRadio(id);
-		final Collection<Procession> processions = this.processionService.findAll();
+		final Double requestApproved = this.requestService.findApprovedRequestByParadeRadio(id);
+		final Double requestPending = this.requestService.findPendingRequestByParadeRadio(id);
+		final Double requestRejected = this.requestService.findRejectedRequestByParadeRadio(id);
+		final Collection<Parade> parades = this.paradeService.findAll();
 
 		final ModelAndView result = new ModelAndView("dashboard/statistics");
-		result.addObject("requestsProcessionApproved", requestApproved);
-		result.addObject("requestsProcessionPending", requestPending);
-		result.addObject("requestsProcessionRejected", requestRejected);
-		result.addObject("processions", processions);
+		result.addObject("requestsParadeApproved", requestApproved);
+		result.addObject("requestsParadePending", requestPending);
+		result.addObject("requestsParadeRejected", requestRejected);
+		result.addObject("parades", parades);
 
 		return result;
 

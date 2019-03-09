@@ -16,10 +16,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import services.ConfigurationParametersService;
-import services.ProcessionService;
+import services.ParadeService;
 import services.RequestService;
 import controllers.AbstractController;
-import domain.Procession;
+import domain.Parade;
 import domain.Request;
 
 @Controller
@@ -30,7 +30,7 @@ public class RequestBrotherhoodController extends AbstractController {
 	private RequestService					requestService;
 
 	@Autowired
-	private ProcessionService				processionService;
+	private ParadeService					paradeService;
 
 	@Autowired
 	private ConfigurationParametersService	configurationParametersService;
@@ -115,17 +115,17 @@ public class RequestBrotherhoodController extends AbstractController {
 	// Edition --------------------------------------------------------
 
 	@RequestMapping(value = "/approve", method = RequestMethod.GET)
-	public ModelAndView approve(@RequestParam final int requestId, @RequestParam final int processionId) {
+	public ModelAndView approve(@RequestParam final int requestId, @RequestParam final int paradeId) {
 		ModelAndView result;
 		Request request;
 
 		// access controlled in findOne method implemented by jmsx
 		request = this.requestService.findOne(requestId);
-		if (request == null || !request.getStatus().equals("PENDING") || this.requestService.processionRequested(processionId))
+		if (request == null || !request.getStatus().equals("PENDING") || this.requestService.paradeRequested(paradeId))
 			result = new ModelAndView("redirect:/misc/403.jsp");
 		else {
 			result = this.createEditModelAndView(request);
-			final List<Integer> ls = this.requestService.suggestPosition(this.processionService.findOne(processionId));
+			final List<Integer> ls = this.requestService.suggestPosition(this.paradeService.findOne(paradeId));
 			result.addObject("setStatusTo", "APPROVED");
 			result.addObject("suggestedRow", ls.get(0));
 			result.addObject("suggestedColumn", ls.get(1));
@@ -174,7 +174,7 @@ public class RequestBrotherhoodController extends AbstractController {
 				} else if (request.getStatus().equals("APPROVED") && (request.getRow() == null || request.getColumn() == null)) {
 					result = this.createEditModelAndView(request, "request.rowcolumn.error");
 					result.addObject("setStatusTo", "APPROVED");
-				} else if (request.getStatus().equals("APPROVED") && ((request.getRow() > request.getProcession().getMaxRows()) || (request.getColumn() > request.getProcession().getMaxColumns()))) {
+				} else if (request.getStatus().equals("APPROVED") && ((request.getRow() > request.getParade().getMaxRows()) || (request.getColumn() > request.getParade().getMaxColumns()))) {
 					result = this.createEditModelAndView(request, "request.max.error");
 					result.addObject("setStatusTo", "APPROVED");
 				} else if (!this.requestService.availableRowColumn(request)) {
@@ -216,14 +216,14 @@ public class RequestBrotherhoodController extends AbstractController {
 	protected ModelAndView createEditModelAndView(final Request request, final String messageCode) {
 		ModelAndView result;
 
-		final Collection<Procession> processions;
+		final Collection<Parade> parades;
 		final String rol = "brotherhood";
 
-		processions = this.processionService.findAll();
+		parades = this.paradeService.findAll();
 
 		result = new ModelAndView("request/edit");
 		result.addObject("request", request);
-		result.addObject("processions", processions);
+		result.addObject("parades", parades);
 		result.addObject("rol", rol);
 		result.addObject("requestURI", "request/brotherhood/edit.do");
 		result.addObject("message", messageCode);

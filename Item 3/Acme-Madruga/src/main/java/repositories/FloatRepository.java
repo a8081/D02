@@ -9,13 +9,13 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import domain.Float;
-import domain.Procession;
+import domain.Parade;
 
 @Repository
 public interface FloatRepository extends JpaRepository<Float, Integer> {
 
 	@Query("select p from Procession p join p.floats b where b.title =?1")
-	List<Procession> findForFloat(String fProcession);
+	List<Parade> findForFloat(String fProcession);
 
 	@Query("select f from Float f where f.brotherhood.userAccount.id = ?1")
 	Collection<Float> findByBrotherhood(int brotherhooodUserAccountId);

@@ -96,12 +96,12 @@ public class FinderMemberController extends AbstractController {
 	//		Assert.notNull(finder);
 	//		final String lang = LocaleContextHolder.getLocale().getLanguage();
 	//
-	//		final Collection<Procession> procs;
+	//		final Collection<Parade> procs;
 	//		procs = this.finderService.find(finder);
-	//		procs = this.processionService.findAllFinalMode();
+	//		procs = this.paradeService.findAllFinalMode();
 	//		result = new ModelAndView("finder/display");
 	//		result.addObject("finder", finder);
-	//		result.addObject("processions", procs);
+	//		result.addObject("parades", procs);
 	//		result.addObject("lang", lang);
 	//				 else
 	//					result = new ModelAndView("redirect:/misc/403.jsp");

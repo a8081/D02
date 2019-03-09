@@ -15,7 +15,7 @@ import org.springframework.util.Assert;
 
 import repositories.RequestRepository;
 import utilities.AbstractTest;
-import domain.Procession;
+import domain.Parade;
 import domain.Request;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -29,7 +29,7 @@ public class RequestServiceTest extends AbstractTest {
 	@Autowired
 	private RequestService		requestService;
 	@Autowired
-	private ProcessionService	processionService;
+	private ParadeService	processionService;
 	@Autowired
 	private ActorService		actorService;
 	@Autowired
@@ -54,7 +54,7 @@ public class RequestServiceTest extends AbstractTest {
 		req.setStatus(Request.PENDING);
 		final Date moment = new Date();
 		req.setMoment(moment);
-		final Procession procession = ((List<Procession>) this.processionService.findAll()).get(0);
+		final Parade procession = ((List<Parade>) this.processionService.findAll()).get(0);
 		req.setProcession(procession);
 		req.setMember(this.memberService.findOne(myId));
 
@@ -69,7 +69,7 @@ public class RequestServiceTest extends AbstractTest {
 		final Integer myId = this.actorService.findByPrincipal().getId();
 		Request req = this.requestService.create();
 		req.setStatus(Request.PENDING);
-		final Procession procession = ((List<Procession>) this.processionService.findAll()).get(0);
+		final Parade procession = ((List<Parade>) this.processionService.findAll()).get(0);
 		req.setProcession(procession);
 		req.setMember(this.memberService.findOne(myId));
 		final Date moment = new Date();

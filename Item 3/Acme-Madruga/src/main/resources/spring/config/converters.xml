@@ -50,7 +50,7 @@
 	<bean class="converters.SocialProfileToStringConverter"/>
 	<bean class="converters.StringToSocialProfileConverter"/>
 	
-	<!-- FLOAT PROCESSION -->
+	<!-- FLOAT -->
 	<bean class="converters.FloatToStringConverter"/>
 	<bean class="converters.StringToFloatConverter"/>
 	
@@ -58,9 +58,9 @@
 	<bean class="converters.FinderToStringConverter"/>
 	<bean class="converters.StringToFinderConverter"/>
 	
-	<!-- PROCESSION -->
-	<bean class="converters.ProcessionToStringConverter"/>
-	<bean class="converters.StringToProcessionConverter"/>
+	<!-- PARADE -->
+	<bean class="converters.ParadeToStringConverter"/>
+	<bean class="converters.StringToParadeConverter"/>
 	
 	<!-- BROTHERHOOD -->
 	<bean class="converters.BrotherhoodToStringConverter"/>

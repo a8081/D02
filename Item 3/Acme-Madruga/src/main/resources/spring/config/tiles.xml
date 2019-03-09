@@ -39,7 +39,7 @@
 		<value>/views/folder/tiles.xml</value>
 		<value>/views/socialProfile/tiles.xml</value>
 		<value>/views/request/tiles.xml</value>
-		<value>/views/procession/tiles.xml</value>
+		<value>/views/parade/tiles.xml</value>
 		<value>/views/message/tiles.xml</value>
 		<value>/views/member/tiles.xml</value>
 		<value>/views/enrolment/tiles.xml</value>

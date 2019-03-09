@@ -15,7 +15,7 @@ import org.springframework.util.Assert;
 import repositories.FinderRepository;
 import domain.Finder;
 import domain.Member;
-import domain.Procession;
+import domain.Parade;
 
 @Service
 @Transactional
@@ -28,7 +28,7 @@ public class FinderService {
 	private MemberService								memberService;
 
 	@Autowired
-	private ProcessionService							processionService;
+	private ParadeService								paradeService;
 
 	@Autowired
 	private ConfigurationParametersService				configParamService;
@@ -48,9 +48,9 @@ public class FinderService {
 		finder.setAreaName("");
 		finder.setMinDate(null);
 		finder.setMaxDate(null);
-		final Collection<Procession> ps = new ArrayList<Procession>();
+		final Collection<Parade> ps = new ArrayList<Parade>();
 		finder.setCreationDate(new Date(System.currentTimeMillis()));
-		finder.setProcessions(ps);
+		finder.setParades(ps);
 		return finder;
 	}
 
@@ -71,13 +71,13 @@ public class FinderService {
 	// Antes de guardar tengo que pasar por este metodo para setearle las nuevas procesiones segun los nuevos parametros
 	public Finder find(final Finder finder) {
 		this.memberService.findByPrincipal();
-		List<Procession> result = new ArrayList<>(this.processionService.findProcessions(finder.getKeyword(), finder.getMinDate(), finder.getMaxDate(), finder.getAreaName()));
+		List<Parade> result = new ArrayList<>(this.paradeService.findParades(finder.getKeyword(), finder.getMinDate(), finder.getMaxDate(), finder.getAreaName()));
 		final int maxResults = this.configParamService.find().getMaxFinderResults();
 		if (result.size() > maxResults) {
 			Collections.shuffle(result);
 			result = result.subList(0, maxResults);
 		}
-		finder.setProcessions(result);
+		finder.setParades(result);
 		return this.save(finder);
 	}
 
@@ -102,9 +102,9 @@ public class FinderService {
 		finder.setAreaName("");
 		finder.setMinDate(null);
 		finder.setMaxDate(null);
-		final Collection<Procession> ps = new ArrayList<Procession>();
+		final Collection<Parade> ps = new ArrayList<Parade>();
 		finder.setCreationDate(new Date(System.currentTimeMillis()));
-		finder.setProcessions(ps);
+		finder.setParades(ps);
 		final Finder res = this.finderRepository.save(finder);
 		return res;
 	}
@@ -145,7 +145,7 @@ public class FinderService {
 		result.setMinDate(null);
 		result.setMaxDate(null);
 		finder.setCreationDate(new Date(System.currentTimeMillis()));
-		result.setProcessions(new ArrayList<Procession>());
+		result.setParades(new ArrayList<Parade>());
 		final Finder saved = this.save(result);
 		return saved;
 	}

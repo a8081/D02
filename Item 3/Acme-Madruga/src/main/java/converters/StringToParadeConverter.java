@@ -8,21 +8,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
-import repositories.ProcessionRepository;
-import domain.Procession;
+import repositories.ParadeRepository;
+import domain.Parade;
 
 @Component
 @Transactional
-public class StringToProcessionConverter implements Converter<String, Procession> {
+public class StringToParadeConverter implements Converter<String, Parade> {
 
 	@Autowired
-	private ProcessionRepository	processionRepository;
+	private ParadeRepository	paradeRepository;
 
 
 	@Override
-	public Procession convert(final String text) {
+	public Parade convert(final String text) {
 
-		final Procession result;
+		final Parade result;
 		final int id;
 
 		try {
@@ -30,7 +30,7 @@ public class StringToProcessionConverter implements Converter<String, Procession
 				result = null;
 			else {
 				id = Integer.valueOf(text);
-				result = this.processionRepository.findOne(id);
+				result = this.paradeRepository.findOne(id);
 			}
 
 		} catch (final Throwable oops) {
