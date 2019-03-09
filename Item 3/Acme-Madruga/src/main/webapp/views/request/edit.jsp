@@ -32,7 +32,7 @@
 	<form:hidden path="version" />
 	<form:hidden path="moment"/>
 	<form:hidden path="member"/>
-	<form:hidden path="procession"/>
+	<form:hidden path="parade"/>
 	
 	
 	<security:authorize access="hasRole('BROTHERHOOD')">

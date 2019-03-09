@@ -75,7 +75,7 @@ function deletePersonalData(){
 	</jstl:otherwise>
 </jstl:choose>
 <br>
-	<acme:button url="procession/listByBrotherhood.do?brotherhoodId=${brotherhood.id}" name="processionList" code="brotherhood.processionList"/>
+	<acme:button url="parade/listByBrotherhood.do?brotherhoodId=${brotherhood.id}" name="paradeList" code="brotherhood.processionList"/>
 <br>
 <jstl:if test="${displayButtons}">
 	<button onClick="generatePDF()"><spring:message code="display.getData"/></button>

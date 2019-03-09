@@ -777,9 +777,9 @@
 
 
 	<!-- =================================================================== 
-		======= PROCESSIONS ========= =================================================================== -->
+		======= PARADES ========= =================================================================== -->
 
-	<bean id="procession1" class="domain.Procession">
+	<bean id="parade1" class="domain.Parade">
 		<property name="title" value="El gran poder" />
 		<property name="description" value="This is a description of a procession1" />
 		<property name="moment" value="2020/04/24 00:00" />
@@ -787,6 +787,7 @@
 		<property name="mode" value="FINAL" />
 		<property name="maxRows" value="200" />
 		<property name="maxColumns" value="200" />
+		<property name="status" value="SUBMITTED"/>
 		<!-- Relations -->
 		<property name="floats">
 			<list>
@@ -795,15 +796,24 @@
 			</list>
 		</property>
 		<property name="brotherhood" ref="brotherhood1" />
+		<property name="segments">
+			<list>
+				<ref bean="segment1" />
+				<ref bean="segment2" />
+			</list>
+		</property>
+
 	</bean>
-	<bean id="procession2" class="domain.Procession">
+	<bean id="parade2" class="domain.Parade">
 		<property name="title" value="Esperanza de triana" />
-		<property name="description" value="This is a description of a procession2" />
+		<property name="description" value="This is a description of a parade2" />
 		<property name="moment" value="2020/04/26 00:00" />
 		<property name="ticker" value="200426-DOUBG" />
 		<property name="mode" value="FINAL" />
 		<property name="maxRows" value="120" />
 		<property name="maxColumns" value="300" />
+		<property name="status" value="ACCEPTED"/>
+		
 		<!-- Relations -->
 		<property name="floats">
 			<list>
@@ -811,15 +821,22 @@
 			</list>
 		</property>
 		<property name="brotherhood" ref="brotherhood2" />
+		<property name="segments">
+			<list>
+				<ref bean="segment3" />
+				<ref bean="segment4" />
+			</list>
+		</property>
 	</bean>
-	<bean id="procession3" class="domain.Procession">
+	<bean id="parade3" class="domain.Parade">
 		<property name="title" value="Esperanza de jesus" />
-		<property name="description" value="This is a description of a procession3" />
+		<property name="description" value="This is a description of a parade3" />
 		<property name="moment" value="2025/04/26 00:00" />
 		<property name="ticker" value="200427-DOUBG" />
 		<property name="mode" value="FINAL" />
 		<property name="maxRows" value="120" />
 		<property name="maxColumns" value="300" />
+		<property name="status" value="REJECTED"/>
 		<!-- Relations -->
 		<property name="floats">
 			<list>
@@ -827,15 +844,23 @@
 			</list>
 		</property>
 		<property name="brotherhood" ref="brotherhood1" />
+		<property name="segments">
+			<list>
+				<ref bean="segment1" />
+				<ref bean="segment2" />
+			</list>
+		</property>
 	</bean>
-	<bean id="procession4" class="domain.Procession">
+	<bean id="parade4" class="domain.Parade">
 		<property name="title" value="Nazareno" />
-		<property name="description" value="This is a description of a procession4" />
+		<property name="description" value="This is a description of a parade4" />
 		<property name="moment" value="2019/04/26 00:00" />
 		<property name="ticker" value="200428-DOUBG" />
 		<property name="mode" value="FINAL" />
 		<property name="maxRows" value="120" />
 		<property name="maxColumns" value="300" />
+		<property name="status" value="SUBMITTED"></property>
+		
 		<!-- Relations -->
 		<property name="floats">
 			<list>
@@ -843,15 +868,23 @@
 			</list>
 		</property>
 		<property name="brotherhood" ref="brotherhood1" />
+		<property name="segments">
+			<list>
+				<ref bean="segment3" />
+				<ref bean="segment4" />
+			</list>
+		</property>
 	</bean>
-	<bean id="procession5" class="domain.Procession">
+	<bean id="parade5" class="domain.Parade">
 		<property name="title" value="Señor de la sangre" />
-		<property name="description" value="This is a description of a procession5" />
+		<property name="description" value="This is a description of a Parade5" />
 		<property name="moment" value="2020/04/26 00:00" />
 		<property name="ticker" value="200429-DOUBG" />
 		<property name="mode" value="FINAL" />
 		<property name="maxRows" value="120" />
 		<property name="maxColumns" value="300" />
+		<property name="status" value="ACCEPTED"/>
+		
 		<!-- Relations -->
 		<property name="floats">
 			<list>
@@ -859,15 +892,22 @@
 			</list>
 		</property>
 		<property name="brotherhood" ref="brotherhood1" />
+		<property name="segments">
+			<list>
+				<ref bean="segment1" />
+				<ref bean="segment2" />
+			</list>
+		</property>
 	</bean>
-	<bean id="procession6" class="domain.Procession">
+	<bean id="parade6" class="domain.Parade">
 		<property name="title" value="Virgen de la Macarena" />
-		<property name="description" value="This is a description of a procession6" />
+		<property name="description" value="This is a description of a parade6" />
 		<property name="moment" value="2021/04/26 00:00" />
 		<property name="ticker" value="200436-DOUBG" />
 		<property name="mode" value="FINAL" />
 		<property name="maxRows" value="120" />
 		<property name="maxColumns" value="300" />
+		<property name="status" value="REJECTED"/>
 		<!-- Relations -->
 		<property name="floats">
 			<list>
@@ -875,15 +915,23 @@
 			</list>
 		</property>
 		<property name="brotherhood" ref="brotherhood1" />
+		<property name="segments">
+			<list>
+				<ref bean="segment3" />
+				<ref bean="segment4" />
+			</list>
+		</property>
 	</bean>
-	<bean id="procession7" class="domain.Procession">
+	<bean id="parade7" class="domain.Parade">
 		<property name="title" value="El cachorro" />
-		<property name="description" value="This is a description of a procession7" />
+		<property name="description" value="This is a description of a parade7" />
 		<property name="moment" value="2021/04/26 00:00" />
 		<property name="ticker" value="200446-DOUBG" />
 		<property name="mode" value="FINAL" />
 		<property name="maxRows" value="120" />
 		<property name="maxColumns" value="300" />
+		<property name="status" value="SUBMITTED"/>
+		
 		<!-- Relations -->
 		<property name="floats">
 			<list>
@@ -891,15 +939,22 @@
 			</list>
 		</property>
 		<property name="brotherhood" ref="brotherhood1" />
+		<property name="segments">
+			<list>
+				<ref bean="segment1" />
+				<ref bean="segment2" />
+			</list>
+		</property>
 	</bean>
-	<bean id="procession8" class="domain.Procession">
+	<bean id="parade8" class="domain.Parade">
 		<property name="title" value="Los gitanos" />
-		<property name="description" value="This is a description of a procession8" />
+		<property name="description" value="This is a description of a parade8" />
 		<property name="moment" value="2021/04/26 00:00" />
 		<property name="ticker" value="200456-DOUBG" />
 		<property name="mode" value="FINAL" />
 		<property name="maxRows" value="120" />
 		<property name="maxColumns" value="300" />
+		<property name="status" value="ACCEPTED"/>
 		<!-- Relations -->
 		<property name="floats">
 			<list>
@@ -907,15 +962,22 @@
 			</list>
 		</property>
 		<property name="brotherhood" ref="brotherhood1" />
+		<property name="segments">
+			<list>
+				<ref bean="segment3" />
+				<ref bean="segment4" />
+			</list>
+		</property>
 	</bean>
-	<bean id="procession9" class="domain.Procession">
+	<bean id="parade9" class="domain.Parade">
 		<property name="title" value="Santa genoveva" />
-		<property name="description" value="This is a description of a procession9s" />
+		<property name="description" value="This is a description of a parade9s" />
 		<property name="moment" value="2021/04/26 00:00" />
 		<property name="ticker" value="200466-DOUBG" />
 		<property name="mode" value="FINAL" />
 		<property name="maxRows" value="120" />
 		<property name="maxColumns" value="300" />
+		<property name="status" value="REJECTED"/>
 		<!-- Relations -->
 		<property name="floats">
 			<list>
@@ -923,15 +985,22 @@
 			</list>
 		</property>
 		<property name="brotherhood" ref="brotherhood1" />
+		<property name="segments">
+			<list>
+				<ref bean="segment1" />
+				<ref bean="segment2" />
+			</list>
+		</property>
 	</bean>
-	<bean id="procession10" class="domain.Procession">
+	<bean id="parade10" class="domain.Parade">
 		<property name="title" value="San gonzalo" />
-		<property name="description" value="This is a description of a procession10" />
+		<property name="description" value="This is a description of a parade10" />
 		<property name="moment" value="2022/04/26 00:00" />
 		<property name="ticker" value="200476-DOUBG" />
 		<property name="mode" value="FINAL" />
 		<property name="maxRows" value="120" />
 		<property name="maxColumns" value="300" />
+		<property name="status" value="SUBMITTED"/>
 		<!-- Relations -->
 		<property name="floats">
 			<list>
@@ -939,15 +1008,22 @@
 			</list>
 		</property>
 		<property name="brotherhood" ref="brotherhood1" />
+		<property name="segments">
+			<list>
+				<ref bean="segment3" />
+				<ref bean="segment4" />
+			</list>
+		</property>
 	</bean>
-	<bean id="procession11" class="domain.Procession">
+	<bean id="parade11" class="domain.Parade">
 		<property name="title" value="La amargura" />
-		<property name="description" value="This is a description of a procession11" />
+		<property name="description" value="This is a description of a parade11" />
 		<property name="moment" value="2022/04/26 00:00" />
 		<property name="ticker" value="200486-DOUBG" />
 		<property name="mode" value="FINAL" />
 		<property name="maxRows" value="120" />
 		<property name="maxColumns" value="300" />
+		<property name="status" value="ACCEPTED"/>
 		<!-- Relations -->
 		<property name="floats">
 			<list>
@@ -955,6 +1031,12 @@
 			</list>
 		</property>
 		<property name="brotherhood" ref="brotherhood1" />
+		<property name="segments">
+			<list>
+				<ref bean="segment1" />
+				<ref bean="segment2" />
+			</list>
+		</property>
 	</bean>
 
 
@@ -971,7 +1053,7 @@
 
 		<!-- Relations -->
 		<property name="member" ref="member1" />
-		<property name="procession" ref="procession1" />
+		<property name="parade" ref="parade1" />
 	</bean>
 
 	<bean id="request2" class="domain.Request">
@@ -981,7 +1063,7 @@
 		<property name="column" value="2" />
 		<!-- Relations -->
 		<property name="member" ref="member2" />
-		<property name="procession" ref="procession2" />
+		<property name="parade" ref="parade2" />
 	</bean>
 
 	<!-- =================================================================== 
@@ -1160,10 +1242,10 @@
 		<property name="creationDate" value="2019/03/06 15:20"></property>
 
 		<!-- Reletions -->
-		<property name="processions">
+		<property name="parades">
 			<list>
-				<ref bean="procession1" />
-				<ref bean="procession2" />
+				<ref bean="parade1" />
+				<ref bean="parade2" />
 			</list>
 		</property>
 
@@ -1268,7 +1350,7 @@
 		<property name="sysName" value="Acme Madrugá" />
 		<property name="banner" value="https://tinyurl.com/acme-madruga" />
 		<property name="welcomeMessageEn"
-			value="Welcome to Acme Madrugá!  The site to organise your processions" />
+			value="Welcome to Acme Madrugá!  The site to organise your parades" />
 		<property name="welcomeMessageEsp"
 			value="¡Bienvenidos a Acme Madrugá!  Tu sitio para organizar procesiones" />
 		<property name="countryPhoneCode" value="+34" />
@@ -1321,8 +1403,51 @@
 		<property name="finderTime" value="1" />
 
 	</bean>
+	
+		<!-- =================================================================== 
+		======= MISCELLANEOUS RECORDS ========= 
+		=================================================================== -->	
+		
+		<bean id="miscellaneousRecord1" class="domain.Record">
+		<property name="title" value="This is a title of a miscellaneousRecord1"></property>
+		<property name="description" value="This is a description of a miscellaneousRecord1"></property>
+		</bean>
+		
+		<bean id="miscellaneousRecord2" class="domain.Record">
+		<property name="title" value="his is a title of a miscellaneousRecord2"></property>
+		<property name="description" value="This is a description of a miscellaneousRecord2"></property>
+		</bean>
+		
+		<bean id="miscellaneousRecord3" class="domain.Record">
+		<property name="title" value="his is a title of a miscellaneousRecord3"></property>
+		<property name="description" value="This is a description of a miscellaneousRecord3"></property>
+		</bean>
+		
+		<bean id="miscellaneousRecord4" class="domain.Record">
+		<property name="title" value="his is a title of a miscellaneousRecord4"></property>
+		<property name="description" value="This is a description of a miscellaneousRecord4"></property>
+		</bean>
+	
+		
 
+	<!-- =================================================================== 
+		======= SEGMENTS ========= 
+		=================================================================== -->
 
-
+	<bean id="segment1" class="domain.Segment">
+	
+	</bean>
+	
+	<bean id="segment2" class="domain.Segment">
+	
+	</bean>
+	
+	<bean id="segment3" class="domain.Segment">
+	
+	</bean>
+	
+	<bean id="segment4" class="domain.Segment">
+	
+	</bean>
 
 </beans>

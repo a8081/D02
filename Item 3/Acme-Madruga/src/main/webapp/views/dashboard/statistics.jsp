@@ -131,11 +131,11 @@
     <table>
     <spring:message code="dashboard.procession" var="findersH" />
  <caption><jstl:out value="${findersH}" /></caption>
- 	<jstl:forEach items="${processions }" var="procession">
+ 	<jstl:forEach items="${parades }" var="parades">
     <tr >
-    <td><jstl:out value="${procession.title}" /></td>
+    <td><jstl:out value="${parade.title}" /></td>
     <td><spring:url value="dashboard/administrator/statistics.do" var="displayURL">
-				<spring:param name="id" value="${procession.id }"/> <!-- es el par�metro que va a acompa�ar a la url -->
+				<spring:param name="id" value="${parade.id }"/> <!-- es el par�metro que va a acompa�ar a la url -->
 			</spring:url>
 			<a href="${displayURL}"><spring:message code="dashboard.calculate"/></a></td>
     </tr>

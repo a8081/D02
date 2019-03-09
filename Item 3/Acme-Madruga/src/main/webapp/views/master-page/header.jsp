@@ -76,13 +76,13 @@
 				</ul>
 			</li>
 
-		<%-- PROCESSIONS --%>
-			<li><a class="fNiv"><spring:message	code="master.page.procession" /></a>
+		<%-- PARADES --%>
+			<li><a class="fNiv"><spring:message	code="master.page.parades" /></a>
 				<ul>
 					<li class="arrow"></li>
-					<li><a href="procession/list.do"><spring:message code="master.page.all.processions" /></a></li>
-					<li><a href="procession/brotherhood/create.do"><spring:message code="master.page.procession.create" /></a></li>
-					<li><a href="procession/brotherhood/list.do"><spring:message code="master.page.procession.list" /></a></li>
+					<li><a href="parade/list.do"><spring:message code="master.page.all.parade" /></a></li>
+					<li><a href="parade/brotherhood/create.do"><spring:message code="master.page.parade.create" /></a></li>
+					<li><a href="parade/brotherhood/list.do"><spring:message code="master.page.parade.list" /></a></li>
 				</ul>
 			</li>
 			
@@ -111,9 +111,9 @@
 		<security:authorize access="hasRole('MEMBER')">
 		
 			
-			<%-- PROCESSIONS --%>
+			<%-- PARADES --%>
 			
-			<li><a href="procession/member/list.do"><spring:message	code="master.page.procession.member.list" /></a>
+			<li><a href="parade/member/list.do"><spring:message	code="master.page.parade.member.list" /></a>
 			
 			<%-- REQUESTS --%>
 						
@@ -139,7 +139,7 @@
 		
 		<security:authorize access="isAnonymous()">
 			<li><a class="fNiv" href="security/login.do"><spring:message code="master.page.login" /></a></li>
-			<li><a class="fNiv" href="procession/list.do"><spring:message code="master.page.all.processions" /></a></li>
+			<li><a class="fNiv" href="parade/list.do"><spring:message code="master.page.all.parade" /></a></li>
 			<li><a class="fNiv" href="brotherhood/create.do"><spring:message code="master.page.brotherhood.register" /></a></li>
 			<li><a class="fNiv" href="member/create.do"><spring:message code="master.page.member.register" /></a></li>
 		</security:authorize>
