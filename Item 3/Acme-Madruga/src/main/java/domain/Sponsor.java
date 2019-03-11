@@ -7,6 +7,6 @@ import javax.persistence.Entity;
 
 @Entity
 @Access(AccessType.PROPERTY)
-public class Sponsor extends DomainEntity {
+public class Sponsor extends Actor {
 
 }
