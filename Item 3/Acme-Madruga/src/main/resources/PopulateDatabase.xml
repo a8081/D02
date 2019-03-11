@@ -1354,7 +1354,7 @@
 	<!-- =================================================================== 
 		======= Segments ========= =================================================================== -->
 	
-	<!-- Segment 1 of parade 1 -->
+	
 	<bean id="segment1" class="domain.Segment">
 		<!-- Atributes -->
 		<property name="originTime" value="2018/03/16 15:20"></property>
@@ -1369,12 +1369,42 @@
 		</property>
 	</bean>
 	
-	<!-- Segment 2 of parade 1 -->
+	
 	
 	<bean id="segment2" class="domain.Segment">
 		<!-- Atributes -->
 		<property name="originTime" value="2018/03/16 17:00"></property>
 		<property name="destinationTime" value="2018/03/16 18:10"></property>
+
+		<!-- Relations -->
+		<property name="gps">
+			<list>
+				<ref bean="gps3" />
+				<ref bean="gps4" />
+			</list>
+		</property>
+	</bean>
+	
+	
+	<bean id="segment3" class="domain.Segment">
+		<!-- Atributes -->
+		<property name="originTime" value="2018/03/20 17:00"></property>
+		<property name="destinationTime" value="2018/03/20 18:10"></property>
+
+		<!-- Relations -->
+		<property name="gps">
+			<list>
+				<ref bean="gps3" />
+				<ref bean="gps4" />
+			</list>
+		</property>
+	</bean>
+	
+	
+	<bean id="segment4" class="domain.Segment">
+		<!-- Atributes -->
+		<property name="originTime" value="2018/03/21 17:00"></property>
+		<property name="destinationTime" value="2018/03/121 18:10"></property>
 
 		<!-- Relations -->
 		<property name="gps">
