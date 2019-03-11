@@ -1,8 +1,8 @@
 
 package domain;
 
-import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
@@ -16,11 +16,11 @@ import javax.validation.Valid;
 @Access(AccessType.PROPERTY)
 public class Segment extends DomainEntity {
 
-	private Date			originTime;
-	private Date			destinationTime;
+	private Date		originTime;
+	private Date		destinationTime;
 
 	//Relational attributes
-	private Collection<GPS>	gps;
+	private List<GPS>	gps;
 
 
 	@Temporal(TemporalType.TIMESTAMP)
@@ -45,11 +45,11 @@ public class Segment extends DomainEntity {
 
 	@Valid
 	@ManyToMany
-	public Collection<GPS> getGps() {
+	public List<GPS> getGps() {
 		return this.gps;
 	}
 
-	public void setGps(final Collection<GPS> gps) {
+	public void setGps(final List<GPS> gps) {
 		this.gps = gps;
 	}
 

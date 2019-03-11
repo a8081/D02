@@ -10,8 +10,8 @@ import javax.validation.constraints.NotNull;
 @Access(AccessType.PROPERTY)
 public class GPS extends DomainEntity {
 
-	double	latitude;
-	double	longitude;
+	private double	latitude;
+	private double	longitude;
 
 
 	@NotNull
