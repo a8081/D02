@@ -139,6 +139,7 @@ public class ConfigurationParameters extends DomainEntity {
 		this.creditCardMake = creditCardMake;
 	}
 
+	@Range(min = 0)
 	public double getFlatFare() {
 		return this.flatFare;
 	}

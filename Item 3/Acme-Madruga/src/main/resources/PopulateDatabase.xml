@@ -1401,6 +1401,17 @@
 		</property>
 		<property name="maxFinderResults" value="10" />
 		<property name="finderTime" value="1" />
+		<property name="creditCardMake">
+			<list>
+				<value>VISA</value>
+				<value>MCARD</value>
+				<value>AMEX</value>
+				<value>DINNERS</value>
+				<value>FLY</value>
+			</list>
+		</property>
+		<property name="flatFare" value="100.0"/>
+		<property name="vat" value="0,25"/>
 
 	</bean>
 	
@@ -1449,5 +1460,40 @@
 	<bean id="segment4" class="domain.Segment">
 	
 	</bean>
-
+	
+	<!-- =================================================================== 
+		======= SPONSORSHIP ========= 
+		=================================================================== -->
+	
+	<bean id="sponsorship1" class="domain.Sponsorship">
+	<property name="banner" value="https://ghc.anitab.org/wp-content/uploads/sites/2/2017/08/example-banner-announcement-1.png"/>
+	<property name="targetPage" value="https://ghc.anitab.org"/>
+	<property name="sponsor"/>
+	<property name="creditCard"/>
+	<property name="parade" ref="parade1"/>
+	</bean>
+	
+	<bean id="sponsorship2" class="domain.Sponsorship">
+	<property name="banner" value="https://ghc.anitab.org/wp-content/uploads/sites/2/2017/08/example-banner-announcement-1.png"/>
+	<property name="targetPage" value="https://ghc.anitab.org"/>
+	<property name="sponsor"/>
+	<property name="creditCard"/>
+	<property name="parade" ref="parade2"/>
+	</bean>
+	
+	<bean id="sponsorship3" class="domain.Sponsorship">
+	<property name="banner" value="https://ghc.anitab.org/wp-content/uploads/sites/2/2017/08/example-banner-announcement-1.png"/>
+	<property name="targetPage" value="https://ghc.anitab.org"/>
+	<property name="sponsor"/>
+	<property name="creditCard"/>
+	<property name="parade" ref="parade3"/>
+	</bean>
+	
+	<bean id="sponsorship4" class="domain.Sponsorship">
+	<property name="banner" value="https://ghc.anitab.org/wp-content/uploads/sites/2/2017/08/example-banner-announcement-1.png"/>
+	<property name="targetPage" value="https://ghc.anitab.org"/>
+	<property name="sponsor"/>
+	<property name="creditCard"/>
+	<property name="parade" ref="parade4"/>
+	</bean>
 </beans>
