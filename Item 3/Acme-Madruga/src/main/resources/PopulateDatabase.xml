@@ -1559,6 +1559,7 @@
 		<property name="inceptionRecord" ref="inceptionRecord1" />
 		<property name="periodRecords">
 			<list>
+				<ref bean="periodRecord1"/>
 			</list>
 		</property>
 		<property name="legalRecords">
@@ -1573,6 +1574,8 @@
 		</property>
 		<property name="miscellaneousRecords">
 			<list>
+				<ref bean="miscellaneousRecord1"/>
+				<ref bean="miscellaneousRecord2"/>
 			</list>
 		</property>
 	</bean>
@@ -1581,6 +1584,7 @@
 		<property name="inceptionRecord" ref="inceptionRecord2" />
 		<property name="periodRecords">
 			<list>
+				<ref bean="periodRecord1"/>
 			</list>
 		</property>
 		<property name="legalRecords">
@@ -1595,6 +1599,8 @@
 		</property>
 		<property name="miscellaneousRecords">
 			<list>
+				<ref bean="miscellaneousRecord3"/>
+				<ref bean="miscellaneousRecord4"/>
 			</list>
 		</property>
 	</bean>
