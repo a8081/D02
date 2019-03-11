@@ -110,6 +110,35 @@
 		/> <property name="authorities"> <list> <bean class="security.Authority"> 
 		<property name="authority" value="BROTHERHOOD" /> </bean> </list> </property> 
 		</bean> -->
+		
+	<!-- ========================= CHAPTER =========================== -->
+	
+	<!-- password: chapter1 -->
+	<bean id="userAccountChapter1" class="security.UserAccount">
+		<property name="username" value="chapter1" />
+		<property name="password" value="178494d73a41f7d68e80f685324d3662" />
+		<property name="authorities">
+			<list>
+				<bean class="security.Authority">
+					<property name="authority" value="CHAPTER" />
+				</bean>
+			</list>
+		</property>
+	</bean>
+	
+	<!-- password: chapter2 -->
+	<bean id="userAccountChapter2" class="security.UserAccount">
+		<property name="username" value="chapter2" />
+		<property name="password" value="07a29f2348d728fad16c5260823f93ef" />
+		<property name="authorities">
+			<list>
+				<bean class="security.Authority">
+					<property name="authority" value="CHAPTER" />
+				</bean>
+			</list>
+		</property>
+	</bean>
+	
 	<!-- ========================= SUPER =========================== -->
 
 	<bean id="userAccountSuper" class="security.UserAccount">
@@ -1322,7 +1351,95 @@
 
 	</bean>
 
+	<!-- =================================================================== 
+		======= Segments ========= =================================================================== -->
+	
+	<!-- Segment 1 of parade 1 -->
+	<bean id="segment1" class="domain.Segment">
+		<!-- Atributes -->
+		<property name="originTime" value="2018/03/16 15:20"></property>
+		<property name="destinationTime" value="2018/03/16 15:40"></property>
 
+		<!-- Relations -->
+		<property name="gps">
+			<list>
+				<ref bean="gps1" />
+				<ref bean="gps2" />
+			</list>
+		</property>
+	</bean>
+	
+	<!-- Segment 2 of parade 1 -->
+	
+	<bean id="segment2" class="domain.Segment">
+		<!-- Atributes -->
+		<property name="originTime" value="2018/03/16 17:00"></property>
+		<property name="destinationTime" value="2018/03/16 18:10"></property>
 
+		<!-- Relations -->
+		<property name="gps">
+			<list>
+				<ref bean="gps3" />
+				<ref bean="gps4" />
+			</list>
+		</property>
+	</bean>
 
+	<!-- =================================================================== 
+		======= Chapters ========= =================================================================== -->
+
+	<!-- Chapter 1 coordinates area 1 -->
+	<bean id="chapter1" class="domain.Chapter">
+		<property name="name" value="Name chapter 1"></property>
+		<property name="middleName" value="Middlename chapter 1 "></property>
+		<property name="surname" value="Surname chapter 1"></property>
+		<property name="photo" value="http://tinyurl.com/serfdq.png"></property>
+		<property name="email" value="chapter1@hotmail.es"></property>
+		<property name="phone" value="+34655398675"></property>
+		<property name="address" value="C/ chapter 1"></property>
+		<property name="score" value="0.2"></property>
+		<property name="spammer" value="false"></property>
+		<property name="userAccount" ref="userAccountChapter1"></property>
+		<property name="title" value="Title chapter 1"></property>
+		<property name="area" ref="area1"></property>
+	</bean>
+	
+	<!-- Chapter 2 coordinates area 2 -->
+	<bean id="chapter2" class="domain.Chapter">
+		<property name="name" value="Name chapter 2"></property>
+		<property name="middleName" value="Middlename chapter 2 "></property>
+		<property name="surname" value="Surname chapter 2"></property>
+		<property name="photo" value="http://tinyurl.com/serfdq.png"></property>
+		<property name="email" value="chapter2@hotmail.es"></property>
+		<property name="phone" value="+34655398333"></property>
+		<property name="address" value="C/ chapter 2"></property>
+		<property name="score" value="0.4"></property>
+		<property name="spammer" value="false"></property>
+		<property name="userAccount" ref="userAccountChapter2"></property>
+		<property name="title" value="Title chapter 2"></property>
+		<property name="area" ref="area2"></property>
+	</bean>
+	
+	
+	<!-- =================================================================== 
+		======= InceptionRecord ========= =================================================================== -->
+	
+	<bean id="inceptionRecord1" class="domain.InceptionRecord">
+		<property name="photos">
+			<list>
+				<value>http://tyniurl.com/dsfrefd.png</value>
+				<value>http://tyniurl.com/dsfes3rfw45d.png</value>
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="inceptionRecord2" class="domain.InceptionRecord">
+		<property name="photos">
+			<list>
+				<value>http://tyniurl.com/dsfrecfwefw.png</value>
+				<value>http://tyniurl.com/dsfevw45d.png</value>
+			</list>
+		</property>
+	</bean>
+	
 </beans>
