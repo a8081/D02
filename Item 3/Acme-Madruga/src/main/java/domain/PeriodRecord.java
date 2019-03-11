@@ -6,6 +6,7 @@ import java.util.Date;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.validation.constraints.NotNull;
 
@@ -42,6 +43,7 @@ public class PeriodRecord extends Record {
 
 	@NotBlank
 	@EachURL
+	@ElementCollection
 	public Collection<String> getPhotos() {
 		return this.photos;
 	}

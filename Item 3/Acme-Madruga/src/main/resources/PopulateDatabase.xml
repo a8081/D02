@@ -180,7 +180,6 @@
 		<property name="spammer" value="false"></property>
 		<property name="userAccount" ref="userAccountMember1"></property>
 		<!-- Member -->
-		<property name="finder" ref="finder1"></property>
 	</bean>
 
 	<bean id="member2" class="domain.Member">
@@ -196,7 +195,6 @@
 		<property name="spammer" value="false"></property>
 		<property name="userAccount" ref="userAccountMember2"></property>
 		<!-- Member -->
-		<!-- <property name="finder"></property> -->
 	</bean>
 
 	<bean id="member3" class="domain.Member">
@@ -861,7 +859,7 @@
 		<property name="title" value="Esperanza de jesus" />
 		<property name="description" value="This is a description of a parade3" />
 		<property name="moment" value="2025/04/26 00:00" />
-		<property name="ticker" value="200427-DOUBG" />
+		<property name="ticker" value="200427-DOUBA" />
 		<property name="mode" value="FINAL" />
 		<property name="maxRows" value="120" />
 		<property name="maxColumns" value="300" />
@@ -875,8 +873,6 @@
 		<property name="brotherhood" ref="brotherhood1" />
 		<property name="segments">
 			<list>
-				<ref bean="segment1" />
-				<ref bean="segment2" />
 			</list>
 		</property>
 	</bean>
@@ -884,7 +880,7 @@
 		<property name="title" value="Nazareno" />
 		<property name="description" value="This is a description of a parade4" />
 		<property name="moment" value="2019/04/26 00:00" />
-		<property name="ticker" value="200428-DOUBG" />
+		<property name="ticker" value="200428-DLUBG" />
 		<property name="mode" value="FINAL" />
 		<property name="maxRows" value="120" />
 		<property name="maxColumns" value="300" />
@@ -899,8 +895,6 @@
 		<property name="brotherhood" ref="brotherhood1" />
 		<property name="segments">
 			<list>
-				<ref bean="segment3" />
-				<ref bean="segment4" />
 			</list>
 		</property>
 	</bean>
@@ -908,7 +902,7 @@
 		<property name="title" value="Señor de la sangre" />
 		<property name="description" value="This is a description of a Parade5" />
 		<property name="moment" value="2020/04/26 00:00" />
-		<property name="ticker" value="200429-DOUBG" />
+		<property name="ticker" value="200429-DOJBG" />
 		<property name="mode" value="FINAL" />
 		<property name="maxRows" value="120" />
 		<property name="maxColumns" value="300" />
@@ -923,8 +917,6 @@
 		<property name="brotherhood" ref="brotherhood1" />
 		<property name="segments">
 			<list>
-				<ref bean="segment1" />
-				<ref bean="segment2" />
 			</list>
 		</property>
 	</bean>
@@ -932,7 +924,7 @@
 		<property name="title" value="Virgen de la Macarena" />
 		<property name="description" value="This is a description of a parade6" />
 		<property name="moment" value="2021/04/26 00:00" />
-		<property name="ticker" value="200436-DOUBG" />
+		<property name="ticker" value="200436-DOABG" />
 		<property name="mode" value="FINAL" />
 		<property name="maxRows" value="120" />
 		<property name="maxColumns" value="300" />
@@ -946,8 +938,6 @@
 		<property name="brotherhood" ref="brotherhood1" />
 		<property name="segments">
 			<list>
-				<ref bean="segment3" />
-				<ref bean="segment4" />
 			</list>
 		</property>
 	</bean>
@@ -955,7 +945,7 @@
 		<property name="title" value="El cachorro" />
 		<property name="description" value="This is a description of a parade7" />
 		<property name="moment" value="2021/04/26 00:00" />
-		<property name="ticker" value="200446-DOUBG" />
+		<property name="ticker" value="200446-DOQBG" />
 		<property name="mode" value="FINAL" />
 		<property name="maxRows" value="120" />
 		<property name="maxColumns" value="300" />
@@ -970,8 +960,6 @@
 		<property name="brotherhood" ref="brotherhood1" />
 		<property name="segments">
 			<list>
-				<ref bean="segment1" />
-				<ref bean="segment2" />
 			</list>
 		</property>
 	</bean>
@@ -979,7 +967,7 @@
 		<property name="title" value="Los gitanos" />
 		<property name="description" value="This is a description of a parade8" />
 		<property name="moment" value="2021/04/26 00:00" />
-		<property name="ticker" value="200456-DOUBG" />
+		<property name="ticker" value="200456-DOUBL" />
 		<property name="mode" value="FINAL" />
 		<property name="maxRows" value="120" />
 		<property name="maxColumns" value="300" />
@@ -993,8 +981,6 @@
 		<property name="brotherhood" ref="brotherhood1" />
 		<property name="segments">
 			<list>
-				<ref bean="segment3" />
-				<ref bean="segment4" />
 			</list>
 		</property>
 	</bean>
@@ -1002,7 +988,7 @@
 		<property name="title" value="Santa genoveva" />
 		<property name="description" value="This is a description of a parade9s" />
 		<property name="moment" value="2021/04/26 00:00" />
-		<property name="ticker" value="200466-DOUBG" />
+		<property name="ticker" value="200466-DOUIG" />
 		<property name="mode" value="FINAL" />
 		<property name="maxRows" value="120" />
 		<property name="maxColumns" value="300" />
@@ -1016,8 +1002,6 @@
 		<property name="brotherhood" ref="brotherhood1" />
 		<property name="segments">
 			<list>
-				<ref bean="segment1" />
-				<ref bean="segment2" />
 			</list>
 		</property>
 	</bean>
@@ -1025,7 +1009,7 @@
 		<property name="title" value="San gonzalo" />
 		<property name="description" value="This is a description of a parade10" />
 		<property name="moment" value="2022/04/26 00:00" />
-		<property name="ticker" value="200476-DOUBG" />
+		<property name="ticker" value="200476-DOWBG" />
 		<property name="mode" value="FINAL" />
 		<property name="maxRows" value="120" />
 		<property name="maxColumns" value="300" />
@@ -1039,8 +1023,6 @@
 		<property name="brotherhood" ref="brotherhood1" />
 		<property name="segments">
 			<list>
-				<ref bean="segment3" />
-				<ref bean="segment4" />
 			</list>
 		</property>
 	</bean>
@@ -1048,7 +1030,7 @@
 		<property name="title" value="La amargura" />
 		<property name="description" value="This is a description of a parade11" />
 		<property name="moment" value="2022/04/26 00:00" />
-		<property name="ticker" value="200486-DOUBG" />
+		<property name="ticker" value="200486-QOUBG" />
 		<property name="mode" value="FINAL" />
 		<property name="maxRows" value="120" />
 		<property name="maxColumns" value="300" />
@@ -1062,8 +1044,6 @@
 		<property name="brotherhood" ref="brotherhood1" />
 		<property name="segments">
 			<list>
-				<ref bean="segment1" />
-				<ref bean="segment2" />
 			</list>
 		</property>
 	</bean>
@@ -1258,27 +1238,7 @@
 	</bean>
 
 
-	<!-- =================================================================== 
-		======= FINDER ========= =================================================================== -->
-
-
-	<bean id="finder1" class="domain.Finder">
-		<!-- Finder -->
-		<property name="keyword" value="poder"></property>
-		<property name="areaName" value=""></property>
-		<property name="minDate" value="2018/04/16 15:20"></property>
-		<property name="maxDate" value="2030/04/16 15:20"></property>
-		<property name="creationDate" value="2019/03/06 15:20"></property>
-
-		<!-- Reletions -->
-		<property name="parades">
-			<list>
-				<ref bean="parade1" />
-				<ref bean="parade2" />
-			</list>
-		</property>
-
-	</bean>
+	
 
 
 
@@ -1440,7 +1400,7 @@
 			</list>
 		</property>
 		<property name="flatFare" value="100.0"/>
-		<property name="vat" value="0,25"/>
+		<property name="vat" value="0.25"/>
 
 	</bean>
 	
@@ -1476,7 +1436,7 @@
 		======= SPONSORSHIP ========= 
 		=================================================================== -->
 	
-	<bean id="sponsorship1" class="domain.Sponsorship">
+	<!-- <bean id="sponsorship1" class="domain.Sponsorship">
 	<property name="banner" value="https://ghc.anitab.org/wp-content/uploads/sites/2/2017/08/example-banner-announcement-1.png"/>
 	<property name="targetPage" value="https://ghc.anitab.org"/>
 	<property name="sponsor"/>
@@ -1508,10 +1468,13 @@
 	<property name="parade" ref="parade4"/>
 	</bean>
 
-	
+	 -->
 
 	<!-- =================================================================== 
 		======= Segments ========= =================================================================== -->
+	
+	<!-- Conected - segment 1 and segment 2
+	              - segmnt 3 and segment 4 -->
 	
 	
 	<bean id="segment1" class="domain.Segment">
@@ -1538,8 +1501,8 @@
 		<!-- Relations -->
 		<property name="gps">
 			<list>
+				<ref bean="gps2" />
 				<ref bean="gps3" />
-				<ref bean="gps4" />
 			</list>
 		</property>
 	</bean>
@@ -1553,8 +1516,8 @@
 		<!-- Relations -->
 		<property name="gps">
 			<list>
+				<ref bean="gps2" />
 				<ref bean="gps3" />
-				<ref bean="gps4" />
 			</list>
 		</property>
 	</bean>
@@ -1563,7 +1526,7 @@
 	<bean id="segment4" class="domain.Segment">
 		<!-- Atributes -->
 		<property name="originTime" value="2018/03/21 17:00"></property>
-		<property name="destinationTime" value="2018/03/121 18:10"></property>
+		<property name="destinationTime" value="2018/03/12 18:10"></property>
 
 		<!-- Relations -->
 		<property name="gps">
@@ -1614,6 +1577,8 @@
 		======= InceptionRecord ========= =================================================================== -->
 	
 	<bean id="inceptionRecord1" class="domain.InceptionRecord">
+		<property name="title" value="title inception recor 1"></property>
+		<property name="description" value="description inception recor 1"></property>
 		<property name="photos">
 			<list>
 				<value>http://tyniurl.com/dsfrefd.png</value>
@@ -1623,6 +1588,8 @@
 	</bean>
 	
 	<bean id="inceptionRecord2" class="domain.InceptionRecord">
+		<property name="title" value="title inception record 2"></property>
+		<property name="description" value="description inception record 2"></property>
 		<property name="photos">
 			<list>
 				<value>http://tyniurl.com/dsfrecfwefw.png</value>
@@ -1630,6 +1597,29 @@
 			</list>
 		</property>
 	</bean>
+	
+		<!-- =================================================================== 
+		======= GPS========= =================================================================== -->
+	<bean id="gps1" class="domain.GPS">
+		<property name="latitude" value="40.75793"></property>
+		<property name="longitude" value="-73.98551"></property>
+	</bean>
+	
+		<bean id="gps2" class="domain.GPS">
+		<property name="latitude" value="50.75793"></property>
+		<property name="longitude" value="-83.98551"></property>
+	</bean>
+	
+		<bean id="gps3" class="domain.GPS">
+		<property name="latitude" value="30.75793"></property>
+		<property name="longitude" value="-63.98551"></property>
+	</bean>
+	
+		<bean id="gps4" class="domain.GPS">
+		<property name="latitude" value="10.75793"></property>
+		<property name="longitude" value="-93.98551"></property>
+	</bean>
+	
 	
 
 </beans>
