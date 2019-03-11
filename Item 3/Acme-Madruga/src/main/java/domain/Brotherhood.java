@@ -9,6 +9,7 @@ import javax.persistence.AccessType;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.Valid;
@@ -28,6 +29,7 @@ public class Brotherhood extends Actor {
 	private Date				date;
 	private Collection<String>	pictures;
 	private Area				area;
+	private History				history;
 
 
 	@NotBlank
@@ -70,6 +72,16 @@ public class Brotherhood extends Actor {
 
 	public void setArea(final Area area) {
 		this.area = area;
+	}
+
+	@Valid
+	@OneToOne
+	public History getHistory() {
+		return this.history;
+	}
+
+	public void setHistory(final History history) {
+		this.history = history;
 	}
 
 }

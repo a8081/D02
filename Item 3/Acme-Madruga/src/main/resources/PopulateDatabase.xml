@@ -110,9 +110,9 @@
 		/> <property name="authorities"> <list> <bean class="security.Authority"> 
 		<property name="authority" value="BROTHERHOOD" /> </bean> </list> </property> 
 		</bean> -->
-		
+
 	<!-- ========================= CHAPTER =========================== -->
-	
+
 	<!-- password: chapter1 -->
 	<bean id="userAccountChapter1" class="security.UserAccount">
 		<property name="username" value="chapter1" />
@@ -125,7 +125,7 @@
 			</list>
 		</property>
 	</bean>
-	
+
 	<!-- password: chapter2 -->
 	<bean id="userAccountChapter2" class="security.UserAccount">
 		<property name="username" value="chapter2" />
@@ -138,7 +138,7 @@
 			</list>
 		</property>
 	</bean>
-	
+
 	<!-- ========================= SUPER =========================== -->
 
 	<bean id="userAccountSuper" class="security.UserAccount">
@@ -165,25 +165,25 @@
 
 
 	<bean class="security.UserAccount" id="userAccountSponsor1">
-		<property value="sponsor1" name="username"/>
-		<property value="42c63ad66d4dc07ed17753772bef96d6" name="password"/>
+		<property value="sponsor1" name="username" />
+		<property value="42c63ad66d4dc07ed17753772bef96d6" name="password" />
 		<property name="authorities">
 			<list>
 				<bean class="security.Authority">
-				<property value="SPONSOR" name="authority"/>
+					<property value="SPONSOR" name="authority" />
 				</bean>
 			</list>
-	</property>
+		</property>
 	</bean>
 
 
 	<bean class="security.UserAccount" id="userAccountSponsor2">
-		<property value="sponsor2" name="username"/>
-		<property value="3dc67f80a03324e01b1640f45d107485" name="password"/>
+		<property value="sponsor2" name="username" />
+		<property value="3dc67f80a03324e01b1640f45d107485" name="password" />
 		<property name="authorities">
 			<list>
 				<bean class="security.Authority">
-				<property value="SPONSOR" name="authority"/>
+					<property value="SPONSOR" name="authority" />
 				</bean>
 			</list>
 		</property>
@@ -191,59 +191,60 @@
 
 
 	<bean class="security.UserAccount" id="userAccountSponsor3">
-		<property value="sponsor3" name="username"/>
-		<property value="857a54956061fdc1b88d7722cafe6519" name="password"/>
+		<property value="sponsor3" name="username" />
+		<property value="857a54956061fdc1b88d7722cafe6519" name="password" />
 		<property name="authorities">
 			<list>
-			<bean class="security.Authority">
-			<property value="SPONSOR" name="authority"/>
-			</bean>
+				<bean class="security.Authority">
+					<property value="SPONSOR" name="authority" />
+				</bean>
 			</list>
 		</property>
 	</bean>
 
-<!-- ========================================================================== SPONSOR ============================================================================ -->
+	<!-- ========================================================================== 
+		SPONSOR ============================================================================ -->
 
 	<bean class="domain.Sponsor" id="sponsor1">
-	<!-- Actor -->
-		<property value="Sponsor1" name="name"/>
-		<property value="sp1" name="middleName"/>
-		<property value="Sponsor1" name="surname"/>
-		<property value="http://tinyurl.com/picture.png" name="photo"/>
-		<property value="contacto@sp1.es" name="email"/>
-		<property value="+34647607406" name="phone"/>
-		<property value="Reina Mercedes" name="address"/>
-		<property value="0.5" name="score"/>
-		<property value="false" name="spammer"/>
-		<property name="userAccount" ref="userAccountSponsor1"/>
+		<!-- Actor -->
+		<property value="Sponsor1" name="name" />
+		<property value="sp1" name="middleName" />
+		<property value="Sponsor1" name="surname" />
+		<property value="http://tinyurl.com/picture.png" name="photo" />
+		<property value="contacto@sp1.es" name="email" />
+		<property value="+34647607406" name="phone" />
+		<property value="Reina Mercedes" name="address" />
+		<property value="0.5" name="score" />
+		<property value="false" name="spammer" />
+		<property name="userAccount" ref="userAccountSponsor1" />
 	</bean>
 
 	<bean class="domain.Sponsor" id="sponsor2">
-	<!-- Actor -->
-		<property value="Sponsor2" name="name"/>
-		<property value="sp2" name="middleName"/>
-		<property value="Sponsor2" name="surname"/>
-		<property value="http://tinyurl.com/picture.png" name="photo"/>
-		<property value="contacto@sp2.es" name="email"/>
-		<property value="+34647607408" name="phone"/>
-		<property value="Reina Mercedes" name="address"/>
-		<property value="0.5" name="score"/>
-		<property value="false" name="spammer"/>
-		<property name="userAccount" ref="userAccountSponsor2"/>
+		<!-- Actor -->
+		<property value="Sponsor2" name="name" />
+		<property value="sp2" name="middleName" />
+		<property value="Sponsor2" name="surname" />
+		<property value="http://tinyurl.com/picture.png" name="photo" />
+		<property value="contacto@sp2.es" name="email" />
+		<property value="+34647607408" name="phone" />
+		<property value="Reina Mercedes" name="address" />
+		<property value="0.5" name="score" />
+		<property value="false" name="spammer" />
+		<property name="userAccount" ref="userAccountSponsor2" />
 	</bean>
 
 	<bean class="domain.Sponsor" id="sponsor3">
 		<!-- Actor -->
-		<property value="Sponsor3" name="name"/>
-		<property value="sp3" name="middleName"/>
-		<property value="Sponsor3" name="surname"/>
-		<property value="http://tinyurl.com/picture.png" name="photo"/>
-		<property value="contacto@sp3.es" name="email"/>
-		<property value="+34647607409" name="phone"/>
-		<property value="Reina Mercedes" name="address"/>
-		<property value="0.5" name="score"/>
-		<property value="false" name="spammer"/>
-		<property name="userAccount" ref="userAccountSponsor3"/>
+		<property value="Sponsor3" name="name" />
+		<property value="sp3" name="middleName" />
+		<property value="Sponsor3" name="surname" />
+		<property value="http://tinyurl.com/picture.png" name="photo" />
+		<property value="contacto@sp3.es" name="email" />
+		<property value="+34647607409" name="phone" />
+		<property value="Reina Mercedes" name="address" />
+		<property value="0.5" name="score" />
+		<property value="false" name="spammer" />
+		<property name="userAccount" ref="userAccountSponsor3" />
 	</bean>
 
 	<!-- =================================================================== 
@@ -896,7 +897,7 @@
 		<property name="mode" value="FINAL" />
 		<property name="maxRows" value="200" />
 		<property name="maxColumns" value="200" />
-		<property name="status" value="SUBMITTED"/>
+		<property name="status" value="SUBMITTED" />
 		<!-- Relations -->
 		<property name="floats">
 			<list>
@@ -921,8 +922,8 @@
 		<property name="mode" value="FINAL" />
 		<property name="maxRows" value="120" />
 		<property name="maxColumns" value="300" />
-		<property name="status" value="ACCEPTED"/>
-		
+		<property name="status" value="ACCEPTED" />
+
 		<!-- Relations -->
 		<property name="floats">
 			<list>
@@ -945,7 +946,7 @@
 		<property name="mode" value="FINAL" />
 		<property name="maxRows" value="120" />
 		<property name="maxColumns" value="300" />
-		<property name="status" value="REJECTED"/>
+		<property name="status" value="REJECTED" />
 		<!-- Relations -->
 		<property name="floats">
 			<list>
@@ -967,7 +968,7 @@
 		<property name="maxRows" value="120" />
 		<property name="maxColumns" value="300" />
 		<property name="status" value="SUBMITTED"></property>
-		
+
 		<!-- Relations -->
 		<property name="floats">
 			<list>
@@ -988,8 +989,8 @@
 		<property name="mode" value="FINAL" />
 		<property name="maxRows" value="120" />
 		<property name="maxColumns" value="300" />
-		<property name="status" value="ACCEPTED"/>
-		
+		<property name="status" value="ACCEPTED" />
+
 		<!-- Relations -->
 		<property name="floats">
 			<list>
@@ -1010,7 +1011,7 @@
 		<property name="mode" value="FINAL" />
 		<property name="maxRows" value="120" />
 		<property name="maxColumns" value="300" />
-		<property name="status" value="REJECTED"/>
+		<property name="status" value="REJECTED" />
 		<!-- Relations -->
 		<property name="floats">
 			<list>
@@ -1031,8 +1032,8 @@
 		<property name="mode" value="FINAL" />
 		<property name="maxRows" value="120" />
 		<property name="maxColumns" value="300" />
-		<property name="status" value="SUBMITTED"/>
-		
+		<property name="status" value="SUBMITTED" />
+
 		<!-- Relations -->
 		<property name="floats">
 			<list>
@@ -1053,7 +1054,7 @@
 		<property name="mode" value="FINAL" />
 		<property name="maxRows" value="120" />
 		<property name="maxColumns" value="300" />
-		<property name="status" value="ACCEPTED"/>
+		<property name="status" value="ACCEPTED" />
 		<!-- Relations -->
 		<property name="floats">
 			<list>
@@ -1074,7 +1075,7 @@
 		<property name="mode" value="FINAL" />
 		<property name="maxRows" value="120" />
 		<property name="maxColumns" value="300" />
-		<property name="status" value="REJECTED"/>
+		<property name="status" value="REJECTED" />
 		<!-- Relations -->
 		<property name="floats">
 			<list>
@@ -1095,7 +1096,7 @@
 		<property name="mode" value="FINAL" />
 		<property name="maxRows" value="120" />
 		<property name="maxColumns" value="300" />
-		<property name="status" value="SUBMITTED"/>
+		<property name="status" value="SUBMITTED" />
 		<!-- Relations -->
 		<property name="floats">
 			<list>
@@ -1116,7 +1117,7 @@
 		<property name="mode" value="FINAL" />
 		<property name="maxRows" value="120" />
 		<property name="maxColumns" value="300" />
-		<property name="status" value="ACCEPTED"/>
+		<property name="status" value="ACCEPTED" />
 		<!-- Relations -->
 		<property name="floats">
 			<list>
@@ -1320,7 +1321,7 @@
 	</bean>
 
 
-	
+
 
 
 
@@ -1349,6 +1350,7 @@
 			</list>
 		</property>
 		<property name="area" ref="area1"></property>
+		<property name="history" ref="history1" />
 	</bean>
 
 
@@ -1373,7 +1375,7 @@
 			</list>
 		</property>
 		<property name="area" ref="area2"></property>
-
+		<property name="history" ref="history2" />
 	</bean>
 
 
@@ -1481,40 +1483,44 @@
 				<value>FLY</value>
 			</list>
 		</property>
-		<property name="flatFare" value="100.0"/>
-		<property name="vat" value="0.25"/>
+		<property name="flatFare" value="100.0" />
+		<property name="vat" value="0.25" />
 
 	</bean>
-	
-		<!-- =================================================================== 
-		======= MISCELLANEOUS RECORDS ========= 
-		=================================================================== -->	
-		
-		<bean id="miscellaneousRecord1" class="domain.Record">
+
+	<!-- =================================================================== 
+		======= MISCELLANEOUS RECORDS ========= =================================================================== -->
+
+	<bean id="miscellaneousRecord1" class="domain.Record">
 		<property name="title" value="This is a title of a miscellaneousRecord1"></property>
-		<property name="description" value="This is a description of a miscellaneousRecord1"></property>
-		</bean>
-		
-		<bean id="miscellaneousRecord2" class="domain.Record">
+		<property name="description"
+			value="This is a description of a miscellaneousRecord1"></property>
+	</bean>
+
+	<bean id="miscellaneousRecord2" class="domain.Record">
 		<property name="title" value="his is a title of a miscellaneousRecord2"></property>
-		<property name="description" value="This is a description of a miscellaneousRecord2"></property>
-		</bean>
-		
-		<bean id="miscellaneousRecord3" class="domain.Record">
+		<property name="description"
+			value="This is a description of a miscellaneousRecord2"></property>
+	</bean>
+
+	<bean id="miscellaneousRecord3" class="domain.Record">
 		<property name="title" value="his is a title of a miscellaneousRecord3"></property>
-		<property name="description" value="This is a description of a miscellaneousRecord3"></property>
-		</bean>
-		
-		<bean id="miscellaneousRecord4" class="domain.Record">
+		<property name="description"
+			value="This is a description of a miscellaneousRecord3"></property>
+	</bean>
+
+	<bean id="miscellaneousRecord4" class="domain.Record">
 		<property name="title" value="his is a title of a miscellaneousRecord4"></property>
-		<property name="description" value="This is a description of a miscellaneousRecord4"></property>
-		</bean>
-	
-		<!-- ========================================================================== LEGALRECORD ========= =================================================================== -->
+		<property name="description"
+			value="This is a description of a miscellaneousRecord4"></property>
+	</bean>
+
+	<!-- ========================================================================== 
+		LEGALRECORD ========= =================================================================== -->
 
 	<bean class="domain.LegalRecord" id="legalRecord1">
-		<property value="legalRecord1" name="legalName"/>
-		<property value="0.21" name="vat"/>
+		<property value="legalRecord1" name="legalName" />
+		<property value="0.21" name="vat" />
 		<property name="laws">
 			<list>
 				<value>Law1</value>
@@ -1524,139 +1530,157 @@
 	</bean>
 
 	<bean class="domain.LegalRecord" id="legalRecord2">
-	<property value="legalRecord2" name="legalName"/>
-	<property value="0.21" name="vat"/>
-	<property name="laws">
-		<list>
-			<value>Law3</value>
-			<value>Law4</value>
-		</list>		
-	</property>
+		<property value="legalRecord2" name="legalName" />
+		<property value="0.21" name="vat" />
+		<property name="laws">
+			<list>
+				<value>Law3</value>
+				<value>Law4</value>
+			</list>
+		</property>
 	</bean>
 
 
 	<bean class="domain.LegalRecord" id="legalRecord3">
-	<property value="legalRecord3" name="legalName"/>
-	<property value="0.21" name="vat"/>
-	<property name="laws">
-		<list>
-			<value>Law5</value>
-			<value>Law6</value>
-		</list>
-	</property>
+		<property value="legalRecord3" name="legalName" />
+		<property value="0.21" name="vat" />
+		<property name="laws">
+			<list>
+				<value>Law5</value>
+				<value>Law6</value>
+			</list>
+		</property>
 	</bean>
 
-<!-- ========================================================================== HISTORY ========= =================================================================== -->
+	<!-- ========================================================================== 
+		HISTORY ========= =================================================================== -->
 
 	<bean class="domain.History" id="history1">
-		<property name="inceptionRecord" ref="inceptionRecord1"/>
+		<property name="inceptionRecord" ref="inceptionRecord1" />
 		<property name="periodRecords">
-			<list> 
+			<list>
 			</list>
 		</property>
 		<property name="legalRecords">
 			<list>
-				<ref bean="legalRecord1"/>
+				<ref bean="legalRecord1" />
 			</list>
 		</property>
 		<property name="linkRecords">
-			<list> 
+			<list>
+				<ref bean="linkRecord1" />
 			</list>
 		</property>
 		<property name="miscellaneousRecords">
-			<list> 
+			<list>
 			</list>
 		</property>
 	</bean>
-	
+
 	<bean class="domain.History" id="history2">
-		<property name="inceptionRecord" ref="inceptionRecord2"/>
+		<property name="inceptionRecord" ref="inceptionRecord2" />
 		<property name="periodRecords">
-			<list> 
+			<list>
 			</list>
 		</property>
 		<property name="legalRecords">
 			<list>
-				<ref bean="legalRecord2"/>
+				<ref bean="legalRecord2" />
 			</list>
 		</property>
 		<property name="linkRecords">
-			<list> 
+			<list>
+				<ref bean="linkRecord2" />
 			</list>
 		</property>
 		<property name="miscellaneousRecords">
-			<list> 
+			<list>
 			</list>
 		</property>
 	</bean>
-	
-	<bean class="domain.History" id="history3">
-		<property name="inceptionRecord" ref="inceptionRecord3"/>
-		<property name="periodRecords">
-			<list> 
-			</list>
-		</property>
-		<property name="legalRecords">
-			<list>
-				<ref bean="legalRecord3"/>
-			</list>
-		</property>
-		<property name="linkRecords">
-			<list> 
-			</list>
-		</property>
-		<property name="miscellaneousRecords">
-			<list> 
-			</list>
-		</property>
+
+	<!-- =================================================================== 
+		======= SPONSORSHIP ========= =================================================================== -->
+
+	<bean id="sponsorship1" class="domain.Sponsorship">
+		<property name="banner"
+			value="https://ghc.anitab.org/wp-content/uploads/sites/2/2017/08/example-banner-announcement-1.png" />
+		<property name="targetPage" value="https://ghc.anitab.org" />
+		<property name="sponsor" ref="sponsor1"/>
+		<property name="creditCard" ref="creditCard1"/>
+		<property name="parade" ref="parade1" />
+	</bean>
+	<bean id="sponsorship2" class="domain.Sponsorship">
+		<property name="banner"
+			value="https://ghc.anitab.org/wp-content/uploads/sites/2/2017/08/example-banner-announcement-1.png" />
+		<property name="targetPage" value="https://ghc.anitab.org" />
+		<property name="sponsor" ref="sponsor2"/>
+		<property name="creditCard" ref="creditCard2"/>
+		<property name="parade" ref="parade2" />
+	</bean>
+	<bean id="sponsorship3" class="domain.Sponsorship">
+		<property name="banner"
+			value="https://ghc.anitab.org/wp-content/uploads/sites/2/2017/08/example-banner-announcement-1.png" />
+		<property name="targetPage" value="https://ghc.anitab.org" />
+		<property name="sponsor" ref="sponsor3"/>
+		<property name="creditCard" ref="creditCard3"/>
+		<property name="parade" ref="parade3" />
+	</bean>
+	<bean id="sponsorship4" class="domain.Sponsorship">
+		<property name="banner"
+			value="https://ghc.anitab.org/wp-content/uploads/sites/2/2017/08/example-banner-announcement-1.png" />
+		<property name="targetPage" value="https://ghc.anitab.org" />
+		<property name="sponsor" ref="sponsor1"/>
+		<property name="creditCard" ref="creditCard4"/>
+		<property name="parade" ref="parade4" />
 	</bean>
 
 
 	<!-- =================================================================== 
-		======= SPONSORSHIP ========= 
-		=================================================================== -->
-	
-	<!-- <bean id="sponsorship1" class="domain.Sponsorship">
-	<property name="banner" value="https://ghc.anitab.org/wp-content/uploads/sites/2/2017/08/example-banner-announcement-1.png"/>
-	<property name="targetPage" value="https://ghc.anitab.org"/>
-	<property name="sponsor"/>
-	<property name="creditCard"/>
-	<property name="parade" ref="parade1"/>
-	</bean>
-	
-	<bean id="sponsorship2" class="domain.Sponsorship">
-	<property name="banner" value="https://ghc.anitab.org/wp-content/uploads/sites/2/2017/08/example-banner-announcement-1.png"/>
-	<property name="targetPage" value="https://ghc.anitab.org"/>
-	<property name="sponsor"/>
-	<property name="creditCard"/>
-	<property name="parade" ref="parade2"/>
-	</bean>
-	
-	<bean id="sponsorship3" class="domain.Sponsorship">
-	<property name="banner" value="https://ghc.anitab.org/wp-content/uploads/sites/2/2017/08/example-banner-announcement-1.png"/>
-	<property name="targetPage" value="https://ghc.anitab.org"/>
-	<property name="sponsor"/>
-	<property name="creditCard"/>
-	<property name="parade" ref="parade3"/>
-	</bean>
-	
-	<bean id="sponsorship4" class="domain.Sponsorship">
-	<property name="banner" value="https://ghc.anitab.org/wp-content/uploads/sites/2/2017/08/example-banner-announcement-1.png"/>
-	<property name="targetPage" value="https://ghc.anitab.org"/>
-	<property name="sponsor"/>
-	<property name="creditCard"/>
-	<property name="parade" ref="parade4"/>
+		======= CreditCard ========= =================================================================== -->
+
+	<bean id="creditCard1" class="domain.CreditCard">
+		<property name="holderName" value="Customer 1" />
+		<property name="make" value="VISA" />
+		<property name="number" value="4716477920082572" />
+		<property name="expirationMonth" value="06" />
+		<property name="expirationYear" value="19" />
+		<property name="cvv" value="163" />
 	</bean>
 
-	 -->
+	<bean id="creditCard2" class="domain.CreditCard">
+		<property name="holderName" value="Customer 2" />
+		<property name="make" value="MASTER" />
+		<property name="number" value="5498128346540526" />
+		<property name="expirationMonth" value="10" />
+		<property name="expirationYear" value="20" />
+		<property name="cvv" value="728" />
+	</bean>
+
+	<bean id="creditCard3" class="domain.CreditCard">
+		<property name="holderName" value="Sponsor 1" />
+		<property name="make" value="AMEX" />
+		<property name="number" value="375278545368168" />
+		<property name="expirationMonth" value="06" />
+		<property name="expirationYear" value="19" />
+		<property name="cvv" value="533" />
+	</bean>
+
+	<bean id="creditCard4" class="domain.CreditCard">
+		<property name="holderName" value="Sponsor 2" />
+		<property name="make" value="VISA" />
+		<property name="number" value="4532787155338743" />
+		<property name="expirationMonth" value="10" />
+		<property name="expirationYear" value="19" />
+		<property name="cvv" value="266" />
+	</bean>
 
 	<!-- =================================================================== 
 		======= Segments ========= =================================================================== -->
-	
-	<!-- Conected - segment 1 and segment 2
-	              - segmnt 3 and segment 4 -->
-	
-	
+
+	<!-- Conected - segment 1 and segment 2 - segmnt 3 and segment 4 -->
+
+
 	<bean id="segment1" class="domain.Segment">
 		<!-- Atributes -->
 		<property name="originTime" value="2018/03/16 15:20"></property>
@@ -1670,9 +1694,9 @@
 			</list>
 		</property>
 	</bean>
-	
-	
-	
+
+
+
 	<bean id="segment2" class="domain.Segment">
 		<!-- Atributes -->
 		<property name="originTime" value="2018/03/16 17:00"></property>
@@ -1686,8 +1710,8 @@
 			</list>
 		</property>
 	</bean>
-	
-	
+
+
 	<bean id="segment3" class="domain.Segment">
 		<!-- Atributes -->
 		<property name="originTime" value="2018/03/20 17:00"></property>
@@ -1701,8 +1725,8 @@
 			</list>
 		</property>
 	</bean>
-	
-	
+
+
 	<bean id="segment4" class="domain.Segment">
 		<!-- Atributes -->
 		<property name="originTime" value="2018/03/21 17:00"></property>
@@ -1735,7 +1759,7 @@
 		<property name="title" value="Title chapter 1"></property>
 		<property name="area" ref="area1"></property>
 	</bean>
-	
+
 	<!-- Chapter 2 coordinates area 2 -->
 	<bean id="chapter2" class="domain.Chapter">
 		<property name="name" value="Name chapter 2"></property>
@@ -1751,11 +1775,11 @@
 		<property name="title" value="Title chapter 2"></property>
 		<property name="area" ref="area2"></property>
 	</bean>
-	
-	
+
+
 	<!-- =================================================================== 
 		======= InceptionRecord ========= =================================================================== -->
-	
+
 	<bean id="inceptionRecord1" class="domain.InceptionRecord">
 		<property name="title" value="title inception recor 1"></property>
 		<property name="description" value="description inception recor 1"></property>
@@ -1766,7 +1790,7 @@
 			</list>
 		</property>
 	</bean>
-	
+
 	<bean id="inceptionRecord2" class="domain.InceptionRecord">
 		<property name="title" value="title inception record 2"></property>
 		<property name="description" value="description inception record 2"></property>
@@ -1777,29 +1801,81 @@
 			</list>
 		</property>
 	</bean>
-	
-		<!-- =================================================================== 
+
+
+	<!-- =================================================================== 
+		======= PeriodRecord ========= =================================================================== -->
+
+	<bean id="periodRecord1" class="domain.PeriodRecord">
+		<property name="title" value="title period record 1"></property>
+		<property name="description" value="description period record 1"></property>
+		<property name="startYear" value="2021" />
+		<property name="endYear" value="2031" />
+		<property name="photos">
+			<list>
+				<value>https://cdn1.coppel.com/images/catalog/pm/1003913-1.jpg
+				</value>
+				<value>https://ateuta.files.wordpress.com/2010/11/reloj_equilibrio.jpg
+				</value>
+			</list>
+		</property>
+	</bean>
+
+
+	<bean id="periodRecord2" class="domain.PeriodRecord">
+		<property name="title" value="title period record 2"></property>
+		<property name="description" value="description period record 2"></property>
+		<property name="startYear" value="2019" />
+		<property name="endYear" value="2029" />
+		<property name="photos">
+			<list>
+				<value>https://www.ociohogar.com/6568-thickbox/reloj-pared-modern-roman-present-time.jpg
+				</value>
+				<value>http://www.qiannipicture.com/pic/Uploadfile/6/POA381022/0AC89C9CCD469E03CB4CD236CECB43D29D9DA39399D29BC6CD33D254CF53CA36CB83CECFF073835663A0CC.jpg
+				</value>
+			</list>
+		</property>
+	</bean>
+
+
+	<!-- =================================================================== 
+		======= LinkRecord ========= =================================================================== -->
+
+	<bean id="linkRecord1" class="domain.LinkRecord">
+		<property name="title" value="title link record 1"></property>
+		<property name="description" value="description link record 1"></property>
+		<property name="linkedBroterhood" ref="brotherhood2" />
+	</bean>
+
+	<bean id="linkRecord2" class="domain.LinkRecord">
+		<property name="title" value="title link record 2"></property>
+		<property name="description" value="description link record 2"></property>
+		<property name="linkedBroterhood" ref="brotherhood1" />
+	</bean>
+
+	<!-- =================================================================== 
 		======= GPS========= =================================================================== -->
+
 	<bean id="gps1" class="domain.GPS">
 		<property name="latitude" value="40.75793"></property>
 		<property name="longitude" value="-73.98551"></property>
 	</bean>
-	
-		<bean id="gps2" class="domain.GPS">
+
+	<bean id="gps2" class="domain.GPS">
 		<property name="latitude" value="50.75793"></property>
 		<property name="longitude" value="-83.98551"></property>
 	</bean>
-	
-		<bean id="gps3" class="domain.GPS">
+
+	<bean id="gps3" class="domain.GPS">
 		<property name="latitude" value="30.75793"></property>
 		<property name="longitude" value="-63.98551"></property>
 	</bean>
-	
-		<bean id="gps4" class="domain.GPS">
+
+	<bean id="gps4" class="domain.GPS">
 		<property name="latitude" value="10.75793"></property>
 		<property name="longitude" value="-93.98551"></property>
 	</bean>
-	
-	
+
+
 
 </beans>
