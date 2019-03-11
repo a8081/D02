@@ -160,9 +160,91 @@
 	</bean>
 
 
+	<!-- ========================= SPONSOR =========================== -->
 
 
 
+	<bean class="security.UserAccount" id="userAccountSponsor1">
+		<property value="sponsor1" name="username"/>
+		<property value="42c63ad66d4dc07ed17753772bef96d6" name="password"/>
+		<property name="authorities">
+			<list>
+				<bean class="security.Authority">
+				<property value="SPONSOR" name="authority"/>
+				</bean>
+			</list>
+	</property>
+	</bean>
+
+
+	<bean class="security.UserAccount" id="userAccountSponsor2">
+		<property value="sponsor2" name="username"/>
+		<property value="3dc67f80a03324e01b1640f45d107485" name="password"/>
+		<property name="authorities">
+			<list>
+				<bean class="security.Authority">
+				<property value="SPONSOR" name="authority"/>
+				</bean>
+			</list>
+		</property>
+	</bean>
+
+
+	<bean class="security.UserAccount" id="userAccountSponsor3">
+		<property value="sponsor3" name="username"/>
+		<property value="857a54956061fdc1b88d7722cafe6519" name="password"/>
+		<property name="authorities">
+			<list>
+			<bean class="security.Authority">
+			<property value="SPONSOR" name="authority"/>
+			</bean>
+			</list>
+		</property>
+	</bean>
+
+<!-- ========================================================================== SPONSOR ============================================================================ -->
+
+	<bean class="domain.Sponsor" id="sponsor1">
+	<!-- Actor -->
+		<property value="Sponsor1" name="name"/>
+		<property value="sp1" name="middleName"/>
+		<property value="Sponsor1" name="surname"/>
+		<property value="http://tinyurl.com/picture.png" name="photo"/>
+		<property value="contacto@sp1.es" name="email"/>
+		<property value="+34647607406" name="phone"/>
+		<property value="Reina Mercedes" name="address"/>
+		<property value="0.5" name="score"/>
+		<property value="false" name="spammer"/>
+		<property name="userAccount" ref="userAccountSponsor1"/>
+	</bean>
+
+	<bean class="domain.Sponsor" id="sponsor2">
+	<!-- Actor -->
+		<property value="Sponsor2" name="name"/>
+		<property value="sp2" name="middleName"/>
+		<property value="Sponsor2" name="surname"/>
+		<property value="http://tinyurl.com/picture.png" name="photo"/>
+		<property value="contacto@sp2.es" name="email"/>
+		<property value="+34647607408" name="phone"/>
+		<property value="Reina Mercedes" name="address"/>
+		<property value="0.5" name="score"/>
+		<property value="false" name="spammer"/>
+		<property name="userAccount" ref="userAccountSponsor2"/>
+	</bean>
+
+	<bean class="domain.Sponsor" id="sponsor3">
+		<!-- Actor -->
+		<property value="Sponsor3" name="name"/>
+		<property value="sp3" name="middleName"/>
+		<property value="Sponsor3" name="surname"/>
+		<property value="http://tinyurl.com/picture.png" name="photo"/>
+		<property value="contacto@sp3.es" name="email"/>
+		<property value="+34647607409" name="phone"/>
+		<property value="Reina Mercedes" name="address"/>
+		<property value="0.5" name="score"/>
+		<property value="false" name="spammer"/>
+		<property name="userAccount" ref="userAccountSponsor3"/>
+	</bean>
 
 	<!-- =================================================================== 
 		======= MEMBER ========= =================================================================== -->
@@ -1428,10 +1510,108 @@
 		<property name="description" value="This is a description of a miscellaneousRecord4"></property>
 		</bean>
 	
-		
+		<!-- ========================================================================== LEGALRECORD ========= =================================================================== -->
+
+	<bean class="domain.LegalRecord" id="legalRecord1">
+		<property value="legalRecord1" name="legalName"/>
+		<property value="0.21" name="vat"/>
+		<property name="laws">
+			<list>
+				<value>Law1</value>
+				<value>Law2</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean class="domain.LegalRecord" id="legalRecord2">
+	<property value="legalRecord2" name="legalName"/>
+	<property value="0.21" name="vat"/>
+	<property name="laws">
+		<list>
+			<value>Law3</value>
+			<value>Law4</value>
+		</list>		
+	</property>
+	</bean>
 
 
+	<bean class="domain.LegalRecord" id="legalRecord3">
+	<property value="legalRecord3" name="legalName"/>
+	<property value="0.21" name="vat"/>
+	<property name="laws">
+		<list>
+			<value>Law5</value>
+			<value>Law6</value>
+		</list>
+	</property>
+	</bean>
+
+<!-- ========================================================================== HISTORY ========= =================================================================== -->
+
+	<bean class="domain.History" id="history1">
+		<property name="inceptionRecord" ref="inceptionRecord1"/>
+		<property name="periodRecords">
+			<list> 
+			</list>
+		</property>
+		<property name="legalRecords">
+			<list>
+				<ref bean="legalRecord1"/>
+			</list>
+		</property>
+		<property name="linkRecords">
+			<list> 
+			</list>
+		</property>
+		<property name="miscellaneousRecords">
+			<list> 
+			</list>
+		</property>
+	</bean>
 	
+	<bean class="domain.History" id="history2">
+		<property name="inceptionRecord" ref="inceptionRecord2"/>
+		<property name="periodRecords">
+			<list> 
+			</list>
+		</property>
+		<property name="legalRecords">
+			<list>
+				<ref bean="legalRecord2"/>
+			</list>
+		</property>
+		<property name="linkRecords">
+			<list> 
+			</list>
+		</property>
+		<property name="miscellaneousRecords">
+			<list> 
+			</list>
+		</property>
+	</bean>
+	
+	<bean class="domain.History" id="history3">
+		<property name="inceptionRecord" ref="inceptionRecord3"/>
+		<property name="periodRecords">
+			<list> 
+			</list>
+		</property>
+		<property name="legalRecords">
+			<list>
+				<ref bean="legalRecord3"/>
+			</list>
+		</property>
+		<property name="linkRecords">
+			<list> 
+			</list>
+		</property>
+		<property name="miscellaneousRecords">
+			<list> 
+			</list>
+		</property>
+	</bean>
+
+
 	<!-- =================================================================== 
 		======= SPONSORSHIP ========= 
 		=================================================================== -->
