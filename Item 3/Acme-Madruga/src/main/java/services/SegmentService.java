@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
+import repositories.BrotherhoodRepository;
 import repositories.SegmentRepository;
 import domain.GPS;
 import domain.Parade;
@@ -20,13 +21,16 @@ import domain.Segment;
 public class SegmentService {
 
 	@Autowired
-	private SegmentRepository	segmentRepository;
+	private SegmentRepository		segmentRepository;
 
 	@Autowired
-	private BrotherhoodService	brotherhoodService;
+	private BrotherhoodService		brotherhoodService;
 
 	@Autowired
-	private GPSService			gpsService;
+	private GPSService				gpsService;
+
+	@Autowired
+	private BrotherhoodRepository	brotherhoodRepository;
 
 
 	/**
@@ -59,13 +63,23 @@ public class SegmentService {
 		return result;
 	}
 
-	public Segment save(final Segment segment) {
+	/**
+	 * Es necesario pasarle el id de la parade a la que se le quiere añadir el segmento cuando
+	 * se cree un segmento nuevo
+	 **/
+	public Segment save(final Segment segment, final int idParade) {
 		Segment result;
 
 		if (segment.getId() != 0) { //Sólo se puede modificar el último segment
 			//Comprobamos que el usuario logueado es una brotherhood que 
 			//tiene la parade a la que corresponde este segmento
 			Assert.isTrue(this.brotherhoodService.findByPrincipal().equals(this.segmentRepository.findBrotherhoodBySegment(segment.getId())), "El usuario logueado debe ser la hermandad que tiene la parade a la que corresponde ese segmento");
+
+			//Comprobamos que es el último de la lista (del path)
+			final Parade parade = this.segmentRepository.findParadeBySegment(segment.getId());
+			final List<Segment> segments = parade.getSegments();
+			final Segment lastSegment = segments.get(segments.size() - 1);
+			Assert.isTrue(segment.equals(lastSegment), "No se puede editar un segmento si no es el último del path");
 
 			//Comprobamos que solo se modifica el tiempo o la posicion final
 			final Segment oldSegment = this.segmentRepository.findOne(segment.getId());
@@ -81,8 +95,9 @@ public class SegmentService {
 		} else {
 			//En el caso de que el segmento se cree nuevo, hay que comprobar que
 			//el usuario logueado sea una brotherhood
-			//TODO como compruebo que se añade a una parade de ese brotherhood
+
 			this.brotherhoodService.findByPrincipal();
+			Assert.isTrue(this.brotherhoodService.findByPrincipal().equals(this.brotherhoodRepository.findBrotherhoodByParade(idParade)));
 
 			//Comprobamos que, el caso de que no sea el primer segment del path, 
 			//el instante y la posicion inicial coincidan con el instante y posicion final del segment
@@ -113,7 +128,7 @@ public class SegmentService {
 
 	}
 
-	public void detele(final Segment segment) {
+	public void delete(final Segment segment) {
 
 		Assert.isTrue(this.segmentRepository.findOne(segment.getId()).equals(segment), "No se puede borrar un segmento que no existe");
 
