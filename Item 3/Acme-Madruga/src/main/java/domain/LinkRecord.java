@@ -16,7 +16,7 @@ public class LinkRecord extends Record {
 
 	@Valid
 	@ManyToOne(optional = false)
-	public Brotherhood getLinkedBroterhood() {
+	public Brotherhood getLinkedBrotherhood() {
 		return this.linkedBroterhood;
 	}
 

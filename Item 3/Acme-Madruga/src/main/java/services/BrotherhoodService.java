@@ -219,4 +219,11 @@ public class BrotherhoodService {
 
 		return result;
 	}
+
+	public Brotherhood findBrotherhoodByHistory(final int historyId) {
+		Brotherhood res;
+		res = this.brotherhoodRepository.findBrotherhoodByHistory(historyId);
+		Assert.notNull(res);
+		return res;
+	}
 }
