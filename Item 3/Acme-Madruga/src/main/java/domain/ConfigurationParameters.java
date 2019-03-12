@@ -147,7 +147,7 @@ public class ConfigurationParameters extends DomainEntity {
 	public void setFlatFare(final double flatFare) {
 		this.flatFare = flatFare;
 	}
-
+	//TODO: getVat
 	public double getVat() {
 		return this.vat;
 	}

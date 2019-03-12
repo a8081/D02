@@ -19,6 +19,7 @@ import security.UserAccount;
 import domain.Actor;
 import domain.Area;
 import domain.Brotherhood;
+import domain.History;
 import forms.BrotherhoodAreaForm;
 import forms.BrotherhoodForm;
 
@@ -38,13 +39,16 @@ public class BrotherhoodService {
 	@Autowired
 	private Validator				validator;
 
+	@Autowired
+	private HistoryService			historyService;
+
 
 	public Brotherhood create() {
 		final Brotherhood brotherhood = new Brotherhood();
 		this.actorService.setAuthorityUserAccount(Authority.BROTHERHOOD, brotherhood);
+
 		return brotherhood;
 	}
-
 	public Collection<Brotherhood> findAll() {
 		final Collection<Brotherhood> result = this.brotherhoodRepository.findAll();
 		Assert.notNull(result);
@@ -64,6 +68,9 @@ public class BrotherhoodService {
 
 		if (brotherhood.getId() == 0) {
 			this.actorService.setAuthorityUserAccount(Authority.BROTHERHOOD, brotherhood);
+			//Al crear una nueva hermandad se le asigna por defecto una History
+			final History history = this.historyService.createForNewBrotherhood();
+			brotherhood.setHistory(history);
 			result = this.brotherhoodRepository.save(brotherhood);
 
 		} else {
