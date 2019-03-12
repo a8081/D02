@@ -1679,7 +1679,8 @@
 		<!-- Atributes -->
 		<property name="originTime" value="2018/03/16 15:20" />
 		<property name="destinationTime" value="2018/03/16 15:40" />
-		<property name="coordinates" ref="gps1" />
+		<property name="originCoordinates" ref="gps1" />
+		<property name="destinationCoordinates" ref="gps2" />
 	</bean>
 
 
@@ -1688,7 +1689,8 @@
 		<!-- Atributes -->
 		<property name="originTime" value="2018/03/16 15:40" />
 		<property name="destinationTime" value="2018/03/16 17:00" />
-		<property name="coordinates" ref="gps2" />
+		<property name="originCoordinates" ref="gps21" />
+		<property name="destinationCoordinates" ref="gps3" />
 	</bean>
 
 
@@ -1696,14 +1698,16 @@
 		<!-- Atributes -->
 		<property name="originTime" value="2018/03/20 17:00" />
 		<property name="destinationTime" value="2018/03/20 18:10" />
-		<property name="coordinates" ref="gps3" />
+		<property name="originCoordinates" ref="gps31" />
+		<property name="destinationCoordinates" ref="gps4" />
 	</bean>
 
 	<bean id="segment4" class="domain.Segment">
 		<!-- Atributes -->
 		<property name="originTime" value="2018/03/20 18:10" />
 		<property name="destinationTime" value="2018/03/20 18:50" />
-		<property name="coordinates" ref="gps4" />
+		<property name="originCoordinates" ref="gps41" />
+		<property name="destinationCoordinates" ref="gps5" />
 	</bean>
 
 	<!-- =================================================================== 
@@ -1819,31 +1823,43 @@
 		======= GPS========= =================================================================== -->
 
 	<bean id="gps1" class="domain.GPS">
-		<property name="orginLatitude" value="40.75793" />
-		<property name="orginLongitude" value="-73.98551" />
-		<property name="destinationLatitude" value="50.75793" />
-		<property name="destinationLongitude" value="-83.98551" />
+		<property name="latitude" value="40.75793" />
+		<property name="longitude" value="-73.98551" />		
+	</bean>
+	
+	<bean id="gps5" class="domain.GPS">
+		<property name="latitude" value="50.75793" />
+		<property name="longitude" value="-83.98551" />
 	</bean>
 
 	<bean id="gps2" class="domain.GPS">
-		<property name="orginLatitude" value="50.75793" />
-		<property name="orginLongitude" value="-83.98551" />
-		<property name="destinationLatitude" value="30.75793" />
-		<property name="destinationLongitude" value="-63.98551" />
+		<property name="latitude" value="30.75793" />
+		<property name="longitude" value="-63.98551" />
 	</bean>
 
 	<bean id="gps3" class="domain.GPS">
-		<property name="orginLatitude" value="30.75793" />
-		<property name="orginLongitude" value="-63.98551" />
-		<property name="destinationLatitude" value="10.75793" />
-		<property name="destinationLongitude" value="-93.98551" />
+		<property name="latitude" value="10.75793" />
+		<property name="longitude" value="-93.98551" />
 	</bean>
 
 	<bean id="gps4" class="domain.GPS">
-		<property name="orginLatitude" value="10.75793" />
-		<property name="orginLongitude" value="-93.98551" />
-		<property name="destinationLatitude" value="23.75793" />
-		<property name="destinationLongitude" value="-53.23551" />
+		<property name="latitude" value="23.75793" />
+		<property name="longitude" value="-53.23551" />
+	</bean>
+	
+	<bean id="gps21" class="domain.GPS">
+		<property name="latitude" value="30.75793" />
+		<property name="longitude" value="-63.98551" />
+	</bean>
+
+	<bean id="gps31" class="domain.GPS">
+		<property name="latitude" value="10.75793" />
+		<property name="longitude" value="-93.98551" />
+	</bean>
+
+	<bean id="gps41" class="domain.GPS">
+		<property name="latitude" value="23.75793" />
+		<property name="longitude" value="-53.23551" />
 	</bean>
 
 

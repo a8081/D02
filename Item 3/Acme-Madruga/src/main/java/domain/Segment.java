@@ -5,6 +5,9 @@ import java.util.Date;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -18,7 +21,8 @@ public class Segment extends DomainEntity {
 
 	private Date	originTime;
 	private Date	destinationTime;
-	private GPS		coordinates;
+	private GPS		originCoordinates;
+	private GPS		destinationCoordinates;
 
 
 	@Temporal(TemporalType.TIMESTAMP)
@@ -42,12 +46,24 @@ public class Segment extends DomainEntity {
 	}
 
 	@Valid
-	public GPS getCoordinates() {
-		return this.coordinates;
+	public GPS getOriginCoordinates() {
+		return this.originCoordinates;
 	}
 
-	public void setCoordinates(final GPS coordinates) {
-		this.coordinates = coordinates;
+	public void setOriginCoordinates(final GPS originCoordinates) {
+		this.originCoordinates = originCoordinates;
+	}
+
+	@Valid
+	@AttributeOverrides({
+		@AttributeOverride(name = "latitude", column = @Column(name = "destinationLatitude")), @AttributeOverride(name = "longitude", column = @Column(name = "destinationLongitude"))
+	})
+	public GPS getDestinationCoordinates() {
+		return this.destinationCoordinates;
+	}
+
+	public void setDestinationCoordinates(final GPS destinationCoordinates) {
+		this.destinationCoordinates = destinationCoordinates;
 	}
 
 }
