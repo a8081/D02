@@ -6,7 +6,6 @@ import java.util.Collection;
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.CascadeType;
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -24,7 +23,7 @@ public class History extends DomainEntity {
 
 
 	@NotNull
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne(cascade = CascadeType.ALL, optional = false)
 	public InceptionRecord getInceptionRecord() {
 		return this.inceptionRecord;
 	}
@@ -33,7 +32,6 @@ public class History extends DomainEntity {
 		this.inceptionRecord = inceptionRecord;
 	}
 
-	@ElementCollection
 	@OneToMany(cascade = CascadeType.ALL)
 	public Collection<PeriodRecord> getPeriodRecords() {
 		return this.periodRecords;
@@ -43,7 +41,6 @@ public class History extends DomainEntity {
 		this.periodRecords = periodRecords;
 	}
 
-	@ElementCollection
 	@OneToMany(cascade = CascadeType.ALL)
 	public Collection<LegalRecord> getLegalRecords() {
 		return this.legalRecords;
@@ -53,7 +50,6 @@ public class History extends DomainEntity {
 		this.legalRecords = legalRecords;
 	}
 
-	@ElementCollection
 	@OneToMany(cascade = CascadeType.ALL)
 	public Collection<LinkRecord> getLinkRecords() {
 		return this.linkRecords;
@@ -63,7 +59,6 @@ public class History extends DomainEntity {
 		this.linkRecords = linkRecords;
 	}
 
-	@ElementCollection
 	@OneToMany(cascade = CascadeType.ALL)
 	public Collection<MiscellaneousRecord> getMiscellaneousRecords() {
 		return this.miscellaneousRecords;

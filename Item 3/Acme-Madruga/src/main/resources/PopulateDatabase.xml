@@ -1850,13 +1850,13 @@
 	<bean id="linkRecord1" class="domain.LinkRecord">
 		<property name="title" value="title link record 1"></property>
 		<property name="description" value="description link record 1"></property>
-		<property name="linkedBroterhood" ref="brotherhood2" />
+		<property name="linkedBrotherhood" ref="brotherhood2" />
 	</bean>
 
 	<bean id="linkRecord2" class="domain.LinkRecord">
 		<property name="title" value="title link record 2"></property>
 		<property name="description" value="description link record 2"></property>
-		<property name="linkedBroterhood" ref="brotherhood1" />
+		<property name="linkedBrotherhood" ref="brotherhood1" />
 	</bean>
 
 	<!-- =================================================================== 

@@ -11,17 +11,17 @@ import javax.validation.Valid;
 @Access(AccessType.PROPERTY)
 public class LinkRecord extends Record {
 
-	private Brotherhood	linkedBroterhood;
+	private Brotherhood	linkedBrotherhood;
 
 
 	@Valid
 	@ManyToOne(optional = false)
 	public Brotherhood getLinkedBrotherhood() {
-		return this.linkedBroterhood;
+		return this.linkedBrotherhood;
 	}
 
-	public void setLinkedBroterhood(final Brotherhood linkedBroterhood) {
-		this.linkedBroterhood = linkedBroterhood;
+	public void setLinkedBrotherhood(final Brotherhood linkedBrotherhood) {
+		this.linkedBrotherhood = linkedBrotherhood;
 	}
 
 }
