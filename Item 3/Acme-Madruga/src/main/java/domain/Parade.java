@@ -3,9 +3,11 @@ package domain;
 
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
@@ -42,7 +44,7 @@ public class Parade extends DomainEntity {
 	//Relational atributes
 	private Collection<Float>	floats;
 	private Brotherhood			brotherhood;
-	private Collection<Segment>	segments;
+	private List<Segment>		segments;
 
 
 	@NotBlank
@@ -118,12 +120,13 @@ public class Parade extends DomainEntity {
 
 	@Valid
 	@ElementCollection
-	@OneToMany
-	public Collection<Segment> getSegments() {
+	@NotNull
+	@OneToMany(cascade = CascadeType.ALL)
+	public List<Segment> getSegments() {
 		return this.segments;
 	}
 
-	public void setSegments(final Collection<Segment> segments) {
+	public void setSegments(final List<Segment> segments) {
 		this.segments = segments;
 	}
 
