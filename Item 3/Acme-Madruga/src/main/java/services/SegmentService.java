@@ -27,9 +27,6 @@ public class SegmentService {
 	private BrotherhoodService		brotherhoodService;
 
 	@Autowired
-	private GPSService				gpsService;
-
-	@Autowired
 	private BrotherhoodRepository	brotherhoodRepository;
 
 
@@ -52,10 +49,12 @@ public class SegmentService {
 		final Segment result = new Segment();
 		//TODO esto lo tengo que hacer aqui por el hecho de que tiene  que ser 2 si o si?
 		final List<GPS> gps = new ArrayList<GPS>();
-		GPS origin = this.gpsService.create();
-		origin = this.gpsService.save(origin);
-		GPS destination = this.gpsService.create();
-		destination = this.gpsService.save(destination);
+		final GPS origin = new GPS();
+		origin.setLatitude(0.0);
+		origin.setLongitude(0.0);
+		final GPS destination = new GPS();
+		destination.setLatitude(0.0);
+		destination.setLongitude(0.0);
 		gps.add(origin);
 		gps.add(destination);
 		result.setGps(gps);
