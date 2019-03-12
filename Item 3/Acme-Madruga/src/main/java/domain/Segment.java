@@ -2,7 +2,6 @@
 package domain;
 
 import java.util.Date;
-import java.util.List;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
@@ -15,11 +14,10 @@ import javax.validation.Valid;
 @Access(AccessType.PROPERTY)
 public class Segment extends DomainEntity {
 
-	private Date		originTime;
-	private Date		destinationTime;
-
-	//Relational attributes
-	private List<GPS>	gps;
+	private Date	originTime;
+	private Date	destinationTime;
+	private GPS		originCoordinates;
+	private GPS		destinationCoordinates;
 
 
 	@Temporal(TemporalType.TIMESTAMP)
@@ -43,12 +41,21 @@ public class Segment extends DomainEntity {
 	}
 
 	@Valid
-	public List<GPS> getGps() {
-		return this.gps;
+	public GPS getOriginCoordinates() {
+		return this.originCoordinates;
 	}
 
-	public void setGps(final List<GPS> gps) {
-		this.gps = gps;
+	public void setOriginCoordinates(final GPS originCoordinates) {
+		this.originCoordinates = originCoordinates;
+	}
+
+	@Valid
+	public GPS getDestinationCoordinates() {
+		return this.destinationCoordinates;
+	}
+
+	public void setDestinationCoordinates(final GPS destinationCoordinates) {
+		this.destinationCoordinates = destinationCoordinates;
 	}
 
 }

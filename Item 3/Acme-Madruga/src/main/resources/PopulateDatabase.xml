@@ -1690,67 +1690,42 @@
 	<!-- =================================================================== 
 		======= Segments ========= =================================================================== -->
 
-	<!-- Conected - segment 1 and segment 2 - segmnt 3 and segment 4 -->
+	<!-- Conected - segment 1 and segment 2 - segmnt 3 -->
 
 
 	<bean id="segment1" class="domain.Segment">
 		<!-- Atributes -->
-		<property name="originTime" value="2018/03/16 15:20"></property>
-		<property name="destinationTime" value="2018/03/16 15:40"></property>
-
-		<!-- Relations -->
-		<property name="gps">
-			<list>
-				<ref bean="gps1" />
-				<ref bean="gps2" />
-			</list>
-		</property>
+		<property name="originTime" value="2018/03/16 15:20"/>
+		<property name="destinationTime" value="2018/03/16 15:40"/>
+		<property name="originCoordinates" ref="gps1" />
+		<property name="destinationCoordinates" ref="gps2" />
 	</bean>
 
 
 
 	<bean id="segment2" class="domain.Segment">
 		<!-- Atributes -->
-		<property name="originTime" value="2018/03/16 17:00"></property>
-		<property name="destinationTime" value="2018/03/16 18:10"></property>
-
-		<!-- Relations -->
-		<property name="gps">
-			<list>
-				<ref bean="gps2" />
-				<ref bean="gps3" />
-			</list>
-		</property>
+		<property name="originTime" value="2018/03/16 15:40"/>
+		<property name="destinationTime" value="2018/03/16 17:00"/>
+		<property name="originCoordinates" ref="gps2" />
+		<property name="destinationCoordinates" ref="gps3" />
 	</bean>
 
 
 	<bean id="segment3" class="domain.Segment">
 		<!-- Atributes -->
-		<property name="originTime" value="2018/03/20 17:00"></property>
-		<property name="destinationTime" value="2018/03/20 18:10"></property>
-
-		<!-- Relations -->
-		<property name="gps">
-			<list>
-				<ref bean="gps2" />
-				<ref bean="gps3" />
-			</list>
-		</property>
+		<property name="originTime" value="2018/03/20 17:00"/>
+		<property name="destinationTime" value="2018/03/20 18:10"/>
+		<property name="originCoordinates" ref="gps3" />
+		<property name="destinationCoordinates" ref="gps4" />
 	</bean>
-
-
-	<bean id="segment4" class="domain.Segment">
+	
+	<bean id="segment3" class="domain.Segment">
 		<!-- Atributes -->
-		<property name="originTime" value="2018/03/21 17:00"></property>
-		<property name="destinationTime" value="2018/03/12 18:10"></property>
-
-		<!-- Relations -->
-		<property name="gps">
-			<list>
-				<ref bean="gps3" />
-				<ref bean="gps4" />
-			</list>
-		</property>
+		<property name="originTime" value="2018/03/20 18:10"/>
+		<property name="destinationTime" value="2018/03/20 18:50"/>
+		<property name="originCoordinates" ref="gps4" />
+		<property name="destinationCoordinates" ref="gps5" />
 	</bean>
 
 	<!-- =================================================================== 
@@ -1881,6 +1856,11 @@
 	<bean id="gps4" class="domain.GPS">
 		<property name="latitude" value="10.75793"></property>
 		<property name="longitude" value="-93.98551"></property>
+	</bean>
+	
+	<bean id="gps4" class="domain.GPS">
+		<property name="latitude" value="10.73493"></property>
+		<property name="longitude" value="-93.34751"></property>
 	</bean>
 
 
