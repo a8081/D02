@@ -7,6 +7,7 @@ import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.validation.constraints.Digits;
 import javax.validation.constraints.Pattern;
 
 import org.hibernate.validator.constraints.NotBlank;
@@ -147,7 +148,9 @@ public class ConfigurationParameters extends DomainEntity {
 	public void setFlatFare(final double flatFare) {
 		this.flatFare = flatFare;
 	}
-	//TODO: getVat
+
+	@Range(min = 0, max = 1)
+	@Digits(integer = 1, fraction = 2)
 	public double getVat() {
 		return this.vat;
 	}

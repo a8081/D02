@@ -1825,14 +1825,11 @@
 		<property name="endYear" value="2031" />
 		<property name="photos">
 			<list>
-				<value>https://cdn1.coppel.com/images/catalog/pm/1003913-1.jpg
-				</value>
-				<value>https://ateuta.files.wordpress.com/2010/11/reloj_equilibrio.jpg
-				</value>
+				<value>https://cdn1.coppel.com/images/catalog/pm/1003913-1.jpg</value>
+				<value>https://ateuta.files.wordpress.com/2010/11/reloj_equilibrio.jpg</value>
 			</list>
 		</property>
 	</bean>
-
 
 	<bean id="periodRecord2" class="domain.PeriodRecord">
 		<property name="title" value="title period record 2"></property>
@@ -1841,10 +1838,8 @@
 		<property name="endYear" value="2029" />
 		<property name="photos">
 			<list>
-				<value>https://www.ociohogar.com/6568-thickbox/reloj-pared-modern-roman-present-time.jpg
-				</value>
-				<value>http://www.qiannipicture.com/pic/Uploadfile/6/POA381022/0AC89C9CCD469E03CB4CD236CECB43D29D9DA39399D29BC6CD33D254CF53CA36CB83CECFF073835663A0CC.jpg
-				</value>
+				<value>https://www.ociohogar.com/6568-thickbox/reloj-pared-modern-roman-present-time.jpg</value>
+				<value>http://www.qiannipicture.com/pic/Uploadfile/6/POA381022/0AC89C9CCD469E03CB4CD236CECB43D29D9DA39399D29BC6CD33D254CF53CA36CB83CECFF073835663A0CC.jpg</value>
 			</list>
 		</property>
 	</bean>

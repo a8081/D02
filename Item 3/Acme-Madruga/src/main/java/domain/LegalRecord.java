@@ -11,6 +11,7 @@ import javax.validation.constraints.Digits;
 
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.Range;
+import org.hibernate.validator.constraints.SafeHtml;
 
 @Entity
 @Access(AccessType.PROPERTY)
@@ -19,7 +20,29 @@ public class LegalRecord extends DomainEntity {
 	private String				legalName;
 	private Double				vat;
 	private Collection<String>	laws;
+	private String				title;
+	private String				description;
 
+
+	@NotBlank
+	@SafeHtml
+	public String getTitle() {
+		return this.title;
+	}
+
+	public void setTitle(final String title) {
+		this.title = title;
+	}
+
+	@NotBlank
+	@SafeHtml
+	public String getDescription() {
+		return this.description;
+	}
+
+	public void setDescription(final String description) {
+		this.description = description;
+	}
 
 	@NotBlank
 	public String getLegalName() {
