@@ -1491,26 +1491,26 @@
 	<!-- =================================================================== 
 		======= MISCELLANEOUS RECORDS ========= =================================================================== -->
 
-	<bean id="miscellaneousRecord1" class="domain.Record">
+	<bean id="miscellaneousRecord1" class="domain.MiscellaneousRecord">
 		<property name="title" value="This is a title of a miscellaneousRecord1"></property>
 		<property name="description"
 			value="This is a description of a miscellaneousRecord1"></property>
 	</bean>
 
-	<bean id="miscellaneousRecord2" class="domain.Record">
+	<bean id="miscellaneousRecord2" class="domain.MiscellaneousRecord">
 		<property name="title" value="his is a title of a miscellaneousRecord2"></property>
 		<property name="description"
 			value="This is a description of a miscellaneousRecord2"></property>
 	</bean>
 
-	<bean id="miscellaneousRecord3" class="domain.Record">
+	<bean id="miscellaneousRecord3" class="domain.MiscellaneousRecord">
 		<property name="title" value="his is a title of a miscellaneousRecord3"></property>
 		<property name="description"
 			value="This is a description of a miscellaneousRecord3"></property>
 	</bean>
 
-	<bean id="miscellaneousRecord4" class="domain.Record">
-		<property name="title" value="his is a title of a miscellaneousRecord4"></property>
+	<bean id="miscellaneousRecord4" class="domain.MiscellaneousRecord">
+		<property name="title" value="This is a title of a miscellaneousRecord4"></property>
 		<property name="description"
 			value="This is a description of a miscellaneousRecord4"></property>
 	</bean>
@@ -1519,6 +1519,8 @@
 		LEGALRECORD ========= =================================================================== -->
 
 	<bean class="domain.LegalRecord" id="legalRecord1">
+		<property name="title" value="This is a title of a legalRecord1"/>
+		<property name="description" value="This is a description of a legalRecord1"/>
 		<property value="legalRecord1" name="legalName" />
 		<property value="0.21" name="vat" />
 		<property name="laws">
@@ -1530,6 +1532,8 @@
 	</bean>
 
 	<bean class="domain.LegalRecord" id="legalRecord2">
+		<property name="title" value="This is a title of a legalRecord2"/>
+		<property name="description" value="This is a description of a legalRecord2"/>
 		<property value="legalRecord2" name="legalName" />
 		<property value="0.21" name="vat" />
 		<property name="laws">
@@ -1542,6 +1546,8 @@
 
 
 	<bean class="domain.LegalRecord" id="legalRecord3">
+		<property name="title" value="This is a title of a legalRecord3"/>
+		<property name="description" value="This is a description of a legalRecord3"/>
 		<property value="legalRecord3" name="legalName" />
 		<property value="0.21" name="vat" />
 		<property name="laws">
