@@ -1572,7 +1572,7 @@
 		<property name="inceptionRecord" ref="inceptionRecord2" />
 		<property name="periodRecords">
 			<list>
-				<ref bean="periodRecord1" />
+				<ref bean="periodRecord2" />
 			</list>
 		</property>
 		<property name="legalRecords">

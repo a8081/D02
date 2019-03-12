@@ -7,8 +7,10 @@ import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.validation.constraints.Digits;
 
 import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.Range;
 import org.hibernate.validator.constraints.SafeHtml;
 
 import cz.jirutka.validator.collection.constraints.EachNotBlank;
@@ -54,8 +56,8 @@ public class LegalRecord extends DomainEntity {
 	}
 
 	//Range, el max debe ser 1.01 ya que el max exluye?
-	//@Range(min = 0, max = 1)
-	//@Digits(fraction = 2, integer = 1)
+	@Range(min = 0, max = 0)
+	@Digits(fraction = 2, integer = 1)
 	public Double getVat() {
 		return this.vat;
 	}
