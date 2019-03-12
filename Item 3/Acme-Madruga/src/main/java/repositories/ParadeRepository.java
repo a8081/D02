@@ -34,4 +34,23 @@ public interface ParadeRepository extends JpaRepository<Parade, Integer> {
 
 	@Query("select p from Parade p where p.mode='FINAL' AND p.brotherhood.id=?1")
 	Collection<Parade> findAllFinalModeByBrotherhood(int userAccountId);
+
+	@Query("select p from Parade p where p.status='ACCEPTED' AND p.brotherhood.id=?1")
+	Collection<Parade> findAllAcceptedByBrotherhood(int brotherhoodId);
+
+	@Query("select p from Parade p where p.status='REJECTED' AND p.brotherhood.id=?1")
+	Collection<Parade> findAllRejectedByBrotherhood(int brotherhoodId);
+
+	@Query("select p from Parade p where p.status='SUBMITTED' AND p.brotherhood.id=?1")
+	Collection<Parade> findAllSubmittedByBrotherhood(int brotherhoodId);
+
+	@Query("select p from Parade p where p.mode='FINAL' AND p.status='ACCEPTED' AND p.brotherhood.area.id=?1")
+	Collection<Parade> findAllFinalModeAcceptedByArea(int areaId);
+
+	@Query("select p from Parade p where p.mode='FINAL' AND p.status='REJECTED' AND p.brotherhood.area.id=?1")
+	Collection<Parade> findAllFinalModeRejectedByArea(int areaId);
+
+	@Query("select p from Parade p where p.mode='FINAL' AND p.status='SUBMITTED' AND p.brotherhood.area.id=?1")
+	Collection<Parade> findAllFinalModeSubmittedByArea(int areaId);
+
 }

@@ -37,6 +37,7 @@ public class Parade extends DomainEntity {
 	private Integer				maxRows;
 	private Integer				maxColumns;
 	private String				status;
+	private String				rejectionReason;
 
 	//Relational atributes
 	private Collection<Float>	floats;
@@ -83,6 +84,8 @@ public class Parade extends DomainEntity {
 	public void setTicker(final String ticker) {
 		this.ticker = ticker;
 	}
+
+	@NotBlank
 	@Pattern(regexp = "^(DRAFT|FINAL)$")
 	public String getMode() {
 		return this.mode;
@@ -142,6 +145,7 @@ public class Parade extends DomainEntity {
 		this.maxColumns = maxColumns;
 	}
 
+	@NotBlank
 	@Pattern(regexp = "^(SUBMITTED|ACCEPTED|REJECTED)$")
 	public String getStatus() {
 		return this.status;
@@ -149,6 +153,15 @@ public class Parade extends DomainEntity {
 
 	public void setStatus(final String status) {
 		this.status = status;
+	}
+
+	@SafeHtml
+	public String getRejectionReason() {
+		return this.rejectionReason;
+	}
+
+	public void setRejectionReason(final String rejectionReason) {
+		this.rejectionReason = rejectionReason;
 	}
 
 }

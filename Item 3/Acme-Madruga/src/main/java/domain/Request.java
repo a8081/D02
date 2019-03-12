@@ -16,6 +16,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Pattern;
 
+import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.SafeHtml;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -40,6 +41,7 @@ public class Request extends DomainEntity {
 	private Parade				parade;
 
 
+	@NotBlank
 	@Pattern(regexp = "^(APPROVED|PENDING|REJECTED)$")
 	public String getStatus() {
 		return this.status;

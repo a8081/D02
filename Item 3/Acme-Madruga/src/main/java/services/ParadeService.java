@@ -20,6 +20,7 @@ import repositories.ParadeRepository;
 import security.Authority;
 import domain.Actor;
 import domain.Brotherhood;
+import domain.Chapter;
 import domain.Float;
 import domain.Member;
 import domain.Parade;
@@ -43,6 +44,9 @@ public class ParadeService {
 
 	@Autowired
 	private FloatService		floatService;
+
+	@Autowired
+	private ChapterService		chapterService;
 
 	@Autowired
 	private Validator			validator;
@@ -130,9 +134,11 @@ public class ParadeService {
 			if (parade.getId() == 0) {
 				parade.setBrotherhood(brotherhoodPrincipal);
 				parade.setMode("DRAFT");
+				parade.setStatus("SUBMITTED");
 				final Date moment = new Date(System.currentTimeMillis());
 				parade.setTicker(this.generateTicker(moment));
 			} else {
+				Assert.isTrue(parade.getStatus() != "REJECTED" || (parade.getRejectionReason() != "" || parade.getRejectionReason() != null), "If Parade is REJECTED must have a rejection reason");
 				Assert.isTrue(!parade.getMode().equals("FINAL"), "Cannot edit a parade in FINAL mode");
 				Assert.isTrue(parade.getBrotherhood() == this.brotherhoodService.findByPrincipal());
 			}
@@ -140,6 +146,31 @@ public class ParadeService {
 		result = this.paradeRepository.save(parade);
 		return result;
 	}
+
+	/**
+	 * Make a copy of one of the parade (given as parameter) of the brotherhood logged. It set a new ticker, clear its status and its rejection reason, and changes it to draft mode.
+	 * 
+	 * @author a8081
+	 * */
+	public Parade copyBrotherhoodParade(final int paradeId) {
+		final Parade parade = this.findOne(paradeId);
+		Assert.notNull(parade);
+		final Parade result;
+		final Brotherhood brotherhoodPrincipal = this.brotherhoodService.findByPrincipal();
+
+		Assert.notEmpty(parade.getFloats(), "A parade must have some floats assigned to be saved");
+		Assert.isTrue(this.floatService.findByBrotherhood(brotherhoodPrincipal).containsAll(parade.getFloats()));
+
+		parade.setBrotherhood(brotherhoodPrincipal);
+		parade.setMode("DRAFT");
+		parade.setStatus("SUBMITTED");
+		final Date moment = new Date(System.currentTimeMillis());
+		parade.setTicker(this.generateTicker(moment));
+
+		result = this.paradeRepository.save(parade);
+		return result;
+	}
+
 	public void delete(final Parade parade) {
 		Assert.notNull(parade);
 		Assert.isTrue(parade.getId() != 0);
@@ -204,6 +235,7 @@ public class ParadeService {
 		final Brotherhood bro = this.brotherhoodService.findByPrincipal();
 		Assert.isTrue(parade.getBrotherhood() == bro, "Actor who want to edit parade mode to FINAL is not his owner");
 		Assert.isTrue(parade.getMode().equals("DRAFT"));
+		Assert.isTrue(parade.getStatus().equals("ACCEPTED"), "Only parades that hace status accepted can be shown publicly");
 		if (bro.getArea() != null)
 			parade.setMode("FINAL");
 		result = this.paradeRepository.save(parade);
@@ -237,5 +269,53 @@ public class ParadeService {
 		final List<Parade> result = this.paradeRepository.getParadesThirtyDays();
 		Assert.notNull(result);
 		return result;
+	}
+
+	public Collection<Parade> findAllFinalModeAccepted(final int areaId) {
+		final Chapter principal = this.chapterService.findByPrincipal();
+		final Chapter areaChapter = this.chapterService.findChapterByArea(areaId);
+		Assert.isTrue(principal == areaChapter, "You're not the owner of this area");
+		final Collection<Parade> res = this.paradeRepository.findAllFinalModeAcceptedByArea(areaId);
+		Assert.notNull(res);
+		return res;
+	}
+
+	public Collection<Parade> findAllFinalModeRejected(final int areaId) {
+		final Chapter principal = this.chapterService.findByPrincipal();
+		final Chapter areaChapter = this.chapterService.findChapterByArea(areaId);
+		Assert.isTrue(principal == areaChapter, "You're not the owner of this area");
+		final Collection<Parade> res = this.paradeRepository.findAllFinalModeAcceptedByArea(areaId);
+		Assert.notNull(res);
+		return res;
+	}
+
+	public Collection<Parade> findAllFinalModeSubmitted(final int areaId) {
+		final Chapter principal = this.chapterService.findByPrincipal();
+		final Chapter areaChapter = this.chapterService.findChapterByArea(areaId);
+		Assert.isTrue(principal == areaChapter, "You're not the owner of this area");
+		final Collection<Parade> res = this.paradeRepository.findAllFinalModeSubmittedByArea(areaId);
+		Assert.notNull(res);
+		return res;
+	}
+
+	public Collection<Parade> findAllAcceptedByBrotherhood() {
+		final Brotherhood principal = this.brotherhoodService.findByPrincipal();
+		final Collection<Parade> res = this.paradeRepository.findAllAcceptedByBrotherhood(principal.getId());
+		Assert.notNull(res);
+		return res;
+	}
+
+	public Collection<Parade> findAllRejectedByBrotherhood() {
+		final Brotherhood principal = this.brotherhoodService.findByPrincipal();
+		final Collection<Parade> res = this.paradeRepository.findAllRejectedByBrotherhood(principal.getId());
+		Assert.notNull(res);
+		return res;
+	}
+
+	public Collection<Parade> findAllSubmittedByBrotherhood() {
+		final Brotherhood principal = this.brotherhoodService.findByPrincipal();
+		final Collection<Parade> res = this.paradeRepository.findAllSubmittedByBrotherhood(principal.getId());
+		Assert.notNull(res);
+		return res;
 	}
 }
