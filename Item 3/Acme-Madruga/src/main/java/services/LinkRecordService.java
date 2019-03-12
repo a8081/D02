@@ -40,14 +40,14 @@ public class LinkRecordService {
 
 	public LinkRecord save(LinkRecord linkRecord) {
 		Assert.notNull(linkRecord);
-		if (linkRecord.getLinkedBroterhood() != null)
+		if (linkRecord.getLinkedBrotherhood() != null)
 			linkRecord = this.linkRecordRepository.save(linkRecord);
 		return linkRecord;
 	}
 
 	public void delete(final LinkRecord linkRecord) {
 		Assert.isTrue(linkRecord.getId() != 0);
-		Assert.notNull(linkRecord.getLinkedBroterhood());
+		Assert.notNull(linkRecord.getLinkedBrotherhood());
 		Assert.notNull(linkRecord);
 		this.linkRecordRepository.delete(linkRecord.getId());
 	}
