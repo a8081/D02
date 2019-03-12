@@ -36,4 +36,7 @@ public interface BrotherhoodRepository extends JpaRepository<Brotherhood, Intege
 
 	@Query("select distinct b from Enrolment e join e.brotherhood b where e.member.userAccount.id=?1 and e.dropOut!=null")
 	Collection<Brotherhood> brotherhoodsHasBelonged(Integer memberUAId);
+
+	@Query("select b from Brotherhood b join b.history h where h.id=?1")
+	Brotherhood findBrotherhoodByHistory(int historyId);
 }

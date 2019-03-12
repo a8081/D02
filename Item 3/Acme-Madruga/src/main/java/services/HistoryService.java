@@ -13,7 +13,6 @@ import repositories.HistoryRepository;
 import domain.Brotherhood;
 import domain.History;
 import domain.InceptionRecord;
-import domain.Parade;
 
 @Service
 @Transactional
@@ -58,13 +57,20 @@ public class HistoryService {
 		final History res;
 		final Brotherhood brotherhood = this.brotherhoodService.findByPrincipal();
 
-		if (history.getId() == 0)
-			Assert.isNull(brotherhood.getHistory());
-		res = this.create();
-
+		if (history.getId() != 0)
+			Assert.isTrue(this.brotherhoodService.findBrotherhoodByHistory(history.getId()) == brotherhood);
+		res = this.historyRepository.save(history);
+		return res;
 	}
-	public void delete(final Parade parade) {
 
+	public void delete(final History history) {
+		Assert.notNull(history);
+		Assert.isTrue(history.getId() != 0);
+		final Brotherhood brotherhood = this.brotherhoodService.findByPrincipal();
+
+		final History retrieved = this.findOne(history.getId());
+		Assert.isTrue(this.brotherhoodService.findBrotherhoodByHistory(retrieved.getId()) == brotherhood);
+		this.historyRepository.delete(history);
 	}
 
 	/* ========================= OTHER METHODS =========================== */
