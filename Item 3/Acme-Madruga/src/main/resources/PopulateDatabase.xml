@@ -1493,36 +1493,32 @@
 
 	<bean id="miscellaneousRecord1" class="domain.MiscellaneousRecord">
 		<property name="title" value="This is a title of a miscellaneousRecord1"></property>
-		<property name="description"
-			value="This is a description of a miscellaneousRecord1"></property>
+		<property name="description" value="Description of a miscellaneousRecord1"></property>
 	</bean>
 
 	<bean id="miscellaneousRecord2" class="domain.MiscellaneousRecord">
-		<property name="title" value="his is a title of a miscellaneousRecord2"></property>
-		<property name="description"
-			value="This is a description of a miscellaneousRecord2"></property>
+		<property name="title" value="This is a title of a miscellaneousRecord2"></property>
+		<property name="description" value="Description of a miscellaneousRecord2"></property>
 	</bean>
 
 	<bean id="miscellaneousRecord3" class="domain.MiscellaneousRecord">
-		<property name="title" value="his is a title of a miscellaneousRecord3"></property>
-		<property name="description"
-			value="This is a description of a miscellaneousRecord3"></property>
+		<property name="title" value="This is a title of a miscellaneousRecord3"></property>
+		<property name="description" value="Description of a miscellaneousRecord3"></property>
 	</bean>
 
 	<bean id="miscellaneousRecord4" class="domain.MiscellaneousRecord">
 		<property name="title" value="This is a title of a miscellaneousRecord4"></property>
-		<property name="description"
-			value="This is a description of a miscellaneousRecord4"></property>
+		<property name="description" value="Description of a miscellaneousRecord4"></property>
 	</bean>
 
 	<!-- ========================================================================== 
 		LEGALRECORD ========= =================================================================== -->
 
-	<bean class="domain.LegalRecord" id="legalRecord1">
+	<bean id="legalRecord1" class="domain.LegalRecord">
 		<property name="title" value="This is a title of a legalRecord1" />
 		<property name="description" value="This is a description of a legalRecord1" />
-		<property value="legalRecord1" name="legalName" />
-		<property value="0.21" name="vat" />
+		<property name="legalName" value="legal Record 1" />
+		<property name="vat"  value="0.21"/>
 		<property name="laws">
 			<list>
 				<value>Law1</value>
@@ -1531,29 +1527,15 @@
 		</property>
 	</bean>
 
-	<bean class="domain.LegalRecord" id="legalRecord2">
+	<bean id="legalRecord2" class="domain.LegalRecord">
 		<property name="title" value="This is a title of a legalRecord2" />
 		<property name="description" value="This is a description of a legalRecord2" />
-		<property value="legalRecord2" name="legalName" />
-		<property value="0.21" name="vat" />
+		<property name="legalName" value="legal Record 2" />
+		<property name="vat" value="0.21" />
 		<property name="laws">
 			<list>
 				<value>Law3</value>
 				<value>Law4</value>
-			</list>
-		</property>
-	</bean>
-
-
-	<bean class="domain.LegalRecord" id="legalRecord3">
-		<property name="title" value="This is a title of a legalRecord3" />
-		<property name="description" value="This is a description of a legalRecord3" />
-		<property value="legalRecord3" name="legalName" />
-		<property value="0.21" name="vat" />
-		<property name="laws">
-			<list>
-				<value>Law5</value>
-				<value>Law6</value>
 			</list>
 		</property>
 	</bean>
@@ -1811,10 +1793,8 @@
 		<property name="endYear" value="2029" />
 		<property name="photos">
 			<list>
-				<value>https://www.ociohogar.com/6568-thickbox/reloj-pared-modern-roman-present-time.jpg
-				</value>
-				<value>http://www.qiannipicture.com/pic/Uploadfile/6/POA381022/0AC89C9CCD469E03CB4CD236CECB43D29D9DA39399D29BC6CD33D254CF53CA36CB83CECFF073835663A0CC.jpg
-				</value>
+				<value>https://www.ociohogar.com/6568-thickbox/reloj-pared-modern-roman-present-time.jpg</value>
+				<value>http://www.qiannipicture.com/pic/Uploadfile/6/POA381022/0AC89C9CCD469E03CB4CD236CECB43D29D9DA39399D29BC6CD33D254CF53CA36CB83CECFF073835663A0CC.jpg</value>
 			</list>
 		</property>
 	</bean>
