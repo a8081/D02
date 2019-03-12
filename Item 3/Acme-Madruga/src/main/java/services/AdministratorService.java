@@ -18,18 +18,16 @@ import forms.ActorFrom;
 public class AdministratorService {
 
 	@Autowired
-	private AdministratorRepository						administratorRepository;
+	private AdministratorRepository	administratorRepository;
 
 	@Autowired
-	private ActorService								actorService;
+	private ActorService			actorService;
 
 	@Autowired
-	private FolderService								folderService;
+	private FolderService			folderService;
 
 	@Autowired
-	private UserAccountService							userAccountService;
-	@Autowired
-	private org.springframework.validation.Validator	validator;
+	private UserAccountService		userAccountService;
 
 
 	public Administrator create() {

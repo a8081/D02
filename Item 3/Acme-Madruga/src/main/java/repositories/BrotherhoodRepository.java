@@ -34,6 +34,18 @@ public interface BrotherhoodRepository extends JpaRepository<Brotherhood, Intege
 		nativeQuery = true)
 	Integer[] getSmallestBrotherhood();
 
+	/** The largest brotherhood is the one with highest number of records per history **/
+	@Query(value = "", nativeQuery = true)
+	Integer[] getLargestBrotherhoodPerHistory();
+
+	/** The smallest brotherhood is the one with lowest number of records per history **/
+	@Query(value = "", nativeQuery = true)
+	Integer[] getSmallestBrotherhoodPerHistory();
+
+	/** The average, the minimum, the maximum and the standard deviation of the number of records per history */
+	@Query(value = "", nativeQuery = true)
+	Double[] getStatisticsOfRecordsPerHistory();
+
 	@Query("select distinct b from Enrolment e join e.brotherhood b where e.member.userAccount.id=?1 and e.dropOut!=null")
 	Collection<Brotherhood> brotherhoodsHasBelonged(Integer memberUAId);
 }

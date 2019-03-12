@@ -138,6 +138,12 @@ public class ChapterService {
 		this.save(principal);
 	}
 
+	//	public Double[] getStatisticsOfMembersPerChapter() {
+	//		final Double[] result = this.chapterRepository.getStatisticsOfMembersPerChapter();
+	//		Assert.notNull(result);
+	//		return result;
+	//	}
+
 	public Chapter reconstruct(final ChapterForm chapterForm) {
 		Chapter chapter;
 		if (chapterForm.getId() == 0) {
