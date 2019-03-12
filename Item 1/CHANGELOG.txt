@@ -1,0 +1,2 @@
+
+Hemos rectificado las anotaciones NotNull de algunos atributos Date, ya que la cardinalidad por defecto de estos atributos es 1, por tanto, es redundante especificar el NotNull.
