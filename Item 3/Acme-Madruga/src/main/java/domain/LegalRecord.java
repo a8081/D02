@@ -64,8 +64,8 @@ public class LegalRecord extends DomainEntity {
 		this.vat = vat;
 	}
 
-	@ElementCollection
 	@NotBlank
+	@ElementCollection
 	public Collection<String> getLaws() {
 		return this.laws;
 	}

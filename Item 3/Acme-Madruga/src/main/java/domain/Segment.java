@@ -10,18 +10,19 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.Valid;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 @Entity
 @Access(AccessType.PROPERTY)
 public class Segment extends DomainEntity {
 
 	private Date	originTime;
 	private Date	destinationTime;
-	private GPS		originCoordinates;
-	private GPS		destinationCoordinates;
+	private GPS		coordinates;
 
 
 	@Temporal(TemporalType.TIMESTAMP)
-	//@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
 	public Date getOriginTime() {
 		return this.originTime;
 	}
@@ -31,7 +32,7 @@ public class Segment extends DomainEntity {
 	}
 
 	@Temporal(TemporalType.TIMESTAMP)
-	//@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
 	public Date getDestinationTime() {
 		return this.destinationTime;
 	}
@@ -41,21 +42,12 @@ public class Segment extends DomainEntity {
 	}
 
 	@Valid
-	public GPS getOriginCoordinates() {
-		return this.originCoordinates;
+	public GPS getCoordinates() {
+		return this.coordinates;
 	}
 
-	public void setOriginCoordinates(final GPS originCoordinates) {
-		this.originCoordinates = originCoordinates;
-	}
-
-	@Valid
-	public GPS getDestinationCoordinates() {
-		return this.destinationCoordinates;
-	}
-
-	public void setDestinationCoordinates(final GPS destinationCoordinates) {
-		this.destinationCoordinates = destinationCoordinates;
+	public void setCoordinates(final GPS coordinates) {
+		this.coordinates = coordinates;
 	}
 
 }

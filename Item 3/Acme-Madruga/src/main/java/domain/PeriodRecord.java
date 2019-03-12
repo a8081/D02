@@ -63,9 +63,8 @@ public class PeriodRecord extends DomainEntity {
 		this.endYear = endYear;
 	}
 
-	@NotBlank
-	@EachURL
 	@ElementCollection
+	@EachURL
 	public Collection<String> getPhotos() {
 		return this.photos;
 	}

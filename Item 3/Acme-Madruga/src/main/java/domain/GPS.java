@@ -10,26 +10,45 @@ import javax.validation.constraints.NotNull;
 @Access(AccessType.PROPERTY)
 public class GPS {
 
-	private double	latitude;
-	private double	longitude;
+	private Double	orginLatitude;
+	private Double	orginLongitude;
+	private Double	destinationLatitude;
+	private Double	destinationLongitude;
 
 
 	@NotNull
-	public double getLatitude() {
-		return this.latitude;
+	public Double getOrginLatitude() {
+		return this.orginLatitude;
 	}
 
-	public void setLatitude(final double latitude) {
-		this.latitude = latitude;
+	public void setOrginLatitude(final Double orginLatitude) {
+		this.orginLatitude = orginLatitude;
 	}
 
 	@NotNull
-	public double getLongitude() {
-		return this.longitude;
+	public Double getOrginLongitude() {
+		return this.orginLongitude;
 	}
 
-	public void setLongitude(final double longitude) {
-		this.longitude = longitude;
+	public void setOrginLongitude(final Double orginLongitude) {
+		this.orginLongitude = orginLongitude;
 	}
 
+	@NotNull
+	public Double getDestinationLatitude() {
+		return this.destinationLatitude;
+	}
+
+	public void setDestinationLatitude(final Double destinationLatitude) {
+		this.destinationLatitude = destinationLatitude;
+	}
+
+	@NotNull
+	public Double getDestinationLongitude() {
+		return this.destinationLongitude;
+	}
+
+	public void setDestinationLongitude(final Double destinationLongitude) {
+		this.destinationLongitude = destinationLongitude;
+	}
 }

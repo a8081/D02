@@ -1519,8 +1519,8 @@
 		LEGALRECORD ========= =================================================================== -->
 
 	<bean class="domain.LegalRecord" id="legalRecord1">
-		<property name="title" value="This is a title of a legalRecord1"/>
-		<property name="description" value="This is a description of a legalRecord1"/>
+		<property name="title" value="This is a title of a legalRecord1" />
+		<property name="description" value="This is a description of a legalRecord1" />
 		<property value="legalRecord1" name="legalName" />
 		<property value="0.21" name="vat" />
 		<property name="laws">
@@ -1532,8 +1532,8 @@
 	</bean>
 
 	<bean class="domain.LegalRecord" id="legalRecord2">
-		<property name="title" value="This is a title of a legalRecord2"/>
-		<property name="description" value="This is a description of a legalRecord2"/>
+		<property name="title" value="This is a title of a legalRecord2" />
+		<property name="description" value="This is a description of a legalRecord2" />
 		<property value="legalRecord2" name="legalName" />
 		<property value="0.21" name="vat" />
 		<property name="laws">
@@ -1546,8 +1546,8 @@
 
 
 	<bean class="domain.LegalRecord" id="legalRecord3">
-		<property name="title" value="This is a title of a legalRecord3"/>
-		<property name="description" value="This is a description of a legalRecord3"/>
+		<property name="title" value="This is a title of a legalRecord3" />
+		<property name="description" value="This is a description of a legalRecord3" />
 		<property value="legalRecord3" name="legalName" />
 		<property value="0.21" name="vat" />
 		<property name="laws">
@@ -1565,7 +1565,7 @@
 		<property name="inceptionRecord" ref="inceptionRecord1" />
 		<property name="periodRecords">
 			<list>
-				<ref bean="periodRecord1"/>
+				<ref bean="periodRecord1" />
 			</list>
 		</property>
 		<property name="legalRecords">
@@ -1580,8 +1580,8 @@
 		</property>
 		<property name="miscellaneousRecords">
 			<list>
-				<ref bean="miscellaneousRecord1"/>
-				<ref bean="miscellaneousRecord2"/>
+				<ref bean="miscellaneousRecord1" />
+				<ref bean="miscellaneousRecord2" />
 			</list>
 		</property>
 	</bean>
@@ -1590,7 +1590,7 @@
 		<property name="inceptionRecord" ref="inceptionRecord2" />
 		<property name="periodRecords">
 			<list>
-				<ref bean="periodRecord1"/>
+				<ref bean="periodRecord1" />
 			</list>
 		</property>
 		<property name="legalRecords">
@@ -1605,8 +1605,8 @@
 		</property>
 		<property name="miscellaneousRecords">
 			<list>
-				<ref bean="miscellaneousRecord3"/>
-				<ref bean="miscellaneousRecord4"/>
+				<ref bean="miscellaneousRecord3" />
+				<ref bean="miscellaneousRecord4" />
 			</list>
 		</property>
 	</bean>
@@ -1618,32 +1618,32 @@
 		<property name="banner"
 			value="https://ghc.anitab.org/wp-content/uploads/sites/2/2017/08/example-banner-announcement-1.png" />
 		<property name="targetPage" value="https://ghc.anitab.org" />
-		<property name="sponsor" ref="sponsor1"/>
-		<property name="creditCard" ref="creditCard1"/>
+		<property name="sponsor" ref="sponsor1" />
+		<property name="creditCard" ref="creditCard1" />
 		<property name="parade" ref="parade1" />
 	</bean>
 	<bean id="sponsorship2" class="domain.Sponsorship">
 		<property name="banner"
 			value="https://ghc.anitab.org/wp-content/uploads/sites/2/2017/08/example-banner-announcement-1.png" />
 		<property name="targetPage" value="https://ghc.anitab.org" />
-		<property name="sponsor" ref="sponsor2"/>
-		<property name="creditCard" ref="creditCard2"/>
+		<property name="sponsor" ref="sponsor2" />
+		<property name="creditCard" ref="creditCard2" />
 		<property name="parade" ref="parade2" />
 	</bean>
 	<bean id="sponsorship3" class="domain.Sponsorship">
 		<property name="banner"
 			value="https://ghc.anitab.org/wp-content/uploads/sites/2/2017/08/example-banner-announcement-1.png" />
 		<property name="targetPage" value="https://ghc.anitab.org" />
-		<property name="sponsor" ref="sponsor3"/>
-		<property name="creditCard" ref="creditCard3"/>
+		<property name="sponsor" ref="sponsor3" />
+		<property name="creditCard" ref="creditCard3" />
 		<property name="parade" ref="parade3" />
 	</bean>
 	<bean id="sponsorship4" class="domain.Sponsorship">
 		<property name="banner"
 			value="https://ghc.anitab.org/wp-content/uploads/sites/2/2017/08/example-banner-announcement-1.png" />
 		<property name="targetPage" value="https://ghc.anitab.org" />
-		<property name="sponsor" ref="sponsor1"/>
-		<property name="creditCard" ref="creditCard4"/>
+		<property name="sponsor" ref="sponsor1" />
+		<property name="creditCard" ref="creditCard4" />
 		<property name="parade" ref="parade4" />
 	</bean>
 
@@ -1695,37 +1695,33 @@
 
 	<bean id="segment1" class="domain.Segment">
 		<!-- Atributes -->
-		<property name="originTime" value="2018/03/16 15:20"/>
-		<property name="destinationTime" value="2018/03/16 15:40"/>
-		<property name="originCoordinates" ref="gps1" />
-		<property name="destinationCoordinates" ref="gps2" />
+		<property name="originTime" value="2018/03/16 15:20" />
+		<property name="destinationTime" value="2018/03/16 15:40" />
+		<property name="coordinates" ref="gps1" />
 	</bean>
 
 
 
 	<bean id="segment2" class="domain.Segment">
 		<!-- Atributes -->
-		<property name="originTime" value="2018/03/16 15:40"/>
-		<property name="destinationTime" value="2018/03/16 17:00"/>
-		<property name="originCoordinates" ref="gps2" />
-		<property name="destinationCoordinates" ref="gps3" />
+		<property name="originTime" value="2018/03/16 15:40" />
+		<property name="destinationTime" value="2018/03/16 17:00" />
+		<property name="coordinates" ref="gps2" />
 	</bean>
 
 
 	<bean id="segment3" class="domain.Segment">
 		<!-- Atributes -->
-		<property name="originTime" value="2018/03/20 17:00"/>
-		<property name="destinationTime" value="2018/03/20 18:10"/>
-		<property name="originCoordinates" ref="gps3" />
-		<property name="destinationCoordinates" ref="gps4" />
+		<property name="originTime" value="2018/03/20 17:00" />
+		<property name="destinationTime" value="2018/03/20 18:10" />
+		<property name="coordinates" ref="gps3" />
 	</bean>
-	
-	<bean id="segment3" class="domain.Segment">
+
+	<bean id="segment4" class="domain.Segment">
 		<!-- Atributes -->
-		<property name="originTime" value="2018/03/20 18:10"/>
-		<property name="destinationTime" value="2018/03/20 18:50"/>
-		<property name="originCoordinates" ref="gps4" />
-		<property name="destinationCoordinates" ref="gps5" />
+		<property name="originTime" value="2018/03/20 18:10" />
+		<property name="destinationTime" value="2018/03/20 18:50" />
+		<property name="coordinates" ref="gps4" />
 	</bean>
 
 	<!-- =================================================================== 
@@ -1800,8 +1796,10 @@
 		<property name="endYear" value="2031" />
 		<property name="photos">
 			<list>
-				<value>https://cdn1.coppel.com/images/catalog/pm/1003913-1.jpg</value>
-				<value>https://ateuta.files.wordpress.com/2010/11/reloj_equilibrio.jpg</value>
+				<value>https://cdn1.coppel.com/images/catalog/pm/1003913-1.jpg
+				</value>
+				<value>https://ateuta.files.wordpress.com/2010/11/reloj_equilibrio.jpg
+				</value>
 			</list>
 		</property>
 	</bean>
@@ -1813,8 +1811,10 @@
 		<property name="endYear" value="2029" />
 		<property name="photos">
 			<list>
-				<value>https://www.ociohogar.com/6568-thickbox/reloj-pared-modern-roman-present-time.jpg</value>
-				<value>http://www.qiannipicture.com/pic/Uploadfile/6/POA381022/0AC89C9CCD469E03CB4CD236CECB43D29D9DA39399D29BC6CD33D254CF53CA36CB83CECFF073835663A0CC.jpg</value>
+				<value>https://www.ociohogar.com/6568-thickbox/reloj-pared-modern-roman-present-time.jpg
+				</value>
+				<value>http://www.qiannipicture.com/pic/Uploadfile/6/POA381022/0AC89C9CCD469E03CB4CD236CECB43D29D9DA39399D29BC6CD33D254CF53CA36CB83CECFF073835663A0CC.jpg
+				</value>
 			</list>
 		</property>
 	</bean>
@@ -1839,29 +1839,33 @@
 		======= GPS========= =================================================================== -->
 
 	<bean id="gps1" class="domain.GPS">
-		<property name="latitude" value="40.75793"></property>
-		<property name="longitude" value="-73.98551"></property>
+		<property name="orginLatitude" value="40.75793" />
+		<property name="orginLongitude" value="-73.98551" />
+		<property name="destinationLatitude" value="50.75793" />
+		<property name="destinationLongitude" value="-83.98551" />
 	</bean>
 
 	<bean id="gps2" class="domain.GPS">
-		<property name="latitude" value="50.75793"></property>
-		<property name="longitude" value="-83.98551"></property>
+		<property name="orginLatitude" value="50.75793" />
+		<property name="orginLongitude" value="-83.98551" />
+		<property name="destinationLatitude" value="30.75793" />
+		<property name="destinationLongitude" value="-63.98551" />
 	</bean>
 
 	<bean id="gps3" class="domain.GPS">
-		<property name="latitude" value="30.75793"></property>
-		<property name="longitude" value="-63.98551"></property>
+		<property name="orginLatitude" value="30.75793" />
+		<property name="orginLongitude" value="-63.98551" />
+		<property name="destinationLatitude" value="10.75793" />
+		<property name="destinationLongitude" value="-93.98551" />
 	</bean>
 
 	<bean id="gps4" class="domain.GPS">
-		<property name="latitude" value="10.75793"></property>
-		<property name="longitude" value="-93.98551"></property>
+		<property name="orginLatitude" value="10.75793" />
+		<property name="orginLongitude" value="-93.98551" />
+		<property name="destinationLatitude" value="23.75793" />
+		<property name="destinationLongitude" value="-53.23551" />
 	</bean>
-	
-	<bean id="gps4" class="domain.GPS">
-		<property name="latitude" value="10.73493"></property>
-		<property name="longitude" value="-93.34751"></property>
-	</bean>
+
 
 
 
