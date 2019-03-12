@@ -196,7 +196,7 @@ public class RequestService {
 		Assert.isTrue(paradeId != 0);
 		Request res = null;
 		final Member principal = this.memberService.findByPrincipal();
-		final Parade p = this.paradeService.findOne(paradeId);
+		this.paradeService.findOne(paradeId);
 		final Collection<Request> cr = this.requestRepository.findByProcesion(paradeId);
 		for (final Request request : cr)
 			if (request.getMember().equals(principal)) {

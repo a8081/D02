@@ -22,22 +22,16 @@ import domain.Parade;
 public class FinderService {
 
 	@Autowired
-	private FinderRepository							finderRepository;
+	private FinderRepository				finderRepository;
 
 	@Autowired
-	private MemberService								memberService;
+	private MemberService					memberService;
 
 	@Autowired
-	private ParadeService								paradeService;
+	private ParadeService					paradeService;
 
 	@Autowired
-	private ConfigurationParametersService				configParamService;
-
-	@Autowired
-	private org.springframework.validation.Validator	validator;
-
-	@Autowired
-	private ActorService								actorService;
+	private ConfigurationParametersService	configParamService;
 
 
 	//Metodos CRUD

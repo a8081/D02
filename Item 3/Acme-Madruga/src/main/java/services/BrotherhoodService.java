@@ -33,12 +33,6 @@ public class BrotherhoodService {
 	private ActorService			actorService;
 
 	@Autowired
-	private FolderService			folderService;
-
-	@Autowired
-	private EnrolmentService		enrolmentService;
-
-	@Autowired
 	private UserAccountService		userAccountService;
 
 	@Autowired

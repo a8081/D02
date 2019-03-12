@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
-import org.springframework.validation.Validator;
 
 import security.Authority;
 import security.UserAccount;
@@ -22,10 +21,9 @@ public class UserAccountService {
 
 	@Autowired
 	private UserAccountRepository	userAccountRepository;
+
 	@Autowired
 	private ActorService			actorService;
-	@Autowired
-	private Validator				validator;
 
 
 	public UserAccount create() {

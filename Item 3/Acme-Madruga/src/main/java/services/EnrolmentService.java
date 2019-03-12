@@ -39,9 +39,6 @@ public class EnrolmentService {
 	@Autowired
 	private Validator			validator;
 
-	@Autowired
-	private PositionService		positionService;
-
 
 	public Enrolment create() {
 		final Enrolment enrolment = new Enrolment();
