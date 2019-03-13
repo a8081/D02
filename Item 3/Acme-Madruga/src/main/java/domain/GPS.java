@@ -3,32 +3,32 @@ package domain;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
-import javax.persistence.Entity;
+import javax.persistence.Embeddable;
 import javax.validation.constraints.NotNull;
 
-@Entity
+@Embeddable
 @Access(AccessType.PROPERTY)
-public class GPS extends DomainEntity {
+public class GPS {
 
-	double	latitude;
-	double	longitude;
+	private Double	latitude;
+	private Double	longitude;
 
 
 	@NotNull
-	public double getLatitude() {
+	public Double getLatitude() {
 		return this.latitude;
 	}
 
-	public void setLatitude(final double latitude) {
+	public void setLatitude(final Double latitude) {
 		this.latitude = latitude;
 	}
 
 	@NotNull
-	public double getLongitude() {
+	public Double getLongitude() {
 		return this.longitude;
 	}
 
-	public void setLongitude(final double longitude) {
+	public void setLongitude(final Double longitude) {
 		this.longitude = longitude;
 	}
 

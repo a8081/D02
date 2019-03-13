@@ -14,10 +14,10 @@ import domain.Parade;
 @Repository
 public interface FloatRepository extends JpaRepository<Float, Integer> {
 
-	@Query("select p from Procession p join p.floats b where b.title =?1")
-	List<Parade> findForFloat(String fProcession);
-
 	@Query("select f from Float f where f.brotherhood.userAccount.id = ?1")
 	Collection<Float> findByBrotherhood(int brotherhooodUserAccountId);
+
+	@Query("select p from Parade p join p.floats b where b.title =?1")
+	List<Parade> findForFloat(String fProcession);
 
 }

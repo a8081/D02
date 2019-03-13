@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.Validator;
 
 import repositories.BrotherhoodRepository;
 import security.Authority;
@@ -19,6 +18,7 @@ import security.UserAccount;
 import domain.Actor;
 import domain.Area;
 import domain.Brotherhood;
+import domain.History;
 import forms.BrotherhoodAreaForm;
 import forms.BrotherhoodForm;
 
@@ -35,16 +35,19 @@ public class BrotherhoodService {
 	@Autowired
 	private UserAccountService		userAccountService;
 
+	//@Autowired
+	//private Validator				validator;
+
 	@Autowired
-	private Validator				validator;
+	private HistoryService			historyService;
 
 
 	public Brotherhood create() {
 		final Brotherhood brotherhood = new Brotherhood();
 		this.actorService.setAuthorityUserAccount(Authority.BROTHERHOOD, brotherhood);
+
 		return brotherhood;
 	}
-
 	public Collection<Brotherhood> findAll() {
 		final Collection<Brotherhood> result = this.brotherhoodRepository.findAll();
 		Assert.notNull(result);
@@ -64,6 +67,9 @@ public class BrotherhoodService {
 
 		if (brotherhood.getId() == 0) {
 			this.actorService.setAuthorityUserAccount(Authority.BROTHERHOOD, brotherhood);
+			//Al crear una nueva hermandad se le asigna por defecto una History
+			final History history = this.historyService.createForNewBrotherhood();
+			brotherhood.setHistory(history);
 			result = this.brotherhoodRepository.save(brotherhood);
 
 		} else {
@@ -215,8 +221,15 @@ public class BrotherhoodService {
 		result.setVersion(brotherhoodAreaForm.getVersion());
 		result.setArea(brotherhoodAreaForm.getArea());
 
-		this.validator.validate(result, binding);
+		//this.validator.validate(result, binding);
 
 		return result;
+	}
+
+	public Brotherhood findBrotherhoodByHistory(final int historyId) {
+		Brotherhood res;
+		res = this.brotherhoodRepository.findBrotherhoodByHistory(historyId);
+		Assert.notNull(res);
+		return res;
 	}
 }

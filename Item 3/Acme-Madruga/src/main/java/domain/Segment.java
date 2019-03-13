@@ -1,30 +1,32 @@
 
 package domain;
 
-import java.util.Collection;
 import java.util.Date;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
+import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.Valid;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @Access(AccessType.PROPERTY)
 public class Segment extends DomainEntity {
 
-	private Date			originTime;
-	private Date			destinationTime;
-
-	//Relational attributes
-	private Collection<GPS>	gps;
+	private Date	originTime;
+	private Date	destinationTime;
+	private GPS		originCoordinates;
+	private GPS		destinationCoordinates;
 
 
 	@Temporal(TemporalType.TIMESTAMP)
-	//@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
 	public Date getOriginTime() {
 		return this.originTime;
 	}
@@ -34,7 +36,7 @@ public class Segment extends DomainEntity {
 	}
 
 	@Temporal(TemporalType.TIMESTAMP)
-	//@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
 	public Date getDestinationTime() {
 		return this.destinationTime;
 	}
@@ -44,13 +46,24 @@ public class Segment extends DomainEntity {
 	}
 
 	@Valid
-	@ManyToMany
-	public Collection<GPS> getGps() {
-		return this.gps;
+	public GPS getOriginCoordinates() {
+		return this.originCoordinates;
 	}
 
-	public void setGps(final Collection<GPS> gps) {
-		this.gps = gps;
+	public void setOriginCoordinates(final GPS originCoordinates) {
+		this.originCoordinates = originCoordinates;
+	}
+
+	@Valid
+	@AttributeOverrides({
+		@AttributeOverride(name = "latitude", column = @Column(name = "destinationLatitude")), @AttributeOverride(name = "longitude", column = @Column(name = "destinationLongitude"))
+	})
+	public GPS getDestinationCoordinates() {
+		return this.destinationCoordinates;
+	}
+
+	public void setDestinationCoordinates(final GPS destinationCoordinates) {
+		this.destinationCoordinates = destinationCoordinates;
 	}
 
 }

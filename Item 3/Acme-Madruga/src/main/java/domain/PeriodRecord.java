@@ -10,17 +10,40 @@ import javax.persistence.Entity;
 import javax.validation.constraints.Digits;
 
 import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.SafeHtml;
 
 import cz.jirutka.validator.collection.constraints.EachURL;
 
 @Entity
 @Access(AccessType.PROPERTY)
-public class PeriodRecord extends Record {
+public class PeriodRecord extends DomainEntity {
 
+	private String				title;
+	private String				description;
 	private Integer				startYear;
 	private Integer				endYear;
 	private Collection<String>	photos;
 
+
+	@NotBlank
+	@SafeHtml
+	public String getTitle() {
+		return this.title;
+	}
+
+	public void setTitle(final String title) {
+		this.title = title;
+	}
+
+	@NotBlank
+	@SafeHtml
+	public String getDescription() {
+		return this.description;
+	}
+
+	public void setDescription(final String description) {
+		this.description = description;
+	}
 
 	@Digits(integer = 4, fraction = 0)
 	public Integer getStartYear() {
@@ -40,9 +63,8 @@ public class PeriodRecord extends Record {
 		this.endYear = endYear;
 	}
 
-	@NotBlank
-	@EachURL
 	@ElementCollection
+	@EachURL
 	public Collection<String> getPhotos() {
 		return this.photos;
 	}
