@@ -1625,6 +1625,7 @@
 		<property name="sponsor" ref="sponsor1" />
 		<property name="creditCard" ref="creditCard1" />
 		<property name="parade" ref="parade1" />
+		<property name="activated" value="true" />
 	</bean>
 	<bean id="sponsorship2" class="domain.Sponsorship">
 		<property name="banner"
@@ -1633,6 +1634,7 @@
 		<property name="sponsor" ref="sponsor2" />
 		<property name="creditCard" ref="creditCard2" />
 		<property name="parade" ref="parade2" />
+		<property name="activated" value="false" />
 	</bean>
 	<bean id="sponsorship3" class="domain.Sponsorship">
 		<property name="banner"
@@ -1641,6 +1643,7 @@
 		<property name="sponsor" ref="sponsor3" />
 		<property name="creditCard" ref="creditCard3" />
 		<property name="parade" ref="parade3" />
+		<property name="activated" value="true" />
 	</bean>
 	<bean id="sponsorship4" class="domain.Sponsorship">
 		<property name="banner"
@@ -1649,6 +1652,7 @@
 		<property name="sponsor" ref="sponsor1" />
 		<property name="creditCard" ref="creditCard4" />
 		<property name="parade" ref="parade4" />
+		<property name="activated" value="true" />
 	</bean>
 
 
