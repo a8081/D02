@@ -1,7 +1,6 @@
 
 package services;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -48,16 +47,14 @@ public class SegmentService {
 	public Segment create() {
 		final Segment result = new Segment();
 		//TODO esto lo tengo que hacer aqui por el hecho de que tiene  que ser 2 si o si?
-		final List<GPS> gps = new ArrayList<GPS>();
 		final GPS origin = new GPS();
 		origin.setLatitude(0.0);
 		origin.setLongitude(0.0);
 		final GPS destination = new GPS();
 		destination.setLatitude(0.0);
 		destination.setLongitude(0.0);
-		gps.add(origin);
-		gps.add(destination);
-		result.setGps(gps);
+		result.setDestinationCoordinates(destination);
+		result.setOriginCoordinates(origin);
 
 		return result;
 	}
@@ -83,9 +80,9 @@ public class SegmentService {
 			//Comprobamos que solo se modifica el tiempo o la posicion final
 			final Segment oldSegment = this.segmentRepository.findOne(segment.getId());
 			final Date oldOriginDate = oldSegment.getOriginTime();
-			final GPS oldOriginGPS = oldSegment.getGps().get(0);
+			final GPS oldOriginGPS = oldSegment.getOriginCoordinates();
 			final Date newOriginDate = segment.getOriginTime();
-			final GPS newOriginGPS = segment.getGps().get(0);
+			final GPS newOriginGPS = segment.getOriginCoordinates();
 			Assert.isTrue(oldOriginDate.equals(newOriginDate) && oldOriginGPS.equals(newOriginGPS), "No se puede modificar ni la posicion ni la fecha de origen");
 
 			result = this.segmentRepository.save(segment);
@@ -106,9 +103,9 @@ public class SegmentService {
 			if (!segments.isEmpty()) {
 				final Segment lastSegment = segments.get(segments.size() - 1);
 				final Date initialDate = segment.getOriginTime();
-				final GPS initialGPS = segment.getGps().get(0);
+				final GPS initialGPS = segment.getOriginCoordinates();
 				final Date finalDate = lastSegment.getDestinationTime();
-				final GPS finalGPS = lastSegment.getGps().get(1);
+				final GPS finalGPS = lastSegment.getDestinationCoordinates();
 				Assert.isTrue(initialDate.equals(finalDate) && initialGPS.equals(finalGPS), "El instante y la posición de inicio del nuevo segmento no coincide con la fecha y posición final del segmnto precedente");
 
 			}

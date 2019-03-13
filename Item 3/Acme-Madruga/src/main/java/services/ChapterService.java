@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.Validator;
 
 import repositories.ChapterRepository;
 import security.Authority;
@@ -34,8 +33,8 @@ public class ChapterService {
 	@Autowired
 	private UserAccountService	userAccountService;
 
-	@Autowired
-	private Validator			validator;
+	//@Autowired
+	//private Validator			validator;
 
 	@Autowired
 	private AreaService			areaService;
@@ -196,7 +195,7 @@ public class ChapterService {
 		result.setVersion(chapterAreaForm.getVersion());
 		result.setArea(chapterAreaForm.getArea());
 
-		this.validator.validate(result, binding);
+		//this.validator.validate(result, binding);
 
 		return result;
 	}

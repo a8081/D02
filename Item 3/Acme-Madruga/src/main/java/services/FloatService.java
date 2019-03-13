@@ -85,12 +85,12 @@ public class FloatService {
 		}
 	}
 
-	public Collection<Parade> find(final String fParade) {
+	public Collection<Parade> find(final String titleParade) {
 		final Collection<Parade> res;
 
 		try {
 			final Collection<Parade> aux = this.paradeService.findAll();
-			aux.retainAll(this.floatRepository.findForFloat(fParade));
+			aux.retainAll(this.floatRepository.findForFloat(titleParade));
 			//			if (aux.size() > numberOfElementInList)
 			//				res = new ArrayList<>(aux.subList(0, numberOfElementInList));
 			//			else
