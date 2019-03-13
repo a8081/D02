@@ -26,7 +26,7 @@ public interface ParadeRepository extends JpaRepository<Parade, Integer> {
 	@Query("select p from Parade p where p.mode = 'FINAL'")
 	Collection<Parade> findAllFinalMode();
 
-	@Query(value = "select * from `acme-parade`.Parade WHERE timestampdiff(MINUTE, '2020-03-27', moment) <=30*24*60", nativeQuery = true)
+	@Query(value = "select  * from `acme-parade`.Parade WHERE timestampdiff(MINUTE, '2020-03-27', moment) <=30*24*60", nativeQuery = true)
 	List<Parade> getParadesThirtyDays();
 
 	@Query("select distinct p from Parade p where p.mode='FINAL' AND (?1='' OR p.description LIKE CONCAT('%',?1,'%') OR p.title LIKE CONCAT('%',?1,'%') OR p.ticker LIKE CONCAT('%',?1,'%')) AND (?4='' OR (?4=p.brotherhood.area.name)) AND ((p.moment>=?2) OR ?2=NULL) AND ((p.moment<=?3) OR ?3=NULL)")
@@ -52,17 +52,5 @@ public interface ParadeRepository extends JpaRepository<Parade, Integer> {
 
 	@Query("select p from Parade p where p.mode='FINAL' AND p.status='SUBMITTED' AND p.brotherhood.area.id=?1")
 	Collection<Parade> findAllFinalModeSubmittedByArea(int areaId);
-
-	@Query("select sum(case when p.mode='DRAFT' then 1.0 else 0.0 end) / sum(case when p.mode='FINAL' then 1.0 else 0.0 end) from Parade p")
-	Double findRatioDraftVsFinalParades();
-
-	@Query("select sum(case when p.status='SUBMITTED' and p.mode='FINAL' then 1.0 else 0.0 end) / count(p) from Parade p")
-	Double findSubmittedParadesRatio();
-
-	@Query("select sum(case when p.status='ACCEPTED' and p.mode='FINAL' then 1.0 else 0.0 end) / count(p) from Parade p")
-	Double findAcceptedParadesRatio();
-
-	@Query("select sum(case when p.status='REJECTED' and p.mode='FINAL' then 1.0 else 0.0 end) / count(p) from Parade p")
-	Double findRejectedParadesRatio();
 
 }
