@@ -55,3 +55,4 @@ public interface BrotherhoodRepository extends JpaRepository<Brotherhood, Intege
 	@Query("select p.brotherhood from Parade p where p.id=?1 ")
 	Brotherhood findBrotherhoodByParade(int idParade);
 
+}
