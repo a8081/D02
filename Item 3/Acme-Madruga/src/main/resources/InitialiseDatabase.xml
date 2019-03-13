@@ -52,9 +52,9 @@
 		<property name="sysName" value="Acme Madrugá" />
 		<property name="banner" value="https://tinyurl.com/acme-madruga" />
 		<property name="welcomeMessageEn"
-			value="Welcome to Acme Madrugá!  The site to organise your processions" />
+			value="Welcome to Acme Madrugá!  The site to organise your parades" />
 		<property name="welcomeMessageEsp"
-			value="¡Bienvenidos a Acme Madrugá!  Tu sitio para organizar procesiones" />
+			value="¡Bienvenidos a Acme Madrugá!  Tu sitio para organizar parades" />
 		<property name="countryPhoneCode" value="+34" />
 		<property name="spamWords">
 			<list>

@@ -891,7 +891,7 @@
 
 	<bean id="parade1" class="domain.Parade">
 		<property name="title" value="El gran poder" />
-		<property name="description" value="This is a description of a procession1" />
+		<property name="description" value="This is a description of a parade1" />
 		<property name="moment" value="2020/04/24 00:00" />
 		<property name="ticker" value="200424-TUEBG" />
 		<property name="mode" value="FINAL" />
@@ -1115,6 +1115,28 @@
 		<property name="moment" value="2022/04/26 00:00" />
 		<property name="ticker" value="200486-QOUBG" />
 		<property name="mode" value="FINAL" />
+		<property name="maxRows" value="120" />
+		<property name="maxColumns" value="300" />
+		<property name="status" value="ACCEPTED" />
+		<!-- Relations -->
+		<property name="floats">
+			<list>
+				<ref bean="float3" />
+			</list>
+		</property>
+		<property name="brotherhood" ref="brotherhood1" />
+		<property name="segments">
+			<list>
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="parade12" class="domain.Parade">
+		<property name="title" value="La amargura" />
+		<property name="description" value="This is a description of a parade11" />
+		<property name="moment" value="2022/04/26 00:00" />
+		<property name="ticker" value="200486-QOUAS" />
+		<property name="mode" value="DRAFT" />
 		<property name="maxRows" value="120" />
 		<property name="maxColumns" value="300" />
 		<property name="status" value="ACCEPTED" />

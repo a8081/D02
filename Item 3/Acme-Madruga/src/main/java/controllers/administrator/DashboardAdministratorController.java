@@ -23,7 +23,6 @@ import services.PositionService;
 import services.RequestService;
 import controllers.AbstractController;
 import domain.Brotherhood;
-import domain.Member;
 import domain.Parade;
 import domain.Position;
 
@@ -99,8 +98,10 @@ public class DashboardAdministratorController extends AbstractController {
 		final Double requestRejected = this.requestService.findRejectedRequestRadio();
 		final Double[] statisticsBrotherhoodsPerArea = this.areaService.getStatiticsBrotherhoodPerArea();
 		final List<String> membersTenPercent = new ArrayList<String>();
-		for (final Member m : this.memberService.getMembersTenPercent())
-			membersTenPercent.add(m.getName());
+		/*
+		 * for (final Member m : this.memberService.getMembersTenPercent())
+		 * membersTenPercent.add(m.getName());
+		 */
 		final Collection<Parade> parades = this.paradeService.findAll();
 		final Double ratioBrotherhoodsPerArea = this.areaService.getRatioBrotherhoodsPerArea();
 
@@ -118,7 +119,7 @@ public class DashboardAdministratorController extends AbstractController {
 		result.addObject("requestsApproved", requestApproved);
 		result.addObject("requestsPending", requestPending);
 		result.addObject("requestsRejected", requestRejected);
-		result.addObject("membersPercent", membersTenPercent);
+		//result.addObject("membersPercent", membersTenPercent);
 		result.addObject("minBrotherhoods", statisticsBrotherhoodsPerArea[2]);
 		result.addObject("averageBrotherhoods", statisticsBrotherhoodsPerArea[0]);
 		result.addObject("maxBrotherhoods", statisticsBrotherhoodsPerArea[1]);
