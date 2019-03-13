@@ -1,14 +1,29 @@
-*Requirement 4*
+*Requirement 4.1*
 
 1) HistoryRepository: Double[] getStatisticsOfRecordsPerHistory();
 2) HistoryRepository: Brotherhood[] getLargestBrotherhoodPerHistory();
 3) HistoryRepository: Brotherhood[] getBrotherhoodPerHistoryLargerThanStd();
 
 
-4.2 Returns an array of brotherhoods because could be possible that exists two brotherhoods with the maximum number of recordss per history
+4.1.2 Returns an array of brotherhoods because could be possible that exists two brotherhoods with the maximum number of recordss per history
 
-*Requirement 8*
+*Requirement 8.1*
 
 1) AreaRepository:	Double getRatioNoCoordinatedAreas();
 2) ChapterRepository:	Double[] getStatisticsOfParadesPerChapter();
-3)  
+3) ChapterRepository:	Collection<Chapter> findTenPerCentMoreParadesThanAverage();
+4) ParadeRepository:	Double findRatioDraftVsFinalParades();
+5) Paraderepository:	Double findSubmittedParadesRatio();
+			Double findAcceptedParadesRatio();
+			Double findRejectedParadesRatio();
+
+*Requirement 18.2*
+
+1) SponsorshipRepository:	Double getRatioActivatedSponsorships();
+2) SponsorshipRepository:	Double[] getStatisticsOfActiveSponsorshipsPerSponsor();
+3) SponsorshipRepository:	List<Sponsorship> getActiveSponsorships();
+
+
+18.2.2 The ordered list of sponsors in terms of number of active sponsorships. Implemented as a List to get the top-5 as a sublist(0,5).
+
+
