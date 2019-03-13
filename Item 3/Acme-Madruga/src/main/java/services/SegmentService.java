@@ -1,9 +1,6 @@
 
 package services;
 
-import java.util.Date;
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,15 +43,15 @@ public class SegmentService {
 
 	public Segment create() {
 		final Segment result = new Segment();
-		//TODO esto lo tengo que hacer aqui por el hecho de que tiene  que ser 2 si o si?
+		//final List<GPS> gps = new ArrayList<GPS>();
 		final GPS origin = new GPS();
 		origin.setLatitude(0.0);
 		origin.setLongitude(0.0);
 		final GPS destination = new GPS();
 		destination.setLatitude(0.0);
 		destination.setLongitude(0.0);
-		result.setDestinationCoordinates(destination);
 		result.setOriginCoordinates(origin);
+		result.setDestinationCoordinates(destination);
 
 		return result;
 	}
