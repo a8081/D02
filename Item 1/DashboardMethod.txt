@@ -1,0 +1,14 @@
+*Requirement 4*
+
+1) HistoryRepository: Double[] getStatisticsOfRecordsPerHistory();
+2) HistoryRepository: Brotherhood[] getLargestBrotherhoodPerHistory();
+3) HistoryRepository: Brotherhood[] getBrotherhoodPerHistoryLargerThanStd();
+
+
+4.2 Returns an array of brotherhoods because could be possible that exists two brotherhoods with the maximum number of recordss per history
+
+*Requirement 8*
+
+1) AreaRepository:	Double getRatioNoCoordinatedAreas();
+2) ChapterRepository:	Double[] getStatisticsOfParadesPerChapter();
+3)  

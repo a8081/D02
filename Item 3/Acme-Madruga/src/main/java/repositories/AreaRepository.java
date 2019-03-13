@@ -28,6 +28,10 @@ public interface AreaRepository extends JpaRepository<Area, Integer> {
 	@Query("select sum(case when exists(select b from Brotherhood b where a =b.area) then 1.0 else 0.0 end) / count(a) from Area a")
 	Double getRatioBrotherhoodsPerArea();
 
+	/** The ratio of areas that are not co-ordinated by any chapters. */
+	@Query("select sum(case when exists(select c from Chapter c where a=c.area) then 0.0 else 1.0 end) / count(a) from Area a")
+	Double getRatioNoCoordinatedAreas();
+
 	@Query("select count(a) from Area a where exists(select b from Brotherhood b where a =b.area)")
 	Integer getNumberOfAreasWithAnyBrotherhood();
 }
