@@ -1,6 +1,7 @@
 
 package services;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -51,10 +52,10 @@ public class SegmentServiceTest extends AbstractTest {
 			}
 		};
 		for (int i = 0; i < testingData.length; i++)
-			this.templateCreateAndSave((Date) testingData[i][0], (Date) testingData[i][1], (GPS) testingData[i][2], (GPS) testingData[i][3], (Class<?>) testingData[i][4]);
+			this.templateCreateAndSave((String) testingData[i][0], (String) testingData[i][1], (GPS) testingData[i][2], (GPS) testingData[i][3], (Class<?>) testingData[i][4]);
 	}
 
-	private void templateCreateAndSave(final Date originTime, final Date destinationTime, final GPS originCoordinates, final GPS destinationCoordinates, final Class<?> expected) {
+	private void templateCreateAndSave(final String originTime, final String destinationTime, final GPS originCoordinates, final GPS destinationCoordinates, final Class<?> expected) {
 
 		Class<?> caught;
 		Segment segment;
@@ -64,15 +65,29 @@ public class SegmentServiceTest extends AbstractTest {
 
 		final Parade parade = this.paradeService.findOne(parades.get(0).getId());
 
+		final Date timeOrigin;
+		final Date timeDestination;
+
 		caught = null;
 
 		try {
-			this.authenticate("brotherhood1");
+			this.authenticate(brotherhood.getUserAccount().getUsername());
 			segment = this.segmentService.create();
-			segment.setOriginTime(originTime);
-			segment.getDestinationTime();
-			segment.getOriginCoordinates();
-			segment.getDestinationCoordinates();
+			if (destinationTime != null)
+				timeDestination = (new SimpleDateFormat("yyyy/MM/dd HH:mm")).parse(destinationTime);
+			else
+				timeDestination = null;
+
+			if (originTime != null)
+				timeOrigin = (new SimpleDateFormat("yyyy/MM/dd HH:mm")).parse(originTime);
+			else
+				timeOrigin = null;
+
+			segment.setOriginTime(timeOrigin);
+			segment.setDestinationTime(timeDestination);
+
+			segment.setOriginCoordinates(originCoordinates);
+			segment.setDestinationCoordinates(destinationCoordinates);
 			segment = this.segmentService.save(segment, parade.getId());
 			this.segmentService.flush();
 		} catch (final Throwable oops) {
