@@ -1,6 +1,7 @@
 
 package services;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +30,11 @@ public class InceptionRecordService {
 		final Actor me = this.brotherhoodService.findByPrincipal();
 		Assert.notNull(me, "You must be logged in the system");
 		Assert.isTrue(this.actorService.checkAuthority(me, Authority.BROTHERHOOD), "You must be BROTHERHOO");
-		return new InceptionRecord();
+		final InceptionRecord res = new InceptionRecord();
+		res.setTitle("");
+		res.setDescription("");
+		res.setPhotos(new ArrayList<String>());
+		return res;
 	}
 
 	public Collection<InceptionRecord> findAll() {
@@ -45,13 +50,13 @@ public class InceptionRecordService {
 		return res;
 	}
 
-	public InceptionRecord save(final InceptionRecord mR) {
+	public InceptionRecord save(final InceptionRecord iR) {
 		final Actor me = this.brotherhoodService.findByPrincipal();
 		Assert.notNull(me, "You must be logged in the system");
 		Assert.isTrue(this.actorService.checkAuthority(me, Authority.BROTHERHOOD), "You must be BROTHERHOO");
-		Assert.notNull(mR);
-		this.inceptionRecordRepository.save(mR);
-		return mR;
+		Assert.notNull(iR);
+		this.inceptionRecordRepository.save(iR);
+		return iR;
 	}
 
 	public void delete(final InceptionRecord mR) {
