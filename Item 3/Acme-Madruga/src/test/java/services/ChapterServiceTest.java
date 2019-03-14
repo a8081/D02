@@ -68,7 +68,7 @@ public class ChapterServiceTest extends AbstractTest {
 				// Crear chapter correctamente
 				"chapter1", "chapter1", "Name chapter 1", "Surname chapter 1", "chapter1@hotmail.es", "+34655398675", "Title chapter 1", null
 			}, {
-				//Crear manager con name incorrecto
+				//Crear chapter con name incorrecto
 				"chapter2", "chapter2", "Name chapter 2", "Surname chapter 2", "chapter2@hotmail.es", "mi telefono", "Title chapter 2", ConstraintViolationException.class
 			}
 		};

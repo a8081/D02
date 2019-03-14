@@ -232,4 +232,5 @@ public class BrotherhoodService {
 		Assert.notNull(res);
 		return res;
 	}
+
 }
