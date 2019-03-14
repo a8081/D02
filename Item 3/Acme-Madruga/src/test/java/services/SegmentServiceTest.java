@@ -19,7 +19,7 @@ import domain.Chapter;
 	"classpath:spring/junit.xml"
 })
 @Transactional
-public class ChapterServiceTest extends AbstractTest {
+public class SegmentServiceTest extends AbstractTest {
 
 	@Autowired
 	private ChapterService	chapterService;
