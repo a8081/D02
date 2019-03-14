@@ -44,6 +44,11 @@
 		<value>/views/member/tiles.xml</value>
 		<value>/views/enrolment/tiles.xml</value>
 		<value>/views/finder/tiles.xml</value>
+		<value>/views/history/tiles.xml</value>
+		<value>/views/legalRecord/tiles.xml</value>
+		<value>/views/periodRecord/tiles.xml</value>
+		<value>/views/miscellaneousRecord/tiles.xml</value>
+		<value>/views/linkRecord/tiles.xml</value>
 		
 		
 	</util:list>
