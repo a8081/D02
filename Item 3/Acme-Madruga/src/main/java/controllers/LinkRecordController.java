@@ -84,6 +84,20 @@ public class LinkRecordController extends AbstractController {
 		return result;
 	}
 
+	@RequestMapping(value = "/delete", method = RequestMethod.GET)
+	public ModelAndView delete(@RequestParam final int linkRecordId) {
+		ModelAndView result;
+		final LinkRecord linkRecord = this.linkRecordService.findOne(linkRecordId);
+		try {
+			this.linkRecordService.delete(linkRecord);
+			result = new ModelAndView("redirect:list.do");
+		} catch (final Throwable oops) {
+			result = this.createEditModelAndView(linkRecord, "general.commit.error");
+			result.addObject("id", linkRecord.getId());
+		}
+		return result;
+	}
+
 	protected ModelAndView createEditModelAndView(final LinkRecord linkRecord) {
 		ModelAndView result;
 

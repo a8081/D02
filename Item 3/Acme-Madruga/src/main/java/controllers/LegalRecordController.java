@@ -84,6 +84,20 @@ public class LegalRecordController extends AbstractController {
 		return result;
 	}
 
+	@RequestMapping(value = "/delete", method = RequestMethod.GET)
+	public ModelAndView delete(@RequestParam final int legalRecordId) {
+		ModelAndView result;
+		final LegalRecord legalRecord = this.legalRecordService.findOne(legalRecordId);
+		try {
+			this.legalRecordService.delete(legalRecord);
+			result = new ModelAndView("redirect:list.do");
+		} catch (final Throwable oops) {
+			result = this.createEditModelAndView(legalRecord, "general.commit.error");
+			result.addObject("id", legalRecord.getId());
+		}
+		return result;
+	}
+
 	protected ModelAndView createEditModelAndView(final LegalRecord legalRecord) {
 		ModelAndView result;
 

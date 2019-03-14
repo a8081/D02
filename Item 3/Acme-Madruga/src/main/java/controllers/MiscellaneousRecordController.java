@@ -84,6 +84,20 @@ public class MiscellaneousRecordController extends AbstractController {
 		return result;
 	}
 
+	@RequestMapping(value = "/delete", method = RequestMethod.GET)
+	public ModelAndView delete(@RequestParam final int miscellaneousRecordId) {
+		ModelAndView result;
+		final MiscellaneousRecord miscellaneousRecord = this.miscellaneousRecordService.findOne(miscellaneousRecordId);
+		try {
+			this.miscellaneousRecordService.delete(miscellaneousRecord);
+			result = new ModelAndView("redirect:list.do");
+		} catch (final Throwable oops) {
+			result = this.createEditModelAndView(miscellaneousRecord, "general.commit.error");
+			result.addObject("id", miscellaneousRecord.getId());
+		}
+		return result;
+	}
+
 	protected ModelAndView createEditModelAndView(final MiscellaneousRecord miscellaneousRecord) {
 		ModelAndView result;
 

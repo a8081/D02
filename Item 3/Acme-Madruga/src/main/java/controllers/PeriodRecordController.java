@@ -84,6 +84,20 @@ public class PeriodRecordController extends AbstractController {
 		return result;
 	}
 
+	@RequestMapping(value = "/delete", method = RequestMethod.GET)
+	public ModelAndView delete(@RequestParam final int periodRecordId) {
+		ModelAndView result;
+		final PeriodRecord periodRecord = this.periodRecordService.findOne(periodRecordId);
+		try {
+			this.periodRecordService.delete(periodRecord);
+			result = new ModelAndView("redirect:list.do");
+		} catch (final Throwable oops) {
+			result = this.createEditModelAndView(periodRecord, "general.commit.error");
+			result.addObject("id", periodRecord.getId());
+		}
+		return result;
+	}
+
 	protected ModelAndView createEditModelAndView(final PeriodRecord periodRecord) {
 		ModelAndView result;
 
