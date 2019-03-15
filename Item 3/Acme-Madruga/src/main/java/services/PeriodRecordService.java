@@ -69,11 +69,11 @@ public class PeriodRecordService {
 		final Actor me = this.brotherhoodService.findByPrincipal();
 		Assert.notNull(me, "You must be logged in the system");
 		Assert.isTrue(this.actorService.checkAuthority(me, Authority.BROTHERHOOD), "You must be BROTHERHOO");
-		Assert.isTrue(pR.getId() != 0);
 		Assert.notNull(pR);
-		this.periodRecordRepository.delete(pR.getId());
-		final Collection<PeriodRecord> res = this.periodRecordRepository.findAll();
-		Assert.isTrue(!res.contains(pR));
+		Assert.isTrue(pR.getId() != 0);
+		Assert.isTrue(this.periodRecordRepository.exists(pR.getId()));
+		this.periodRecordRepository.delete(pR);
+
 	}
 
 }
