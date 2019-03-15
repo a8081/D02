@@ -1,6 +1,7 @@
 
 package services;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,17 +20,22 @@ public class PeriodRecordService {
 
 	@Autowired
 	private PeriodRecordRepository	periodRecordRepository;
+	@Autowired
 	private BrotherhoodService		brotherhoodService;
+	@Autowired
 	private ActorService			actorService;
 
 
 	//Metodos CRUD
 
 	public PeriodRecord create() {
-		final Actor me = this.brotherhoodService.findByPrincipal();
-		Assert.notNull(me, "You must be logged in the system");
-		Assert.isTrue(this.actorService.checkAuthority(me, Authority.BROTHERHOOD), "You must be BROTHERHOO");
-		return new PeriodRecord();
+		final PeriodRecord res = new PeriodRecord();
+		res.setTitle("");
+		res.setDescription("");
+		res.setPhotos(new ArrayList<String>());
+		res.setStartYear(null);
+		res.setEndYear(null);
+		return res;
 	}
 
 	public Collection<PeriodRecord> findAll() {
@@ -50,8 +56,13 @@ public class PeriodRecordService {
 		Assert.notNull(me, "You must be logged in the system");
 		Assert.isTrue(this.actorService.checkAuthority(me, Authority.BROTHERHOOD), "You must be BROTHERHOO");
 		Assert.notNull(pR);
-		this.periodRecordRepository.save(pR);
-		return pR;
+		Assert.notNull(pR.getTitle());
+		Assert.notNull(pR.getDescription());
+		Assert.isTrue(pR.getTitle() != "");
+		Assert.isTrue(pR.getDescription() != "");
+		final PeriodRecord saved = this.periodRecordRepository.save(pR);
+		Assert.notNull(this.findOne(saved.getId()));
+		return saved;
 	}
 
 	public void delete(final PeriodRecord pR) {
@@ -61,7 +72,8 @@ public class PeriodRecordService {
 		Assert.isTrue(pR.getId() != 0);
 		Assert.notNull(pR);
 		this.periodRecordRepository.delete(pR.getId());
-
+		final Collection<PeriodRecord> res = this.periodRecordRepository.findAll();
+		Assert.isTrue(!res.contains(pR));
 	}
 
 }
