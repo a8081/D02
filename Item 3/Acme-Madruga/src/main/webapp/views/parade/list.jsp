@@ -14,6 +14,7 @@
 	<jstl:set var="rolURL" value="/${rol}" />
 </jstl:if>
 
+<security:authorize access="hasAnyRole('BROTHERHOOD','MEMBER')">
 <display:table name="parades" id="row"
 	requestURI="parade${rolURL}/list.do" pagesize="5"
 	class="displaytag">
@@ -79,6 +80,90 @@
 	</security:authorize>
 
 </display:table>
+</security:authorize>
+
+
+
+<security:authorize access="hasAnyRole('CHAPTER')">
+
+<display:table name="paradesSubmitted" id="row"
+	requestURI="parade/chapter/list.do" pagesize="5"
+	class="displaytag">
+
+	<display:column property="title" titleKey="parade.title" />
+	
+	<display:column property="ticker" titleKey="parade.ticker" />
+
+	<acme:dataTableColumn code="parade.moment" property="moment" />
+	
+	<display:column titleKey="parade.brotherhood">
+		<a href="brotherhood/displayTabla.do?brotherhoodId=${row.brotherhood.id}">
+			<jstl:out value="${row.brotherhood.title}" />
+		</a>
+	</display:column>
+	
+	<display:column>
+		<acme:link url="parade/chapter/display.do?paradeId=${row.id}"
+			code="parade.display" />
+	</display:column>
+	
+	<display:column>
+	<acme:button url="parade/chapter/accept.do?paradeId=${row.id}" name="approve" code="parade.approve"/>
+	<acme:button url="parade/chapter/reject.do?paradeId=${row.id}" name="approve" code="parade.reject"/>
+	
+	</display:column>
+
+</display:table>
+
+<display:table name="paradesAccepted" id="row"
+	requestURI="parade/chapter/list.do" pagesize="5"
+	class="displaytag">
+
+	<display:column property="title" titleKey="parade.title" />
+	
+	<display:column property="ticker" titleKey="parade.ticker" />
+
+	<acme:dataTableColumn code="parade.moment" property="moment" />
+	
+	<display:column titleKey="parade.brotherhood">
+		<a href="brotherhood/displayTabla.do?brotherhoodId=${row.brotherhood.id}">
+			<jstl:out value="${row.brotherhood.title}" />
+		</a>
+	</display:column>
+	
+	<display:column>
+		<acme:link url="parade/chapter/display.do?paradeId=${row.id}"
+			code="parade.display" />
+	</display:column>
+
+</display:table>
+
+
+<display:table name="paradesRejected" id="row"
+	requestURI="parade/chapter/list.do" pagesize="5"
+	class="displaytag">
+
+	<display:column property="title" titleKey="parade.title" />
+	
+	<display:column property="ticker" titleKey="parade.ticker" />
+
+	<acme:dataTableColumn code="parade.moment" property="moment" />
+	
+	<display:column titleKey="parade.brotherhood">
+		<a href="brotherhood/displayTabla.do?brotherhoodId=${row.brotherhood.id}">
+			<jstl:out value="${row.brotherhood.title}" />
+		</a>
+	</display:column>
+	
+	<display:column>
+		<acme:link url="parade/chapter/display.do?paradeId=${row.id}"
+			code="parade.display" />
+	</display:column>
+
+</display:table>
+
+</security:authorize>
+
 
 <security:authorize access="hasRole('BROTHERHOOD')">
 	<acme:link url="parade/brotherhood/create.do"
