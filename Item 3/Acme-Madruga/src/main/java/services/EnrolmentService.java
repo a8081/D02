@@ -207,4 +207,8 @@ public class EnrolmentService {
 		return retrieved;
 	}
 
+	public void flush() {
+		this.enrolmentRepository.flush();
+	}
+
 }

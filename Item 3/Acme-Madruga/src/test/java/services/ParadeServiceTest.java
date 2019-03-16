@@ -17,7 +17,11 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import utilities.AbstractTest;
+import domain.Brotherhood;
+import domain.Enrolment;
 import domain.GPS;
+import domain.Member;
+import domain.Position;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {
@@ -28,7 +32,6 @@ public class ParadeServiceTest extends AbstractTest {
 
 	@Test
 	private void templateListEdit(final String title, final String description, final String moment, final String ticker, final String mode, final int maxRows, final int maxColumns, final String status, final String rejectionReason, final Class<?> expected) {
-		final int rendezvouseId, final Class<?> expected) {
 			// falta segments
 		Rendezvouse rendezvouse;
 		final Date organisedMomentDate;
@@ -722,6 +725,54 @@ public class ParadeServiceTest extends AbstractTest {
 		result.add(gpsOutOfRangeLongitudeMin);
 
 		return result;
+	}
+	
+	
+	protected void createAndSaveTemplate(final String userName, final String title, final String description, final String moment, final String ticker, final String mode, final int maxRows, final int maxColumns, final String status, final String rejectionReason, final Class<?> expected) {
+		Class<?> caught;
+		final Enrolment enrolment;
+		Brotherhood brotherhood;
+		Member member;
+		Date momentDate;
+		Date dropOutDate;
+		Position position;
+		int brotherhoodId;
+		int memberId;
+		int positionBeanNameId;
+		caught = null;
+		try {
+			this.authenticate(userName);
+			brotherhoodId = super.getEntityId(brotherhoodBeanName);
+			memberId = super.getEntityId(memberBeanName);
+			positionBeanNameId = super.getEntityId(positionBeanName);
+			brotherhood = this.brotherhoodService.findOne(brotherhoodId);
+			member = this.memberService.findOne(memberId);
+			position = this.positionService.findOne(positionBeanNameId);
+
+			enrolment = new Enrolment();
+			enrolment.setBrotherhood(brotherhood);
+			enrolment.setMember(member);
+			enrolment.setEnrolled(enrolled);
+			enrolment.setPosition(position);
+			if (moment != null)
+				momentDate = (new SimpleDateFormat("yyyy-MM-dd HH:mm")).parse(moment);
+			else
+				momentDate = null;
+			enrolment.setMoment(momentDate);
+			if (dropOut != null)
+				dropOutDate = (new SimpleDateFormat("yyyy-MM-dd HH:mm")).parse(dropOut);
+			else
+				dropOutDate = null;
+			enrolment.setDropOut(dropOutDate);
+
+			this.enrolmentService.save(enrolment, brotherhoodId);
+			this.enrolmentService.flush();
+
+		} catch (final Throwable oops) {
+			caught = oops.getClass();
+		}
+
+		this.checkExceptions(expected, caught);
 	}
 
 }
