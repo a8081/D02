@@ -146,11 +146,9 @@ public class RequestServiceTest extends AbstractTest {
 
 		this.authenticate("member1");
 		//final Integer myId = this.actorService.findByPrincipal().getId();
-		System.out.println("hola");
 		final int p = this.getEntityId("parade11");
 		System.out.println(p);
 		//final Parade parade = this.paradeService.findOne(this.getEntityId("parade11"));
-		System.out.println("adios");
 		final Request req = this.requestService.requestToParade(p);
 		Assert.isTrue(req.getId() != 0);
 		this.unauthenticate();
@@ -167,6 +165,10 @@ public class RequestServiceTest extends AbstractTest {
 	 * Brotherhood change status to accepted giving a position
 	 * Member modify parade -> error
 	 * **/
+
+	//,{
+	//	"brotherhood1", "request1", "APPROVED", null, 1, 1, null
+	//}
 
 	protected void templateUpdateRequest(final String username, final String request, final String status, final String explanation, final Integer row, final Integer column, final Class<?> expected) {
 
@@ -203,6 +205,8 @@ public class RequestServiceTest extends AbstractTest {
 				"brotherhood1", "request1", "APPROVED", "explanation", null, null, IllegalArgumentException.class
 			}, {
 				"brotherhood1", "request1", "REJECTED", null, null, null, IllegalArgumentException.class
+			}, {
+				"member1", "request1", "PENDING", null, null, null, IllegalArgumentException.class
 			}
 		};
 
@@ -210,40 +214,101 @@ public class RequestServiceTest extends AbstractTest {
 			this.templateUpdateRequest((String) testingData[i][0], (String) testingData[i][1], (String) testingData[i][2], (String) testingData[i][3], (Integer) testingData[i][4], (Integer) testingData[i][5], (Class<?>) testingData[i][6]);
 	}
 
+	/**
+	 * DELETE REQUEST: use cases
+	 * Member delete one of his/her request with status PENDING -> error
+	 * Member delete request from other member with status PENDING -> error
+	 * Member delete one of his/her request with status APPROVED -> error
+	 * Brotherhood delete a request -> error
+	 * **/
+	protected void templateDeleteRequest(final String username, final String request, final Class<?> expected) {
+
+		Class<?> caught = null;
+
+		try {
+			this.authenticate(username);
+			final Integer myId = this.actorService.findByPrincipal().getId();
+			final int idRequest = this.getEntityId(request);
+			final Request req = this.requestService.findOne(idRequest);
+			this.requestService.delete(req);
+			this.unauthenticate();
+
+			this.requestRepository.flush();
+		} catch (final Throwable oops) {
+			caught = oops.getClass();
+		}
+
+		super.checkExceptions(expected, caught);
+	}
+
+	@Test
+	public void driverDeleteRequest() {
+		final Object testingData[][] = {
+			{
+				"member1", "request1", null
+			}, {
+				"member2", "request1", IllegalArgumentException.class
+			}, {
+				"member2", "request2", IllegalArgumentException.class
+			}, {
+				"brotherhood1", "request2", IllegalArgumentException.class
+			}
+		};
+
+		for (int i = 0; i < testingData.length; i++)
+			this.templateDeleteRequest((String) testingData[i][0], (String) testingData[i][1], (Class<?>) testingData[i][2]);
+	}
+
+	/**
+	 * FIND ONE REQUEST: use cases
+	 * Member tries to see a request that does not belong to her/him -> error
+	 * Member tries to see a request that does belong to her/him
+	 * Brotherhood tries to see a request that does not belong to any of its parades -> error
+	 * Brotherhood tries to see a request that does belong to any of its parades
+	 * **/
+	@Test
+	public void driverFindOneRequest() {
+		final Object testingData[][] = {
+			{
+				"member1", "request2", IllegalArgumentException.class
+			}, {
+				"member2", "request2", null
+			}, {
+				"brotherhood1", "request2", IllegalArgumentException.class
+			}, {
+				"brotherhood1", "request1", null
+			}
+		};
+
+		for (int i = 0; i < testingData.length; i++)
+			this.templateFindOneRequest((String) testingData[i][0], (String) testingData[i][1], (Class<?>) testingData[i][2]);
+	}
+
+	protected void templateFindOneRequest(final String username, final String request, final Class<?> expected) {
+
+		Class<?> caught = null;
+
+		try {
+			this.authenticate(username);
+			final Integer myId = this.actorService.findByPrincipal().getId();
+			final int idRequest = this.getEntityId(request);
+			Assert.notNull(this.requestService.findOne(idRequest));
+			this.unauthenticate();
+
+			this.requestRepository.flush();
+		} catch (final Throwable oops) {
+			caught = oops.getClass();
+		}
+
+		super.checkExceptions(expected, caught);
+	}
+
 	/*
-	 * @Test
-	 * public void deleteTest() {
-	 * this.authenticate("member1");
-	 * final Integer myId = this.actorService.findByPrincipal().getId();
-	 * Request req = this.requestService.create();
-	 * req.setStatus(Request.PENDING);
-	 * final Parade procession = ((List<Parade>) this.processionService.findAll()).get(0);
-	 * req.setProcession(procession);
-	 * req.setMember(this.memberService.findOne(myId));
-	 * final Date moment = new Date();
-	 * req.setMoment(moment);
-	 * 
-	 * req = this.requestRepository.saveAndFlush(req);
-	 * final Integer idRequest = req.getId();
-	 * Assert.isTrue(req.getId() != 0);
-	 * this.requestService.delete(req);
-	 * req = this.requestRepository.findOne(idRequest);
-	 * Assert.isTrue(req == null);
-	 * 
-	 * }
 	 * 
 	 * @Test
 	 * public void findAll() {
 	 * this.authenticate("member1");
 	 * Assert.isTrue(this.requestService.findAll().size() > 0);
-	 * }
-	 * 
-	 * @Test
-	 * public void findOne() {
-	 * this.authenticate("member1");
-	 * final List<Request> list = new ArrayList<>(this.requestService.findAll());
-	 * Assert.isTrue(list.size() > 0);
-	 * Assert.notNull(this.requestService.findOne(list.get(0).getId()));
 	 * }
 	 */
 }

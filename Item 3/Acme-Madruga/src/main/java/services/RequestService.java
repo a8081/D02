@@ -118,6 +118,10 @@ public class RequestService {
 				System.out.println("cccc");
 				Assert.isTrue(!(rowIsNull || columnIsNull), "If Request is APPROVED, row and column cannot be null or greater than maximum allowed");
 				System.out.println("ddd");
+				System.out.println("q" + req.getRow());
+				System.out.println("qw" + req.getColumn());
+				System.out.println("qq" + req.getParade().getId());
+				System.out.println("hey" + this.requestRepository.availableRowColumn(req.getRow(), req.getColumn(), req.getParade().getId()));
 				Assert.isTrue(this.requestRepository.availableRowColumn(req.getRow(), req.getColumn(), req.getParade().getId()), "If Request is APPROVED, row and column assigned by brotherhood must be unique");
 				System.out.println("eee");
 			}
