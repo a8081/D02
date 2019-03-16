@@ -67,8 +67,8 @@ public class InceptionRecordService {
 		final Brotherhood me = this.brotherhoodService.findByPrincipal();
 		Assert.notNull(me, "You must be logged in the system");
 		Assert.isTrue(this.actorService.checkAuthority(me, Authority.BROTHERHOOD), "You must be BROTHERHOO");
-		Assert.isTrue(iR.getId() != 0);
 		Assert.notNull(iR);
+		Assert.isTrue(iR.getId() != 0);
 		this.inceptionRecordRepository.delete(iR);
 		final Collection<InceptionRecord> res = this.inceptionRecordRepository.findAll();
 		Assert.isTrue(!res.contains(iR));
