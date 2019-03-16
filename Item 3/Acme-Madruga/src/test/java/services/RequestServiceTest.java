@@ -91,9 +91,23 @@ public class RequestServiceTest extends AbstractTest {
 	public void driverRequestToParade() {  //FUNCIONA
 		final Object testingData[][] = {
 			{
-				"member1", "parade12", java.lang.IllegalArgumentException.class
+				"member1", "parade12", IllegalArgumentException.class
 			}, {
+				"member2", "parade11", null
+			}
+		};
+
+		for (int i = 0; i < testingData.length; i++)
+			this.templateRequestToParade((String) testingData[i][0], (String) testingData[i][1], (Class<?>) testingData[i][2]);
+	}
+
+	@Test
+	public void driverMemberRequestsTwice() {
+		final Object testingData[][] = {
+			{
 				"member1", "parade11", null
+			}, {
+				"member1", "parade11", IllegalArgumentException.class
 			}
 		};
 
@@ -142,7 +156,7 @@ public class RequestServiceTest extends AbstractTest {
 	}
 
 	@Test
-	public void requestToParade() {
+	public void requestToParade() {  //funciona
 
 		this.authenticate("member1");
 		//final Integer myId = this.actorService.findByPrincipal().getId();
