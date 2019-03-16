@@ -75,7 +75,7 @@ public class LegalRecordService {
 		Assert.isTrue(legalRecord.getId() != 0);
 		final LegalRecord retrieved = this.findOne(legalRecord.getId());
 		Assert.isTrue(me.getHistory().getLegalRecords().contains(retrieved));
-		this.legalRecordRepository.delete(legalRecord);
+		this.legalRecordRepository.delete(retrieved);
 	}
 
 	/* ========================= OTHER METHODS =========================== */

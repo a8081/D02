@@ -71,7 +71,7 @@ public class MiscellaneousRecordService {
 		Assert.isTrue(mR.getId() != 0);
 		final MiscellaneousRecord res = this.findOne(mR.getId());
 		Assert.isTrue(me.getHistory().getMiscellaneousRecords().contains(res));
-		this.miscellaneousRecordRepository.delete(mR);
+		this.miscellaneousRecordRepository.delete(res);
 
 	}
 

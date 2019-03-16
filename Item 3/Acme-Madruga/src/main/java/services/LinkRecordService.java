@@ -9,6 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import repositories.LinkRecordRepository;
+import security.Authority;
+import domain.Brotherhood;
 import domain.LinkRecord;
 
 @Service
@@ -18,11 +20,22 @@ public class LinkRecordService {
 	@Autowired
 	private LinkRecordRepository	linkRecordRepository;
 
+	@Autowired
+	private BrotherhoodService		brotherhoodService;
+
+	@Autowired
+	private ActorService			actorService;
+
 
 	//Metodos CRUD
 
 	public LinkRecord create() {
-		return new LinkRecord();
+		final LinkRecord res = new LinkRecord();
+		res.setTitle("");
+		res.setDescription("");
+		res.setLinkedBrotherhood(null);
+		return res;
+
 	}
 
 	public Collection<LinkRecord> findAll() {
@@ -38,18 +51,30 @@ public class LinkRecordService {
 		return res;
 	}
 
-	public LinkRecord save(LinkRecord linkRecord) {
+	public LinkRecord save(final LinkRecord linkRecord) {
+		final Brotherhood me = this.brotherhoodService.findByPrincipal();
+		Assert.notNull(me, "You must be logged in the system");
+		Assert.isTrue(this.actorService.checkAuthority(me, Authority.BROTHERHOOD), "You must be BROTHERHOO");
 		Assert.notNull(linkRecord);
-		if (linkRecord.getLinkedBrotherhood() != null)
-			linkRecord = this.linkRecordRepository.save(linkRecord);
-		return linkRecord;
+		Assert.notNull(linkRecord.getTitle());
+		Assert.notNull(linkRecord.getDescription());
+		Assert.isTrue(linkRecord.getTitle() != "");
+		Assert.isTrue(linkRecord.getDescription() != "");
+		Assert.notNull(linkRecord.getLinkedBrotherhood());
+		final LinkRecord res = this.linkRecordRepository.save(linkRecord);
+		Assert.notNull(this.findOne(res.getId()));
+		return res;
 	}
 
 	public void delete(final LinkRecord linkRecord) {
-		Assert.isTrue(linkRecord.getId() != 0);
-		Assert.notNull(linkRecord.getLinkedBrotherhood());
+		final Brotherhood me = this.brotherhoodService.findByPrincipal();
+		Assert.notNull(me, "You must be logged in the system");
+		Assert.isTrue(this.actorService.checkAuthority(me, Authority.BROTHERHOOD), "You must be BROTHERHOO");
 		Assert.notNull(linkRecord);
-		this.linkRecordRepository.delete(linkRecord.getId());
+		Assert.isTrue(linkRecord.getId() != 0);
+		final LinkRecord retrieved = this.findOne(linkRecord.getId());
+		Assert.isTrue(me.getHistory().getLinkRecords().contains(retrieved));
+		this.linkRecordRepository.delete(retrieved);
 	}
 
 }

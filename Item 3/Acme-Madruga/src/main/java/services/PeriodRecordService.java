@@ -11,7 +11,7 @@ import org.springframework.util.Assert;
 
 import repositories.PeriodRecordRepository;
 import security.Authority;
-import domain.Actor;
+import domain.Brotherhood;
 import domain.PeriodRecord;
 
 @Service
@@ -52,7 +52,7 @@ public class PeriodRecordService {
 	}
 
 	public PeriodRecord save(final PeriodRecord pR) {
-		final Actor me = this.brotherhoodService.findByPrincipal();
+		final Brotherhood me = this.brotherhoodService.findByPrincipal();
 		Assert.notNull(me, "You must be logged in the system");
 		Assert.isTrue(this.actorService.checkAuthority(me, Authority.BROTHERHOOD), "You must be BROTHERHOO");
 		Assert.notNull(pR);
@@ -66,13 +66,14 @@ public class PeriodRecordService {
 	}
 
 	public void delete(final PeriodRecord pR) {
-		final Actor me = this.brotherhoodService.findByPrincipal();
+		final Brotherhood me = this.brotherhoodService.findByPrincipal();
 		Assert.notNull(me, "You must be logged in the system");
 		Assert.isTrue(this.actorService.checkAuthority(me, Authority.BROTHERHOOD), "You must be BROTHERHOO");
 		Assert.notNull(pR);
 		Assert.isTrue(pR.getId() != 0);
-		Assert.isTrue(this.periodRecordRepository.exists(pR.getId()));
-		this.periodRecordRepository.delete(pR);
+		final PeriodRecord retrieved = this.findOne(pR.getId());
+		Assert.isTrue(me.getHistory().getPeriodRecords().contains(retrieved));
+		this.periodRecordRepository.delete(retrieved);
 
 	}
 
