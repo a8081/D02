@@ -109,12 +109,17 @@ public class RequestService {
 			if (req.getStatus().equals("REJECTED"))
 				Assert.isTrue(!(req.getExplanation() == "" || req.getExplanation() == null), "If Request is REJECTED must have a explanation");
 			if (req.getStatus().equals("APPROVED")) {
+				System.out.println("aaaa");
 				Assert.isTrue(!this.paradeRequested(req.getParade().getId()));
+				System.out.println("bbbbb");
 				Assert.isTrue((req.getExplanation() == "" || req.getExplanation() == null), "A explanation musn't be written if you approve the request");
 				final boolean rowIsNull = req.getRow() == null || req.getRow() > req.getParade().getMaxRows();
 				final boolean columnIsNull = req.getColumn() == null || req.getColumn() > req.getParade().getMaxColumns();
+				System.out.println("cccc");
 				Assert.isTrue(!(rowIsNull || columnIsNull), "If Request is APPROVED, row and column cannot be null or greater than maximum allowed");
+				System.out.println("ddd");
 				Assert.isTrue(this.requestRepository.availableRowColumn(req.getRow(), req.getColumn(), req.getParade().getId()), "If Request is APPROVED, row and column assigned by brotherhood must be unique");
+				System.out.println("eee");
 			}
 		}
 		req = this.requestRepository.save(req);
