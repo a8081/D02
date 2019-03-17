@@ -23,6 +23,7 @@ import domain.Chapter;
 import domain.Float;
 import domain.Member;
 import domain.Parade;
+import domain.Segment;
 import forms.ParadeForm;
 
 @Service
@@ -55,7 +56,9 @@ public class ParadeService {
 		final Parade parade = new Parade();
 
 		final Collection<Float> floats = new ArrayList<>();
+		final List<Segment> segments = new ArrayList<>();
 		parade.setFloats(floats);
+		parade.setSegments(segments);
 
 		parade.setBrotherhood(this.brotherhoodService.findByPrincipal());
 		parade.setMode("DRAFT");
