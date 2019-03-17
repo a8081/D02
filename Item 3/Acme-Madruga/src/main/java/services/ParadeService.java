@@ -24,6 +24,7 @@ import domain.Float;
 import domain.Member;
 import domain.Parade;
 import domain.Segment;
+import forms.ParadeChapterForm;
 import forms.ParadeForm;
 
 @Service
@@ -244,6 +245,20 @@ public class ParadeService {
 		return result;
 	}
 
+	public Parade acceptParade(final int paradeId) {
+		final Parade parade = this.findOne(paradeId);
+		final Parade result;
+		final Chapter chapter = this.chapterService.findByPrincipal();
+		Assert.isTrue(parade.getBrotherhood().getArea() == chapter.getArea(), "No puede aceptar una parade que no pertenece al área que coordina.");
+		Assert.isTrue(parade.getMode().equals("FINAL"), "La parade que desea aceptar no ha sido guardada en modo final.");
+		Assert.isTrue(parade.getStatus().equals("SUBMITTED"), "No puede aceptar una parade que su estado sea distinto a Submitted");
+		if (chapter.getArea() != null)
+			parade.setStatus("ACCEPTED");
+		result = this.paradeRepository.save(parade);
+		return result;
+
+	}
+
 	// This method is not used because it doesn't make sense to have a pruned object in parade
 	public Parade reconstruct(final ParadeForm pform, final BindingResult binding) {
 		Parade result;
@@ -286,7 +301,7 @@ public class ParadeService {
 		final Chapter principal = this.chapterService.findByPrincipal();
 		final Chapter areaChapter = this.chapterService.findChapterByArea(areaId);
 		Assert.isTrue(principal == areaChapter, "You're not the owner of this area");
-		final Collection<Parade> res = this.paradeRepository.findAllFinalModeAcceptedByArea(areaId);
+		final Collection<Parade> res = this.paradeRepository.findAllFinalModeRejectedByArea(areaId);
 		Assert.notNull(res);
 		return res;
 	}
@@ -327,5 +342,20 @@ public class ParadeService {
 		Assert.notNull(res);
 		return res;
 
+	}
+
+	public Parade reconstruct2(final ParadeChapterForm paradeChapterForm, final BindingResult binding) {
+		Parade result;
+
+		Assert.isTrue(paradeChapterForm.getId() != 0);
+
+		result = this.findOne(paradeChapterForm.getId());
+
+		result.setId(paradeChapterForm.getId());
+		result.setVersion(paradeChapterForm.getVersion());
+		result.setStatus(paradeChapterForm.getStatus());
+		result.setRejectionReason(paradeChapterForm.getRejectionReason());
+
+		return result;
 	}
 }

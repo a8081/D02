@@ -147,6 +147,16 @@
 		<security:intercept-url pattern="/finder/member/display.do" access="hasRole('MEMBER')"/>
 
 
+		<!-- CHAPTER -->
+		<security:intercept-url pattern="/parade/chapter/listAll.do" access="hasRole('CHAPTER')"/>
+		<security:intercept-url pattern="/parade/chapter/listAccepted.do" access="hasRole('CHAPTER')"/>
+		<security:intercept-url pattern="/parade/chapter/listRejected.do" access="hasRole('CHAPTER')"/>
+		<security:intercept-url pattern="/parade/chapter/listSubmitted.do" access="hasRole('CHAPTER')"/>
+		<security:intercept-url pattern="/parade/chapter/accept.do" access="hasRole('CHAPTER')"/>
+		<security:intercept-url pattern="/parade/chapter/reject.do" access="hasRole('CHAPTER')"/>
+		<security:intercept-url pattern="/parade/chapter/display.do" access="hasRole('CHAPTER')"/>
+		<security:intercept-url pattern="/parade/chapter/edit.do" access="hasRole('CHAPTER')"/>
+		
 
 
 		<security:intercept-url pattern="/profile/action-1.do" access="isAuthenticated()" /> 
