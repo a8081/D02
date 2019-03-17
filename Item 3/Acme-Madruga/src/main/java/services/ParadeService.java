@@ -320,4 +320,12 @@ public class ParadeService {
 		Assert.notNull(res);
 		return res;
 	}
+
+	public Collection<Parade> findAllParadeByBrotherhoodId(final Integer broUAId) {
+		Collection<Parade> res = new ArrayList<>();
+		res = this.paradeRepository.findAllParadeByBrotherhoodId(broUAId);
+		Assert.notNull(res);
+		return res;
+
+	}
 }
