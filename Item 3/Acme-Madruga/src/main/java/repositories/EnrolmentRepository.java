@@ -21,4 +21,6 @@ public interface EnrolmentRepository extends JpaRepository<Enrolment, Integer> {
 	@Query("select e from Enrolment e where e.brotherhood.userAccount.id=?1 and e.member.userAccount.id=?2")
 	Collection<Enrolment> findEnrolmentFromBroMember(Integer broUAId, Integer memberUAId);
 
+	@Query("select e from Enrolment e where e.brotherhood.userAccount.id=?1 and e.member.userAccount.id=?2 and e.dropOut=NULL")
+	Enrolment enrolmentActive(Integer broUAId, Integer memberUAId);
 }

@@ -1,6 +1,7 @@
 
 package repositories;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,6 +12,17 @@ import domain.Sponsorship;
 
 @Repository
 public interface SponsorshipRepository extends JpaRepository<Sponsorship, Integer> {
+
+	@Query("select sp.sponsor from Sponsorship sp where sp.sponsor.userAccount.id=?1")
+	Collection<Sponsorship> findAllByUserId(final Integer userAccountId);
+
+	@Query("select sp.sponsor from Sponsorship sp where sp.sponsor.userAccount.id=?1 and sp.activated=1")
+	Collection<Sponsorship> findAllActivateByUserId(final Integer userAccountId);
+
+	@Query("select sp.sponsor from Sponsorship sp where sp.sponsor.userAccount.id=?1 and sp.activated=0")
+	Collection<Sponsorship> findAllDeactivateByUserId(final Integer userAccountId);
+
+	// DASHBOARD
 
 	/** The ratio of active sponsorships */
 	@Query("select sum(case when s.activated=1 then 1.0 else 0.0 end) / count(s) from Sponsorship s")
@@ -23,5 +35,8 @@ public interface SponsorshipRepository extends JpaRepository<Sponsorship, Intege
 	/** The ordered list of sponsors in terms of number of active sponsorships. Implemented as a List to get the top-5 as a sublist(0,5). */
 	@Query("select s from Sponsor s order by 1.0+(select count(sp) from Sponsorship sp where sp.sponsor.id=s.id and sp.activated=1) desc")
 	List<Sponsorship> getActiveSponsorships();
+
+	@Query("select s from Sponsorship s where s.parade.id=?1")
+	Collection<Sponsorship> findByParade(int paradeId);
 
 }

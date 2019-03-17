@@ -1443,7 +1443,7 @@
 
 	<bean id="configurationParameters" class="domain.ConfigurationParameters">
 		<property name="sysName" value="Acme Madrugá" />
-		<property name="banner" value="https://tinyurl.com/acme-madruga" />
+		<property name="banner" value="https://i.ibb.co/mB2Rdr2/logo.png" />
 		<property name="welcomeMessageEn"
 			value="Welcome to Acme Madrugá!  The site to organise your parades" />
 		<property name="welcomeMessageEsp"
