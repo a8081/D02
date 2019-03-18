@@ -8,6 +8,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.Assert;
 import org.springframework.validation.BindingResult;
@@ -108,11 +109,14 @@ public class BrotherhoodController extends AbstractController {
 		brotherhood = this.brotherhoodService.findOne(brotherhoodId);
 
 		if (brotherhood != null) {
-			final int principal = this.actorService.findByPrincipal().getId();
 			result = new ModelAndView("brotherhood/display");
 			result.addObject("brotherhood", brotherhood);
-			final boolean displayButtons = principal == brotherhood.getId();
-			result.addObject("displayButtons", displayButtons);
+			final Object user = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			if (user != "anonymousUser") {
+				final int principal = this.actorService.findByPrincipal().getId();
+				final boolean displayButtons = principal == brotherhood.getId();
+				result.addObject("displayButtons", displayButtons);
+			}
 		} else
 			result = new ModelAndView("redirect:/misc/403.jsp");
 

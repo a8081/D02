@@ -43,12 +43,15 @@
 			value="${parade.moment}" type="both" pattern="dd/MM/yyyy HH:mm" />
 	</jstl:otherwise>
 </jstl:choose>
-</br>
+<br>
 
 <acme:display code="parade.ticker" value="${parade.ticker}" />
 <spring:message code="parade.mode" />:
 <acme:modeChoose mode="${parade.mode}"/>
-<br />
+<br>
+<spring:message code="parade.status" />:
+<acme:modeChoose mode="${parade.status}"/>
+<br>
 <acme:display code="parade.maxRows" value="${parade.maxRows}" />
 <acme:display code="parade.maxColumns"
 	value="${parade.maxColumns}" />

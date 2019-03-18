@@ -15,10 +15,10 @@ import domain.Parade;
 public interface ParadeRepository extends JpaRepository<Parade, Integer> {
 
 	@Query("select p from Parade p where p.brotherhood.userAccount.id=?1")
-	Collection<Parade> findAllParadeByBrotherhoodId(Integer id);
+	Collection<Parade> findAllParadeByBrotherhoodId(Integer broUAId);
 
 	@Query("select p from Request r join r.parade p where r.member.userAccount.id=?1")
-	Collection<Parade> findAllParadeByBMemberId(Integer id);
+	Collection<Parade> findAllParadeByBMemberId(Integer memberUAId);
 
 	@Query("select p from Parade p where p.ticker = ?1")
 	Collection<Parade> getParadeWithTicker(String ticker);

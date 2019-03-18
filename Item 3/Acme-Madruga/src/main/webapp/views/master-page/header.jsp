@@ -137,6 +137,26 @@
 			
 		</security:authorize>
 		
+		<!-- ========================================================================================================= -->
+		<!-- ========================================= CHAPTER =================================================== -->
+		<!-- ========================================================================================================= -->	
+	
+		<security:authorize access="hasRole('CHAPTER')">
+		
+		
+		<%-- PARADES --%>
+		
+		<li><a class="fNiv"><spring:message	code="master.page.parades.chapter.list" /></a>
+				<ul>
+					<li class="arrow"></li>
+					<li><a href="parade/chapter/listAccepted.do"><spring:message code="master.page.parade.accepted" /></a></li>
+					<li><a href="parade/chapter/listRejected.do"><spring:message code="master.page.parade.rejected" /></a></li>
+					<li><a href="parade/chapter/listSubmitted.do"><spring:message code="master.page.parade.submitted" /></a></li>
+				</ul>
+			</li>
+		
+		</security:authorize>
+		
 		<security:authorize access="isAnonymous()">
 			<li><a class="fNiv" href="security/login.do"><spring:message code="master.page.login" /></a></li>
 			<li><a class="fNiv" href="parade/list.do"><spring:message code="master.page.all.parade" /></a></li>
