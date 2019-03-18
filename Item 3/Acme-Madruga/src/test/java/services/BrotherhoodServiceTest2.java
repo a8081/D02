@@ -61,10 +61,10 @@ public class BrotherhoodServiceTest2 extends AbstractTest {
 	/* ========================= Test Create and Save Brotherhoood =========================== */
 
 	@Test
-	public void driverCreateAndSaveChapter() {
+	public void driverCreateAndSaveBrotherhood() {
 		final Object testingData[][] = {
 			{
-				// Crear chapter correctamente
+				// Crear brotherhood correctamente
 				"brotherhood1", "brotherhood1", "Esperanza de triana", "surnameBrother", "esperanza@hotmail.es", "+34655398741", "La Esperanza de Triana", null
 			}, {
 				//Crear manager con name incorrecto
