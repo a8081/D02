@@ -45,6 +45,8 @@
 		<value>/views/enrolment/tiles.xml</value>
 		<value>/views/finder/tiles.xml</value>
 		
+		<value>/views/chapter/tiles.xml</value>
+		
 		
 	</util:list>
 

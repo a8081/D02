@@ -142,6 +142,7 @@
 			<li><a class="fNiv" href="parade/list.do"><spring:message code="master.page.all.parade" /></a></li>
 			<li><a class="fNiv" href="brotherhood/create.do"><spring:message code="master.page.brotherhood.register" /></a></li>
 			<li><a class="fNiv" href="member/create.do"><spring:message code="master.page.member.register" /></a></li>
+			<li><a class="fNiv" href="chapter/create.do"><spring:message code="master.page.chapter.register" /></a></li>
 		</security:authorize>
 		
 		<security:authorize access="isAuthenticated()">
@@ -160,6 +161,10 @@
 					<security:authorize access="hasRole('MEMBER')">
 					<li><a href="member/edit.do"><spring:message code="master.page.member.edit" /></a></li>
 					<li><a href="member/display.do"><spring:message code="master.page.member.display" /></a></li>
+					</security:authorize>
+					<security:authorize access="hasRole('CHAPTER')">
+					<li><a href="chapter/edit.do"><spring:message code="master.page.chapter.edit" /></a></li>
+					<li><a href="chapter/display.do"><spring:message code="master.page.chapter.display" /></a></li>
 					</security:authorize>
 					<security:authorize access="hasRole('BROTHERHOOD')">
 					<li><a href="brotherhood/edit.do"><spring:message code="master.page.brotherhood.edit" /></a></li>

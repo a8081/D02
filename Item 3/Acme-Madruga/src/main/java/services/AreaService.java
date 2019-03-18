@@ -94,4 +94,13 @@ public class AreaService {
 		return result;
 	}
 
+	public List<Area> findFreeOfChapter() {
+		final List<Area> assigned = this.areaRepository.findAreasAssignedToChapter();
+		Assert.notNull(assigned);
+		final List<Area> result = (List<Area>) this.findAll();
+		Assert.notNull(result);
+		result.removeAll(assigned);
+		return result;
+	}
+
 }

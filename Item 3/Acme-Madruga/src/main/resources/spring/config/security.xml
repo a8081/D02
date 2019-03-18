@@ -147,7 +147,12 @@
 		<security:intercept-url pattern="/finder/member/display.do" access="hasRole('MEMBER')"/>
 
 
-
+		<!-- CHAPTER -->
+		<security:intercept-url pattern="/chapter/create.do" access="permitAll" /> 
+		<security:intercept-url pattern="/chapter/edit.do" access="permitAll" /> 
+		<security:intercept-url pattern="/chapter/display.do" access="hasRole('CHAPTER')"/>
+				<security:intercept-url pattern="/chapter/assignArea.do" access="hasRole('CHAPTER')" />
+		<security:intercept-url pattern="/chapter/deletePersonalData.do" access="hasRole('CHAPTER')" />
 
 		<security:intercept-url pattern="/profile/action-1.do" access="isAuthenticated()" /> 
 		<security:intercept-url pattern="/profile/action-2.do" access="isAuthenticated()" /> 

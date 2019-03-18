@@ -67,7 +67,9 @@ public class ChapterService {
 		if (chapter.getId() == 0) {
 			this.actorService.setAuthorityUserAccount(Authority.CHAPTER, chapter);
 			Assert.isTrue(newArea == null || !this.hasAnyChapterThisArea(newArea.getId()), "The selected area has been already assigned to another chapter");
+			System.out.println("CAAAAAOOOOO");
 			result = this.chapterRepository.save(chapter);
+			System.out.println("bAAAAAOOOOO");
 
 		} else {
 			this.actorService.checkForSpamWords(chapter);
@@ -185,11 +187,11 @@ public class ChapterService {
 
 	}
 
-	public Chapter reconstruct2(final ChapterAreaForm chapterAreaForm, final BindingResult binding) {
+	public Chapter reconstructChapterArea(final ChapterAreaForm chapterAreaForm, final BindingResult binding) {
 		Chapter result;
 		Assert.isTrue(chapterAreaForm.getId() != 0);
 
-		result = this.findOne(chapterAreaForm.getId());
+		result = this.findOne(chapterAreaForm.getId()); //ya que consideramos el id del objeto ChapterAreaForm como el id del chapter
 
 		result.setId(chapterAreaForm.getId());
 		result.setVersion(chapterAreaForm.getVersion());

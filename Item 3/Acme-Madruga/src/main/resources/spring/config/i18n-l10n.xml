@@ -44,6 +44,8 @@
 		<value>/views/enrolment/messages</value>
 		<value>/views/finder/messages</value>
 		
+		<value>/views/chapter/messages</value>
+		
 	</util:list>
 
 </beans>
