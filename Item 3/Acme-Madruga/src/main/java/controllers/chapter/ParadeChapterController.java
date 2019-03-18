@@ -164,7 +164,7 @@ public class ParadeChapterController extends AbstractController {
 		Parade parade;
 
 		parade = this.paradeService.findOne(paradeId);
-		if (parade == null || !parade.getStatus().equals("SUBMITTED") || parade.getBrotherhood().getArea() == chapter.getArea()) {
+		if (parade == null || !parade.getStatus().equals("SUBMITTED") || parade.getBrotherhood().getArea() != chapter.getArea()) {
 			result = this.createEditModelAndView(parade, "parade.commit.error");
 			result.addObject("ok", false);
 		} else
