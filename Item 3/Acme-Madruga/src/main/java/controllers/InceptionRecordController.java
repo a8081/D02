@@ -20,7 +20,7 @@ import domain.History;
 import domain.InceptionRecord;
 
 @Controller
-@RequestMapping("/legalRecord")
+@RequestMapping("/inceptionRecord")
 public class InceptionRecordController extends AbstractController {
 
 	@Autowired
