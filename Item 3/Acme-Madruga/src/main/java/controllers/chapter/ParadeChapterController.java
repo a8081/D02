@@ -142,9 +142,10 @@ public class ParadeChapterController extends AbstractController {
 		final ModelAndView result;
 		final Parade parade = this.paradeService.findOne(paradeId);
 
-		if (parade == null || !parade.getStatus().equals("SUBMITTED"))
-			result = new ModelAndView("parade.commit.error");
-		else {
+		if (parade == null || !parade.getStatus().equals("SUBMITTED")) {
+			result = this.createEditModelAndView(parade, "parade.commit.error");
+			result.addObject("ok", false);
+		} else {
 			this.paradeService.acceptParade(paradeId);
 			result = this.listAccepted();
 		}
@@ -154,18 +155,19 @@ public class ParadeChapterController extends AbstractController {
 
 		return result;
 	}
-
 	// REJECT PARADE --------------------------------------------------------
 
 	@RequestMapping(value = "/reject", method = RequestMethod.GET)
 	public ModelAndView reject(@RequestParam final int paradeId) {
 		ModelAndView result;
+		final Chapter chapter = this.chapterService.findByPrincipal();
 		Parade parade;
 
 		parade = this.paradeService.findOne(paradeId);
-		if (parade == null || !parade.getStatus().equals("SUBMITTED"))
-			result = new ModelAndView("parade.commit.error");
-		else
+		if (parade == null || !parade.getStatus().equals("SUBMITTED") || parade.getBrotherhood().getArea() == chapter.getArea()) {
+			result = this.createEditModelAndView(parade, "parade.commit.error");
+			result.addObject("ok", false);
+		} else
 			result = this.createEditModelAndView(parade);
 		return result;
 	}
@@ -194,23 +196,23 @@ public class ParadeChapterController extends AbstractController {
 
 		return result;
 	}
-	//
-	//	// EDIT  ---------------------------------------------------------------		
-	//
-	//	@RequestMapping(value = "/edit", method = RequestMethod.GET)
-	//	public ModelAndView edit(@RequestParam final int paradeId) {
-	//		ModelAndView result;
-	//		Parade parade;
-	//
-	//		parade = this.paradeService.findOne(paradeId);
-	//
-	//		if (parade != null)
-	//			result = this.createEditModelAndView(parade);
-	//		else
-	//			result = new ModelAndView("redirect:/misc/403.jsp");
-	//
-	//		return result;
-	//	}
+
+	// EDIT  ---------------------------------------------------------------		
+
+	@RequestMapping(value = "/edit", method = RequestMethod.GET)
+	public ModelAndView edit(@RequestParam final int paradeId) {
+		ModelAndView result;
+		Parade parade;
+
+		parade = this.paradeService.findOne(paradeId);
+
+		if (parade != null)
+			result = this.createEditModelAndView(parade);
+		else
+			result = new ModelAndView("redirect:/misc/403.jsp");
+
+		return result;
+	}
 
 	// SAVE  ---------------------------------------------------------------		
 
@@ -230,6 +232,8 @@ public class ParadeChapterController extends AbstractController {
 				result.addObject("banner", banner);
 			} catch (final Throwable oops) {
 				result = this.createEditModelAndView(parade, "parade.commit.save.error");
+				result.addObject("ok", false);
+
 			}
 
 		return result;
@@ -247,6 +251,7 @@ public class ParadeChapterController extends AbstractController {
 		result = new ModelAndView("parade/edit2");
 		result.addObject("parade", this.constructPruned(parade));
 		result.addObject("message", messageCode);
+		result.addObject("ok", true);
 
 		final String banner = this.configurationParametersService.findBanner();
 		result.addObject("banner", banner);

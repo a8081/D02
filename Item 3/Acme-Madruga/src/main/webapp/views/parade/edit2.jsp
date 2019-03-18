@@ -8,8 +8,8 @@
 
 <%@taglib prefix="acme" tagdir="/WEB-INF/tags"%>
 
-
-<form:form action="parade/chapter/reject.do" modelAttribute="parade" method="POST">
+<jstl:if test="${ok}">
+<form:form action="parade/chapter/edit.do" modelAttribute="parade" method="POST">
 
 	<form:hidden path="id" />
 	<form:hidden path="version" />
@@ -18,10 +18,10 @@
 	<acme:textarea code="parade.rejectionReason" path="rejectionReason"/>
 
 	<br>
-<%-- 	<input type="submit" name="save" value="<spring:message code="parade.save" />" />
- --%>	
-	<acme:button url="parade/chapter/edit.do" name="save" code="parade.save"/>
+	<input type="submit" name="save" value="<spring:message code="parade.save" />" />
+	
 		
 	<acme:button url="parade/chapter/listSubmitted.do" name="cancel" code="parade.cancel" />
 		
 </form:form>
+</jstl:if>
