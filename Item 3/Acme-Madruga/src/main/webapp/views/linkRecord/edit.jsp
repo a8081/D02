@@ -18,7 +18,7 @@
 
 <%@taglib prefix="acme" tagdir="/WEB-INF/tags"%>
 
-<form:form action="folder/edit.do" modelAttribute="folder">
+<form:form action="linkRecord/edit.do" modelAttribute="linkRecord">
 
 	<form:hidden path="id"/>
     <form:hidden path="version"/>
