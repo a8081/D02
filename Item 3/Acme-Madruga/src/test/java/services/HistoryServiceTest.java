@@ -1,8 +1,6 @@
 
 package services;
 
-import java.util.Date;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,9 +9,10 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
-import repositories.RequestRepository;
+import repositories.HistoryRepository;
 import utilities.AbstractTest;
-import domain.Request;
+import domain.History;
+import domain.InceptionRecord;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {
@@ -24,17 +23,17 @@ public class HistoryServiceTest extends AbstractTest {
 
 	// Services
 	@Autowired
-	private RequestService		requestService;
+	private HistoryService			historyService;
 	@Autowired
-	private ParadeService		paradeService;
+	private InceptionRecordService	inceotionRecordService;
 	@Autowired
-	private ActorService		actorService;
+	private ActorService			actorService;
 	@Autowired
-	private MemberService		memberService;
+	private BrotherhoodService		brotherhoodService;
 
 	//Repositorys
 	@Autowired
-	private RequestRepository	requestRepository;
+	private HistoryRepository		historyRepository;
 
 
 	@Test
@@ -43,41 +42,75 @@ public class HistoryServiceTest extends AbstractTest {
 	}
 
 	@Test
-	public void driverCreate() {
+	public void driverCreateSave() {
 		final Object testingData[][] = {
 			{
-				"member1", "", new Date(), null, null, null, "parade12", IllegalArgumentException.class
+				"brotherhood1", new InceptionRecord(), null
 			}, {
-				"member1", "", new Date(), "", null, null, "parade11", IllegalArgumentException.class
+				"member1", new InceptionRecord(), IllegalArgumentException.class
 			}, {
-				"member1", "ACEPTED", new Date(), null, null, null, "parade11", IllegalArgumentException.class
-			}, {
-				"member1", "PENDING", new Date(), null, 3, 2, "parade11", IllegalArgumentException.class
+				"brotherhood1", null, IllegalArgumentException.class
 			}
 		};
 
 		for (int i = 0; i < testingData.length; i++)
-			this.template((String) testingData[i][0], (String) testingData[i][1], (Date) testingData[i][2], (String) testingData[i][3], (Integer) testingData[i][4], (Integer) testingData[i][5], (String) testingData[i][6], (Class<?>) testingData[i][7]);
+			this.templateCreateSave((String) testingData[i][0], (InceptionRecord) testingData[i][1], (Class<?>) testingData[i][2]);
 	}
 
-	protected void template(final String member, final String status, final Date moment, final String explanation, final Integer row, final Integer column, final String parade, final Class<?> expected) {
+	protected void templateCreateSave(final String brotherhood, final InceptionRecord iR, final Class<?> expected) {
 
 		Class<?> caught = null;
 
 		try {
-			this.authenticate(member);
-			final Integer myId = this.actorService.findByPrincipal().getId();
-			Request req = this.requestService.create();
-			req.setStatus(status);
-			req.setMoment(moment);
-			req.setExplanation(explanation);
-			req.setParade(this.paradeService.findOne(this.getEntityId(parade)));
-			req.setMember(this.memberService.findOne(myId));
-			req.setRow(row);
-			req.setColumn(column);
+			this.authenticate(brotherhood);
+			if (iR != null) {
+				iR.setDescription("DescriptionTest");
+				iR.setTitle("TitleTest");
+			}
+			final History history = this.historyService.create();
+			history.setInceptionRecord(iR);
+			final History saved = this.historyService.save(history);
+			Assert.isTrue(saved.getId() != 0);
+			this.unauthenticate();
+		} catch (final Throwable oops) {
+			caught = oops.getClass();
+		}
 
-			req = this.requestService.save(req);
-			Assert.isTrue(req.getId() != 0);
+		super.checkExceptions(expected, caught);
+	}
+
+	@Test
+	public void driverEdit() {
+		final History history1 = this.historyService.findOne(2210);
+		final History history2 = this.historyService.findOne(2214);
+		final Object testingData[][] = {
+			{
+				"brotherhood1", history1, "InceptionTest", "DescriptionTest", null
+			}, {
+				"member1", history1, "InceptionTest", "DescriptionTest", IllegalArgumentException.class
+			}, {
+				"brotherhood1", history2, "InceptionTest", "DescriptionTest", IllegalArgumentException.class
+			}, {
+				"brotherhood1", history1, null, null, IllegalArgumentException.class
+			}
+		};
+
+		for (int i = 0; i < testingData.length; i++)
+			this.templateEdit((String) testingData[i][0], (History) testingData[i][1], (String) testingData[i][2], (String) testingData[i][3], (Class<?>) testingData[i][4]);
+	}
+
+	protected void templateEdit(final String brotherhood, final History history, final String title, final String description, final Class<?> expected) {
+
+		Class<?> caught = null;
+
+		try {
+			this.authenticate(brotherhood);
+			final InceptionRecord iR = history.getInceptionRecord();
+			iR.setTitle(title);
+			iR.setDescription(description);
+			history.setInceptionRecord(iR);
+			final History saved = this.historyService.save(history);
+			Assert.isTrue(saved.getId() != 0);
 			this.unauthenticate();
 		} catch (final Throwable oops) {
 			caught = oops.getClass();
