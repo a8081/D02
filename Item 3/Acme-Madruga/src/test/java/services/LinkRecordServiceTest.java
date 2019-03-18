@@ -2,7 +2,6 @@
 package services;
 
 import java.util.ArrayList;
-import java.util.Collection;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -38,11 +37,7 @@ public class LinkRecordServiceTest extends AbstractTest {
 
 	@Test
 	public void driverCreateSave() {
-		final Collection<Brotherhood> bros = this.brotherhoodService.findAll();
 		final Brotherhood bro = this.brotherhoodService.findOne(2199);
-		//		for (final Brotherhood b : bros)
-		//			if (b.getUserAccount().getUsername() == "brotherhood2")
-		//				bro = b;
 		final Object testingData[][] = {
 			{
 				//Correcto
@@ -93,11 +88,7 @@ public class LinkRecordServiceTest extends AbstractTest {
 
 	@Test
 	public void driverEdit() {
-		final Collection<Brotherhood> bros = this.brotherhoodService.findAll();
 		final Brotherhood bro = this.brotherhoodService.findOne(2199);
-		//		for (final Brotherhood b : bros)
-		//			if (b.getUserAccount().getUsername() == "brotherhood2")
-		//				bro = b;
 		final Object testingData[][] = {
 			{
 				//Correcto

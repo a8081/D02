@@ -10,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import repositories.InceptionRecordRepository;
-import security.Authority;
 import domain.Brotherhood;
 import domain.InceptionRecord;
 
@@ -52,7 +51,6 @@ public class InceptionRecordService {
 	public InceptionRecord save(final InceptionRecord iR) {
 		final Brotherhood me = this.brotherhoodService.findByPrincipal();
 		Assert.notNull(me, "You must be logged in the system");
-		Assert.isTrue(this.actorService.checkAuthority(me, Authority.BROTHERHOOD), "You must be BROTHERHOO");
 		Assert.notNull(iR);
 		Assert.notNull(iR.getTitle());
 		Assert.notNull(iR.getDescription());

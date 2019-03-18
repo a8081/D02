@@ -9,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import repositories.LinkRecordRepository;
-import security.Authority;
 import domain.Brotherhood;
 import domain.LinkRecord;
 
@@ -54,7 +53,6 @@ public class LinkRecordService {
 	public LinkRecord save(final LinkRecord linkRecord) {
 		final Brotherhood me = this.brotherhoodService.findByPrincipal();
 		Assert.notNull(me, "You must be logged in the system");
-		Assert.isTrue(this.actorService.checkAuthority(me, Authority.BROTHERHOOD), "You must be BROTHERHOO");
 		Assert.notNull(linkRecord);
 		Assert.notNull(linkRecord.getTitle());
 		Assert.notNull(linkRecord.getDescription());
@@ -69,7 +67,6 @@ public class LinkRecordService {
 	public void delete(final LinkRecord linkRecord) {
 		final Brotherhood me = this.brotherhoodService.findByPrincipal();
 		Assert.notNull(me, "You must be logged in the system");
-		Assert.isTrue(this.actorService.checkAuthority(me, Authority.BROTHERHOOD), "You must be BROTHERHOO");
 		Assert.notNull(linkRecord);
 		Assert.isTrue(linkRecord.getId() != 0);
 		final LinkRecord retrieved = this.findOne(linkRecord.getId());

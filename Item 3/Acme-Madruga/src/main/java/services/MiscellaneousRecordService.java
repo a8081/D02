@@ -9,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import repositories.MiscellaneousRecordRepository;
-import security.Authority;
 import domain.Brotherhood;
 import domain.MiscellaneousRecord;
 
@@ -52,7 +51,6 @@ public class MiscellaneousRecordService {
 	public MiscellaneousRecord save(final MiscellaneousRecord mR) {
 		final Brotherhood me = this.brotherhoodService.findByPrincipal();
 		Assert.notNull(me, "You must be logged in the system");
-		Assert.isTrue(this.actorService.checkAuthority(me, Authority.BROTHERHOOD), "You must be BROTHERHOO");
 		Assert.notNull(mR);
 		Assert.notNull(mR.getTitle());
 		Assert.notNull(mR.getDescription());
@@ -66,7 +64,6 @@ public class MiscellaneousRecordService {
 	public void delete(final MiscellaneousRecord mR) {
 		final Brotherhood me = this.brotherhoodService.findByPrincipal();
 		Assert.notNull(me, "You must be logged in the system");
-		Assert.isTrue(this.actorService.checkAuthority(me, Authority.BROTHERHOOD), "You must be BROTHERHOO");
 		Assert.notNull(mR);
 		Assert.isTrue(mR.getId() != 0);
 		final MiscellaneousRecord res = this.findOne(mR.getId());

@@ -10,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import repositories.PeriodRecordRepository;
-import security.Authority;
 import domain.Brotherhood;
 import domain.PeriodRecord;
 
@@ -22,8 +21,6 @@ public class PeriodRecordService {
 	private PeriodRecordRepository	periodRecordRepository;
 	@Autowired
 	private BrotherhoodService		brotherhoodService;
-	@Autowired
-	private ActorService			actorService;
 
 
 	//Metodos CRUD
@@ -54,7 +51,6 @@ public class PeriodRecordService {
 	public PeriodRecord save(final PeriodRecord pR) {
 		final Brotherhood me = this.brotherhoodService.findByPrincipal();
 		Assert.notNull(me, "You must be logged in the system");
-		Assert.isTrue(this.actorService.checkAuthority(me, Authority.BROTHERHOOD), "You must be BROTHERHOO");
 		Assert.notNull(pR);
 		Assert.notNull(pR.getTitle());
 		Assert.notNull(pR.getDescription());
@@ -68,7 +64,6 @@ public class PeriodRecordService {
 	public void delete(final PeriodRecord pR) {
 		final Brotherhood me = this.brotherhoodService.findByPrincipal();
 		Assert.notNull(me, "You must be logged in the system");
-		Assert.isTrue(this.actorService.checkAuthority(me, Authority.BROTHERHOOD), "You must be BROTHERHOO");
 		Assert.notNull(pR);
 		Assert.isTrue(pR.getId() != 0);
 		final PeriodRecord retrieved = this.findOne(pR.getId());

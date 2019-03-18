@@ -143,40 +143,4 @@ public class InceptionRecordServiceTest extends AbstractTest {
 		super.checkExceptions(expected, caught);
 
 	}
-
-	//	@Test
-	//	public void driverDelete() {
-	//
-	//		final Object testingData[][] = {
-	//			{
-	//				"brotherhood1", null, null
-	//			}, {
-	//				"brotherhood1", new InceptionRecord(), ConstraintViolationException.class
-	//			}, {
-	//				"member1", null, ConstraintViolationException.class
-	//			},
-	//		};
-	//
-	//		for (int i = 0; i < testingData.length; i++)
-	//			this.templateDelete((String) testingData[i][0], (InceptionRecord) testingData[i][1], (Class<?>) testingData[i][2]);
-	//	}
-	//
-	//	private void templateDelete(final String actor, final InceptionRecord inceptionRecord, final Class<?> expected) {
-	//		Class<?> caught = null;
-	//		try {
-	//			this.authenticate(actor);
-	//			InceptionRecord incRec = inceptionRecord;
-	//			if (inceptionRecord == null) {
-	//				final Brotherhood brotherhood = this.brotherhoodService.findByPrincipal();
-	//				incRec = brotherhood.getHistory().getInceptionRecord();
-	//			}
-	//			this.inceptionRecordService.delete(incRec);
-	//			this.unauthenticate();
-	//		} catch (final Throwable oops) {
-	//			caught = oops.getClass();
-	//		}
-	//
-	//		super.checkExceptions(expected, caught);
-	//
-	//	}
 }

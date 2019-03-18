@@ -10,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import repositories.LegalRecordRepository;
-import security.Authority;
 import domain.Brotherhood;
 import domain.LegalRecord;
 
@@ -55,7 +54,6 @@ public class LegalRecordService {
 	public LegalRecord save(final LegalRecord legalRecord) {
 		final Brotherhood me = this.brotherhoodService.findByPrincipal();
 		Assert.notNull(me, "You must be logged in the system");
-		Assert.isTrue(this.actorService.checkAuthority(me, Authority.BROTHERHOOD), "You must be BROTHERHOO");
 		Assert.notNull(legalRecord);
 		Assert.notNull(legalRecord.getTitle());
 		Assert.notNull(legalRecord.getDescription());
@@ -70,7 +68,6 @@ public class LegalRecordService {
 	public void delete(final LegalRecord legalRecord) {
 		final Brotherhood me = this.brotherhoodService.findByPrincipal();
 		Assert.notNull(me, "You must be logged in the system");
-		Assert.isTrue(this.actorService.checkAuthority(me, Authority.BROTHERHOOD), "You must be BROTHERHOO");
 		Assert.notNull(legalRecord);
 		Assert.isTrue(legalRecord.getId() != 0);
 		final LegalRecord retrieved = this.findOne(legalRecord.getId());
