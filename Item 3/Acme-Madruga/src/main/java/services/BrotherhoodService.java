@@ -237,4 +237,8 @@ public class BrotherhoodService {
 		return res;
 	}
 
+	public void flush() {
+		this.brotherhoodRepository.flush();
+	}
+
 }

@@ -40,8 +40,7 @@ public class MiscellaneousRecordService {
 
 	public MiscellaneousRecord save(final MiscellaneousRecord mR) {
 		Assert.notNull(mR);
-		this.miscellaneousRecordRepository.save(mR);
-		return mR;
+		return this.miscellaneousRecordRepository.save(mR);
 	}
 
 	public void delete(final MiscellaneousRecord mR) {

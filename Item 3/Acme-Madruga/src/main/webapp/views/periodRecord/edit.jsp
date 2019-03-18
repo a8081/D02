@@ -22,12 +22,12 @@
 
 	<form:hidden path="id"/>
     <form:hidden path="version"/>
-    <form:hidden path="isSystemFolder"/>
-    <form:hidden path="actor"/>
-    <form:hidden path="messages"/>
-    <form:hidden path="father"/>
 
-    <acme:textbox path="name" code="folder.name"/>
+    <acme:textbox path="title" code="record.title"/>
+    <acme:textbox path="description" code="record.description"/>
+    <acme:textbox path="startYear" code="record.startYear"/>
+    <acme:textbox path="endYear" code="record.endYear"/>
+    <acme:textbox path="photos" code="record.photos"/>
    
 
     <br/>
@@ -38,7 +38,7 @@
  	
     <input type="button" class="btn btn-danger" name="cancel"
            value="<spring:message code="general.cancel" />"
-           onclick="relativeRedir('folder/list.do');"/>
+           onclick="relativeRedir('history/list.do');"/>
 
 
 

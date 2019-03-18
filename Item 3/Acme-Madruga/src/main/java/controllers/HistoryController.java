@@ -41,7 +41,7 @@ public class HistoryController extends AbstractController {
 		final Collection<LinkRecord> linkRecords = history.getLinkRecords();
 		final Collection<MiscellaneousRecord> miscellaneousRecords = history.getMiscellaneousRecords();
 
-		res = new ModelAndView("history/list");
+		res = new ModelAndView("history/display");
 		res.addObject("history", history);
 		res.addObject("inceptionRecord", inceptionRecord);
 		res.addObject("periodrecords", periodRecords);

@@ -17,7 +17,7 @@
     <param-name>contextConfigLocation</param-name>
     <param-value>classpath:spring/servlet.xml</param-value>
   </context-param>
-  
+
  <!--  <security-constraint>
     <web-resource-collection>
       <web-resource-name>Acme-Parade</web-resource-name>
@@ -26,7 +26,8 @@
     <user-data-constraint>
       <transport-guarantee>CONFIDENTIAL</transport-guarantee>
     </user-data-constraint>
-  </security-constraint> -->
+
+  </security-constraint>-->
   <servlet>
     <servlet-name>AcmeParadeServlet</servlet-name>
     <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
