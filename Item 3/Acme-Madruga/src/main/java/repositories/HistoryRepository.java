@@ -23,6 +23,6 @@ public interface HistoryRepository extends JpaRepository<History, Integer> {
 
 	/** The smallest brotherhood is the one with lowest number of records per history **/
 	@Query("select b from Brotherhood b where (b.history.periodRecords.size+b.history.legalRecords.size+b.history.linkRecords.size+b.history.miscellaneousRecords.size)>(select stddev(p.history.periodRecords.size+p.history.legalRecords.size+p.history.linkRecords.size+p.history.miscellaneousRecords.size) from Brotherhood p)")
-	Brotherhood[] getBrotherhoodPerHistoryLargerThanStd();
+	Collection<Brotherhood> getBrotherhoodPerHistoryLargerThanStd();
 
 }

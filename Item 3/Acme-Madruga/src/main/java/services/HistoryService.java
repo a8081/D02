@@ -111,8 +111,8 @@ public class HistoryService {
 		return result;
 	}
 
-	public Brotherhood[] getBrotherhoodPerHistoryLargerThanStd() {
-		final Brotherhood[] result = this.historyRepository.getBrotherhoodPerHistoryLargerThanStd();
+	public Collection<Brotherhood> getBrotherhoodPerHistoryLargerThanStd() {
+		final Collection<Brotherhood> result = this.historyRepository.getBrotherhoodPerHistoryLargerThanStd();
 		Assert.notNull(result);
 		return result;
 	}

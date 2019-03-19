@@ -135,7 +135,7 @@
     <table>
     <spring:message code="dashboard.procession" var="findersH" />
  <caption><jstl:out value="${findersH}" /></caption>
- 	<jstl:forEach items="${parades }" var="parades">
+ 	<jstl:forEach items="${parades }" var="parade">
     <tr >
     <td><jstl:out value="${parade.title}" /></td>
     <td><spring:url value="dashboard/administrator/statistics.do" var="displayURL">
@@ -146,15 +146,15 @@
     </jstl:forEach>
     <tr >
     <td><spring:message code="requests.approved" var="reqaH" /><jstl:out value="${reqaH}" /></td>
-    <td>${requestsProcessionApproved}</td>
+    <td>${requestsParadeApproved}</td>
     </tr>
      <tr >
     <td><spring:message code="requests.pending" var="reqpH" /><jstl:out value="${reqpH}" /></td>
-    <td>${requestsProcessionPending}</td>
+    <td>${requestsParadePending}</td>
     </tr>
      <tr>
     <td><spring:message code="requests.rejected" var="reqrH" /><jstl:out value="${reqrH}" /></td>
-    <td>${requestsProcessionRejected}</td>
+    <td>${requestsParadeRejected}</td>
     </tr>
     	
        
