@@ -8,12 +8,15 @@ import java.util.List;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.encoding.Md5PasswordEncoder;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import repositories.MemberRepository;
+import security.UserAccount;
+import services.auxiliary.RegisterService;
 import utilities.AbstractTest;
 import domain.Member;
 
@@ -31,6 +34,12 @@ public class MemberServiceTest extends AbstractTest {
 	//Repositorys
 	@Autowired
 	private MemberRepository	memberRepository;
+
+	@Autowired
+	private RegisterService		registerService;
+
+	@Autowired
+	private UserAccountService	userAccountService;
 
 
 	@Test
@@ -52,30 +61,78 @@ public class MemberServiceTest extends AbstractTest {
 	}
 
 	@Test
-	public void testSave() {
-		final Member member = this.memberService.create();
-		//		final UserAccount user = this.userAccountService.create();
-		//		final Authority auth = new Authority();
-		//		auth.setAuthority(Authority.MEMBER);
-		//		user.addAuthority(auth);
+	public void driverLoopSaveNew() {
+		final Object testingData[][] = new Object[20][10];
+		for (int i = 0; i < 20; i++) {
+			testingData[i][0] = "test" + i;
+			testingData[i][1] = "test" + i;
+			testingData[i][2] = "name" + i;
+			testingData[i][3] = "middlename" + i;
+			testingData[i][4] = "surname" + i;
+			testingData[i][5] = "";
+			testingData[i][6] = "test" + i + "@gmail.com";
+			testingData[i][7] = "+34654543432";
+			testingData[i][8] = "avd test" + i;
+			testingData[i][9] = null;
+		}
 
-		// a8081: Jesus he a�adido esta funcionalidad diractamente en el save del servicio
+		for (int i = 0; i < testingData.length; i++)
+			this.templateSaveNew((String) testingData[i][0], (String) testingData[i][1], (String) testingData[i][2], (String) testingData[i][3], (String) testingData[i][4], (String) testingData[i][5], (String) testingData[i][6],
+				(String) testingData[i][7], (String) testingData[i][8], (Class<?>) testingData[i][9]);
+	}
 
-		//		member.setUserAccount(user);
-		member.setName("Jes�s Manuel");
-		member.setMiddleName("");
-		member.setSurname("Garc�a Lanzas");
-		member.setPhoto("");
-		member.setEmail("jmgl@gmail.com");
-		member.setPhone("658 98 65 96");
-		member.setAddress("Avda. Reina Mercedes");
-		member.setSpammer(false);
+	/**
+	 * 1
+	 * **/
+	@Test
+	public void driverSaveNew() {
+		final Object testingData[][] = {
+			{
+				"test1", "test1", "name test 1", "middlename test 1", "surname test 1", "http://phototest1.com", "testemail1@gmail.com", "+3465765", "avd test", javax.validation.ConstraintViolationException.class
+			}, {
+				"test2", "test2", "name test 2", "middlename test 2", "surname test 2", "http://phototest2.com", "testemail2.com", "+34657456234", "avd test", org.springframework.dao.DataIntegrityViolationException.class
+			}, {
+				"test3", "test3", "name test 3", "middlename test 3", "surname test 3", "http://phototest3.com", "testemail3@gmail.com", "+34657651234", "avd test 3", org.springframework.dao.DataIntegrityViolationException.class
+			}
+		};
 
-		final Member saved = this.memberService.save(member);
-		final Collection<Member> members = this.memberService.findAll();
+		for (int i = 0; i < testingData.length; i++)
+			this.templateSaveNew((String) testingData[i][0], (String) testingData[i][1], (String) testingData[i][2], (String) testingData[i][3], (String) testingData[i][4], (String) testingData[i][5], (String) testingData[i][6],
+				(String) testingData[i][7], (String) testingData[i][8], (Class<?>) testingData[i][9]);
+	}
 
-		Assert.isTrue(members.contains(saved));
+	protected void templateSaveNew(final String username, final String password, final String name, final String middlename, final String surname, final String photo, final String email, final String phone, final String address, final Class<?> expected) {
+		Class<?> caught = null;
 
+		try {
+			final Member member = this.memberService.create();
+			member.setName(name);
+			member.setMiddleName(middlename);
+			member.setSurname(surname);
+			member.setPhoto(photo);
+			member.setEmail(email);
+			member.setPhone(phone);
+			member.setAddress(address);
+			member.setSpammer(false);
+
+			System.out.println("holaa");
+			final Member saved = this.memberService.save(member);
+			final UserAccount ua = saved.getUserAccount();
+			ua.setUsername(username);
+			final Md5PasswordEncoder encoder = new Md5PasswordEncoder();
+			final String hash = encoder.encodePassword(password, null);
+			ua.setPassword(hash);
+			final UserAccount uaSaved = this.userAccountService.save(ua);
+			System.out.println("adioos");
+			final Collection<Member> members = this.memberService.findAll();
+
+			Assert.isTrue(members.contains(saved));
+			this.memberRepository.flush();
+		} catch (final Throwable oops) {
+			caught = oops.getClass();
+		}
+
+		super.checkExceptions(expected, caught);
 	}
 
 	@Test
