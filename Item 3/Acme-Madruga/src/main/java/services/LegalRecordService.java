@@ -59,6 +59,8 @@ public class LegalRecordService {
 		Assert.notNull(legalRecord.getDescription());
 		Assert.isTrue(legalRecord.getTitle() != "");
 		Assert.isTrue(legalRecord.getDescription() != "");
+		if (legalRecord.getId() != 0)
+			Assert.isTrue(this.findBrotherhoodByLegal(legalRecord.getId()) == me);
 		final LegalRecord res;
 		res = this.legalRecordRepository.save(legalRecord);
 		Assert.notNull(this.findOne(res.getId()));
@@ -70,6 +72,7 @@ public class LegalRecordService {
 		Assert.notNull(me, "You must be logged in the system");
 		Assert.notNull(legalRecord);
 		Assert.isTrue(legalRecord.getId() != 0);
+		Assert.isTrue(this.findBrotherhoodByLegal(legalRecord.getId()) == me);
 		final LegalRecord retrieved = this.findOne(legalRecord.getId());
 		Assert.isTrue(me.getHistory().getLegalRecords().contains(retrieved));
 		this.legalRecordRepository.delete(retrieved);
@@ -77,4 +80,11 @@ public class LegalRecordService {
 
 	/* ========================= OTHER METHODS =========================== */
 
+	public Brotherhood findBrotherhoodByLegal(final Integer id) {
+		Assert.notNull(id);
+		Assert.isTrue(id != 0);
+		final Brotherhood bro = this.legalRecordRepository.findBrotherhoodByLegal(id);
+		Assert.notNull(bro);
+		return bro;
+	}
 }

@@ -75,7 +75,7 @@ public class Brotherhood extends Actor {
 	}
 
 	@Valid
-	@OneToOne
+	@OneToOne(optional = true)
 	public History getHistory() {
 		return this.history;
 	}

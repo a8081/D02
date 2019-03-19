@@ -14,6 +14,7 @@ import org.springframework.util.Assert;
 
 import utilities.AbstractTest;
 import domain.Brotherhood;
+import domain.History;
 import domain.LegalRecord;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -100,46 +101,51 @@ public class LegalRecordServiceTest extends AbstractTest {
 		final Object testingData[][] = {
 			{
 				//Correcto
-				"brotherhood1", "LegalTest", "descriptionTest", "Legal Record Test", 0.21, null, null
+				"brotherhood1", 2208, "LegalTest", "descriptionTest", "Legal Record Test", 0.21, null, null
+			}, {
+				//Usuario al que no le pertenece este LegalRecord
+				"brotherhood2", 2208, "LegalTest", "descriptionTest", "Legal Record Test", 0.21, null, IllegalArgumentException.class
 			}, {
 				//Crear con usuario distinto a brothethood
-				"member1", "LegalTest", "descriptionTest", "Legal Record Test", 0.21, null, IllegalArgumentException.class
+				"member1", 2208, "LegalTest", "descriptionTest", "Legal Record Test", 0.21, null, IllegalArgumentException.class
 			}, {
 				//Title cadena vacia
-				"brotherhood1", "", "descriptionTest", "Legal Record Test", 0.21, null, IllegalArgumentException.class
+				"brotherhood1", 2208, "", "descriptionTest", "Legal Record Test", 0.21, null, IllegalArgumentException.class
 			}, {
 				//Title null
-				"brotherhood1", null, "descriptionTest", "Legal Record Test", 0.21, null, IllegalArgumentException.class
+				"brotherhood1", 2208, null, "descriptionTest", "Legal Record Test", 0.21, null, IllegalArgumentException.class
 			}, {
 				//Discription cadena vacia
-				"brotherhood1", "LegalTest", "", "Legal Record Test", 0.21, null, IllegalArgumentException.class
+				"brotherhood1", 2208, "LegalTest", "", "Legal Record Test", 0.21, null, IllegalArgumentException.class
 			}, {
 				//Description null
-				"brotherhood1", "LegalTest", null, "Legal Record Test", 0.21, null, IllegalArgumentException.class
+				"brotherhood1", 2208, "LegalTest", null, "Legal Record Test", 0.21, null, IllegalArgumentException.class
 			}, {
 				//Laws
-				"brotherhood1", "LegalTest", "descriptionTest", "Legal Record Test", 0.21, laws, null
+				"brotherhood1", 2208, "LegalTest", "descriptionTest", "Legal Record Test", 0.21, laws, null
 			},
 		};
 
 		for (int i = 0; i < testingData.length; i++)
-			this.templateEdit((String) testingData[i][0], (String) testingData[i][1], (String) testingData[i][2], (String) testingData[i][3], (Double) testingData[i][4], (Collection<String>) testingData[i][5], (Class<?>) testingData[i][6]);
+			this.templateEdit((String) testingData[i][0], (Integer) testingData[i][1], (String) testingData[i][2], (String) testingData[i][3], (String) testingData[i][4], (Double) testingData[i][5], (Collection<String>) testingData[i][6],
+				(Class<?>) testingData[i][7]);
 	}
 
-	private void templateEdit(final String user, final String title, final String description, final String legalName, final Double vat, final Collection<String> laws, final Class<?> expected) {
+	private void templateEdit(final String user, final Integer id, final String title, final String description, final String legalName, final Double vat, final Collection<String> laws, final Class<?> expected) {
 		Class<?> caught = null;
 		try {
 			this.authenticate(user);
 			final Brotherhood principal = this.brotherhoodService.findByPrincipal();
-			final ArrayList<LegalRecord> broLegRecs = new ArrayList<LegalRecord>(principal.getHistory().getLegalRecords());
-			final LegalRecord bLRec = broLegRecs.get(0);
-			bLRec.setTitle(title);
-			bLRec.setDescription(description);
-			bLRec.setLegalName(legalName);
-			bLRec.setVat(vat);
+			final History history = principal.getHistory();
+			final LegalRecord lR;
+			lR = this.legalRecordService.findOne(id);
+			lR.setTitle(title);
+			lR.setDescription(description);
+			lR.setLegalName(legalName);
+			lR.setVat(vat);
 			if (laws != null)
-				bLRec.setLaws(laws);
-			this.legalRecordService.save(bLRec);
+				lR.setLaws(laws);
+			this.legalRecordService.save(lR);
 			this.unauthenticate();
 		} catch (final Throwable oops) {
 			caught = oops.getClass();
@@ -154,28 +160,29 @@ public class LegalRecordServiceTest extends AbstractTest {
 
 		final Object testingData[][] = {
 			{
-				"brotherhood1", null, null
+				"brotherhood1", 2208, null
 			}, {
-				"brotherhood1", new LegalRecord(), IllegalArgumentException.class
+				"brotherhood2", 2208, IllegalArgumentException.class
+			}, {
+				"brotherhood1", null, IllegalArgumentException.class
 			}, {
 				"member1", null, IllegalArgumentException.class
 			},
 		};
 
 		for (int i = 0; i < testingData.length; i++)
-			this.templateDelete((String) testingData[i][0], (LegalRecord) testingData[i][1], (Class<?>) testingData[i][2]);
+			this.templateDelete((String) testingData[i][0], (Integer) testingData[i][1], (Class<?>) testingData[i][2]);
 	}
 
-	private void templateDelete(final String actor, final LegalRecord legalRecord, final Class<?> expected) {
+	private void templateDelete(final String actor, final Integer id, final Class<?> expected) {
 		Class<?> caught = null;
 		try {
 			this.authenticate(actor);
-			LegalRecord lRec = legalRecord;
-			if (lRec == null) {
-				final Brotherhood brotherhood = this.brotherhoodService.findByPrincipal();
-				final ArrayList<LegalRecord> lRecs = new ArrayList<LegalRecord>(brotherhood.getHistory().getLegalRecords());
-				lRec = lRecs.get(0);
-			}
+			LegalRecord lRec;
+			if (id != null)
+				lRec = this.legalRecordService.findOne(id);
+			else
+				lRec = new LegalRecord();
 			this.legalRecordService.delete(lRec);
 			this.unauthenticate();
 		} catch (final Throwable oops) {

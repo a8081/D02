@@ -56,6 +56,8 @@ public class MiscellaneousRecordService {
 		Assert.notNull(mR.getDescription());
 		Assert.isTrue(mR.getTitle() != "");
 		Assert.isTrue(mR.getDescription() != "");
+		if (mR.getId() != 0)
+			Assert.isTrue(this.findBrotherhoodByMiscellaneous(mR.getId()) == me);
 		final MiscellaneousRecord res = this.miscellaneousRecordRepository.save(mR);
 		Assert.notNull(me.getHistory().getMiscellaneousRecords().contains(res));
 		return res;
@@ -66,10 +68,19 @@ public class MiscellaneousRecordService {
 		Assert.notNull(me, "You must be logged in the system");
 		Assert.notNull(mR);
 		Assert.isTrue(mR.getId() != 0);
+		Assert.isTrue(this.findBrotherhoodByMiscellaneous(mR.getId()) == me);
 		final MiscellaneousRecord res = this.findOne(mR.getId());
 		Assert.isTrue(me.getHistory().getMiscellaneousRecords().contains(res));
 		this.miscellaneousRecordRepository.delete(res);
 
+	}
+
+	public Brotherhood findBrotherhoodByMiscellaneous(final Integer id) {
+		Assert.notNull(id);
+		Assert.isTrue(id != 0);
+		final Brotherhood bro = this.miscellaneousRecordRepository.findBrotherhoodByMiscellaneous(id);
+		Assert.notNull(bro);
+		return bro;
 	}
 
 }

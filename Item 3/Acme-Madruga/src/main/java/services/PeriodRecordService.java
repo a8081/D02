@@ -56,6 +56,8 @@ public class PeriodRecordService {
 		Assert.notNull(pR.getDescription());
 		Assert.isTrue(pR.getTitle() != "");
 		Assert.isTrue(pR.getDescription() != "");
+		if (pR.getId() != 0)
+			Assert.isTrue(this.findBrotherhoodByPeriod(pR.getId()) == me);
 		final PeriodRecord saved = this.periodRecordRepository.save(pR);
 		Assert.notNull(this.findOne(saved.getId()));
 		return saved;
@@ -66,10 +68,19 @@ public class PeriodRecordService {
 		Assert.notNull(me, "You must be logged in the system");
 		Assert.notNull(pR);
 		Assert.isTrue(pR.getId() != 0);
+		Assert.isTrue(this.findBrotherhoodByPeriod(pR.getId()) == me);
 		final PeriodRecord retrieved = this.findOne(pR.getId());
 		Assert.isTrue(me.getHistory().getPeriodRecords().contains(retrieved));
 		this.periodRecordRepository.delete(retrieved);
 
+	}
+
+	public Brotherhood findBrotherhoodByPeriod(final Integer id) {
+		Assert.notNull(id);
+		Assert.isTrue(id != 0);
+		final Brotherhood bro = this.periodRecordRepository.findBrotherhoodByPeriod(id);
+		Assert.notNull(bro);
+		return bro;
 	}
 
 }

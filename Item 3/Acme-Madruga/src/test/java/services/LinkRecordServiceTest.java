@@ -1,8 +1,6 @@
 
 package services;
 
-import java.util.ArrayList;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -92,42 +90,43 @@ public class LinkRecordServiceTest extends AbstractTest {
 		final Object testingData[][] = {
 			{
 				//Correcto
-				"brotherhood1", "LinkTest", "descriptionTest", bro, null
+				"brotherhood1", 2212, "LinkTest", "descriptionTest", bro, null
+			}, {
+				//Usuairo al que no le pertenece esta linkRecord
+				"brotherhood2", 2212, "LinkTest", "descriptionTest", bro, IllegalArgumentException.class
 			}, {
 				//Crear con usuario distinto a brothethood
-				"member1", "LinkTest", "descriptionTest", bro, IllegalArgumentException.class
+				"member1", 2212, "LinkTest", "descriptionTest", bro, IllegalArgumentException.class
 			}, {
 				//Title cadena vacia
-				"brotherhood1", "", "descriptionTest", bro, IllegalArgumentException.class
+				"brotherhood1", 2212, "", "descriptionTest", bro, IllegalArgumentException.class
 			}, {
 				//Title null
-				"brotherhood1", null, "descriptionTest", bro, IllegalArgumentException.class
+				"brotherhood1", 2212, null, "descriptionTest", bro, IllegalArgumentException.class
 			}, {
 				//Discription cadena vacia
-				"brotherhood1", "LinkTest", "", bro, IllegalArgumentException.class
+				"brotherhood1", 2212, "LinkTest", "", bro, IllegalArgumentException.class
 			}, {
 				//Description null
-				"brotherhood1", "LinkTest", null, bro, IllegalArgumentException.class
+				"brotherhood1", 2212, "LinkTest", null, bro, IllegalArgumentException.class
 			}, {
 				//Brotherhood null
-				"brotherhood1", "LinkTest", "descriptionTest", null, IllegalArgumentException.class
+				"brotherhood1", 2212, "LinkTest", "descriptionTest", null, IllegalArgumentException.class
 			}
 		};
 
 		for (int i = 0; i < testingData.length; i++)
-			this.templateEdit((String) testingData[i][0], (String) testingData[i][1], (String) testingData[i][2], (Brotherhood) testingData[i][3], (Class<?>) testingData[i][4]);
+			this.templateEdit((String) testingData[i][0], (Integer) testingData[i][1], (String) testingData[i][2], (String) testingData[i][3], (Brotherhood) testingData[i][4], (Class<?>) testingData[i][5]);
 	}
-	private void templateEdit(final String user, final String title, final String description, final Brotherhood bro, final Class<?> expected) {
+	private void templateEdit(final String user, final Integer id, final String title, final String description, final Brotherhood bro, final Class<?> expected) {
 		Class<?> caught = null;
 		try {
 			this.authenticate(user);
-			final Brotherhood principal = this.brotherhoodService.findByPrincipal();
-			final ArrayList<LinkRecord> broLinkRecs = new ArrayList<LinkRecord>(principal.getHistory().getLinkRecords());
-			final LinkRecord bLRec = broLinkRecs.get(0);
-			bLRec.setTitle(title);
-			bLRec.setDescription(description);
-			bLRec.setLinkedBrotherhood(bro);
-			this.linkRecordService.save(bLRec);
+			final LinkRecord lRec = this.linkRecordService.findOne(id);
+			lRec.setTitle(title);
+			lRec.setDescription(description);
+			lRec.setLinkedBrotherhood(bro);
+			this.linkRecordService.save(lRec);
 			this.unauthenticate();
 		} catch (final Throwable oops) {
 			caught = oops.getClass();
@@ -142,28 +141,29 @@ public class LinkRecordServiceTest extends AbstractTest {
 
 		final Object testingData[][] = {
 			{
-				"brotherhood1", null, null
+				"brotherhood1", 2212, null
 			}, {
-				"brotherhood1", new LinkRecord(), IllegalArgumentException.class
+				"brotherhood2", 2212, IllegalArgumentException.class
+			}, {
+				"brotherhood1", null, IllegalArgumentException.class
 			}, {
 				"member1", null, IllegalArgumentException.class
 			},
 		};
 
 		for (int i = 0; i < testingData.length; i++)
-			this.templateDelete((String) testingData[i][0], (LinkRecord) testingData[i][1], (Class<?>) testingData[i][2]);
+			this.templateDelete((String) testingData[i][0], (Integer) testingData[i][1], (Class<?>) testingData[i][2]);
 	}
 
-	private void templateDelete(final String actor, final LinkRecord linkRecord, final Class<?> expected) {
+	private void templateDelete(final String actor, final Integer id, final Class<?> expected) {
 		Class<?> caught = null;
 		try {
 			this.authenticate(actor);
-			LinkRecord lRec = linkRecord;
-			if (lRec == null) {
-				final Brotherhood brotherhood = this.brotherhoodService.findByPrincipal();
-				final ArrayList<LinkRecord> lRecs = new ArrayList<LinkRecord>(brotherhood.getHistory().getLinkRecords());
-				lRec = lRecs.get(0);
-			}
+			LinkRecord lRec;
+			if (id != null)
+				lRec = this.linkRecordService.findOne(id);
+			else
+				lRec = new LinkRecord();
 			this.linkRecordService.delete(lRec);
 			this.unauthenticate();
 		} catch (final Throwable oops) {

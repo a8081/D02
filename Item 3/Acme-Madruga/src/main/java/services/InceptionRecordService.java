@@ -54,13 +54,22 @@ public class InceptionRecordService {
 		Assert.notNull(iR);
 		Assert.notNull(iR.getTitle());
 		Assert.notNull(iR.getDescription());
-		//		if (iR.getId() != 0) {
-		//			Assert.isTrue(iR.getTitle() != "");
-		//			Assert.isTrue(iR.getDescription() != "");
-		//		}
+		if (iR.getId() != 0) {
+			Assert.isTrue(iR.getTitle() != "");
+			Assert.isTrue(iR.getDescription() != "");
+			Assert.isTrue(this.findBrotherhoodByInception(iR.getId()) == me);
+		}
 		final InceptionRecord saved = this.inceptionRecordRepository.save(iR);
 		Assert.notNull(this.findOne(saved.getId()));
 		return saved;
+	}
+
+	public Brotherhood findBrotherhoodByInception(final Integer id) {
+		Assert.notNull(id);
+		Assert.isTrue(id != 0);
+		final Brotherhood bro = this.inceptionRecordRepository.findBrotherhoodByInception(id);
+		Assert.notNull(bro);
+		return bro;
 	}
 
 }

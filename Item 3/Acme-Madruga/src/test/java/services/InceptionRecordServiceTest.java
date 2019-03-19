@@ -7,6 +7,7 @@ import java.util.Collection;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,6 +15,7 @@ import org.springframework.util.Assert;
 
 import utilities.AbstractTest;
 import domain.Brotherhood;
+import domain.History;
 import domain.InceptionRecord;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -104,37 +106,46 @@ public class InceptionRecordServiceTest extends AbstractTest {
 		final Object testingData[][] = {
 			{
 				//CORRECTO
-				"brotherhood1", "title inception recor test", "description inception recor test", null
+				"brotherhood1", null, "title inception recor test", "description inception recor test", null
+			}, {
+				//BROTHERHOOD NO PROPIETARIA
+				"brotherhood2", 2211, "title inception recor test", "description inception recor test", DataIntegrityViolationException.class
 			}, {
 				//ERROR USER
-				"member1", "title inception recor test", "description inception recor test", IllegalArgumentException.class
+				"member1", null, "title inception recor test", "description inception recor test", IllegalArgumentException.class
 			}, {
 				//TITLE VACIO
-				"brotherhood1", "", "description inception recor test", IllegalArgumentException.class
+				"brotherhood1", null, "", "description inception recor test", IllegalArgumentException.class
 			}, {
 				//TITLE NULL
-				"brotherhood1", null, "description inception recor test", IllegalArgumentException.class
+				"brotherhood1", null, null, "description inception recor test", IllegalArgumentException.class
 			}, {
 				//DESCRIPTION VACIO
-				"brotherhood1", "title inception recor test", "", IllegalArgumentException.class
+				"brotherhood1", null, "title inception recor test", "", IllegalArgumentException.class
 			}, {
 				//DESCRIPTION NULL
-				"brotherhood1", "title inception recor test", null, IllegalArgumentException.class
+				"brotherhood1", null, "title inception recor test", null, IllegalArgumentException.class
 			},
 		};
 		for (int i = 0; i < testingData.length; i++)
-			this.templateEdit((String) testingData[i][0], (String) testingData[i][1], (String) testingData[i][2], (Class<?>) testingData[i][3]);
+			this.templateEdit((String) testingData[i][0], (Integer) testingData[i][1], (String) testingData[i][2], (String) testingData[i][3], (Class<?>) testingData[i][4]);
 	}
 
-	private void templateEdit(final String actor, final String title, final String description, final Class<?> expected) {
+	private void templateEdit(final String actor, final Integer id, final String title, final String description, final Class<?> expected) {
 		Class<?> caught = null;
 		try {
 			this.authenticate(actor);
 			final Brotherhood principal = this.brotherhoodService.findByPrincipal();
-			final InceptionRecord broIncRec = principal.getHistory().getInceptionRecord();
-			broIncRec.setTitle(title);
-			broIncRec.setDescription(description);
-			this.inceptionRecordService.save(broIncRec);
+			final InceptionRecord iR;
+			final History history = principal.getHistory();
+			if (id == null)
+				iR = history.getInceptionRecord();
+			else
+				iR = this.inceptionRecordService.findOne(id);
+			iR.setTitle(title);
+			iR.setDescription(description);
+			history.setInceptionRecord(iR);
+			this.inceptionRecordService.save(iR);
 			this.unauthenticate();
 		} catch (final Throwable oops) {
 			caught = oops.getClass();

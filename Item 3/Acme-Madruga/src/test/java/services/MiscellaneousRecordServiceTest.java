@@ -1,8 +1,6 @@
 
 package services;
 
-import java.util.ArrayList;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import utilities.AbstractTest;
-import domain.Brotherhood;
 import domain.MiscellaneousRecord;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -86,36 +83,37 @@ public class MiscellaneousRecordServiceTest extends AbstractTest {
 		final Object testingData[][] = {
 			{
 				//Correcto
-				"brotherhood1", "MiscellaneousTest", "descriptionTest", null
+				"brotherhood1", 2204, "MiscellaneousTest", "descriptionTest", null
+			}, {
+				//Usuario al que no le pertenece este miscellaneousRecord
+				"brotherhood2", 2204, "MiscellaneousTest", "descriptionTest", IllegalArgumentException.class
 			}, {
 				//Crear con usuario distinto a brothethood
-				"member1", "MiscellaneousTest", "descriptionTest", IllegalArgumentException.class
+				"member1", 2204, "MiscellaneousTest", "descriptionTest", IllegalArgumentException.class
 			}, {
 				//Title cadena vacia
-				"brotherhood1", "", "descriptionTest", IllegalArgumentException.class
+				"brotherhood1", 2204, "", "descriptionTest", IllegalArgumentException.class
 			}, {
 				//Title null
-				"brotherhood1", null, "descriptionTest", IllegalArgumentException.class
+				"brotherhood1", 2204, null, "descriptionTest", IllegalArgumentException.class
 			}, {
 				//Discription cadena vacia
-				"brotherhood1", "MiscellaneousTest", "", IllegalArgumentException.class
+				"brotherhood1", 2204, "MiscellaneousTest", "", IllegalArgumentException.class
 			}, {
 				//Description null
-				"brotherhood1", "MiscellaneousTest", null, IllegalArgumentException.class
+				"brotherhood1", 2204, "MiscellaneousTest", null, IllegalArgumentException.class
 			},
 		};
 
 		for (int i = 0; i < testingData.length; i++)
-			this.templateEdit((String) testingData[i][0], (String) testingData[i][1], (String) testingData[i][2], (Class<?>) testingData[i][3]);
+			this.templateEdit((String) testingData[i][0], (Integer) testingData[i][1], (String) testingData[i][2], (String) testingData[i][3], (Class<?>) testingData[i][4]);
 	}
 
-	private void templateEdit(final String user, final String title, final String description, final Class<?> expected) {
+	private void templateEdit(final String user, final Integer id, final String title, final String description, final Class<?> expected) {
 		Class<?> caught = null;
 		try {
 			this.authenticate(user);
-			final Brotherhood principal = this.brotherhoodService.findByPrincipal();
-			final ArrayList<MiscellaneousRecord> broPerRecs = new ArrayList<MiscellaneousRecord>(principal.getHistory().getMiscellaneousRecords());
-			final MiscellaneousRecord bPRec = broPerRecs.get(0);
+			final MiscellaneousRecord bPRec = this.miscellaneousRecordService.findOne(id);
 			bPRec.setTitle(title);
 			bPRec.setDescription(description);
 			this.miscellaneousRecordService.save(bPRec);
@@ -133,28 +131,29 @@ public class MiscellaneousRecordServiceTest extends AbstractTest {
 
 		final Object testingData[][] = {
 			{
-				"brotherhood1", null, null
+				"brotherhood1", 2204, null
 			}, {
-				"brotherhood1", new MiscellaneousRecord(), IllegalArgumentException.class
+				"brotherhood2", 2204, IllegalArgumentException.class
+			}, {
+				"brotherhood1", null, IllegalArgumentException.class
 			}, {
 				"member1", null, IllegalArgumentException.class
 			},
 		};
 
 		for (int i = 0; i < testingData.length; i++)
-			this.templateDelete((String) testingData[i][0], (MiscellaneousRecord) testingData[i][1], (Class<?>) testingData[i][2]);
+			this.templateDelete((String) testingData[i][0], (Integer) testingData[i][1], (Class<?>) testingData[i][2]);
 	}
 
-	private void templateDelete(final String actor, final MiscellaneousRecord miscellaneousRecord, final Class<?> expected) {
+	private void templateDelete(final String actor, final Integer id, final Class<?> expected) {
 		Class<?> caught = null;
 		try {
 			this.authenticate(actor);
-			MiscellaneousRecord pRec = miscellaneousRecord;
-			if (pRec == null) {
-				final Brotherhood brotherhood = this.brotherhoodService.findByPrincipal();
-				final ArrayList<MiscellaneousRecord> pRecs = new ArrayList<MiscellaneousRecord>(brotherhood.getHistory().getMiscellaneousRecords());
-				pRec = pRecs.get(0);
-			}
+			MiscellaneousRecord pRec;
+			if (id != null)
+				pRec = this.miscellaneousRecordService.findOne(id);
+			else
+				pRec = new MiscellaneousRecord();
 			this.miscellaneousRecordService.delete(pRec);
 			this.unauthenticate();
 		} catch (final Throwable oops) {
