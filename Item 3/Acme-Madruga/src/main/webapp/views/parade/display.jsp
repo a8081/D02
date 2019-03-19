@@ -101,17 +101,17 @@
 <security:authorize access="hasAnyRole('CHAPTER','BROTHERHOOD')">
 
 <jstl:if test="${parade.status eq 'ACCEPTED'}">
-<acme:button url="parade${rol}/listAccepted.do" name="back"
+<acme:button url="parade${rolURL}/listAccepted.do" name="back"
 	code="parade.list.button" />
 </jstl:if>
 
 <jstl:if test="${parade.status eq 'REJECTED'}">
-<acme:button url="parade${rol}/listRejected.do" name="back"
+<acme:button url="parade${rolURL}/listRejected.do" name="back"
 	code="parade.list.button" />
 </jstl:if>
 
 <jstl:if test="${parade.status eq 'SUBMITTED'}">
-<acme:button url="parade${rol}/listSubmitted.do" name="back"
+<acme:button url="parade${rolURL}/listSubmitted.do" name="back"
 	code="parade.list.button" />
 </jstl:if>
 </security:authorize>

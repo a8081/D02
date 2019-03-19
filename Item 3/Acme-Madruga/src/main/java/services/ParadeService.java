@@ -61,8 +61,9 @@ public class ParadeService {
 		parade.setFloats(floats);
 		parade.setSegments(segments);
 
-		parade.setBrotherhood(this.brotherhoodService.findByPrincipal());
+		//		parade.setBrotherhood(this.brotherhoodService.findByPrincipal());
 		parade.setMode("DRAFT");
+		parade.setStatus("SUBMITTED");
 		final Date moment = new Date(System.currentTimeMillis());
 		parade.setTicker(this.generateTicker(moment));
 
@@ -155,23 +156,45 @@ public class ParadeService {
 	 * 
 	 * @author a8081
 	 * */
-	public Parade copyBrotherhoodParade(final int paradeId) {
+	//	public Parade copyBrotherhoodParade(final int paradeId) {
+	//		final Parade parade = this.findOne(paradeId);
+	//		Assert.notNull(parade);
+	//		final Parade result;
+	//		final Brotherhood brotherhoodPrincipal = this.brotherhoodService.findByPrincipal();
+	//
+	//		Assert.notEmpty(parade.getFloats(), "A parade must have some floats assigned to be saved");
+	//		Assert.isTrue(this.floatService.findByBrotherhood(brotherhoodPrincipal).containsAll(parade.getFloats()));
+	//
+	//		parade.setBrotherhood(brotherhoodPrincipal);
+	//		parade.setMode("DRAFT");
+	//		parade.setStatus("SUBMITTED");
+	//		final Date moment = new Date(System.currentTimeMillis());
+	//		parade.setTicker(this.generateTicker(moment));
+	//
+	//		result = this.paradeRepository.save(parade);
+	//		return result;
+	//	}
+
+	public void copyBrotherhoodParade(final int paradeId) {
 		final Parade parade = this.findOne(paradeId);
 		Assert.notNull(parade);
-		final Parade result;
+		final Parade copy = this.create();
 		final Brotherhood brotherhoodPrincipal = this.brotherhoodService.findByPrincipal();
 
 		Assert.notEmpty(parade.getFloats(), "A parade must have some floats assigned to be saved");
 		Assert.isTrue(this.floatService.findByBrotherhood(brotherhoodPrincipal).containsAll(parade.getFloats()));
 
-		parade.setBrotherhood(brotherhoodPrincipal);
-		parade.setMode("DRAFT");
-		parade.setStatus("SUBMITTED");
-		final Date moment = new Date(System.currentTimeMillis());
-		parade.setTicker(this.generateTicker(moment));
+		copy.setTitle(parade.getTitle());
+		copy.setDescription(parade.getDescription());
+		copy.setMaxRows(parade.getMaxRows());
+		copy.setMaxColumns(parade.getMaxColumns());
+		if (parade.getStatus().equals("REJECTED"))
+			copy.setRejectionReason(parade.getRejectionReason());
 
-		result = this.paradeRepository.save(parade);
-		return result;
+		copy.setFloats(parade.getFloats());
+		copy.setSegments(parade.getSegments());
+		Assert.isTrue(copy.getBrotherhood().equals(parade.getBrotherhood()), "No puede hacer una copia de un desfile que no pertenece a su hermandad.");
+		this.save(copy);
 	}
 
 	public void delete(final Parade parade) {

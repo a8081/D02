@@ -102,7 +102,7 @@ public class ParadeBrotherhoodController extends AbstractController {
 		String rol;
 
 		listParades = "listAccepted";
-		rol = "brootherhood";
+		rol = "brotherhood";
 		final String lang = LocaleContextHolder.getLocale().getLanguage();
 
 		result = new ModelAndView("parade/list");
@@ -129,7 +129,7 @@ public class ParadeBrotherhoodController extends AbstractController {
 		String rol;
 
 		listParades = "listRejected";
-		rol = "brootherhood";
+		rol = "brotherhood";
 
 		final String lang = LocaleContextHolder.getLocale().getLanguage();
 
@@ -196,6 +196,27 @@ public class ParadeBrotherhoodController extends AbstractController {
 	//
 	//		return result;
 	//	}
+
+	// MAKE COPY --------------------------------------------------------
+
+	@RequestMapping(value = "/copyBrotherhoodParade", method = RequestMethod.GET)
+	public ModelAndView copyBrotherhoodParade(@RequestParam final int paradeId) {
+		final ModelAndView result;
+		final Parade parade = this.paradeService.findOne(paradeId);
+
+		if (parade == null) {
+			result = this.createEditModelAndView(parade, "parade.commit.error");
+			result.addObject("ok", false);
+		} else {
+			this.paradeService.copyBrotherhoodParade(paradeId);
+			result = this.listSubmitted();
+		}
+
+		final String banner = this.configurationParametersService.findBanner();
+		result.addObject("banner", banner);
+
+		return result;
+	}
 
 	// EDIT
 

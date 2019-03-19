@@ -75,7 +75,7 @@
 </jstl:if>
 
 <display:table name="parades" id="row"
-	requestURI="parade${rol}${chooseList}.do" pagesize="5"
+	requestURI="parade${rolURL}${chooseList}.do" pagesize="5"
 	class="displaytag">
 
 	<security:authorize access="hasRole('BROTHERHOOD')">
@@ -101,7 +101,7 @@
 	</display:column>
 	
 	<display:column>
-		<acme:link url="parade/${rol}/display.do?paradeId=${row.id}"
+		<acme:link url="parade${rolURL}/display.do?paradeId=${row.id}"
 			code="parade.display" />
 	</display:column>
 	
@@ -129,12 +129,12 @@
 	</display:column>
 	</security:authorize>
 	
+	<security:authorize access="hasRole('BROTHERHOOD')">
+	<display:column>
+	<acme:button url="parade/brotherhood/copyBrotherhoodParade.do?paradeId=${row.id}" name="copy" code="parade.copy"/>
+	</display:column>
+	</security:authorize>
+	
 </display:table>
 
-</security:authorize>
-
-
-<security:authorize access="hasRole('BROTHERHOOD')">
-	<acme:link url="parade/brotherhood/create.do"
-		code="parade.create" />
 </security:authorize>
