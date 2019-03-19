@@ -99,4 +99,22 @@ public class HistoryService {
 
 	/* ========================= OTHER METHODS =========================== */
 
+	public Double[] getStatisticsOfRecordsPerHistory() {
+		final Double[] result = this.historyRepository.getStatisticsOfRecordsPerHistory();
+		Assert.notNull(result);
+		return result;
+	}
+
+	public Collection<Brotherhood> getLargestBrotherhoodPerHistory() {
+		final Collection<Brotherhood> result = this.historyRepository.getLargestBrotherhoodPerHistory();
+		Assert.notNull(result);
+		return result;
+	}
+
+	public Brotherhood[] getBrotherhoodPerHistoryLargerThanStd() {
+		final Brotherhood[] result = this.historyRepository.getBrotherhoodPerHistoryLargerThanStd();
+		Assert.notNull(result);
+		return result;
+	}
+
 }

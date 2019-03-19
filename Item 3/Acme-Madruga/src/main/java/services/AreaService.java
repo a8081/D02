@@ -103,4 +103,10 @@ public class AreaService {
 		return result;
 	}
 
+	public Double getRatioNoCoordinatedAreas() {
+		final Double result = this.areaRepository.getRatioNoCoordinatedAreas();
+		Assert.notNull(result);
+		return result;
+	}
+
 }

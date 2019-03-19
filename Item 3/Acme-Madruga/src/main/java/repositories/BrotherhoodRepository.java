@@ -24,13 +24,13 @@ public interface BrotherhoodRepository extends JpaRepository<Brotherhood, Intege
 
 	/** The largest brotherhood is the one with highest number of members **/
 	@Query(
-		value = "SELECT ENROLMENT.brotherhood FROM `acme-parade`.ENROLMENT INNER JOIN BROTHERHOOD  WHERE ENROLMENT.drop_out IS NULL GROUP BY brotherhood HAVING COUNT(*) = (SELECT MAX(x) FROM (SELECT COUNT(*) AS x FROM `acme-madruga`.ENROLMENT GROUP BY brotherhood)AS T)",
+		value = "SELECT ENROLMENT.brotherhood FROM `acme-parade`.ENROLMENT INNER JOIN `acme-parade`.BROTHERHOOD  WHERE ENROLMENT.drop_out IS NULL GROUP BY brotherhood HAVING COUNT(*) = (SELECT MAX(x) FROM (SELECT COUNT(*) AS x FROM `acme-parade`.ENROLMENT GROUP BY brotherhood)AS T)",
 		nativeQuery = true)
 	Integer[] getLargestBrotherhood();
 
 	/** The smallest brotherhood is the one with lowest number of members **/
 	@Query(
-		value = "SELECT ENROLMENT.brotherhood FROM `acme-parade`.ENROLMENT INNER JOIN BROTHERHOOD WHERE ENROLMENT.drop_out IS NULL GROUP BY brotherhood HAVING COUNT(*) = (SELECT MIN(x) FROM (SELECT COUNT(*) AS x FROM `acme-madruga`.ENROLMENT GROUP BY brotherhood)AS T)",
+		value = "SELECT ENROLMENT.brotherhood FROM `acme-parade`.ENROLMENT INNER JOIN `acme-parade`.BROTHERHOOD WHERE ENROLMENT.drop_out IS NULL GROUP BY brotherhood HAVING COUNT(*) = (SELECT MIN(x) FROM (SELECT COUNT(*) AS x FROM `acme-parade`.ENROLMENT GROUP BY brotherhood)AS T)",
 		nativeQuery = true)
 	Integer[] getSmallestBrotherhood();
 

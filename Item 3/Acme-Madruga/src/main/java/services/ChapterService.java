@@ -205,4 +205,16 @@ public class ChapterService {
 	public void flush() {
 		this.chapterRepository.flush();
 	}
+
+	public Double[] getStatisticsOfParadesPerChapter() {
+		final Double[] result = this.chapterRepository.getStatisticsOfParadesPerChapter();
+		Assert.notNull(result);
+		return result;
+	}
+
+	public Collection<Chapter> findTenPerCentMoreParadesThanAverage() {
+		final Collection<Chapter> result = this.chapterRepository.findTenPerCentMoreParadesThanAverage();
+		Assert.notNull(result);
+		return result;
+	}
 }
