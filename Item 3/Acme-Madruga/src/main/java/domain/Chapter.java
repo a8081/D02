@@ -31,7 +31,7 @@ public class Chapter extends Actor {
 	//Relational methods
 
 	@Valid
-	@OneToOne(optional = false)
+	@OneToOne(optional = true)
 	public Area getArea() {
 		return this.area;
 	}

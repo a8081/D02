@@ -16,6 +16,7 @@ public class Sponsorship extends DomainEntity {
 
 	private String		banner;
 	private String		targetPage;
+	private boolean		activated;
 
 	private Sponsor		sponsor;
 	private CreditCard	creditCard;
@@ -69,6 +70,14 @@ public class Sponsorship extends DomainEntity {
 
 	public void setParade(final Parade parade) {
 		this.parade = parade;
+	}
+
+	public boolean isActivated() {
+		return this.activated;
+	}
+
+	public void setActivated(final boolean activated) {
+		this.activated = activated;
 	}
 
 }

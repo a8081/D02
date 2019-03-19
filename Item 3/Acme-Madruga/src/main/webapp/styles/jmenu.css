@@ -89,3 +89,8 @@
 select{
 	-webkit-appearance: none;
 }
+
+img.resize {
+  max-width:15%;
+  max-height:15%;
+}

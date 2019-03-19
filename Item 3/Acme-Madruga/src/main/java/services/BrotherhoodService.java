@@ -41,6 +41,9 @@ public class BrotherhoodService {
 	@Autowired
 	private HistoryService			historyService;
 
+	@Autowired
+	private FolderService			folderService;
+
 
 	public Brotherhood create() {
 		final Brotherhood brotherhood = new Brotherhood();
@@ -71,6 +74,7 @@ public class BrotherhoodService {
 			final History history = this.historyService.createForNewBrotherhood();
 			brotherhood.setHistory(history);
 			result = this.brotherhoodRepository.save(brotherhood);
+			this.folderService.setFoldersByDefault(result);
 
 		} else {
 			this.actorService.checkForSpamWords(brotherhood);
@@ -232,4 +236,9 @@ public class BrotherhoodService {
 		Assert.notNull(res);
 		return res;
 	}
+
+	public void flush() {
+		this.brotherhoodRepository.flush();
+	}
+
 }

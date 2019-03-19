@@ -1,0 +1,245 @@
+<%@page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+<%@taglib prefix="jstl" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@taglib prefix="security"
+    uri="http://www.springframework.org/security/tags"%>
+<%@taglib prefix="display" uri="http://displaytag.sf.net"%>
+
+<jstl:if test="${not empty history}">
+    <%-- History --%>
+    <div id="history">
+        <ul style="list-style-type: disc">
+            <li><b><spring:message code="history"/></b>
+        </ul>
+        <br/>
+    </div>
+    <%-- Inception record --%>
+    <div id="inceptionRecord">
+        <ul>
+            <!--<u><b><spring:message code="history.inceptionRecord"></spring:message></b></u>
+            <br/><br/>
+            <img class="resize" src="<jstl:out value="${inceptionRecord.photos}"/>"
+                alt="<spring:message
+                        code="curriculum.alt.personalPhoto"/>" />
+            <br/><br/>-->
+            <li><b><spring:message
+                        code="record.title"></spring:message>:</b> <jstl:out
+                    value="${inceptionRecord.title}" /></li>
+            <li><b><spring:message
+                        code="record.description"></spring:message>:</b> <jstl:out
+                    value="${inceptionRecord.description}" /></li>
+        </ul>
+        <br/>
+        <security:authorize access="hasRole('BROTHERHOOD')">
+            <jstl:if test="${originURL eq 1}">
+                <input type="button" name="edit"
+                    value="<spring:message code="record.edit" />"
+                    onclick="relativeRedir('inceptionRecord/edit.do?inceptionRecordId=${inceptionRecords.id}')" />
+            </jstl:if>
+        </security:authorize>
+        
+    </div>
+    <%-- Period records --%>
+    <input type="button" name="create"
+    value="<spring:message code="record.create" />"
+    onclick="relativeRedir('periodRecord/create.do')" />
+    <br />
+    <div id="peroidRecords">
+        <ul>
+            <jstl:if test="${not empty periodRecords}">
+                <u><b><spring:message code="periodRecords"></spring:message></b></u>
+                <br />
+                <jstl:forEach var="periodRecord"
+                    items="${periodRecords}" varStatus="loop">
+                    <br/>
+                    
+                    <li><b><spring:message
+		                        code="record.title"></spring:message>:</b> <jstl:out
+		                    value="${periodRecords.title}" /></li>
+		            <li><b><spring:message
+		                        code="record.description"></spring:message>:</b> <jstl:out
+		                    value="${periodRecords.description}" /></li>
+                    <li><b><spring:message
+                                code="periodRecord.starYear"></spring:message>:</b> <fmt:formatDate
+                            pattern="yyyy" value="${periodRecords.starYear}" /></li>
+                    <li><b><spring:message
+                                code="periodRecord.endYear"></spring:message>:</b> <fmt:formatDate
+                            pattern="yyyy" value="${periodRecords.endYear}" /></li>
+                    <br />
+                    <security:authorize access="hasRole('BROTHERHOOD')">
+			            <jstl:if test="${originURL eq 1}">
+			                <input type="button" name="edit"
+			                    value="<spring:message code="record.edit" />"
+			                    onclick="relativeRedir('periodRecord/edit.do?periodRecordId=${periodRecords.id}')" />
+			            </jstl:if>
+			        </security:authorize>
+        				<jstl:if test="${originURL eq 1}">
+                            <input type="button" name="delete"
+                                value="<spring:message code="record.delete" />"
+                                onclick="relativeRedir('periodRecord/delete.do?periodRecordId=${periodRecords.id}')" />
+                            <br />
+                        </jstl:if>
+                </jstl:forEach>
+            </jstl:if>
+        </ul>
+        <br /> <br />
+    </div>
+    <%-- Legal records --%>
+    <input type="button" name="create"
+    value="<spring:message code="record.create" />"
+    onclick="relativeRedir('legalRecord/create.do')" />
+    <br />
+    <div id="legalRecords">
+        <ul>
+            <jstl:if test="${not empty legalRecords}">
+                <u><b><spring:message code="legalRecords"></spring:message></b></u>
+                <br />
+                <jstl:forEach var="legalRecords"
+                    items="${legalRecords}" varStatus="loop">
+                    <br/>
+                    <li><b><spring:message
+		                        code="record.title"></spring:message>:</b> <jstl:out
+		                    value="${legalRecords.title}" /></li>
+		            <li><b><spring:message
+		                        code="record.description"></spring:message>:</b> <jstl:out
+		                    value="${legalRecords.description}" /></li>
+                    <li><b><spring:message
+	                        code="legalRecord.legalName"></spring:message>:</b> <jstl:out
+	                    value="${legalRecords.legalName}" /></li>
+                    <li><b><spring:message
+	                        code="legalRecord.laws"></spring:message>:</b> <jstl:out
+	                    value="${legalRecords.laws}" /></li>
+                    <ul>
+                        <jstl:forEach var="laws" items="${legalRecords.laws}">
+                            <li><jstl:out value="${legalRecords.laws}" /></li>
+                        </jstl:forEach>
+                    </ul>
+                    <br />
+                    <security:authorize access="hasRole('BROTHERHOOD')">
+		            <jstl:if test="${originURL eq 1}">
+		                <input type="button" name="edit"
+		                    value="<spring:message code="record.edit" />"
+		                    onclick="relativeRedir('legalRecord/edit.do?legalRecordId=${legalRecords.id}')" />
+		            </jstl:if>
+		        	</security:authorize>
+		        		<jstl:if test="${originURL eq 1}">
+                            <input type="button" name="delete"
+                                value="<spring:message code="record.delete" />"
+                                onclick="relativeRedir('legalRecord/delete.do?legalRecordId=${legalRecords.id}')" />
+                            <br />
+                        </jstl:if>
+                </jstl:forEach>
+            </jstl:if>
+        </ul>
+        <br /> <br />
+    </div>
+    <%-- Link records --%>
+    <input type="button" name="create"
+    value="<spring:message code="record.create" />"
+    onclick="relativeRedir('linkRecord/create.do')" />
+    <br />
+    <div id="linkRecords">
+        <ul>
+            <jstl:if test="${not empty linkRecords}">
+                <u><b><spring:message code="linkRecords"/></b></u>
+                <br />
+                <jstl:forEach var="linkRecords"
+                    items="${linkRecords}" varStatus="loop">
+                    <br/>
+                    
+                    <li><b><spring:message
+		                        code="record.title"></spring:message>:</b> <jstl:out
+		                    value="${linkRecords.title}" /></li>
+		            <li><b><spring:message
+		                        code="record.description"></spring:message>:</b> <jstl:out
+		                    value="${linkRecords.description}" /></li>
+                    <li><b><spring:message
+                                code="linkRecords.linkedBrotherhood"></spring:message>:</b> <a
+                        href="<jstl:out value="${linkRecords.linkedBrotherhood}"/>"><jstl:out
+                                value="${linkRecords.linkedBrotherhood}" /></a></li>
+                    <br />
+                    <br>
+                    <security:authorize access="hasRole('BROTHERHOOD')">
+			            <jstl:if test="${originURL eq 1}">
+			                <input type="button" name="edit"
+			                    value="<spring:message code="record.edit" />"
+			                    onclick="relativeRedir('linkRecord/edit.do?linkRecordId=${linkRecords.id}')" />
+			            </jstl:if>
+			        </security:authorize>
+			        	<jstl:if test="${originURL eq 1}">
+                            <input type="button" name="delete"
+                                value="<spring:message code="record.delete" />"
+                                onclick="relativeRedir('linkRecord/delete.do?linkRecordId=${linkRecords.id}')" />
+                            <br />
+                        </jstl:if>
+                </jstl:forEach>
+            </jstl:if>
+        </ul>
+        <br /> <br />
+    </div>
+    <%-- Miscellaneous records --%>
+    <input type="button" name="create"
+    value="<spring:message code="record.create" />"
+    onclick="relativeRedir('miscellaneousRecord/create.do')" />
+    <br />
+    <div id="miscellaneousRecords">
+        <ul>
+            <jstl:if test="${not empty miscellaneousRecords}">
+                <u><b><spring:message code="miscellaneousRecords"></spring:message></b></u>
+                <br />
+                <jstl:forEach var="miscellaneousRecord"
+                    items="${miscellaneousRecords}" varStatus="loop">
+                    <br/>
+                    <li><b><spring:message
+		                        code="record.title"></spring:message>:</b> <jstl:out
+		                    value="${miscellaneousRecords.title}" /></li>
+		            <li><b><spring:message
+		                        code="record.description"></spring:message>:</b> <jstl:out
+		                    value="${miscellaneousRecords.description}" /></li>
+                    <br />
+                    <security:authorize access="hasRole('BROTHERHOOD')">
+			            <jstl:if test="${originURL eq 1}">
+			                <input type="button" name="edit"
+			                    value="<spring:message code="record.edit" />"
+			                    onclick="relativeRedir('miscellaneousRecord/edit.do?miscellaneousRecordId=${miscellaneousRecords.id}')" />
+			            </jstl:if>
+			        </security:authorize>
+			        	<jstl:if test="${originURL eq 1}">
+                            <input type="button" name="delete"
+                                value="<spring:message code="record.delete" />"
+                                onclick="relativeRedir('miscellaneousRecord/delete.do?miscellaneousRecordId=${miscellaneousRecords.id}')" />
+                            <br />
+                        </jstl:if>
+                </jstl:forEach>
+            </jstl:if>
+        </ul>
+        <br /> <br /> <br />
+    </div>
+</jstl:if>
+    <%-- ---------------------------------------------------------------------------------------------------------------------------------- --%>
+    <!--<security:authorize access="hasRole('HANDYWORKER')">
+        <jstl:if test="${originURL eq 1}">
+            <form:form action="curriculum/handyWorker/edit.do"
+                modelAttribute="curriculum">
+                <form:hidden path="id" />
+                <form:hidden path="version" />
+                <form:hidden path="ticker" />
+                <input type="submit" name="delete"
+                    value="<spring:message code="curriculum.delete" />" />
+            </form:form>
+            <br />
+        </jstl:if>
+    </security:authorize>
+<jstl:if test="${empty curriculum and (originURL eq 1)}">
+    <input type="button" name="create"
+        value="<spring:message code="curriculum.create" />"
+        onclick="javascript: relativeRedir('curriculum/handyWorker/create.do');" />
+</jstl:if>
+<input type="button"
+    name="back"
+    value="<spring:message code="curriculum.back"/>"
+    onclick="javascript:window.history.back();" />
+<br />-->

@@ -43,12 +43,13 @@
 			value="${parade.moment}" type="both" pattern="dd/MM/yyyy HH:mm" />
 	</jstl:otherwise>
 </jstl:choose>
-</br>
+<br>
 
 <acme:display code="parade.ticker" value="${parade.ticker}" />
 <spring:message code="parade.mode" />:
 <acme:modeChoose mode="${parade.mode}"/>
-<br />
+<br>
+<acme:display code="parade.status" value="${parade.status}" />
 <acme:display code="parade.maxRows" value="${parade.maxRows}" />
 <acme:display code="parade.maxColumns"
 	value="${parade.maxColumns}" />
@@ -63,7 +64,11 @@
 <a href="brotherhood/displayTabla.do?brotherhoodId=${parade.brotherhood.id}">
 <jstl:out value="${parade.brotherhood.title}"/>
 </a><br />
-<br />
+
+<jstl:if test="${parade.status eq 'REJECTED'}">
+<acme:display code="parade.rejectReason" value="${parade.rejectionReason}"/>
+</jstl:if>
+<br>
 
 <security:authorize access="hasRole('BROTHERHOOD')">
 	<spring:message code="parade.requests" />:
@@ -87,6 +92,28 @@
 	<br />
 </security:authorize>
 
+
+<security:authorize access="hasAnyRole('BROTHERHOOD','MEMBER')">
 <acme:button url="parade${rolURL}/list.do" name="back"
 	code="parade.list.button" />
+</security:authorize>
+
+<security:authorize access="hasRole('CHAPTER')">
+<jstl:if test="${parade.status eq 'ACCEPTED'}">
+<acme:button url="parade/chapter/listAccepted.do" name="back"
+	code="parade.list.button" />
+</jstl:if>
+
+<jstl:if test="${parade.status eq 'REJECTED'}">
+<acme:button url="parade/chapter/listRejected.do" name="back"
+	code="parade.list.button" />
+</jstl:if>
+
+<jstl:if test="${parade.status eq 'SUBMITTED'}">
+<acme:button url="parade/chapter/listSubmitted.do" name="back"
+	code="parade.list.button" />
+</jstl:if>
+</security:authorize>
+
+
 <br />

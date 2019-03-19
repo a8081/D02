@@ -6,6 +6,8 @@ import javax.persistence.AccessType;
 import javax.persistence.Embeddable;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.validator.constraints.Range;
+
 @Embeddable
 @Access(AccessType.PROPERTY)
 public class GPS {
@@ -15,6 +17,7 @@ public class GPS {
 
 
 	@NotNull
+	@Range(min = -90, max = 90)
 	public Double getLatitude() {
 		return this.latitude;
 	}
@@ -24,6 +27,7 @@ public class GPS {
 	}
 
 	@NotNull
+	@Range(min = -180, max = 180)
 	public Double getLongitude() {
 		return this.longitude;
 	}

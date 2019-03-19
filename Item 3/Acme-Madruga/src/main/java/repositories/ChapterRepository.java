@@ -1,6 +1,8 @@
 
 package repositories;
 
+import java.util.Collection;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -17,19 +19,12 @@ public interface ChapterRepository extends JpaRepository<Chapter, Integer> {
 	@Query("select c from Chapter c where c.area.id=?1")
 	Chapter findChapterByArea(int areaId);
 
-	@Query(value = "SELECT STDDEV(x),MAX(x),MIN(x),AVG(x) FROM (SELECT COUNT(*) AS x FROM `acme-parade`.ENROLMENT WHERE ENROLMENT.drop_out IS NULL GROUP BY brotherhood) AS x", nativeQuery = true)
-	Double[] getStatisticsOfMembersPerBrotherhood();
+	/** The average, the minimum, the maximum and the standard deviation of the number of parades co-ordinated by the chapters */
+	@Query("select avg(1.0 + (select count(p) from Parade p join p.brotherhood.area a where c.area.id=a.id)-1.0), min(1.0 + (select count(p) from Parade p join p.brotherhood.area a where c.area.id=a.id)-1.0), max(1.0 + (select count(p) from Parade p join p.brotherhood.area a where c.area.id=a.id)-1.0), stddev(1.0 + (select count(p) from Parade p join p.brotherhood.area a where c.area.id=a.id)-1.0) from Chapter c)")
+	Double[] getStatisticsOfParadesPerChapter();
 
-	/** The largest brotherhood is the one with highest number of members **/
-	@Query(
-		value = "SELECT ENROLMENT.brotherhood FROM `acme-parade`.ENROLMENT LEFT OUTER JOIN BROTHERHOOD ON ENROLMENT.id=BROTHERHOOD.id WHERE ENROLMENT.drop_out IS NULL GROUP BY brotherhood HAVING COUNT(*) = (SELECT MAX(x) FROM (SELECT COUNT(*) AS x FROM `acme-madruga`.ENROLMENT GROUP BY brotherhood)AS T)",
-		nativeQuery = true)
-	Integer[] getLargestBrotherhood();
-
-	/** The smallest brotherhood is the one with lowest number of members **/
-	@Query(
-		value = "SELECT ENROLMENT.brotherhood FROM `acme-parade`.ENROLMENT LEFT OUTER JOIN BROTHERHOOD ON ENROLMENT.id=BROTHERHOOD.id WHERE ENROLMENT.drop_out IS NULL GROUP BY brotherhood HAVING COUNT(*) = (SELECT MIN(x) FROM (SELECT COUNT(*) AS x FROM `acme-madruga`.ENROLMENT GROUP BY brotherhood)AS T)",
-		nativeQuery = true)
-	Integer[] getSmallestBrotherhood();
+	/** The chapters that co-ordinate at least 10 per cent more parades than de average */
+	@Query("select distinct c from Chapter c where (1.0*(select count(p) from Parade p join p.brotherhood.area a where c.area.id=a.id))>=(1.1*(select avg(1.0+(select count(h) from Parade h join h.brotherhood.area r where k.area.id=r.id)-1.0) from Chapter k))")
+	Collection<Chapter> findTenPerCentMoreParadesThanAverage();
 
 }

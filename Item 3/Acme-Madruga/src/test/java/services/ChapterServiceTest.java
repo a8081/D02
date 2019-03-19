@@ -1,6 +1,8 @@
 
 package services;
 
+import javax.validation.ConstraintViolationException;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,7 +50,7 @@ public class ChapterServiceTest extends AbstractTest {
 		try {
 			super.authenticate(chapterUsername);
 			this.unauthenticate();
-			//			this.chapterService.flush();
+			this.chapterService.flush();
 		} catch (final Throwable oops) {
 			caught = oops.getClass();
 
@@ -64,10 +66,10 @@ public class ChapterServiceTest extends AbstractTest {
 		final Object testingData[][] = {
 			{
 				// Crear chapter correctamente
-				"chapterTest1", "chapterTest1", "nameChapterTest1", "surnameChapterTest1", "titleChapterTest1", null
+				"chapter1", "chapter1", "Name chapter 1", "Surname chapter 1", "chapter1@hotmail.es", "+34655398675", "Title chapter 1", null
 			}, {
-				//Crear manager con name incorrecto
-				"chapterTest1", "chapterTest1", " ", "surnameChapterTest1", "titleChapterTest1", javax.validation.ConstraintViolationException.class
+				//Crear chapter con name incorrecto
+				"chapter2", "chapter2", "Name chapter 2", "Surname chapter 2", "chapter2@hotmail.es", "mi telefono", "Title chapter 2", ConstraintViolationException.class
 			}
 		};
 		for (int i = 0; i < testingData.length; i++)
@@ -95,7 +97,7 @@ public class ChapterServiceTest extends AbstractTest {
 			userAccount.setPassword(password);
 			chapter.setUserAccount(userAccount);
 			chapter = this.chapterService.save(chapter);
-			//			this.chapterService.flush();
+			this.chapterService.flush();
 		} catch (final Throwable oops) {
 			caught = oops.getClass();
 
@@ -112,25 +114,22 @@ public class ChapterServiceTest extends AbstractTest {
 		final Object testingData[][] = {
 			{
 				// Editar tus datos
-				"chapter1", "Jesus", "Garcia", "jesus@mail.com", "956657894", "titleJesus", null
+				"chapter1", "Name chapter 1", "Surname chapter 1", "chapter1@hotmail.es", "+34655398675", "Title chapter 1", null
 			}, {
-				//Editar phone incorrecto
-				"chapter1", "Jesus", "Garcia", "jesus@mail.com", "telefono", "titleJesus", null
-			}, {
-				//Editar tu email en blanco
-				"chapter1", "Jesus", "Garcia", "", "956657894", "titleJesus", null
+				//Editar phone vacio
+				"chapter1", "Name chapter 1", "Surname chapter 1", "chapter1@hotmail.es", "", "Title chapter 1", null
 			}, {
 				//Editar email incorrecto
-				"chapter1", "Jesus", "Garcia", "no tengo email", "956657894", "titleJesus", javax.validation.ConstraintViolationException.class
+				"chapter1", "Name chapter 1", "Surname chapter 1", "no tengo email", "+34655398675", "Title chapter 1", ConstraintViolationException.class
 			}, {
 				//Editar usuario y dejar nombre en blanco
-				"chapter1", "", "Garcia", "jesus@mail.com", "956657894", "titleJesus", javax.validation.ConstraintViolationException.class
+				"chapter1", "", "Surname chapter 1", "chapter1@hotmail.es", "+34655398675", "Title chapter 1", ConstraintViolationException.class
 			}, {
 				//Editar usuario y dejar apellido en blanco
-				"chapter1", "Jesus", "", "jesus@mail.com", "956657894", "titleJesus", javax.validation.ConstraintViolationException.class
+				"chapter1", "Name chapter 1", "", "chapter1@hotmail.es", "+34655398675", "Title chapter 1", ConstraintViolationException.class
 			}, {
 				//Editar usuario y dejar title en blanco
-				"chapter1", "Jesus", "Garcia", "jesus@mail.com", "956657894", "", javax.validation.ConstraintViolationException.class
+				"chapter1", "Name chapter 1", "Surname chapter 1", "chapter1@hotmail.es", "+34655398675", "", ConstraintViolationException.class
 			}
 		};
 		for (int i = 0; i < testingData.length; i++)
@@ -140,7 +139,7 @@ public class ChapterServiceTest extends AbstractTest {
 	private void templateEditChapter(final String username, final String name, final String surname, final String email, final String phone, final String title, final Class<?> expected) {
 		Class<?> caught;
 		Chapter chapter;
-		chapter = this.chapterService.findOne(this.getEntityId("chapter1"));
+		chapter = this.chapterService.findOne(this.getEntityId(username));
 
 		caught = null;
 		try {
@@ -151,7 +150,7 @@ public class ChapterServiceTest extends AbstractTest {
 			chapter.setPhone(phone);
 			chapter.setTitle(title);
 			this.unauthenticate();
-			//			this.chapterService.flush();
+			this.chapterService.flush();
 
 		} catch (final Throwable oops) {
 			caught = oops.getClass();

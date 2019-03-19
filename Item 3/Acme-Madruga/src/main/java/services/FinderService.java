@@ -185,4 +185,9 @@ public class FinderService {
 		return max <= period;
 	}
 
+	public void flush() {
+		this.finderRepository.flush();
+
+	}
+
 }

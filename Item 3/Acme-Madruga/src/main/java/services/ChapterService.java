@@ -39,6 +39,9 @@ public class ChapterService {
 	@Autowired
 	private AreaService			areaService;
 
+	@Autowired
+	private FolderService		folderService;
+
 
 	public Chapter create() {
 		final Chapter chapter = new Chapter();
@@ -68,7 +71,7 @@ public class ChapterService {
 			this.actorService.setAuthorityUserAccount(Authority.CHAPTER, chapter);
 			Assert.isTrue(newArea == null || !this.hasAnyChapterThisArea(newArea.getId()), "The selected area has been already assigned to another chapter");
 			result = this.chapterRepository.save(chapter);
-
+			this.folderService.setFoldersByDefault(result);
 		} else {
 			this.actorService.checkForSpamWords(chapter);
 			final Actor principal = this.actorService.findByPrincipal();
@@ -198,5 +201,9 @@ public class ChapterService {
 		//this.validator.validate(result, binding);
 
 		return result;
+	}
+
+	public void flush() {
+		this.chapterRepository.flush();
 	}
 }
