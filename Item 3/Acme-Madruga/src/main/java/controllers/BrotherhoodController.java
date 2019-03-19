@@ -142,7 +142,7 @@ public class BrotherhoodController extends AbstractController {
 				result.addObject("alert", "brotherhood.edit.correct");
 				result.addObject("brotherhoodForm", brotherhoodForm);
 			} catch (final Throwable e) {
-				if (e.getMessage().contains("username is register"))
+				if (e.getMessage() != null && e.getMessage().contains("username is register"))
 					result.addObject("alert", "brotherhood.edit.usernameIsUsed");
 				result.addObject("errors", binding.getAllErrors());
 				brotherhoodForm.setTermsAndCondicions(false);
