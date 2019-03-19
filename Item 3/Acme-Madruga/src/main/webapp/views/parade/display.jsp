@@ -90,7 +90,26 @@
 		</display:column>
 	</display:table>
 	<br />
+	
 </security:authorize>
+
+<spring:message code="parade.segments"/>:
+<display:table name="segments" id="row"
+	requestURI="segment/brotherhood/list.do?paradeId=${parade.id}" pagesize="5"
+	class="displaytag">
+
+	<display:column>
+	<acme:button url="segment/brotherhood/edit.do?segmentId=${row.id}" name="edit" code="parade.segment.edit" />
+	</display:column>
+
+	<acme:dataTableColumn code="segment.originTime" property="originTime" />
+	<acme:dataTableColumn code="segment.destinationTime" property="destinationTime" />
+	
+	<display:column>
+	<acme:button url="segment/brotherhood/display.do?segmentId=${row.id}" name="display" code="parade.segment.display" />
+	</display:column>
+	
+</display:table>
 
 
 <security:authorize access="hasRole('MEMBER')">
@@ -99,6 +118,11 @@
 </security:authorize>
 
 <security:authorize access="hasAnyRole('CHAPTER','BROTHERHOOD')">
+
+<jstl:if test="${parade.status eq 'DEFAULT'}">
+<acme:button url="parade${rolURL}/listDefault.do" name="back"
+	code="parade.list.button" />
+</jstl:if>
 
 <jstl:if test="${parade.status eq 'ACCEPTED'}">
 <acme:button url="parade${rolURL}/listAccepted.do" name="back"

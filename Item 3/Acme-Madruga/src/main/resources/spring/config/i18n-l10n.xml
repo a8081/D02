@@ -48,6 +48,8 @@
 		<value>/views/periodRecord/messages</value>
 		<value>/views/legalRecord/messages</value>
 		<value>/views/miscellaneousRecord/messages</value>
+		<value>/views/segment/messages</value>
+		
 		
 	</util:list>
 

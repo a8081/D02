@@ -147,7 +147,10 @@
 		<security:intercept-url pattern="/finder/member/edit.do" access="hasRole('MEMBER')"/>
 		<security:intercept-url pattern="/finder/member/display.do" access="hasRole('MEMBER')"/>
 		
-
+		<!-- SEGMENT -->
+		<security:intercept-url pattern="/segment/brotherhood/**" access="hasRole('BROTHERHOOD')" />
+		
+		
 
 		<security:intercept-url pattern="/profile/action-1.do" access="isAuthenticated()" /> 
 		<security:intercept-url pattern="/profile/action-2.do" access="isAuthenticated()" /> 

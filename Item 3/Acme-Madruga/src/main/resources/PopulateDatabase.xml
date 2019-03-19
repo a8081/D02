@@ -946,7 +946,7 @@
 		<property name="mode" value="DRAFT" />
 		<property name="maxRows" value="120" />
 		<property name="maxColumns" value="300" />
-		<property name="status" value="SUBMITTED" />
+		<property name="status" value="DEFAULT" />
 		<!-- Relations -->
 		<property name="floats">
 			<list>
@@ -1078,7 +1078,7 @@
 		<property name="mode" value="DRAFT" />
 		<property name="maxRows" value="120" />
 		<property name="maxColumns" value="300" />
-		<property name="status" value="SUBMITTED" />
+		<property name="status" value="DEFAULT" />
 		<!-- Relations -->
 		<property name="floats">
 			<list>
@@ -1142,7 +1142,7 @@
 		<property name="mode" value="DRAFT" />
 		<property name="maxRows" value="120" />
 		<property name="maxColumns" value="300" />
-		<property name="status" value="SUBMITTED" />
+		<property name="status" value="DEFAULT" />
 		<!-- Relations -->
 		<property name="floats">
 			<list>

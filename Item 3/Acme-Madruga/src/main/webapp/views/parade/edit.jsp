@@ -77,7 +77,7 @@
 			value="<spring:message code="parade.delete" />" />
 	</jstl:if>
 
-	<acme:button url="parade/brotherhood/list.do" name="cancel"
+	<acme:button url="parade/brotherhood/listDefault.do" name="cancel"
 		code="parade.cancel" />
 
 </form:form>

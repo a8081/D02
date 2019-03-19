@@ -63,7 +63,7 @@ public class ParadeService {
 
 		//		parade.setBrotherhood(this.brotherhoodService.findByPrincipal());
 		parade.setMode("DRAFT");
-		parade.setStatus("SUBMITTED");
+		parade.setStatus("DEFAULT");
 		final Date moment = new Date(System.currentTimeMillis());
 		parade.setTicker(this.generateTicker(moment));
 
@@ -194,7 +194,7 @@ public class ParadeService {
 		copy.setFloats(parade.getFloats());
 		copy.setSegments(parade.getSegments());
 		Assert.isTrue(copy.getBrotherhood().equals(parade.getBrotherhood()), "No puede hacer una copia de un desfile que no pertenece a su hermandad.");
-		this.save(copy);
+		this.paradeRepository.save(copy);
 	}
 
 	public void delete(final Parade parade) {
@@ -261,9 +261,11 @@ public class ParadeService {
 		final Brotherhood bro = this.brotherhoodService.findByPrincipal();
 		Assert.isTrue(parade.getBrotherhood() == bro, "Actor who want to edit parade mode to FINAL is not his owner");
 		Assert.isTrue(parade.getMode().equals("DRAFT"));
-		Assert.isTrue(parade.getStatus().equals("ACCEPTED"), "Only parades that hace status accepted can be shown publicly");
-		if (bro.getArea() != null)
+		//		Assert.isTrue(parade.getStatus().equals("ACCEPTED"), "Only parades that hace status accepted can be shown publicly");
+		if (bro.getArea() != null) {
 			parade.setMode("FINAL");
+			parade.setStatus("SUBMITTED");
+		}
 		result = this.paradeRepository.save(parade);
 		return result;
 	}
@@ -359,12 +361,26 @@ public class ParadeService {
 		return res;
 	}
 
+	public Collection<Parade> findAllDefaultByBrotherhood() {
+		final Brotherhood principal = this.brotherhoodService.findByPrincipal();
+		final Collection<Parade> res = this.paradeRepository.findAllDefaultByBrotherhood(principal.getId());
+		Assert.notNull(res);
+		return res;
+	}
+
 	public Collection<Parade> findAllParadeByBrotherhoodId(final Integer broUAId) {
 		Collection<Parade> res = new ArrayList<>();
 		res = this.paradeRepository.findAllParadeByBrotherhoodId(broUAId);
 		Assert.notNull(res);
 		return res;
 
+	}
+
+	public Parade findParadeBySegment(final Integer segmentId) {
+		Parade res;
+		res = this.paradeRepository.findParadeBySegment(segmentId);
+		Assert.notNull(res);
+		return res;
 	}
 
 	public Parade reconstruct2(final ParadeChapterForm paradeChapterForm, final BindingResult binding) {

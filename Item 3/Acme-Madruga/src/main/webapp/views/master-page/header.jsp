@@ -82,6 +82,7 @@
 					<li class="arrow"></li>
 					<li><a href="parade/list.do"><spring:message code="master.page.all.parade" /></a></li>
 					<li><a href="parade/brotherhood/create.do"><spring:message code="master.page.parade.create" /></a></li>
+					<li><a href="parade/brotherhood/listDefault.do"><spring:message code="master.page.parade.default" /></a></li>
 					<li><a href="parade/brotherhood/listAccepted.do"><spring:message code="master.page.parade.accepted" /></a></li>
 					<li><a href="parade/brotherhood/listRejected.do"><spring:message code="master.page.parade.rejected" /></a></li>
 					<li><a href="parade/brotherhood/listSubmitted.do"><spring:message code="master.page.parade.submitted" /></a></li>

@@ -78,6 +78,14 @@
 	<bean class="converters.RequestToStringConverter"/>
 	<bean class="converters.StringToRequestConverter"/>
 	
+	<!-- SEGMENT -->
+	<bean class="converters.SegmentToStringConverter"/>
+	<bean class="converters.StringToSegmentConverter"/>
+	
+	<!-- GPS -->
+	<bean class="converters.GPSToStringConverter"/>
+	<bean class="converters.StringToGPSConverter"/>
+	
 	</util:list>
 	
 </beans>

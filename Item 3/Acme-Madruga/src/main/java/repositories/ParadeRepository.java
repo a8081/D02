@@ -44,6 +44,9 @@ public interface ParadeRepository extends JpaRepository<Parade, Integer> {
 	@Query("select p from Parade p where p.status='SUBMITTED' AND p.brotherhood.id=?1")
 	Collection<Parade> findAllSubmittedByBrotherhood(int brotherhoodId);
 
+	@Query("select p from Parade p where p.status='DEFAULT' AND p.brotherhood.id=?1")
+	Collection<Parade> findAllDefaultByBrotherhood(int brotherhoodId);
+
 	@Query("select p from Parade p where p.mode='FINAL' AND p.status='ACCEPTED' AND p.brotherhood.area.id=?1")
 	Collection<Parade> findAllFinalModeAcceptedByArea(int areaId);
 
@@ -64,5 +67,8 @@ public interface ParadeRepository extends JpaRepository<Parade, Integer> {
 
 	@Query("select sum(case when p.status='REJECTED' and p.mode='FINAL' then 1.0 else 0.0 end) / count(p) from Parade p")
 	Double findRejectedParadesRatio();
+
+	@Query("select p from Parade p join p.segments s where s.id=?1")
+	Parade findParadeBySegment(int segmentId);
 
 }

@@ -14,6 +14,9 @@
 
 <security:authorize access="hasAnyRole('MEMBER')">
 
+<jstl:if test="${not empty rol}">
+	<jstl:set var="rolURL" value="/${rol}" />
+</jstl:if>
 
 <display:table name="parades" id="row"
 	requestURI="parade/member/list.do" pagesize="5"
@@ -133,6 +136,8 @@
 	<display:column>
 	<acme:button url="parade/brotherhood/copyBrotherhoodParade.do?paradeId=${row.id}" name="copy" code="parade.copy"/>
 	</display:column>
+
+	
 	</security:authorize>
 	
 </display:table>

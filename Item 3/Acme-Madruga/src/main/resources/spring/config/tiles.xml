@@ -49,6 +49,8 @@
 		<value>/views/periodRecord/tiles.xml</value>
 		<value>/views/miscellaneousRecord/tiles.xml</value>
 		<value>/views/linkRecord/tiles.xml</value>
+		<value>/views/segment/tiles.xml</value>
+		
 		
 		
 	</util:list>
