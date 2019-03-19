@@ -54,11 +54,23 @@ public class InceptionRecordService {
 		Assert.notNull(iR);
 		Assert.notNull(iR.getTitle());
 		Assert.notNull(iR.getDescription());
-		if (iR.getId() != 0) {
-			Assert.isTrue(iR.getTitle() != "");
-			Assert.isTrue(iR.getDescription() != "");
+		Assert.isTrue(iR.getTitle() != "");
+		Assert.isTrue(iR.getDescription() != "");
+		if (iR.getId() != 0)
 			Assert.isTrue(this.findBrotherhoodByInception(iR.getId()) == me);
-		}
+		final InceptionRecord saved = this.inceptionRecordRepository.save(iR);
+		Assert.notNull(this.findOne(saved.getId()));
+		return saved;
+	}
+
+	public InceptionRecord saveForNewHistory(final InceptionRecord iR) {
+		final Brotherhood me = this.brotherhoodService.findByPrincipal();
+		Assert.notNull(me, "You must be logged in the system");
+		Assert.notNull(iR);
+		Assert.notNull(iR.getTitle());
+		Assert.notNull(iR.getDescription());
+		if (iR.getId() != 0)
+			Assert.isTrue(this.findBrotherhoodByInception(iR.getId()) == me);
 		final InceptionRecord saved = this.inceptionRecordRepository.save(iR);
 		Assert.notNull(this.findOne(saved.getId()));
 		return saved;

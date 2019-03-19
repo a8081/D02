@@ -35,7 +35,7 @@ public class HistoryService {
 	public History create() {
 		final History history = new History();
 		final InceptionRecord inceptionRecord = this.inceptionRecordService.create();
-		final InceptionRecord saved = this.inceptionRecordService.save(inceptionRecord);
+		final InceptionRecord saved = this.inceptionRecordService.saveForNewHistory(inceptionRecord);
 		history.setInceptionRecord(saved);
 		final Collection<PeriodRecord> periodRecords = new ArrayList<PeriodRecord>();
 		history.setPeriodRecords(periodRecords);
