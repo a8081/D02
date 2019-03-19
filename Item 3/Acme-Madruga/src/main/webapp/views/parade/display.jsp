@@ -93,24 +93,25 @@
 </security:authorize>
 
 
-<security:authorize access="hasAnyRole('BROTHERHOOD','MEMBER')">
-<acme:button url="parade${rolURL}/list.do" name="back"
+<security:authorize access="hasRole('MEMBER')">
+<acme:button url="parade/member/list.do" name="back"
 	code="parade.list.button" />
 </security:authorize>
 
-<security:authorize access="hasRole('CHAPTER')">
+<security:authorize access="hasAnyRole('CHAPTER','BROTHERHOOD')">
+
 <jstl:if test="${parade.status eq 'ACCEPTED'}">
-<acme:button url="parade/chapter/listAccepted.do" name="back"
+<acme:button url="parade${rol}/listAccepted.do" name="back"
 	code="parade.list.button" />
 </jstl:if>
 
 <jstl:if test="${parade.status eq 'REJECTED'}">
-<acme:button url="parade/chapter/listRejected.do" name="back"
+<acme:button url="parade${rol}/listRejected.do" name="back"
 	code="parade.list.button" />
 </jstl:if>
 
 <jstl:if test="${parade.status eq 'SUBMITTED'}">
-<acme:button url="parade/chapter/listSubmitted.do" name="back"
+<acme:button url="parade${rol}/listSubmitted.do" name="back"
 	code="parade.list.button" />
 </jstl:if>
 </security:authorize>

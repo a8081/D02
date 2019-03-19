@@ -46,8 +46,11 @@ public class ParadeChapterController extends AbstractController {
 		parades = this.paradeService.findAll();
 
 		String listParades;
+		String rol;
 
 		listParades = "listAll";
+		rol = "chapter";
+
 		final String lang = LocaleContextHolder.getLocale().getLanguage();
 
 		result = new ModelAndView("parade/list");
@@ -56,6 +59,7 @@ public class ParadeChapterController extends AbstractController {
 		result.addObject("lang", lang);
 		result.addObject("requetURI", "parade/chapter/listAll.do");
 		result.addObject("listParades", listParades);
+		result.addObject("rol", rol);
 
 		return result;
 	}
@@ -71,8 +75,11 @@ public class ParadeChapterController extends AbstractController {
 		parades = this.paradeService.findAllFinalModeAccepted(chapter.getArea().getId());
 
 		String listParades;
+		String rol;
 
 		listParades = "listAccepted";
+		rol = "chapter";
+
 		final String lang = LocaleContextHolder.getLocale().getLanguage();
 
 		result = new ModelAndView("parade/list");
@@ -81,6 +88,7 @@ public class ParadeChapterController extends AbstractController {
 		result.addObject("lang", lang);
 		result.addObject("requetURI", "parade/chapter/listAccepted.do");
 		result.addObject("listParades", listParades);
+		result.addObject("rol", rol);
 
 		return result;
 	}
@@ -96,8 +104,11 @@ public class ParadeChapterController extends AbstractController {
 		parades = this.paradeService.findAllFinalModeRejected(chapter.getArea().getId());
 
 		String listParades;
+		String rol;
 
 		listParades = "listRejected";
+		rol = "chapter";
+
 		final String lang = LocaleContextHolder.getLocale().getLanguage();
 
 		result = new ModelAndView("parade/list");
@@ -106,6 +117,7 @@ public class ParadeChapterController extends AbstractController {
 		result.addObject("lang", lang);
 		result.addObject("requetURI", "parade/chapter/listRejected.do");
 		result.addObject("listParades", listParades);
+		result.addObject("rol", rol);
 
 		return result;
 	}
@@ -121,8 +133,10 @@ public class ParadeChapterController extends AbstractController {
 		parades = this.paradeService.findAllFinalModeSubmitted(chapter.getArea().getId());
 
 		String listParades;
+		String rol;
 
 		listParades = "listRejected";
+		rol = "chapter";
 		final String lang = LocaleContextHolder.getLocale().getLanguage();
 
 		result = new ModelAndView("parade/list");
@@ -131,6 +145,7 @@ public class ParadeChapterController extends AbstractController {
 		result.addObject("lang", lang);
 		result.addObject("requetURI", "parade/chapter/listSubmitted.do");
 		result.addObject("listParades", listParades);
+		result.addObject("rol", rol);
 
 		return result;
 	}

@@ -922,7 +922,7 @@
 		<property name="mode" value="FINAL" />
 		<property name="maxRows" value="120" />
 		<property name="maxColumns" value="300" />
-		<property name="status" value="ACCEPTED" />
+		<property name="status" value="SUBMITTED" />
 
 		<!-- Relations -->
 		<property name="floats">
@@ -943,10 +943,10 @@
 		<property name="description" value="This is a description of a parade3" />
 		<property name="moment" value="2025/04/26 00:00" />
 		<property name="ticker" value="200427-DOUBA" />
-		<property name="mode" value="FINAL" />
+		<property name="mode" value="DRAFT" />
 		<property name="maxRows" value="120" />
 		<property name="maxColumns" value="300" />
-		<property name="status" value="REJECTED" />
+		<property name="status" value="SUBMITTED" />
 		<!-- Relations -->
 		<property name="floats">
 			<list>
@@ -1012,6 +1012,8 @@
 		<property name="maxRows" value="120" />
 		<property name="maxColumns" value="300" />
 		<property name="status" value="REJECTED" />
+		<property name="rejectionReason" value="No me gusta"/>
+		
 		<!-- Relations -->
 		<property name="floats">
 			<list>
@@ -1032,7 +1034,7 @@
 		<property name="mode" value="FINAL" />
 		<property name="maxRows" value="120" />
 		<property name="maxColumns" value="300" />
-		<property name="status" value="SUBMITTED" />
+		<property name="status" value="ACCEPTED" />
 
 		<!-- Relations -->
 		<property name="floats">
@@ -1054,7 +1056,8 @@
 		<property name="mode" value="FINAL" />
 		<property name="maxRows" value="120" />
 		<property name="maxColumns" value="300" />
-		<property name="status" value="ACCEPTED" />
+		<property name="status" value="REJECTED" />
+		<property name="rejectionReason" value="No me gusta"/>
 		<!-- Relations -->
 		<property name="floats">
 			<list>
@@ -1072,10 +1075,10 @@
 		<property name="description" value="This is a description of a parade9s" />
 		<property name="moment" value="2021/04/26 00:00" />
 		<property name="ticker" value="200466-DOUIG" />
-		<property name="mode" value="FINAL" />
+		<property name="mode" value="DRAFT" />
 		<property name="maxRows" value="120" />
 		<property name="maxColumns" value="300" />
-		<property name="status" value="REJECTED" />
+		<property name="status" value="SUBMITTED" />
 		<!-- Relations -->
 		<property name="floats">
 			<list>
@@ -1117,7 +1120,7 @@
 		<property name="mode" value="FINAL" />
 		<property name="maxRows" value="120" />
 		<property name="maxColumns" value="300" />
-		<property name="status" value="ACCEPTED" />
+		<property name="status" value="SUBMITTED" />
 		<!-- Relations -->
 		<property name="floats">
 			<list>
@@ -1139,7 +1142,7 @@
 		<property name="mode" value="DRAFT" />
 		<property name="maxRows" value="120" />
 		<property name="maxColumns" value="300" />
-		<property name="status" value="ACCEPTED" />
+		<property name="status" value="SUBMITTED" />
 		<!-- Relations -->
 		<property name="floats">
 			<list>

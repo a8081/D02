@@ -48,6 +48,7 @@
 		<security:intercept-url pattern="/parade/display.do" access="permitAll" /> 
 		<security:intercept-url pattern="/parade/member/**" access="hasRole('MEMBER')" />
 		<security:intercept-url pattern="/parade/brotherhood/**" access="hasRole('BROTHERHOOD')" />
+		<security:intercept-url pattern="/parade/chapter/**" access="hasRole('CHAPTER')" />
 		<security:intercept-url pattern="/parade/listByBrotherhood.do" access="permitAll" />
 		
 		<!-- REQUEST -->
@@ -145,17 +146,6 @@
 		<security:intercept-url pattern="/member/displayTabla.do" access="isAuthenticated()"/>
 		<security:intercept-url pattern="/finder/member/edit.do" access="hasRole('MEMBER')"/>
 		<security:intercept-url pattern="/finder/member/display.do" access="hasRole('MEMBER')"/>
-
-
-		<!-- CHAPTER -->
-		<security:intercept-url pattern="/parade/chapter/listAll.do" access="hasRole('CHAPTER')"/>
-		<security:intercept-url pattern="/parade/chapter/listAccepted.do" access="hasRole('CHAPTER')"/>
-		<security:intercept-url pattern="/parade/chapter/listRejected.do" access="hasRole('CHAPTER')"/>
-		<security:intercept-url pattern="/parade/chapter/listSubmitted.do" access="hasRole('CHAPTER')"/>
-		<security:intercept-url pattern="/parade/chapter/accept.do" access="hasRole('CHAPTER')"/>
-		<security:intercept-url pattern="/parade/chapter/reject.do" access="hasRole('CHAPTER')"/>
-		<security:intercept-url pattern="/parade/chapter/display.do" access="hasRole('CHAPTER')"/>
-		<security:intercept-url pattern="/parade/chapter/edit.do" access="hasRole('CHAPTER')"/>
 		
 
 

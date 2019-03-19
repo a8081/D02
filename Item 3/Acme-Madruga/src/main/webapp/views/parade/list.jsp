@@ -12,25 +12,12 @@
 
 
 
-<security:authorize access="hasAnyRole('BROTHERHOOD','MEMBER')">
+<security:authorize access="hasAnyRole('MEMBER')">
 
-<jstl:if test="${not empty rol}">
-	<jstl:set var="rolURL" value="/${rol}" />
-</jstl:if>
 
 <display:table name="parades" id="row"
-	requestURI="parade${rolURL}/list.do" pagesize="5"
+	requestURI="parade/member/list.do" pagesize="5"
 	class="displaytag">
-
-	<security:authorize access="hasRole('BROTHERHOOD')">
-		<display:column>
-			<jstl:if test="${row.mode eq 'DRAFT'}">
-				<acme:link
-					url="parade/brotherhood/edit.do?paradeId=${row.id}"
-					code="parade.edit" />
-			</jstl:if>
-		</display:column>
-	</security:authorize>
 
 	<display:column property="title" titleKey="parade.title" />
 	
@@ -45,7 +32,7 @@
 	</display:column>
 	
 	<display:column>
-		<acme:link url="parade${rolURL}/display.do?paradeId=${row.id}"
+		<acme:link url="parade/member/display.do?paradeId=${row.id}"
 			code="parade.display" />
 	</display:column>
 	
@@ -71,31 +58,35 @@
 			</display:column>
 		</jstl:if>
 	</security:authorize>
-	
-	<security:authorize access="hasRole('BROTHERHOOD')">
-		<display:column>
-			<jstl:if test="${row.mode eq 'DRAFT'}">
-				<acme:link
-					url="parade/brotherhood/finalMode.do?paradeId=${row.id}"
-					code="parade.finalMode" />
-			</jstl:if>
-		</display:column>
-	</security:authorize>
 
 </display:table>
 </security:authorize>
 
 
 
-<security:authorize access="hasAnyRole('CHAPTER')">
+<security:authorize access="hasAnyRole('CHAPTER','BROTHERHOOD')">
+
+<jstl:if test="${not empty rol}">
+	<jstl:set var="rolURL" value="/${rol}" />
+</jstl:if>
 
 <jstl:if test="${not empty listParades}">
 	<jstl:set var="chooseList" value="/${listParades}" />
 </jstl:if>
 
 <display:table name="parades" id="row"
-	requestURI="parade/chapter/${chooseList}.do" pagesize="5"
+	requestURI="parade${rol}${chooseList}.do" pagesize="5"
 	class="displaytag">
+
+	<security:authorize access="hasRole('BROTHERHOOD')">
+		<display:column>
+			<jstl:if test="${row.mode eq 'DRAFT'}">
+				<acme:link
+					url="parade/brotherhood/edit.do?paradeId=${row.id}"
+					code="parade.edit" />
+			</jstl:if>
+		</display:column>
+	</security:authorize>
 
 	<display:column property="title" titleKey="parade.title" />
 	
@@ -110,21 +101,33 @@
 	</display:column>
 	
 	<display:column>
-		<acme:link url="parade/chapter/display.do?paradeId=${row.id}"
+		<acme:link url="parade/${rol}/display.do?paradeId=${row.id}"
 			code="parade.display" />
 	</display:column>
 	
+	<security:authorize access="hasRole('BROTHERHOOD')">
+		<display:column>
+			<jstl:if test="${row.mode eq 'DRAFT'}">
+				<acme:link
+					url="parade/brotherhood/finalMode.do?paradeId=${row.id}"
+					code="parade.finalMode" />
+			</jstl:if>
+		</display:column>
+	</security:authorize>
+	
+	<security:authorize access="hasRole('CHAPTER')">
 	<display:column>
-	<jstl:if test="${row.status eq 'SUBMITTED'}">
+	<jstl:if test="${row.status eq 'SUBMITTED' and row.mode eq 'FINAL'}">
 	<acme:button url="parade/chapter/accept.do?paradeId=${row.id}" name="accept" code="parade.accept"/>
 	</jstl:if>
 	</display:column>
 	
 	<display:column>
-	<jstl:if test="${row.status eq 'SUBMITTED'}">
+	<jstl:if test="${row.status eq 'SUBMITTED' and row.mode eq 'FINAL'}">
 	<acme:button url="parade/chapter/reject.do?paradeId=${row.id}" name="reject" code="parade.reject"/>
 	</jstl:if>
 	</display:column>
+	</security:authorize>
 	
 </display:table>
 

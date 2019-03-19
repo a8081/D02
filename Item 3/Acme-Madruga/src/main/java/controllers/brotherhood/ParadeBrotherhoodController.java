@@ -89,26 +89,113 @@ public class ParadeBrotherhoodController extends AbstractController {
 		return result;
 	}
 
-	// LIST
+	// LIST ACCEPTED --------------------------------------------------------
 
-	@RequestMapping(value = "/list", method = RequestMethod.GET)
-	public ModelAndView list() {
+	@RequestMapping(value = "/listAccepted", method = RequestMethod.GET)
+	public ModelAndView listAccepted() {
 		final ModelAndView result;
 		final Collection<Parade> parades;
+
+		parades = this.paradeService.findAllAcceptedByBrotherhood();
+
+		String listParades;
 		String rol;
 
-		parades = this.paradeService.findAllByPrincipal();
+		listParades = "listAccepted";
+		rol = "brootherhood";
+		final String lang = LocaleContextHolder.getLocale().getLanguage();
+
+		result = new ModelAndView("parade/list");
+		result.addObject("parades", parades);
+
+		result.addObject("lang", lang);
+		result.addObject("requetURI", "parade/brotherhood/listAccepted.do");
+		result.addObject("listParades", listParades);
+		result.addObject("rol", rol);
+
+		return result;
+	}
+
+	// LIST REJECTED --------------------------------------------------------
+
+	@RequestMapping(value = "/listRejected", method = RequestMethod.GET)
+	public ModelAndView listRejected() {
+		final ModelAndView result;
+		final Collection<Parade> parades;
+
+		parades = this.paradeService.findAllRejectedByBrotherhood();
+
+		String listParades;
+		String rol;
+
+		listParades = "listRejected";
+		rol = "brootherhood";
+
+		final String lang = LocaleContextHolder.getLocale().getLanguage();
+
+		result = new ModelAndView("parade/list");
+		result.addObject("parades", parades);
+
+		result.addObject("lang", lang);
+		result.addObject("requetURI", "parade/brotherhood/listRejected.do");
+		result.addObject("listParades", listParades);
+		result.addObject("rol", rol);
+
+		return result;
+	}
+
+	// LIST SUBMITTED --------------------------------------------------------
+
+	@RequestMapping(value = "/listSubmitted", method = RequestMethod.GET)
+	public ModelAndView listSubmitted() {
+		final ModelAndView result;
+		final Collection<Parade> parades;
+
+		parades = this.paradeService.findAllSubmittedByBrotherhood();
+
+		String listParades;
+		String rol;
+
+		listParades = "listRejected";
 		rol = "brotherhood";
 		final String lang = LocaleContextHolder.getLocale().getLanguage();
 
 		result = new ModelAndView("parade/list");
 		result.addObject("parades", parades);
+
 		result.addObject("lang", lang);
-		result.addObject("requetURI", "parade/brotherhood/list.do");
+		result.addObject("requetURI", "parade/brotherhood/listSubmitted.do");
+		result.addObject("listParades", listParades);
 		result.addObject("rol", rol);
 
 		return result;
 	}
+
+	//	// LIST
+	//
+	//	@RequestMapping(value = "/list", method = RequestMethod.GET)
+	//	public ModelAndView list() {
+	//		final ModelAndView result;
+	//		final Collection<Parade> parades;
+	//		String rol;
+	//		String listParades;
+	//
+	//		parades = this.paradeService.findAllByPrincipal();
+	//
+	//		listParades = "list";
+	//		rol = "brotherhood";
+	//
+	//		final String lang = LocaleContextHolder.getLocale().getLanguage();
+	//
+	//		result = new ModelAndView("parade/list");
+	//		result.addObject("parades", parades);
+	//		result.addObject("lang", lang);
+	//		result.addObject("requetURI", "parade/brotherhood/list.do");
+	//		result.addObject("listParades", listParades);
+	//		result.addObject("rol", rol);
+	//
+	//		return result;
+	//	}
 
 	// EDIT
 
@@ -156,12 +243,13 @@ public class ParadeBrotherhoodController extends AbstractController {
 
 		return result;
 	}
+
 	@RequestMapping(value = "/finalMode", method = RequestMethod.GET)
 	public ModelAndView finalMode(@RequestParam final int paradeId) {
 		final ModelAndView result;
 		if (this.brotherhoodService.findByPrincipal().getArea() != null) {
 			this.paradeService.toFinalMode(paradeId);
-			result = new ModelAndView("redirect:list.do");
+			result = new ModelAndView("redirect:listSubmitted.do");
 		} else
 			result = new ModelAndView("redirect:/misc/403.jsp");
 		return result;
