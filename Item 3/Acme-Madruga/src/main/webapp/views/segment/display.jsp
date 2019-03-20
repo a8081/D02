@@ -27,16 +27,26 @@
 <jstl:choose>
 	<jstl:when test="${lang eq 'en' }">
 		<spring:message code="segment.destinationTime" />: <fmt:formatDate
-			value="${destinationTime}" type="both" pattern="yyyy/MM/dd HH:mm" />
+			value="${segment.destinationTime}" type="both" pattern="yyyy/MM/dd HH:mm" />
 	</jstl:when>
 	<jstl:otherwise>
 		<spring:message code="segment.destinationTime" />: <fmt:formatDate
-			value="${destinationTime}" type="both" pattern="dd/MM/yyyy HH:mm" />
+			value="${segment.destinationTime}" type="both" pattern="dd/MM/yyyy HH:mm" />
 	</jstl:otherwise>
 </jstl:choose>
 <br>
 
 
 
-<acme:display code="segment.originCoordinates" value="${segment.originCoordinates}" />
-<acme:display code="segment.destinationCoordinates" value="${segment.destinationCoordinates}" />
+<acme:display code="segment.originCoordinates.latitude" value="${segment.originCoordinates.latitude}" />
+<acme:display code="segment.originCoordinates.longitude" value="${segment.originCoordinates.longitude}" />
+
+<acme:display code="segment.destinationCoordinates.latitude" value="${segment.destinationCoordinates.latitude}" />
+<acme:display code="segment.destinationCoordinates.longitude" value="${segment.destinationCoordinates.longitude}" />
+<br>
+<acme:button url="parade/brotherhood/display.do?paradeId=${parade.id}" name="cancel" code="segment.back"/>
+
+
+
+
+

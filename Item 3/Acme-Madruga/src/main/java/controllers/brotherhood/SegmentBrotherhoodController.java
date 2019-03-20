@@ -64,8 +64,10 @@ public class SegmentBrotherhoodController extends AbstractController {
 	public ModelAndView display(@RequestParam final int segmentId) {
 		final ModelAndView result;
 		Segment segment;
+		Parade parade;
 
 		segment = this.segmentService.findOne(segmentId);
+		parade = this.paradeService.findParadeBySegment(segmentId);
 
 		final String lang = LocaleContextHolder.getLocale().getLanguage();
 
@@ -75,6 +77,7 @@ public class SegmentBrotherhoodController extends AbstractController {
 		result.addObject("segment", segment);
 		result.addObject("lang", lang);
 		result.addObject("brotherhood", bro);
+		result.addObject("parade", parade);
 		result.addObject("rol", "brotherhood");
 
 		return result;
