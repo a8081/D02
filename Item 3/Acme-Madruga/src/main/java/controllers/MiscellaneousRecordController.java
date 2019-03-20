@@ -30,6 +30,8 @@ public class MiscellaneousRecordController extends AbstractController {
 	@Autowired
 	private HistoryService				historyService;
 	@Autowired
+	private HistoryController			historyController;
+	@Autowired
 	private BrotherhoodService			brotherhoodService;
 
 
@@ -49,7 +51,7 @@ public class MiscellaneousRecordController extends AbstractController {
 			final MiscellaneousRecord miscellaneousRecord;
 			final Brotherhood brotherhood = this.brotherhoodService.findByPrincipal();
 			miscellaneousRecord = this.miscellaneousRecordService.findOne(miscellaneousRecordId);
-			Assert.isTrue(brotherhood.getHistory().getMiscellaneousRecords().equals(miscellaneousRecord), "This miscellaneous-record is not of your property");
+			Assert.isTrue(brotherhood.getHistory().getMiscellaneousRecords().contains(miscellaneousRecord), "This miscellaneous-record is not of your property");
 			result = this.createEditModelAndView(miscellaneousRecord);
 		} catch (final Exception e) {
 			result = new ModelAndView("administrator/error");
@@ -90,14 +92,13 @@ public class MiscellaneousRecordController extends AbstractController {
 		final MiscellaneousRecord miscellaneousRecord = this.miscellaneousRecordService.findOne(miscellaneousRecordId);
 		try {
 			this.miscellaneousRecordService.delete(miscellaneousRecord);
-			result = new ModelAndView("redirect:list.do");
+			result = this.historyController.list();
 		} catch (final Throwable oops) {
 			result = this.createEditModelAndView(miscellaneousRecord, "general.commit.error");
 			result.addObject("id", miscellaneousRecord.getId());
 		}
 		return result;
 	}
-
 	protected ModelAndView createEditModelAndView(final MiscellaneousRecord miscellaneousRecord) {
 		ModelAndView result;
 

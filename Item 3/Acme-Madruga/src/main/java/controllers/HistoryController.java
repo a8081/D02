@@ -52,4 +52,24 @@ public class HistoryController extends AbstractController {
 		return res;
 	}
 
+	protected ModelAndView createListModelAndView(final History history) {
+		ModelAndView result;
+
+		result = this.createListModelAndView(history, null);
+
+		return result;
+	}
+	// Edition ---------------------------------------------------------
+
+	protected ModelAndView createListModelAndView(final History history, final String message) {
+		ModelAndView result;
+
+		result = new ModelAndView("history/display");
+		result.addObject("history", history);
+		result.addObject("message", message);
+
+		return result;
+
+	}
+
 }

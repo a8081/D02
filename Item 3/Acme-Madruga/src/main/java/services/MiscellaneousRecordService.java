@@ -9,6 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import repositories.MiscellaneousRecordRepository;
+import domain.Brotherhood;
+import domain.History;
 import domain.MiscellaneousRecord;
 
 @Service
@@ -17,6 +19,8 @@ public class MiscellaneousRecordService {
 
 	@Autowired
 	private MiscellaneousRecordRepository	miscellaneousRecordRepository;
+	@Autowired
+	private BrotherhoodService				brotherhoodService;
 
 
 	//Metodos CRUD
@@ -46,8 +50,11 @@ public class MiscellaneousRecordService {
 	public void delete(final MiscellaneousRecord mR) {
 		Assert.isTrue(mR.getId() != 0);
 		Assert.notNull(mR);
+		final Brotherhood brotherhood = this.brotherhoodService.findByPrincipal();
+		final History history = brotherhood.getHistory();
+		final Collection<MiscellaneousRecord> miscellaneousRecords = history.getMiscellaneousRecords();
+		miscellaneousRecords.remove(mR);
 		this.miscellaneousRecordRepository.delete(mR.getId());
 
 	}
-
 }

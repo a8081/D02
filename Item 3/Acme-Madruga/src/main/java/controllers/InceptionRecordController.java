@@ -28,6 +28,8 @@ public class InceptionRecordController extends AbstractController {
 	@Autowired
 	private HistoryService			historyService;
 	@Autowired
+	private HistoryController		historyController;
+	@Autowired
 	private BrotherhoodService		brotherhoodService;
 
 
@@ -70,14 +72,13 @@ public class InceptionRecordController extends AbstractController {
 				this.inceptionRecordService.save(inceptionRecord);
 				history.setInceptionRecord(inceptionRecord);
 				this.historyService.save(history);
-				result = new ModelAndView("redirect:../history/list.do");
+				result = this.historyController.list();
 			} catch (final Throwable oops) {
 				result = this.createEditModelAndView(inceptionRecord, "general.commit.error");
 			}
 
 		return result;
 	}
-
 	protected ModelAndView createEditModelAndView(final InceptionRecord inceptionRecord) {
 		ModelAndView result;
 

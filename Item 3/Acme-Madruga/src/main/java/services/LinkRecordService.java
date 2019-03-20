@@ -9,6 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import repositories.LinkRecordRepository;
+import domain.Brotherhood;
+import domain.History;
 import domain.LinkRecord;
 
 @Service
@@ -17,6 +19,8 @@ public class LinkRecordService {
 
 	@Autowired
 	private LinkRecordRepository	linkRecordRepository;
+	@Autowired
+	private BrotherhoodService		brotherhoodService;
 
 
 	//Metodos CRUD
@@ -49,6 +53,10 @@ public class LinkRecordService {
 		Assert.isTrue(linkRecord.getId() != 0);
 		Assert.notNull(linkRecord.getLinkedBrotherhood());
 		Assert.notNull(linkRecord);
+		final Brotherhood brotherhood = this.brotherhoodService.findByPrincipal();
+		final History history = brotherhood.getHistory();
+		final Collection<LinkRecord> linkRecords = history.getLinkRecords();
+		linkRecords.remove(linkRecord);
 		this.linkRecordRepository.delete(linkRecord.getId());
 	}
 

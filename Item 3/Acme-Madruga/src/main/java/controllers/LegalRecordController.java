@@ -30,6 +30,8 @@ public class LegalRecordController extends AbstractController {
 	@Autowired
 	private HistoryService		historyService;
 	@Autowired
+	private HistoryController	historyController;
+	@Autowired
 	private BrotherhoodService	brotherhoodService;
 
 
@@ -49,7 +51,7 @@ public class LegalRecordController extends AbstractController {
 			final LegalRecord legalRecord;
 			final Brotherhood brotherhood = this.brotherhoodService.findByPrincipal();
 			legalRecord = this.legalRecordService.findOne(legalRecordId);
-			Assert.isTrue(brotherhood.getHistory().getPeriodRecords().equals(legalRecord), "This legal-record is not of your property");
+			Assert.isTrue(brotherhood.getHistory().getLegalRecords().contains(legalRecord), "This legal-record is not of your property");
 			result = this.createEditModelAndView(legalRecord);
 		} catch (final Exception e) {
 			result = new ModelAndView("administrator/error");
@@ -90,7 +92,7 @@ public class LegalRecordController extends AbstractController {
 		final LegalRecord legalRecord = this.legalRecordService.findOne(legalRecordId);
 		try {
 			this.legalRecordService.delete(legalRecord);
-			result = new ModelAndView("redirect:list.do");
+			result = this.historyController.list();
 		} catch (final Throwable oops) {
 			result = this.createEditModelAndView(legalRecord, "general.commit.error");
 			result.addObject("id", legalRecord.getId());

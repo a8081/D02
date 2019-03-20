@@ -18,7 +18,6 @@ import security.UserAccount;
 import domain.Actor;
 import domain.Area;
 import domain.Brotherhood;
-import domain.History;
 import forms.BrotherhoodAreaForm;
 import forms.BrotherhoodForm;
 
@@ -70,9 +69,6 @@ public class BrotherhoodService {
 
 		if (brotherhood.getId() == 0) {
 			this.actorService.setAuthorityUserAccount(Authority.BROTHERHOOD, brotherhood);
-			//Al crear una nueva hermandad se le asigna por defecto una History
-			final History history = this.historyService.createForNewBrotherhood();
-			brotherhood.setHistory(history);
 			result = this.brotherhoodRepository.save(brotherhood);
 			this.folderService.setFoldersByDefault(result);
 

@@ -30,6 +30,8 @@ public class LinkRecordController extends AbstractController {
 	@Autowired
 	private HistoryService		historyService;
 	@Autowired
+	private HistoryController	historyController;
+	@Autowired
 	private BrotherhoodService	brotherhoodService;
 
 
@@ -37,7 +39,9 @@ public class LinkRecordController extends AbstractController {
 	public ModelAndView create() {
 		ModelAndView result;
 		final LinkRecord linkRecord = this.linkRecordService.create();
+		final Collection<Brotherhood> brotherhoods = this.brotherhoodService.findAll();
 		result = this.createEditModelAndView(linkRecord);
+		result.addObject("brotherhoods", brotherhoods);
 		return result;
 	}
 
@@ -49,8 +53,10 @@ public class LinkRecordController extends AbstractController {
 			final LinkRecord linkRecord;
 			final Brotherhood brotherhood = this.brotherhoodService.findByPrincipal();
 			linkRecord = this.linkRecordService.findOne(linkRecordId);
-			Assert.isTrue(brotherhood.getHistory().getLinkRecords().equals(linkRecord), "This link-record is not of your property");
+			Assert.isTrue(brotherhood.getHistory().getLinkRecords().contains(linkRecord), "This link-record is not of your property");
+			final Collection<Brotherhood> brotherhoods = this.brotherhoodService.findAll();
 			result = this.createEditModelAndView(linkRecord);
+			result.addObject("brotherhoods", brotherhoods);
 		} catch (final Exception e) {
 			result = new ModelAndView("administrator/error");
 			result.addObject("trace", e.getMessage());
@@ -90,7 +96,7 @@ public class LinkRecordController extends AbstractController {
 		final LinkRecord linkRecord = this.linkRecordService.findOne(linkRecordId);
 		try {
 			this.linkRecordService.delete(linkRecord);
-			result = new ModelAndView("redirect:list.do");
+			result = this.historyController.list();
 		} catch (final Throwable oops) {
 			result = this.createEditModelAndView(linkRecord, "general.commit.error");
 			result.addObject("id", linkRecord.getId());

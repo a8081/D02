@@ -11,6 +11,8 @@ import org.springframework.util.Assert;
 import repositories.PeriodRecordRepository;
 import security.Authority;
 import domain.Actor;
+import domain.Brotherhood;
+import domain.History;
 import domain.PeriodRecord;
 
 @Service
@@ -19,7 +21,9 @@ public class PeriodRecordService {
 
 	@Autowired
 	private PeriodRecordRepository	periodRecordRepository;
+	@Autowired
 	private BrotherhoodService		brotherhoodService;
+	@Autowired
 	private ActorService			actorService;
 
 
@@ -60,6 +64,10 @@ public class PeriodRecordService {
 		Assert.isTrue(this.actorService.checkAuthority(me, Authority.BROTHERHOOD), "You must be BROTHERHOO");
 		Assert.isTrue(pR.getId() != 0);
 		Assert.notNull(pR);
+		final Brotherhood brotherhood = this.brotherhoodService.findByPrincipal();
+		final History history = brotherhood.getHistory();
+		final Collection<PeriodRecord> periodRecords = history.getPeriodRecords();
+		periodRecords.remove(pR);
 		this.periodRecordRepository.delete(pR.getId());
 
 	}

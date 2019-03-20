@@ -19,7 +19,9 @@ public class InceptionRecordService {
 
 	@Autowired
 	private InceptionRecordRepository	inceptionRecordRepository;
+	@Autowired
 	private BrotherhoodService			brotherhoodService;
+	@Autowired
 	private ActorService				actorService;
 
 
