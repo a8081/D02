@@ -358,4 +358,8 @@ public class ParadeService {
 
 		return result;
 	}
+
+	public void flush() {
+		this.paradeRepository.flush();
+	}
 }
