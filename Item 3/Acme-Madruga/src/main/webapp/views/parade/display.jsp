@@ -94,6 +94,7 @@
 </security:authorize>
 
 <spring:message code="parade.segments"/>:
+<acme:button url="segment/brotherhood/create.do?paradeId=${parade.id}" name="create" code="parade.segment.create" />
 <display:table name="segments" id="row"
 	requestURI="segment/brotherhood/list.do?paradeId=${parade.id}" pagesize="5"
 	class="displaytag">

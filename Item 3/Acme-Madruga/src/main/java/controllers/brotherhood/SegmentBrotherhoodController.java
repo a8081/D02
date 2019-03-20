@@ -1,7 +1,10 @@
 
 package controllers.brotherhood;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
+import java.util.List;
 
 import javax.validation.Valid;
 
@@ -21,8 +24,10 @@ import services.ParadeService;
 import services.SegmentService;
 import controllers.AbstractController;
 import domain.Brotherhood;
+import domain.GPS;
 import domain.Parade;
 import domain.Segment;
+import forms.SegmentForm;
 
 @Controller
 @RequestMapping("/segment/brotherhood")
@@ -47,14 +52,15 @@ public class SegmentBrotherhoodController extends AbstractController {
 	// CREATE --------------------------------------------------------
 
 	@RequestMapping(value = "/create", method = RequestMethod.GET)
-	public ModelAndView create() {
+	public ModelAndView create(@RequestParam final int paradeId) {
 		ModelAndView result;
 		Segment segment;
 
 		// String lang = LocaleContextHolder.getLocale().getLanguage();
 
 		segment = this.segmentService.create();
-		result = this.createEditModelAndView(segment);
+		result = this.createEditModelAndView(segment, paradeId);
+		result.addObject("paradeId", paradeId);
 		return result;
 	}
 
@@ -109,43 +115,46 @@ public class SegmentBrotherhoodController extends AbstractController {
 	// EDIT --------------------------------------------------------
 
 	@RequestMapping(value = "/edit", method = RequestMethod.GET)
-	public ModelAndView edit(@RequestParam final int segmentId) {
+	public ModelAndView edit(@RequestParam final int segmentId, final int paradeId) {
 		ModelAndView result;
 		Segment segment;
 
 		segment = this.segmentService.findOne(segmentId);
 
 		if (segment != null)
-			result = this.createEditModelAndView(segment);
+			result = this.createEditModelAndView(segment, paradeId);
+
 		else
 			result = new ModelAndView("redirect:/misc/403.jsp");
 
 		return result;
 	}
-
 	// SAVE --------------------------------------------------------
 
 	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "save")
-	public ModelAndView save(@Valid final Segment segment, final BindingResult binding) {
+	public ModelAndView save(@Valid final SegmentForm segmentForm, final BindingResult binding) {
 		ModelAndView result;
+		final int paradeId = segmentForm.getParadeId();
+
+		final Segment segment = this.segmentService.reconstruct(segmentForm, binding);
 
 		if (binding.hasErrors())
-			result = this.createEditModelAndView(segment);
-		else
-			try {
-				final Parade parade = this.paradeService.findParadeBySegment(segment.getId());
-				this.segmentService.save(segment, parade.getId());
-				result = this.createEditModelAndView(segment, "segment.commit.congrat");
-				//				result = this.paradeBrotherhoodController.display(parade.getId());
-				final String banner = this.configurationParametersService.findBanner();
-				result.addObject("banner", banner);
-			} catch (final Throwable oops) {
-				result = this.createEditModelAndView(segment, "segment.commit.save.error");
+			result = this.createEditModelAndView(segment, paradeId);
+		else {
+			//			try {
+			this.segmentService.save(segment, paradeId);
+			//				result = this.createEditModelAndView(segment, "segment.commit.congrat");
+			result = this.paradeBrotherhoodController.display(paradeId);
 
-			}
+			//			} catch (final Throwable oops) {
+			//				result = this.createEditModelAndView(segment, "segment.commit.save.error");
+			//
+		}
+		final String banner = this.configurationParametersService.findBanner();
+		result.addObject("banner", banner);
+
 		return result;
 	}
-
 	//	// DELETE
 	//
 	//	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "delete")
@@ -165,24 +174,50 @@ public class SegmentBrotherhoodController extends AbstractController {
 
 	// ANCILLIARY METHODS --------------------------------------------------------
 
-	protected ModelAndView createEditModelAndView(final Segment segment) {
+	protected ModelAndView createEditModelAndView(final Segment segment, final int paradeId) {
 		ModelAndView result;
 
-		result = this.createEditModelAndView(segment, null);
+		result = this.createEditModelAndView(segment, paradeId, null);
 
 		return result;
 	}
 
-	protected ModelAndView createEditModelAndView(final Segment segment, final String messageCode) {
+	protected ModelAndView createEditModelAndView(final Segment segment, final int paradeId, final String messageCode) {
 		Assert.notNull(segment);
 		final ModelAndView result;
 
 		result = new ModelAndView("segment/edit");
-		result.addObject("segment", segment); // this.constructPruned(parade));
+
+		List<Segment> segments = new ArrayList<>();
+		final Parade parade = this.paradeService.findOne(paradeId);
+		segments = parade.getSegments();
+
+		if (segment.getId() == 0 && !segments.isEmpty()) {
+			final Segment lastSegment = segments.get(segments.size() - 1);
+			final Date originTime = lastSegment.getDestinationTime();
+			final GPS originCoordinates = lastSegment.getDestinationCoordinates();
+			result.addObject("suggestOriginTime", originTime);
+			result.addObject("suggestOriginCoordinates", originCoordinates);
+		}
+
+		result.addObject("segment", this.constructSegmentForm(segment, paradeId)); // this.constructPruned(parade));
 
 		result.addObject("message", messageCode);
 
 		return result;
 	}
 
+	public SegmentForm constructSegmentForm(final Segment segment, final int paradeId) {
+		final SegmentForm segmentForm = new SegmentForm();
+		segmentForm.setId(segment.getId());
+		segmentForm.setVersion(segment.getVersion());
+		segmentForm.setOriginTime(segment.getOriginTime());
+		segmentForm.setDestinationTime(segment.getDestinationTime());
+		segmentForm.setOriginCoordinates(segment.getOriginCoordinates());
+		segmentForm.setDestinationCoordinates(segment.getDestinationCoordinates());
+		segmentForm.setParadeId(paradeId);
+
+		return segmentForm;
+
+	}
 }

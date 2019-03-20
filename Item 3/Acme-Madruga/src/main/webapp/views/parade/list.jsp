@@ -137,6 +137,9 @@
 	<acme:button url="parade/brotherhood/copyBrotherhoodParade.do?paradeId=${row.id}" name="copy" code="parade.copy"/>
 	</display:column>
 
+	<display:column>
+	<acme:button url="segment/brotherhood/create.do?paradeId=${row.id}" name="create" code="parade.segment.create"/>
+	</display:column>
 	
 	</security:authorize>
 	

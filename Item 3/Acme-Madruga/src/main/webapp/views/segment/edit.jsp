@@ -15,17 +15,35 @@
 
 	<form:hidden path="id"/>
 	<form:hidden path="version"/>
+	<form:hidden path="paradeId" value="${paradeId}"/>
 	
-	<acme:textbox code="segment.originTime" path="originTime" placeholder="yyyy-MM-dd HH:mm"/> <spring:message code="date.pattern" />
+	<jstl:choose>
+		<jstl:when test="${not empty suggestOriginTime}">
+			<acme:display code="segment.originTime" value="${suggestOriginTime}"/>
+		</jstl:when>
+		
+		<jstl:otherwise>
+			<acme:textbox code="segment.originTime" path="originTime" placeholder="yyyy-MM-dd HH:mm"/> <spring:message code="date.pattern" />
+		</jstl:otherwise>
+	</jstl:choose>
 	
 	<acme:textbox code="segment.destinationTime" path="destinationTime" placeholder="yyyy-MM-dd HH:mm"/> <spring:message code="date.pattern" />
-	
-	<acme:textbox code="segment.originCoordinates" path="originCoordinates"/>
-	
-	<acme:textbox code="segment.destinationCoordinates" path="destinationCoordinates"/> 
+	<br>
+	<jstl:choose>
+		<jstl:when test="${not empty suggestOriginCoordinates}">
+			<acme:display code="segment.originCoordinates.latitude" value="${suggestOriginCoordinates.latitude}" />
+			<acme:display code="segment.originCoordinates.longitude" value="${suggestOriginCoordinates.longitude}" />
+		</jstl:when>
+		
+		<jstl:otherwise>
+			<acme:textbox code="segment.originCoordinates" path="originCoordinates"/>
+		</jstl:otherwise>
+	</jstl:choose>
+
+	<acme:textbox code="segment.destinationCoordinates" path="destinationCoordinates" placeholder="0.0|0.0|"/> <spring:message code="coordinate.pattern" />
 	
 
-
+<br>
 	<input type="submit" name="save"
 		value="<spring:message code="segment.save" />" />
 	

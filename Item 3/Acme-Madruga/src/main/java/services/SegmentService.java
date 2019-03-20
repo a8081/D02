@@ -4,16 +4,21 @@ package services;
 import java.util.Date;
 import java.util.List;
 
+import javax.validation.ValidationException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.Validator;
 
 import repositories.BrotherhoodRepository;
 import repositories.SegmentRepository;
 import domain.GPS;
 import domain.Parade;
 import domain.Segment;
+import forms.SegmentForm;
 
 @Service
 @Transactional
@@ -27,6 +32,12 @@ public class SegmentService {
 
 	@Autowired
 	private BrotherhoodRepository	brotherhoodRepository;
+
+	@Autowired
+	private ParadeService			paradeService;
+
+	@Autowired
+	private Validator				validator;
 
 
 	/**
@@ -98,7 +109,7 @@ public class SegmentService {
 			//Comprobamos que, el caso de que no sea el primer segment del path, 
 			//el instante y la posicion inicial coincidan con el instante y posicion final del segment
 			//anterior
-			final Parade parade = this.segmentRepository.findParadeBySegment(segment.getId());
+			final Parade parade = this.paradeService.findOne(idParade);
 			final List<Segment> segments = parade.getSegments();
 			if (!segments.isEmpty()) {
 				final Segment lastSegment = segments.get(segments.size() - 1);
@@ -164,4 +175,25 @@ public class SegmentService {
 		this.segmentRepository.flush();
 	}
 
+	public Segment reconstruct(final SegmentForm segmentForm, final BindingResult binding) {
+		Segment result;
+
+		Assert.isTrue(segmentForm.getId() != 0);
+
+		result = this.findOne(segmentForm.getId());
+
+		result.setId(segmentForm.getId());
+		result.setVersion(segmentForm.getVersion());
+		result.setOriginTime(segmentForm.getOriginTime());
+		result.setDestinationTime(segmentForm.getDestinationTime());
+		result.setOriginCoordinates(segmentForm.getOriginCoordinates());
+		result.setDestinationCoordinates(segmentForm.getDestinationCoordinates());
+
+		this.validator.validate(result, binding);
+
+		if (binding.hasErrors())
+			throw new ValidationException();
+
+		return result;
+	}
 }

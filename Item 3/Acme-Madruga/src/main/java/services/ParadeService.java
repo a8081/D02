@@ -379,7 +379,6 @@ public class ParadeService {
 	public Parade findParadeBySegment(final Integer segmentId) {
 		Parade res;
 		res = this.paradeRepository.findParadeBySegment(segmentId);
-		Assert.notNull(res);
 		return res;
 	}
 
