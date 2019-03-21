@@ -7,6 +7,8 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
+import javax.validation.ConstraintViolationException;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,37 +42,33 @@ public class ParadeServiceTest extends AbstractTest {
 	private ChapterService		chapterService;
 
 
-	//	@Test
-	//	public void createAndSaveDriver() {
-	//		final Object testingData[][] = {
-	//			{		// Parade correcta
-	//				"brotherhood1", "brotherhood1", "Title1", "Description1", "2019-12-12 20:00", "djehfahwrlfhajsdhfashdflov", "DRAFT", 120, 120, "SUBMITTED", null, null
-	//			}, {		// Guardar Parade a otra brotherhood 
-	//				"brotherhood2", "brotherhood1", "Title1", "Description1", "2019-12-12 20:00", "djehfahwrlfhajsdhfashdflov", "DRAFT", 120, 120, "SUBMITTED", null, IllegalArgumentException.class
-	//			}
-	//
-	//							{		// Parade correcta
-	//								"brotherhood1", "brotherhood1", "", "Description1", "2019-12-12 20:00", "djehfahwrlfhajsdhfashdflov", "DRAFT", 120, 120, "SUBMITTED", null, null
-	//							}, {		// Parade correcta
-	//								"brotherhood1", "brotherhood1", "Title1", "", "2019-12-12 20:00", "djehfahwrlfhajsdhfashdflov", "DRAFT", 120, 120, "SUBMITTED", null, null
-	//							}, {		// Parade correcta
-	//								"brotherhood1", "brotherhood1", "Title1", "Description1", "2019-12-12 20:00", "", "DRAFT", 120, 120, "SUBMITTED", null, null
-	//							}, {		// Parade correcta
-	//								"brotherhood1", "brotherhood1", "Title1", "Description1", "2019-12-12 20:00", "djehfahwrlfhajsdhfashdflov", "DRAFT", 120, 120, "SUBMITTED", null, null
-	//							}
-	//		};
-	//
-	//		for (int i = 0; i < testingData.length; i++)
-	//			try {
-	//				super.startTransaction();
-	//				this.createAndSaveTemplate((String) testingData[i][0], (String) testingData[i][1], (String) testingData[i][2], (String) testingData[i][3], (String) testingData[i][4], (String) testingData[i][5], (String) testingData[i][6],
-	//					(int) testingData[i][7], (int) testingData[i][8], (String) testingData[i][9], (String) testingData[i][10], (Class<?>) testingData[i][11]);
-	//			} catch (final Throwable oops) {
-	//				throw new RuntimeException(oops);
-	//			} finally {
-	//				super.rollbackTransaction();
-	//			}
-	//	}
+	@Test
+	public void createAndSaveDriver() {
+		final Object testingData[][] = {
+			{	// Parade sin titulo
+				"brotherhood2", "brotherhood1", "", "Description1", "2019-12-12 20:00", "djehfahwrlfhajsdhfashdflov", "DRAFT", 120, 120, "DEFAULT", null, ConstraintViolationException.class
+			}, {	// Parade sin descripcion
+				"brotherhood2", "brotherhood1", "Title1", "", "2019-12-12 20:00", "djehfahwrlfhajsdhfashdflov", "DRAFT", 120, 120, "DEFAULT", null, ConstraintViolationException.class
+			}, { 	// Parade sin mode, status ni ticker. No debe fallar ya que se setea en el save
+				"brotherhood2", "brotherhood1", "Title1", "Description1", "2019-12-12 20:00", "", "", 120, 120, "", null, null
+			}, {		// Parade correcta
+				"brotherhood1", "brotherhood1", "Title1", "Description1", "2019-12-12 20:00", "djehfahwrlfhajsdhfashdflov", "DRAFT", 120, 120, "DEFAULT", null, null
+			}, {	// Guardar Parade a otra brotherhood 
+				"brotherhood2", "brotherhood1", "Title1", "Description1", "2019-12-12 20:00", "djehfahwrlfhajsdhfashdflov", "DRAFT", 120, 120, "DEFAULT", null, IllegalArgumentException.class
+			}
+		};
+
+		for (int i = 0; i < testingData.length; i++)
+			try {
+				super.startTransaction();
+				this.createAndSaveTemplate((String) testingData[i][0], (String) testingData[i][1], (String) testingData[i][2], (String) testingData[i][3], (String) testingData[i][4], (String) testingData[i][5], (String) testingData[i][6],
+					(int) testingData[i][7], (int) testingData[i][8], (String) testingData[i][9], (String) testingData[i][10], (Class<?>) testingData[i][11]);
+			} catch (final Throwable oops) {
+				throw new RuntimeException(oops);
+			} finally {
+				super.rollbackTransaction();
+			}
+	}
 
 	@Test
 	public void toFinalModeDriver() {
@@ -100,8 +98,14 @@ public class ParadeServiceTest extends AbstractTest {
 	@Test
 	public void acceptParadeDriver() {
 		final Object testingData[][] = {
-			{		// Un chapter acepta una parade en draft mode con estado default, accion correcta
+			{		// Un chapter acepta una parade en final mode con estado submitted, accion correcta
 				"chapter1", "parade1", null
+			}, {		// Un actor que no es chapter acepta una parade, accion incorrecta
+				"brotherhood1", "parade1", IllegalArgumentException.class
+			}, {		// Un chapter acepta una parade en draft mode con estado default, accion incorrecta
+				"chapter1", "parade13", IllegalArgumentException.class
+			}, {		// Un chapter acepta una parade en final mode con estado accepted, accion incorrecta
+				"chapter1", "parade2", IllegalArgumentException.class
 			}
 		};
 
@@ -116,43 +120,53 @@ public class ParadeServiceTest extends AbstractTest {
 			}
 	}
 
-	//	@Test
-	//	public void rejectParadeDriver() {
-	//		final Object testingData[][] = {
-	//			{		// 
-	//			}, {	// 
-	//			}
-	//		};
-	//
-	//		for (int i = 0; i < testingData.length; i++)
-	//			try {
-	//				super.startTransaction();
-	//				this.rejectParadeTemplate((String) testingData[i][0], (String) testingData[i][1], (Class<?>) testingData[i][2]);
-	//			} catch (final Throwable oops) {
-	//				throw new RuntimeException(oops);
-	//			} finally {
-	//				super.rollbackTransaction();
-	//			}
-	//	}
+	@Test
+	public void rejectParadeDriver() {
+		final Object testingData[][] = {
+			{		// Un chapter rechaza una parade en final mode con estado submitted, accion correcta
+				"chapter1", "parade1", null
+			}, {		// Un actor que no es chapter rechaza una parade, accion incorrecta
+				"brotherhood1", "parade1", IllegalArgumentException.class
+			}, {		// Un chapter rechaza una parade en draft mode con estado default, accion incorrecta
+				"chapter1", "parade13", IllegalArgumentException.class
+			}, {		// Un chapter rechaza una parade en final mode con estado accepted, accion incorrecta
+				"chapter1", "parade2", IllegalArgumentException.class
+			}
+		};
 
-	//	@Test
-	//	public void copyBrotherhoodParadeDriver() {
-	//		final Object testingData[][] = {
-	//			{		// 
-	//			}, {	// 
-	//			}
-	//		};
-	//
-	//		for (int i = 0; i < testingData.length; i++)
-	//			try {
-	//				super.startTransaction();
-	//				this.copyBrotherhoodParadeTemplate((String) testingData[i][0], (String) testingData[i][1], (Class<?>) testingData[i][2]);
-	//			} catch (final Throwable oops) {
-	//				throw new RuntimeException(oops);
-	//			} finally {
-	//				super.rollbackTransaction();
-	//			}
-	//	}
+		for (int i = 0; i < testingData.length; i++)
+			try {
+				super.startTransaction();
+				this.rejectParadeTemplate((String) testingData[i][0], (String) testingData[i][1], (Class<?>) testingData[i][2]);
+			} catch (final Throwable oops) {
+				throw new RuntimeException(oops);
+			} finally {
+				super.rollbackTransaction();
+			}
+	}
+
+	@Test
+	public void copyBrotherhoodParadeDriver() {
+		final Object testingData[][] = {
+			{		// copia correcta
+				"brotherhood1", "parade1", null
+			}, {	// copia incorrecta, brotherhood 2 no es el propietario de la parade 1
+				"brotherhood2", "parade1", IllegalArgumentException.class
+			}, {		// copia incorrecta, actores con autoridad distinta a brotherhood no tienen privilegios para copiar parades
+				"chapter1", "parade1", IllegalArgumentException.class
+			}
+		};
+
+		for (int i = 0; i < testingData.length; i++)
+			try {
+				super.startTransaction();
+				this.copyBrotherhoodParadeTemplate((String) testingData[i][0], (String) testingData[i][1], (Class<?>) testingData[i][2]);
+			} catch (final Throwable oops) {
+				throw new RuntimeException(oops);
+			} finally {
+				super.rollbackTransaction();
+			}
+	}
 
 	protected void createAndSaveTemplate(final String userName, final String brotherhoodBeanName, final String title, final String description, final String moment, final String ticker, final String mode, final int maxRows, final int maxColumns,
 		final String status, final String rejectionReason, final Class<?> expected) {

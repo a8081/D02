@@ -49,6 +49,9 @@ public class ParadeService {
 	@Autowired
 	private ChapterService		chapterService;
 
+	@Autowired
+	private SegmentService		segmentService;
+
 
 	//@Autowired
 	//private Validator			validator;
@@ -137,7 +140,7 @@ public class ParadeService {
 			if (parade.getId() == 0) {
 				parade.setBrotherhood(brotherhoodPrincipal);
 				parade.setMode("DRAFT");
-				parade.setStatus("SUBMITTED");
+				parade.setStatus("DEFAULT");
 				final Date moment = new Date(System.currentTimeMillis());
 				parade.setTicker(this.generateTicker(moment));
 			} else {
@@ -156,21 +159,36 @@ public class ParadeService {
 	 * @author a8081
 	 * */
 	public Parade copyBrotherhoodParade(final int paradeId) {
+
 		final Parade parade = this.findOne(paradeId);
 		Assert.notNull(parade);
-		final Parade result;
+		Parade newParade;
 		final Brotherhood brotherhoodPrincipal = this.brotherhoodService.findByPrincipal();
 
+		Assert.isTrue(brotherhoodPrincipal.equals(parade.getBrotherhood()), "Brotherhood only can copy one of their parades");
 		Assert.notEmpty(parade.getFloats(), "A parade must have some floats assigned to be saved");
 		Assert.isTrue(this.floatService.findByBrotherhood(brotherhoodPrincipal).containsAll(parade.getFloats()));
 
-		parade.setBrotherhood(brotherhoodPrincipal);
-		parade.setMode("DRAFT");
-		parade.setStatus("SUBMITTED");
-		final Date moment = new Date(System.currentTimeMillis());
-		parade.setTicker(this.generateTicker(moment));
+		newParade = new Parade();
+		//		No es necesario hacer esto ya que se setea en el metodo save
+		//
+		//		newParade.setBrotherhood(brotherhoodPrincipal);
+		//		newParade.setMode("DRAFT");
+		//		newParade.setStatus("DEFAULT");
+		//		final Date moment = new Date(System.currentTimeMillis());
+		//		newParade.setTicker(this.generateTicker(moment));
 
-		result = this.paradeRepository.save(parade);
+		newParade.setTitle(parade.getTitle());
+		newParade.setDescription(parade.getDescription());
+		newParade.setMaxColumns(parade.getMaxColumns());
+		newParade.setMaxRows(parade.getMaxRows());
+		newParade.setFloats(parade.getFloats());
+		final List<Segment> pathCopied = this.segmentService.copyPath(parade.getSegments());
+		newParade.setSegments(pathCopied);
+		newParade.setMoment(parade.getMoment());
+
+		final Parade result = this.paradeRepository.save(newParade);
+
 		return result;
 	}
 

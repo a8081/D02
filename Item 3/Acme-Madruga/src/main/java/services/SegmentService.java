@@ -1,6 +1,7 @@
 
 package services;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -157,6 +158,21 @@ public class SegmentService {
 		//TODO solo puede ver los segments la brotherhood que tiene el parade?
 		final List<Segment> result = this.segmentRepository.findSegmentsByParade(idParade);
 		Assert.notNull(result);
+		return result;
+	}
+
+	public List<Segment> copyPath(final List<Segment> path) {
+		final List<Segment> result = new ArrayList<>();
+		Segment retrieved;
+		final Segment copia = new Segment();
+		for (final Segment segment : path) {
+			copia.setOriginTime(segment.getOriginTime());
+			copia.setOriginCoordinates(segment.getOriginCoordinates());
+			copia.setDestinationTime(segment.getDestinationTime());
+			copia.setDestinationCoordinates(segment.getDestinationCoordinates());
+			retrieved = this.segmentRepository.save(copia);
+			result.add(retrieved);
+		}
 		return result;
 	}
 
