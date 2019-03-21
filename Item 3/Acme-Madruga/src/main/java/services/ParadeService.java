@@ -236,11 +236,12 @@ public class ParadeService {
 		final Parade parade = this.findOne(paradeId);
 		final Parade result;
 		final Brotherhood bro = this.brotherhoodService.findByPrincipal();
+		Assert.isTrue(bro.getArea() != null);
 		Assert.isTrue(parade.getBrotherhood() == bro, "Actor who want to edit parade mode to FINAL is not his owner");
 		Assert.isTrue(parade.getMode().equals("DRAFT"), "To set final mode, parade must be in draft mode");
-		Assert.isTrue(parade.getStatus().equals("ACCEPTED"), "Only parades that have status accepted can be shown publicly");
-		if (bro.getArea() != null)
-			parade.setMode("FINAL");
+		Assert.isTrue(parade.getStatus().equals("DEFAULT"), "Parades must have status default if they are in draft mode");
+		parade.setMode("FINAL");
+		parade.setStatus("SUBMITTED");
 		result = this.paradeRepository.save(parade);
 		return result;
 	}

@@ -1152,6 +1152,29 @@
 			</list>
 		</property>
 	</bean>
+	
+	<bean id="parade13" class="domain.Parade">
+		<property name="title" value="Los Javieres" />
+		<property name="description" value="This is a description of a parade14" />
+		<property name="moment" value="2022/04/26 00:00" />
+		<property name="ticker" value="203486-QUODF" />
+		<property name="mode" value="DRAFT" />
+		<property name="maxRows" value="120" />
+		<property name="maxColumns" value="300" />
+		<property name="status" value="DEFAULT" />
+		<!-- Relations -->
+		<property name="floats">
+			<list>
+				<ref bean="float1" />
+				<ref bean="float3" />
+			</list>
+		</property>
+		<property name="brotherhood" ref="brotherhood1" />
+		<property name="segments">
+			<list>
+			</list>
+		</property>
+	</bean>
 
 
 

@@ -75,10 +75,14 @@ public class ParadeServiceTest extends AbstractTest {
 	@Test
 	public void toFinalModeDriver() {
 		final Object testingData[][] = {
-			{		// Poner en modo final una parade que no tiene el estado ACCEPTED
-				"brotherhood1", "parade12", IllegalArgumentException.class
+			{		// Parade en draft mode con status accepted, to final mode correcto
+				"brotherhood1", "parade13", null
+			}, {		// Poner en modo final una parade que tiene el estado rejected
+				"brotherhood1", "parade2", IllegalArgumentException.class
 			}, {	// To final mode una parade que ya esta en final mode
 				"brotherhood1", "parade11", IllegalArgumentException.class
+			}, {	// No puedes poner en final mode una parade que no es tuya
+				"brotherhood2", "parade11", IllegalArgumentException.class
 			}
 		};
 
@@ -93,24 +97,24 @@ public class ParadeServiceTest extends AbstractTest {
 			}
 	}
 
-	//	@Test
-	//	public void acceptParadeDriver() {
-	//		final Object testingData[][] = {
-	//			{		// 
-	//			}, {	// 
-	//			}
-	//		};
-	//
-	//		for (int i = 0; i < testingData.length; i++)
-	//			try {
-	//				super.startTransaction();
-	//				this.acceptParadeTemplate((String) testingData[i][0], (String) testingData[i][1], (Class<?>) testingData[i][2]);
-	//			} catch (final Throwable oops) {
-	//				throw new RuntimeException(oops);
-	//			} finally {
-	//				super.rollbackTransaction();
-	//			}
-	//	}
+	@Test
+	public void acceptParadeDriver() {
+		final Object testingData[][] = {
+			{		// Un chapter acepta una parade en draft mode con estado default, accion correcta
+				"chapter1", "parade1", null
+			}
+		};
+
+		for (int i = 0; i < testingData.length; i++)
+			try {
+				super.startTransaction();
+				this.acceptParadeTemplate((String) testingData[i][0], (String) testingData[i][1], (Class<?>) testingData[i][2]);
+			} catch (final Throwable oops) {
+				throw new RuntimeException(oops);
+			} finally {
+				super.rollbackTransaction();
+			}
+	}
 
 	//	@Test
 	//	public void rejectParadeDriver() {
