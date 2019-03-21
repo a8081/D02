@@ -69,16 +69,16 @@ public class PeriodRecordController extends AbstractController {
 			result = this.createEditModelAndView(periodRecord);
 		else
 			try {
-				final PeriodRecord periodRecord1 = this.periodRecordService.save(periodRecord);
-				if (periodRecord.getVersion() == 0) {
+				if (periodRecord.getId() == 0) {
 					final Brotherhood brotherhood = this.brotherhoodService.findByPrincipal();
 					final History history = brotherhood.getHistory();
 					final Collection<PeriodRecord> pr = history.getPeriodRecords();
-					pr.add(periodRecord1);
+					pr.add(periodRecord);
 					history.setPeriodRecords(pr);
 					this.historyService.save(history);
-				}
-				result = new ModelAndView("redirect:../history/list.do");
+				} else
+					this.periodRecordService.save(periodRecord);
+				result = this.historyController.list();
 			} catch (final Throwable oops) {
 				result = this.createEditModelAndView(periodRecord, "general.commit.error");
 			}

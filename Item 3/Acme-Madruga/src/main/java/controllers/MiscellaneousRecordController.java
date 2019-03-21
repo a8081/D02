@@ -69,16 +69,16 @@ public class MiscellaneousRecordController extends AbstractController {
 			result = this.createEditModelAndView(miscellaneousRecord);
 		else
 			try {
-				final MiscellaneousRecord miscellaneousRecord1 = this.miscellaneousRecordService.save(miscellaneousRecord);
-				if (miscellaneousRecord.getVersion() == 0) {
+				if (miscellaneousRecord.getId() == 0) {
 					final Brotherhood brotherhood = this.brotherhoodService.findByPrincipal();
 					final History history = brotherhood.getHistory();
 					final Collection<MiscellaneousRecord> mr = history.getMiscellaneousRecords();
-					mr.add(miscellaneousRecord1);
+					mr.add(miscellaneousRecord);
 					history.setMiscellaneousRecords(mr);
 					this.historyService.save(history);
-				}
-				result = new ModelAndView("redirect:../history/list.do");
+				} else
+					this.miscellaneousRecordService.save(miscellaneousRecord);
+				result = this.historyController.list();
 			} catch (final Throwable oops) {
 				result = this.createEditModelAndView(miscellaneousRecord, "general.commit.error");
 			}

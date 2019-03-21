@@ -69,16 +69,16 @@ public class LegalRecordController extends AbstractController {
 			result = this.createEditModelAndView(legalRecord);
 		else
 			try {
-				final LegalRecord legalRecord1 = this.legalRecordService.save(legalRecord);
-				if (legalRecord.getVersion() == 0) {
+				if (legalRecord.getId() == 0) {
 					final Brotherhood brotherhood = this.brotherhoodService.findByPrincipal();
 					final History history = brotherhood.getHistory();
-					final Collection<LegalRecord> legalR = history.getLegalRecords();
-					legalR.add(legalRecord1);
-					history.setLegalRecords(legalR);
+					final Collection<LegalRecord> legalRecords = history.getLegalRecords();
+					legalRecords.add(legalRecord);
+					history.setLegalRecords(legalRecords);
 					this.historyService.save(history);
-				}
-				result = new ModelAndView("redirect:../history/list.do");
+				} else
+					this.legalRecordService.save(legalRecord);
+				result = this.historyController.list();
 			} catch (final Throwable oops) {
 				result = this.createEditModelAndView(legalRecord, "general.commit.error");
 			}

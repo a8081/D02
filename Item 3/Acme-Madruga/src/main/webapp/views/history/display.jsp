@@ -10,7 +10,7 @@
 
 <jstl:if test="${not empty history}">
     <%-- History --%>
-   
+
     <!-- Inception Record -->
     <div id="inceptionRecord">
         <ul style="list-style-type: disc">
@@ -88,6 +88,8 @@
     <display:column property="description" title="${description}" sortable="true"/>
     <spring:message var="legalName" code="legalRecord.legalName"/>
     <display:column property="legalName" title="${legalName}" sortable="true"/>
+    <spring:message var="vat" code="legalRecord.vat"/>
+    <display:column property="vat" title="${vat}" sortable="true"/>
     <spring:message var="laws" code="legalRecord.laws"/>
     <display:column property="laws" title="${laws}" sortable="true"/>
 	<display:column>
@@ -122,7 +124,7 @@
     <spring:message var="description" code="record.description"/>
     <display:column property="description" title="${description}" sortable="true"/>
     <spring:message var="linkedBrotherhood" code="linkRecords.linkedBrotherhood"/>
-    <display:column property="linkedBrotherhood" title="${linkedBrotherhood}" sortable="true"/>
+    <display:column property="linkedBrotherhood.name" title="${linkedBrotherhood}" sortable="true"/>
 	<display:column>
             <input type="button" name="edit"
                 value="<spring:message code="record.edit" />"
@@ -166,5 +168,9 @@
 	</display:column>
         
 	</display:table>
+	
+	<input type="button" name="delete"
+                value="<spring:message code="record.delete" />"
+                onclick="relativeRedir('history/delete.do?historyId=${history.id}')" />
 
 </jstl:if>

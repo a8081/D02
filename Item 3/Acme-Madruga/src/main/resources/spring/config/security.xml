@@ -53,6 +53,9 @@
 		<!-- History & Records -->
 		
 		<security:intercept-url pattern="/history/list.do" access="hasRole('BROTHERHOOD')" />
+		<security:intercept-url pattern="/history/create.do" access="hasRole('BROTHERHOOD')" />
+		<security:intercept-url pattern="/history/edit.do" access="hasRole('BROTHERHOOD')" />
+		<security:intercept-url pattern="/history/delete.do" access="hasRole('BROTHERHOOD')" />
 		<security:intercept-url pattern="/inceptionRecord/edit.do" access="hasRole('BROTHERHOOD')" />
 		<security:intercept-url pattern="/periodRecord/create.do" access="hasRole('BROTHERHOOD')" />
 		<security:intercept-url pattern="/periodRecord/edit.do" access="hasRole('BROTHERHOOD')" />

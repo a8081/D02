@@ -1372,7 +1372,6 @@
 			</list>
 		</property>
 		<property name="area" ref="area1"></property>
-		<property name="history" ref="history1" />
 	</bean>
 
 

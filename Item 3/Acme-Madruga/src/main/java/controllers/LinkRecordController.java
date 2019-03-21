@@ -73,16 +73,16 @@ public class LinkRecordController extends AbstractController {
 			result = this.createEditModelAndView(linkRecord);
 		else
 			try {
-				final LinkRecord linkRecord1 = this.linkRecordService.save(linkRecord);
-				if (linkRecord.getVersion() == 0) {
+				if (linkRecord.getId() == 0) {
 					final Brotherhood brotherhood = this.brotherhoodService.findByPrincipal();
 					final History history = brotherhood.getHistory();
-					final Collection<LinkRecord> lr = history.getLinkRecords();
-					lr.add(linkRecord1);
-					history.setLinkRecords(lr);
+					final Collection<LinkRecord> linkRecords = history.getLinkRecords();
+					linkRecords.add(linkRecord);
+					history.setLinkRecords(linkRecords);
 					this.historyService.save(history);
-				}
-				result = new ModelAndView("redirect:../history/list.do");
+				} else
+					this.linkRecordService.save(linkRecord);
+				result = this.historyController.list();
 			} catch (final Throwable oops) {
 				result = this.createEditModelAndView(linkRecord, "general.commit.error");
 			}
