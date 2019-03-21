@@ -927,7 +927,7 @@
 		<!-- Relations -->
 		<property name="floats">
 			<list>
-				<ref bean="float3" />
+				<ref bean="float5" />
 			</list>
 		</property>
 		<property name="brotherhood" ref="brotherhood2" />
@@ -1132,14 +1132,14 @@
 	</bean>
 	
 	<bean id="parade12" class="domain.Parade">
-		<property name="title" value="La amargura" />
+		<property name="title" value="Carmen Doloroso" />
 		<property name="description" value="This is a description of a parade11" />
 		<property name="moment" value="2022/04/26 00:00" />
 		<property name="ticker" value="200486-QOUAS" />
 		<property name="mode" value="DRAFT" />
 		<property name="maxRows" value="120" />
 		<property name="maxColumns" value="300" />
-		<property name="status" value="ACCEPTED" />
+		<property name="status" value="DEFAULT" />
 		<!-- Relations -->
 		<property name="floats">
 			<list>
@@ -1298,7 +1298,7 @@
 			</list>
 		</property>
 		<!-- Relations -->
-		<property name="brotherhood" ref="brotherhood1" />
+		<property name="brotherhood" ref="brotherhood2" />
 	</bean>
 
 

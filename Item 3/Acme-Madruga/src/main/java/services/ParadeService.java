@@ -237,8 +237,8 @@ public class ParadeService {
 		final Parade result;
 		final Brotherhood bro = this.brotherhoodService.findByPrincipal();
 		Assert.isTrue(parade.getBrotherhood() == bro, "Actor who want to edit parade mode to FINAL is not his owner");
-		Assert.isTrue(parade.getMode().equals("DRAFT"));
-		Assert.isTrue(parade.getStatus().equals("ACCEPTED"), "Only parades that hace status accepted can be shown publicly");
+		Assert.isTrue(parade.getMode().equals("DRAFT"), "To set final mode, parade must be in draft mode");
+		Assert.isTrue(parade.getStatus().equals("ACCEPTED"), "Only parades that have status accepted can be shown publicly");
 		if (bro.getArea() != null)
 			parade.setMode("FINAL");
 		result = this.paradeRepository.save(parade);
@@ -254,6 +254,19 @@ public class ParadeService {
 		Assert.isTrue(parade.getStatus().equals("SUBMITTED"), "No puede aceptar una parade que su estado sea distinto a Submitted");
 		if (chapter.getArea() != null)
 			parade.setStatus("ACCEPTED");
+		result = this.paradeRepository.save(parade);
+		return result;
+	}
+
+	public Parade rejectParade(final int paradeId) {
+		final Parade parade = this.findOne(paradeId);
+		final Parade result;
+		final Chapter chapter = this.chapterService.findByPrincipal();
+		Assert.isTrue(parade.getBrotherhood().getArea() == chapter.getArea(), "No puede rechazar una parade que no pertenece al área que coordina.");
+		Assert.isTrue(parade.getMode().equals("FINAL"), "La parade que desea rechazar no ha sido guardada en modo final.");
+		Assert.isTrue(parade.getStatus().equals("SUBMITTED"), "No puede rechazar una parade que su estado sea distinto a Submitted");
+		if (chapter.getArea() != null)
+			parade.setStatus("REJECTED");
 		result = this.paradeRepository.save(parade);
 		return result;
 
