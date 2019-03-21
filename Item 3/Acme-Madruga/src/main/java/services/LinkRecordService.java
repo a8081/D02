@@ -21,10 +21,6 @@ public class LinkRecordService {
 	private LinkRecordRepository	linkRecordRepository;
 	@Autowired
 	private BrotherhoodService		brotherhoodService;
-
-	@Autowired
-	private BrotherhoodService		brotherhoodService;
-
 	@Autowired
 	private ActorService			actorService;
 
@@ -73,10 +69,10 @@ public class LinkRecordService {
 		final Brotherhood brotherhood = this.brotherhoodService.findByPrincipal();
 		Assert.notNull(brotherhood, "You must be logged in the system");
 		Assert.notNull(linkRecord);
-    Assert.isTrue(linkRecord.getId() != 0);
+		Assert.isTrue(linkRecord.getId() != 0);
 		Assert.isTrue(this.findBrotherhoodByLink(linkRecord.getId()) == brotherhood);
 		final LinkRecord retrieved = this.findOne(linkRecord.getId());
-    final History history = brotherhood.getHistory();
+		final History history = brotherhood.getHistory();
 		final Collection<LinkRecord> linkRecords = history.getLinkRecords();
 		Assert.isTrue(linkRecords.contains(retrieved));
 		linkRecords.remove(retrieved);

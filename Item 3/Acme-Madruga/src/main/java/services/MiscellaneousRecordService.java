@@ -21,10 +21,6 @@ public class MiscellaneousRecordService {
 	private MiscellaneousRecordRepository	miscellaneousRecordRepository;
 	@Autowired
 	private BrotherhoodService				brotherhoodService;
-
-	@Autowired
-	private BrotherhoodService				brotherhoodService;
-
 	@Autowired
 	private ActorService					actorService;
 
@@ -69,10 +65,10 @@ public class MiscellaneousRecordService {
 	public void delete(final MiscellaneousRecord mR) {
 		final Brotherhood me = this.brotherhoodService.findByPrincipal();
 		Assert.notNull(me, "You must be logged in the system");
-    Assert.isTrue(this.findBrotherhoodByMiscellaneous(mR.getId()) == me);
+		Assert.isTrue(this.findBrotherhoodByMiscellaneous(mR.getId()) == me);
 		Assert.notNull(mR);
-    Assert.isTrue(mR.getId() != 0);
-    final MiscellaneousRecord res = this.findOne(mR.getId());
+		Assert.isTrue(mR.getId() != 0);
+		final MiscellaneousRecord res = this.findOne(mR.getId());
 		Assert.isTrue(me.getHistory().getMiscellaneousRecords().contains(res));
 		final Brotherhood brotherhood = this.brotherhoodService.findByPrincipal();
 		final History history = brotherhood.getHistory();
