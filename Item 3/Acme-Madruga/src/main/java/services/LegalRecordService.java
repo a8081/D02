@@ -78,7 +78,7 @@ public class LegalRecordService {
 		final History history = brotherhood.getHistory();
 		final Collection<LegalRecord> legalRecords = history.getLegalRecords();
 		legalRecords.remove(retrieved);
-		this.legalRecordRepository.delete(legalRecord);
+		this.legalRecordRepository.delete(retrieved.getId());
 	}
 
 	/* ========================= OTHER METHODS =========================== */

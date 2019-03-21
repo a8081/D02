@@ -76,7 +76,7 @@ public class LinkRecordService {
 		final Collection<LinkRecord> linkRecords = history.getLinkRecords();
 		Assert.isTrue(linkRecords.contains(retrieved));
 		linkRecords.remove(retrieved);
-		this.linkRecordRepository.delete(retrieved);
+		this.linkRecordRepository.delete(retrieved.getId());
 	}
 
 	public Brotherhood findBrotherhoodByLink(final Integer id) {
