@@ -39,8 +39,7 @@ public class HistoryService {
 		final InceptionRecord inceptionRecord = this.inceptionRecordService.create();
 		inceptionRecord.setTitle("Title inception " + brotherhood.getName());
 		inceptionRecord.setDescription("Decription inception " + brotherhood.getName());
-		final InceptionRecord saved = this.inceptionRecordService.save(inceptionRecord);
-		history.setInceptionRecord(saved);
+		history.setInceptionRecord(inceptionRecord);
 
 		final Collection<PeriodRecord> periodRecords = new ArrayList<PeriodRecord>();
 		history.setPeriodRecords(periodRecords);

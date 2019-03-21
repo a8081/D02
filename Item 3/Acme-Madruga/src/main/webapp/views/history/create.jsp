@@ -11,6 +11,6 @@
 	<%-- History --%>
 	
     <input type="button" name="create"
-    value="<spring:message code="record.create" />"
+    value="<spring:message code="record.create.history" />"
     onclick="relativeRedir('history/create.do')" />
     <br>

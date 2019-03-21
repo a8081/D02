@@ -40,7 +40,7 @@
         </ul>
     </div>
     <input type="button" name="create"
-    value="<spring:message code="record.create" />"
+    value="<spring:message code="record.create.periodRecord" />"
     onclick="relativeRedir('periodRecord/create.do')" />
     <br />
     <display:table pagesize="10" class="displaytag" keepStatus="true"
@@ -75,7 +75,7 @@
         </ul>
     </div>
     <input type="button" name="create"
-    value="<spring:message code="record.create" />"
+    value="<spring:message code="record.create.legalRecord" />"
     onclick="relativeRedir('legalRecord/create.do')" />
     <br />
     <display:table pagesize="10" class="displaytag" keepStatus="true"
@@ -112,7 +112,7 @@
         </ul>
     </div>
     <input type="button" name="create"
-    value="<spring:message code="record.create" />"
+    value="<spring:message code="record.create.linkRecord" />"
     onclick="relativeRedir('linkRecord/create.do')" />
     <br />
     <display:table pagesize="10" class="displaytag" keepStatus="true"
@@ -145,7 +145,7 @@
         </ul>
     </div>
     <input type="button" name="create"
-    value="<spring:message code="record.create" />"
+    value="<spring:message code="record.create.miscellaneousRecord" />"
     onclick="relativeRedir('miscellaneousRecord/create.do')" />
     <br />
     <display:table pagesize="10" class="displaytag" keepStatus="true"
@@ -168,9 +168,10 @@
 	</display:column>
         
 	</display:table>
-	
+	<br>
+	<br>
 	<input type="button" name="delete"
-                value="<spring:message code="record.delete" />"
+                value="<spring:message code="record.delete.history" />"
                 onclick="relativeRedir('history/delete.do?historyId=${history.id}')" />
 
 </jstl:if>
