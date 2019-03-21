@@ -89,6 +89,10 @@
 		<%-- MEMBERS --%>
 			
 			<li><a href="member/list.do"><spring:message code="master.page.member.list" /></a></li>
+			
+		<%-- MEMBERS --%>
+		
+			<li><a href="history/list.do"><spring:message code="master.page.history" /></a></li>
 		
 		<%-- REQUESTS --%>
 			

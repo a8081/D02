@@ -26,7 +26,7 @@
 
     <acme:textbox path="title" code="record.title"/>
     <acme:textbox path="description" code="record.description"/>
-    <acme:textbox path="linkedBrotherhood" code="record.linkedBrotherhood"/>
+    <acme:select items="${brotherhoods}" itemLabel="name" code="linkRecords.linkedBrotherhood" path="linkedBrotherhood"/>
    
 
     <br/>
