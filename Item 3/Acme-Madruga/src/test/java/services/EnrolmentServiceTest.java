@@ -37,52 +37,105 @@ public class EnrolmentServiceTest extends AbstractTest {
 	private EnrolmentService	enrolmentService;
 
 
-	//	@Test
-	//	public void createAndSaveDriver() {
-	//		final Object testingData[][] = {
-	//			{	//Creacion correcta de un request
-	//				"member1", "service2", "rendezvous3", "one comment", "holder", "brand", "4539433728995809", 10, 20, 150, null
-	//			}, {	//Creacion correcta de un request sin comentario
-	//				"member1", "service2", "rendezvous3", null, "holder", "brand", "4539433728995809", 10, 20, 150, null
-	//			}, {	//Creacion correcta de un request con comentario blanco
-	//				"member1", "service2", "rendezvous3", "", "holder", "brand", "4539433728995809", 10, 20, 150, null
-	//			}, {	//Request sin user logueado
-	//				null, "service2", "rendezvous3", "one commnent", "holder", "brand", "4539433728995809", 10, 20, 150, IllegalArgumentException.class
-	//			}, {	//Request con holdername vacio
-	//				"member1", "service2", "rendezvous3", "one comment", "", "brand", "4539433728995809", 10, 20, 150, ConstraintViolationException.class
-	//			}, {	//Request con holdername nulo
-	//				"member1", "service2", "rendezvous3", "one comment", null, "brand", "4539433728995809", 10, 20, 150, ConstraintViolationException.class
-	//			}, {	//Request con brandname vacio
-	//				"member1", "service2", "rendezvous3", "one comment", "holder", "", "4539433728995809", 10, 20, 150, ConstraintViolationException.class
-	//			}, {	//Request con brandname nulo
-	//				"member1", "service2", "rendezvous3", "one comment", "holder", null, "4539433728995809", 10, 20, 150, ConstraintViolationException.class
-	//			}
-	//		};
-	//
-	//		for (int i = 0; i < testingData.length; i++)
-	//			try {
-	//				super.startTransaction();
-	//				this.createAndSaveTemplate((String) testingData[i][0], (String) testingData[i][1], (String) testingData[i][2], (String) testingData[i][3], (String) testingData[i][4], (String) testingData[i][5], (String) testingData[i][6],
-	//					(int) testingData[i][7], (int) testingData[i][8], (int) testingData[i][9], (Class<?>) testingData[i][10]);
-	//			} catch (final Throwable oops) {
-	//				throw new RuntimeException(oops);
-	//			} finally {
-	//				super.rollbackTransaction();
-	//			}
-	//	}
-
 	@Test
-	public void enroleDriver() {
+	public void getEnrolmentDriver() {
 		final Object testingData[][] = {
 			{		// Enrole correcto
-				"member2", "Esperanza de triana", null
+				"brotherhood2", "member2", null
+			}, {	// Enrole con dropOut seteado (no activo) 
+				"brotherhood1", "member1", IllegalArgumentException.class
+			}, {	// No existe enrole
+				"brotherhood1", "member2", IllegalArgumentException.class
 			}
 		};
 
 		for (int i = 0; i < testingData.length; i++)
 			try {
 				super.startTransaction();
-				this.enroleTemplate((String) testingData[i][0], (String) testingData[i][1], (Class<?>) testingData[i][10]);
+				this.getEnrolmentTemplate((String) testingData[i][0], (String) testingData[i][1], (Class<?>) testingData[i][2]);
+			} catch (final Throwable oops) {
+				throw new RuntimeException(oops);
+			} finally {
+				super.rollbackTransaction();
+			}
+	}
+
+	@Test
+	public void enroleDriver() {
+		final Object testingData[][] = {
+			{		// Enrole correcto
+				"member2", "brotherhood1", null
+			}, {	// Enrole con una brotherhood con la que tengo un enrolment antiguo (drop out != null) 
+				"member1", "brotherhood1", null
+			}, {	// Enrole con una brotherhood con la que ya tengo enrolment
+				"member2", "brotherhood2", IllegalArgumentException.class
+			}, {	// Brotherhood no puede establecer enrolments
+				"brotherhood1", "brotherhood1", IllegalArgumentException.class
+			}, {	// Brotherhood no puede establecer enrolments
+				"member1", "member1", IllegalArgumentException.class
+			}, {	// Enrolment relaciona a member con brotherhood no a un admin
+				"admin1", "brotherhood1", IllegalArgumentException.class
+			}
+		};
+
+		for (int i = 0; i < testingData.length; i++)
+			try {
+				super.startTransaction();
+				this.enroleTemplate((String) testingData[i][0], (String) testingData[i][1], (Class<?>) testingData[i][2]);
+			} catch (final Throwable oops) {
+				throw new RuntimeException(oops);
+			} finally {
+				super.rollbackTransaction();
+			}
+	}
+
+	@Test
+	public void leaveDriver() {
+		final Object testingData[][] = {
+			{		// Enrole correcto
+				"member2", "brotherhood2", null
+			}, {	// Dejar una brotherhood con la que no tengo enrolment
+				"member2", "brotherhood1", IllegalArgumentException.class
+			}, {	// Dejar una brotherhood que ya deje (dropOut ya seteado anteriormente)
+				"member1", "brotherhood1", IllegalArgumentException.class
+			}, {	// Brotherhood dejarse a ella misma
+				"brotherhood1", "brotherhood1", IllegalArgumentException.class
+			}, {	// Member dejarse a el mismo
+				"member1", "member1", IllegalArgumentException.class
+			}
+		};
+
+		for (int i = 0; i < testingData.length; i++)
+			try {
+				super.startTransaction();
+				this.leaveTemplate((String) testingData[i][0], (String) testingData[i][1], (Class<?>) testingData[i][2]);
+			} catch (final Throwable oops) {
+				throw new RuntimeException(oops);
+			} finally {
+				super.rollbackTransaction();
+			}
+	}
+
+	@Test
+	public void dropOutDriver() {
+		final Object testingData[][] = {
+			{		// Drop out enrole correcto
+				"brotherhood2", "member2", null
+			}, {	// Brotherhood intenta echar a un member que no tiene enrolment con ella
+				"brotherhood1", "member2", IllegalArgumentException.class
+			}, {	// Brotherhood intenta echar a un member que ya fue echado y por tanto tiene su drop out seteado
+				"brotherhood1", "member1", IllegalArgumentException.class
+			}, {	// Member intenta echar a otro member
+				"member1", "member2", IllegalArgumentException.class
+			}, {	// Member intenta echarse a si mismo
+				"member1", "member1", IllegalArgumentException.class
+			}
+		};
+
+		for (int i = 0; i < testingData.length; i++)
+			try {
+				super.startTransaction();
+				this.dropOutTemplate((String) testingData[i][0], (String) testingData[i][1], (Class<?>) testingData[i][2]);
 			} catch (final Throwable oops) {
 				throw new RuntimeException(oops);
 			} finally {
@@ -181,17 +234,41 @@ public class EnrolmentServiceTest extends AbstractTest {
 
 	protected void dropOutTemplate(final String userName, final String memberBeanName, final Class<?> expected) {
 		Class<?> caught;
-		Brotherhood member;
+		Member member;
 		int memberId;
 		caught = null;
 		try {
 
 			this.authenticate(userName);
 			memberId = super.getEntityId(memberBeanName);
-			member = this.brotherhoodService.findOne(memberId);
+			member = this.memberService.findOne(memberId);
 
-			this.enrolmentService.leave(member);
+			this.enrolmentService.dropOut(member);
 			this.enrolmentService.flush();
+
+		} catch (final Throwable oops) {
+			caught = oops.getClass();
+		}
+
+		this.checkExceptions(expected, caught);
+	}
+
+	protected void getEnrolmentTemplate(final String brotherhoodBeanName, final String memberBeanName, final Class<?> expected) {
+		Class<?> caught;
+		Brotherhood brotherhood;
+		Member member;
+		int brotherhoodId;
+		int memberId;
+		caught = null;
+		try {
+
+			memberId = super.getEntityId(memberBeanName);
+			brotherhoodId = super.getEntityId(brotherhoodBeanName);
+			brotherhood = this.brotherhoodService.findOne(brotherhoodId);
+			member = this.memberService.findOne(memberId);
+
+			this.enrolmentService.getEnrolment(brotherhood, member);
+			// this.enrolmentService.flush();
 
 		} catch (final Throwable oops) {
 			caught = oops.getClass();

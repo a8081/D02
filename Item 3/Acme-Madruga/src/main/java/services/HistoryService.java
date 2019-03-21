@@ -98,7 +98,7 @@ public class HistoryService {
 		Assert.notNull(history);
 		final History res;
 		final Brotherhood brotherhood = this.brotherhoodService.findByPrincipal();
-
+    
 		if (history.getId() != 0)
 			Assert.isTrue(this.brotherhoodService.findBrotherhoodByHistory(history.getId()).equals(brotherhood));
 		res = this.historyRepository.save(history);

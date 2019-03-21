@@ -927,7 +927,7 @@
 		<!-- Relations -->
 		<property name="floats">
 			<list>
-				<ref bean="float3" />
+				<ref bean="float5" />
 			</list>
 		</property>
 		<property name="brotherhood" ref="brotherhood2" />
@@ -1132,17 +1132,40 @@
 	</bean>
 	
 	<bean id="parade12" class="domain.Parade">
-		<property name="title" value="La amargura" />
+		<property name="title" value="Carmen Doloroso" />
 		<property name="description" value="This is a description of a parade11" />
 		<property name="moment" value="2022/04/26 00:00" />
 		<property name="ticker" value="200486-QOUAS" />
 		<property name="mode" value="DRAFT" />
 		<property name="maxRows" value="120" />
 		<property name="maxColumns" value="300" />
-		<property name="status" value="ACCEPTED" />
+		<property name="status" value="DEFAULT" />
 		<!-- Relations -->
 		<property name="floats">
 			<list>
+				<ref bean="float3" />
+			</list>
+		</property>
+		<property name="brotherhood" ref="brotherhood1" />
+		<property name="segments">
+			<list>
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="parade13" class="domain.Parade">
+		<property name="title" value="Los Javieres" />
+		<property name="description" value="This is a description of a parade14" />
+		<property name="moment" value="2022/04/26 00:00" />
+		<property name="ticker" value="203486-QUODF" />
+		<property name="mode" value="DRAFT" />
+		<property name="maxRows" value="120" />
+		<property name="maxColumns" value="300" />
+		<property name="status" value="DEFAULT" />
+		<!-- Relations -->
+		<property name="floats">
+			<list>
+				<ref bean="float1" />
 				<ref bean="float3" />
 			</list>
 		</property>
@@ -1298,7 +1321,7 @@
 			</list>
 		</property>
 		<!-- Relations -->
-		<property name="brotherhood" ref="brotherhood1" />
+		<property name="brotherhood" ref="brotherhood2" />
 	</bean>
 
 
@@ -1886,8 +1909,25 @@
 		<property name="latitude" value="23.75793" />
 		<property name="longitude" value="-53.23551" />
 	</bean>
+<!-- =================================================================== 
+		======= Proclaim============================================================================ -->
 
-
-
+	<bean id="proclaim1" class="domain.Proclaim">
+		<property name="moment" value="2019/01/28 13:00"/>
+		<property name="text" value="Text of Proclaim1"/>
+		<property name="chapter" ref="chapter1"/>
+	</bean>
+	
+	<bean id="proclaim2" class="domain.Proclaim">
+		<property name="moment" value="2019/01/30 14:30"/>
+		<property name="text" value="Text of Proclaim2"/>
+		<property name="chapter" ref="chapter1"/>
+	</bean>
+	
+	<bean id="proclaim3" class="domain.Proclaim">
+		<property name="moment" value="2019/02/13 18:45"/>
+		<property name="text" value="Text of Proclaim3"/>
+		<property name="chapter" ref="chapter2"/>
+	</bean>
 
 </beans>

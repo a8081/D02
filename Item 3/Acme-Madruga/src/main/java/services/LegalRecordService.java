@@ -24,16 +24,23 @@ public class LegalRecordService {
 	@Autowired
 	private BrotherhoodService		brotherhoodService;
 
+	@Autowired
+	private ActorService			actorService;
+
 
 	public LegalRecord create() {
 		final LegalRecord legalRecord = new LegalRecord();
+		legalRecord.setTitle("");
+		legalRecord.setDescription("");
+		legalRecord.setLegalName("");
+		legalRecord.setVat(null);
+		legalRecord.setLaws(new ArrayList<String>());
 		return legalRecord;
 
 	}
 
 	public Collection<LegalRecord> findAll() {
-		Collection<LegalRecord> res = new ArrayList<>();
-		res = this.legalRecordRepository.findAll();
+		final Collection<LegalRecord> res = this.legalRecordRepository.findAll();
 		Assert.notNull(res, "La lista total de LegalRecords es nula.");
 		return res;
 	}
@@ -46,32 +53,41 @@ public class LegalRecordService {
 	}
 
 	public LegalRecord save(final LegalRecord legalRecord) {
+		final Brotherhood me = this.brotherhoodService.findByPrincipal();
+		Assert.notNull(me, "You must be logged in the system");
 		Assert.notNull(legalRecord);
+		Assert.notNull(legalRecord.getTitle());
+		Assert.notNull(legalRecord.getDescription());
+		Assert.isTrue(legalRecord.getTitle() != "");
+		Assert.isTrue(legalRecord.getDescription() != "");
+		if (legalRecord.getId() != 0)
+			Assert.isTrue(this.findBrotherhoodByLegal(legalRecord.getId()) == me);
 		final LegalRecord res;
-		final Brotherhood brotherhood = this.brotherhoodService.findByPrincipal();
-
-		if (legalRecord.getId() == 0)
-			brotherhood.getHistory().getLegalRecords().add(legalRecord);
-		else
-			Assert.isTrue(brotherhood.getHistory().getLegalRecords().contains(legalRecord));
-
 		res = this.legalRecordRepository.save(legalRecord);
+		Assert.notNull(this.findOne(res.getId()));
 		return res;
 	}
 
 	public void delete(final LegalRecord legalRecord) {
+		final Brotherhood brotherhood = this.brotherhoodService.findByPrincipal();
+		Assert.notNull(brotherhood, "You must be logged in the system");
 		Assert.notNull(legalRecord);
 		Assert.isTrue(legalRecord.getId() != 0);
-		final Brotherhood brotherhood = this.brotherhoodService.findByPrincipal();
 		final LegalRecord retrieved = this.findOne(legalRecord.getId());
 		Assert.isTrue(brotherhood.getHistory().getLegalRecords().contains(retrieved));
 		final History history = brotherhood.getHistory();
 		final Collection<LegalRecord> legalRecords = history.getLegalRecords();
-		legalRecords.remove(legalRecord);
+		legalRecords.remove(retrieved);
 		this.legalRecordRepository.delete(legalRecord);
-
 	}
 
 	/* ========================= OTHER METHODS =========================== */
 
+	public Brotherhood findBrotherhoodByLegal(final Integer id) {
+		Assert.notNull(id);
+		Assert.isTrue(id != 0);
+		final Brotherhood bro = this.legalRecordRepository.findBrotherhoodByLegal(id);
+		Assert.notNull(bro);
+		return bro;
+	}
 }
