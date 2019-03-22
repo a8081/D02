@@ -2,6 +2,7 @@
 package services;
 
 import java.util.Collection;
+import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -49,6 +50,7 @@ public class ProclaimService {
 		final Chapter me = this.chapterService.findByPrincipal();
 		Assert.notNull(me, "You must be logged in the system");
 		Assert.notNull(p);
+		p.setMoment(new Date(System.currentTimeMillis() - 1));
 		final Proclaim saved = this.proclaimRepository.save(p);
 		Assert.notNull(this.findOne(saved.getId()));
 		return saved;

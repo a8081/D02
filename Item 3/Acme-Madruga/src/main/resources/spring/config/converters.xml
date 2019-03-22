@@ -78,6 +78,10 @@
 	<bean class="converters.RequestToStringConverter"/>
 	<bean class="converters.StringToRequestConverter"/>
 	
+	<!-- PROCLAIM -->
+	<bean class="converters.ProclaimToStringConverter"/>
+	<bean class="converters.StringToProclaimConverter"/>
+	
 	</util:list>
 	
 </beans>
