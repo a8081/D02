@@ -30,6 +30,8 @@ public class PeriodRecordController extends AbstractController {
 	@Autowired
 	private HistoryService		historyService;
 	@Autowired
+	private HistoryController	historyController;
+	@Autowired
 	private BrotherhoodService	brotherhoodService;
 
 
@@ -49,7 +51,7 @@ public class PeriodRecordController extends AbstractController {
 			final PeriodRecord periodRecord;
 			final Brotherhood brotherhood = this.brotherhoodService.findByPrincipal();
 			periodRecord = this.periodRecordService.findOne(periodRecordId);
-			Assert.isTrue(brotherhood.getHistory().getPeriodRecords().equals(periodRecord), "This period-record is not of your property");
+			Assert.isTrue(brotherhood.getHistory().getPeriodRecords().contains(periodRecord), "This period-record is not of your property");
 			result = this.createEditModelAndView(periodRecord);
 		} catch (final Exception e) {
 			result = new ModelAndView("administrator/error");
@@ -67,16 +69,16 @@ public class PeriodRecordController extends AbstractController {
 			result = this.createEditModelAndView(periodRecord);
 		else
 			try {
-				final PeriodRecord periodRecord1 = this.periodRecordService.save(periodRecord);
-				if (periodRecord.getVersion() == 0) {
+				if (periodRecord.getId() == 0) {
 					final Brotherhood brotherhood = this.brotherhoodService.findByPrincipal();
 					final History history = brotherhood.getHistory();
 					final Collection<PeriodRecord> pr = history.getPeriodRecords();
-					pr.add(periodRecord1);
+					pr.add(periodRecord);
 					history.setPeriodRecords(pr);
 					this.historyService.save(history);
-				}
-				result = new ModelAndView("redirect:../history/list.do");
+				} else
+					this.periodRecordService.save(periodRecord);
+				result = this.historyController.list();
 			} catch (final Throwable oops) {
 				result = this.createEditModelAndView(periodRecord, "general.commit.error");
 			}
@@ -90,14 +92,13 @@ public class PeriodRecordController extends AbstractController {
 		final PeriodRecord periodRecord = this.periodRecordService.findOne(periodRecordId);
 		try {
 			this.periodRecordService.delete(periodRecord);
-			result = new ModelAndView("redirect:list.do");
+			result = this.historyController.list();
 		} catch (final Throwable oops) {
 			result = this.createEditModelAndView(periodRecord, "general.commit.error");
 			result.addObject("id", periodRecord.getId());
 		}
 		return result;
 	}
-
 	protected ModelAndView createEditModelAndView(final PeriodRecord periodRecord) {
 		ModelAndView result;
 

@@ -1,6 +1,8 @@
 
 package services;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.validation.ValidationException;
@@ -44,14 +46,14 @@ public class SegmentService {
 	 * los segmentos se guardan en una lista
 	 * 
 	 * RESTRICCIONES:
-	 * Sólo se puede borrar el segmento del último
-	 * Sólo se pueden agregar segmentos con un orden un nivel superior al nivel más alto que hay en ese momento
+	 * Sï¿½lo se puede borrar el segmento del ï¿½ltimo
+	 * Sï¿½lo se pueden agregar segmentos con un orden un nivel superior al nivel mï¿½s alto que hay en ese momento
 	 * Si se quiere modificar un segmento de nivel intermedio, la unica opcion es editarlo
 	 * 
 	 * En el jsp, al hacer click sobre ver el path de la parade:
-	 * aparecerán los segmentos ordenador por su orden
-	 * aparecerá el botón de borrar siempre al lado del último segmento
-	 * en el modo edición no se podrá modificar el orden
+	 * aparecerï¿½n los segmentos ordenador por su orden
+	 * aparecerï¿½ el botï¿½n de borrar siempre al lado del ï¿½ltimo segmento
+	 * en el modo ediciï¿½n no se podrï¿½ modificar el orden
 	 * **/
 
 	public Segment create() {
@@ -70,22 +72,22 @@ public class SegmentService {
 	}
 
 	/**
-	 * Es necesario pasarle el id de la parade a la que se le quiere añadir el segmento cuando
+	 * Es necesario pasarle el id de la parade a la que se le quiere aï¿½adir el segmento cuando
 	 * se cree un segmento nuevo
 	 **/
 	public Segment save(final Segment segment, final int idParade) {
 		Segment result;
 
-		if (segment.getId() != 0) { //Sólo se puede modificar el último segment
+		if (segment.getId() != 0) { //Sï¿½lo se puede modificar el ï¿½ltimo segment
 			//Comprobamos que el usuario logueado es una brotherhood que 
 			//tiene la parade a la que corresponde este segmento
 			Assert.isTrue(this.brotherhoodService.findByPrincipal().equals(this.segmentRepository.findBrotherhoodBySegment(segment.getId())), "El usuario logueado debe ser la hermandad que tiene la parade a la que corresponde ese segmento");
 
-			//Comprobamos que es el último de la lista (del path)
+			//Comprobamos que es el ï¿½ltimo de la lista (del path)
 			final Parade parade = this.paradeService.findOne(idParade);
 			final List<Segment> segments = parade.getSegments();
 			final Segment lastSegment = segments.get(segments.size() - 1);
-			Assert.isTrue(segment.equals(lastSegment), "No se puede editar un segmento si no es el último del path");
+			Assert.isTrue(segment.equals(lastSegment), "No se puede editar un segmento si no es el ï¿½ltimo del path");
 
 			segment.setOriginTime(lastSegment.getOriginTime());
 			segment.setOriginCoordinates(lastSegment.getOriginCoordinates());
@@ -116,7 +118,7 @@ public class SegmentService {
 			//Guardar el segment
 			result = this.segmentRepository.save(segment);
 			Assert.notNull(result);
-			//Guardarlo en la última posición de la lista de segments del parade
+			//Guardarlo en la ï¿½ltima posiciï¿½n de la lista de segments del parade
 
 			segments.add(result);
 			parade.setSegments(segments);
@@ -134,11 +136,11 @@ public class SegmentService {
 		//tiene la parade a la que corresponde este segmento
 		Assert.isTrue(this.brotherhoodService.findByPrincipal().equals(this.segmentRepository.findBrotherhoodBySegment(segment.getId())), "El usuario logueado debe ser la hermandad que tiene la parade a la que corresponde ese segmento");
 
-		//Comprobamos que es el último de la lista (del path)
+		//Comprobamos que es el ï¿½ltimo de la lista (del path)
 		final Parade parade = this.segmentRepository.findParadeBySegment(segment.getId());
 		final List<Segment> segments = parade.getSegments();
 		final Segment lastSegment = segments.get(segments.size() - 1);
-		Assert.isTrue(segment.equals(lastSegment), "No se puede borrar un segmento si no es el último del path");
+		Assert.isTrue(segment.equals(lastSegment), "No se puede borrar un segmento si no es el ï¿½ltimo del path");
 
 	}
 
@@ -159,6 +161,21 @@ public class SegmentService {
 		//TODO solo puede ver los segments la brotherhood que tiene el parade?
 		final List<Segment> result = this.segmentRepository.findSegmentsByParade(idParade);
 		Assert.notNull(result);
+		return result;
+	}
+
+	public List<Segment> copyPath(final List<Segment> path) {
+		final List<Segment> result = new ArrayList<>();
+		Segment retrieved;
+		final Segment copia = new Segment();
+		for (final Segment segment : path) {
+			copia.setOriginTime(segment.getOriginTime());
+			copia.setOriginCoordinates(segment.getOriginCoordinates());
+			copia.setDestinationTime(segment.getDestinationTime());
+			copia.setDestinationCoordinates(segment.getDestinationCoordinates());
+			retrieved = this.segmentRepository.save(copia);
+			result.add(retrieved);
+		}
 		return result;
 	}
 

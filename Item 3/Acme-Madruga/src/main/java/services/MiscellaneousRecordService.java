@@ -10,6 +10,7 @@ import org.springframework.util.Assert;
 
 import repositories.MiscellaneousRecordRepository;
 import domain.Brotherhood;
+import domain.History;
 import domain.MiscellaneousRecord;
 
 @Service
@@ -18,10 +19,8 @@ public class MiscellaneousRecordService {
 
 	@Autowired
 	private MiscellaneousRecordRepository	miscellaneousRecordRepository;
-
 	@Autowired
 	private BrotherhoodService				brotherhoodService;
-
 	@Autowired
 	private ActorService					actorService;
 
@@ -66,12 +65,16 @@ public class MiscellaneousRecordService {
 	public void delete(final MiscellaneousRecord mR) {
 		final Brotherhood me = this.brotherhoodService.findByPrincipal();
 		Assert.notNull(me, "You must be logged in the system");
+		Assert.isTrue(this.findBrotherhoodByMiscellaneous(mR.getId()) == me);
 		Assert.notNull(mR);
 		Assert.isTrue(mR.getId() != 0);
-		Assert.isTrue(this.findBrotherhoodByMiscellaneous(mR.getId()) == me);
 		final MiscellaneousRecord res = this.findOne(mR.getId());
 		Assert.isTrue(me.getHistory().getMiscellaneousRecords().contains(res));
-		this.miscellaneousRecordRepository.delete(res);
+		final Brotherhood brotherhood = this.brotherhoodService.findByPrincipal();
+		final History history = brotherhood.getHistory();
+		final Collection<MiscellaneousRecord> miscellaneousRecords = history.getMiscellaneousRecords();
+		miscellaneousRecords.remove(res);
+		this.miscellaneousRecordRepository.delete(res.getId());
 
 	}
 
@@ -82,5 +85,4 @@ public class MiscellaneousRecordService {
 		Assert.notNull(bro);
 		return bro;
 	}
-
 }

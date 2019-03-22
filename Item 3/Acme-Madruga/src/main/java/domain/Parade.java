@@ -149,7 +149,7 @@ public class Parade extends DomainEntity {
 	}
 
 	@NotBlank
-	@Pattern(regexp = "^(SUBMITTED|ACCEPTED|REJECTED|DEFAULT)$")
+	@Pattern(regexp = "^(DEFAULT|SUBMITTED|ACCEPTED|REJECTED)$")
 	public String getStatus() {
 		return this.status;
 	}

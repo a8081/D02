@@ -50,6 +50,7 @@
 		<value>/views/miscellaneousRecord/messages</value>
 		<value>/views/segment/messages</value>
 		
+		<value>/views/inceptionRecord/messages</value>
 		
 	</util:list>
 

@@ -85,6 +85,25 @@
 	<!-- GPS -->
 	<bean class="converters.GPSToStringConverter"/>
 	<bean class="converters.StringToGPSConverter"/>
+	<!-- HISTORY & RECORDS -->
+	<bean class="converters.HistoryToStringConverter"/>
+	<bean class="converters.StringToHistoryConverter"/>
+	
+	<bean class="converters.LinkRecordToStringConverter"/>
+	<bean class="converters.StringToLinkRecordConverter"/>
+	
+	<bean class="converters.LegalRecordToStringConverter"/>
+	<bean class="converters.StringToLegalRecordConverter"/>
+	
+	<bean class="converters.InceptionRecordToStringConverter"/>
+	<bean class="converters.StringToInceptionRecordConverter"/>
+	
+	<bean class="converters.PeriodRecordToStringConverter"/>
+	<bean class="converters.StringToPeriodRecordConverter"/>
+
+	<bean class="converters.MiscellaneousRecordToStringConverter"/>
+	<bean class="converters.StringToMiscellaneousRecordConverter"/>
+	
 	
 	</util:list>
 	

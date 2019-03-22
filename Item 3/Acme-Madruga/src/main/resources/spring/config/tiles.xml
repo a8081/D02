@@ -51,6 +51,7 @@
 		<value>/views/linkRecord/tiles.xml</value>
 		<value>/views/segment/tiles.xml</value>
 		
+		<value>/views/inceptionRecord/tiles.xml</value>
 		
 		
 	</util:list>
