@@ -15,11 +15,12 @@
 
 	<form:hidden path="id"/>
 	<form:hidden path="version"/>
-	<form:hidden path="paradeId" value="${paradeId}"/>
+	
+	<input type="hidden" name="paradeId" value="${paradeId}"/>
 	
 	<jstl:choose>
 		<jstl:when test="${not empty suggestOriginTime}">
-			<acme:display code="segment.originTime" value="${suggestOriginTime}"/>
+ 			<spring:message code="segment.originTime"/><input type="text" value="${suggestOriginTime}" readonly="readonly" />
 		</jstl:when>
 		
 		<jstl:otherwise>
@@ -31,8 +32,8 @@
 	<br>
 	<jstl:choose>
 		<jstl:when test="${not empty suggestOriginCoordinates}">
-			<acme:display code="segment.originCoordinates.latitude" value="${suggestOriginCoordinates.latitude}" />
-			<acme:display code="segment.originCoordinates.longitude" value="${suggestOriginCoordinates.longitude}" />
+ 			<spring:message code="segment.originCoordinates.latitude"/><input type="text" value="${suggestOriginCoordinates.latitude}" readonly="readonly"/><br>
+ 			<spring:message code="segment.originCoordinates.longitude"/><input type="text" value="${suggestOriginCoordinates.longitude}" readonly="readonly"/>
 		</jstl:when>
 		
 		<jstl:otherwise>
@@ -47,7 +48,7 @@
 	<input type="submit" name="save"
 		value="<spring:message code="segment.save" />" />
 	
-	<acme:button url="segment/brotherhood/list.do" name="cancel"
+	<acme:button url="parade/brotherhood/display.do?paradeId=${paradeId}" name="cancel"
 		code="segment.cancel" />
 
 </form:form>

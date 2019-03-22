@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,6 @@ import domain.Brotherhood;
 import domain.GPS;
 import domain.Parade;
 import domain.Segment;
-import forms.SegmentForm;
 
 @Controller
 @RequestMapping("/segment/brotherhood")
@@ -60,6 +60,7 @@ public class SegmentBrotherhoodController extends AbstractController {
 
 		segment = this.segmentService.create();
 		result = this.createEditModelAndView(segment, paradeId);
+		result.addObject("segment", segment);
 		result.addObject("paradeId", paradeId);
 		return result;
 	}
@@ -80,6 +81,7 @@ public class SegmentBrotherhoodController extends AbstractController {
 		final Brotherhood bro = this.brotherhoodService.findByPrincipal();
 
 		result = new ModelAndView("segment/display");
+
 		result.addObject("segment", segment);
 		result.addObject("lang", lang);
 		result.addObject("brotherhood", bro);
@@ -92,7 +94,7 @@ public class SegmentBrotherhoodController extends AbstractController {
 	// LIST --------------------------------------------------------
 
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
-	public ModelAndView list(final int paradeId) {
+	public ModelAndView list(@RequestParam final int paradeId) {
 		final ModelAndView result;
 		final Collection<Segment> segments;
 		final Parade parade = this.paradeService.findOne(paradeId);
@@ -115,16 +117,18 @@ public class SegmentBrotherhoodController extends AbstractController {
 	// EDIT --------------------------------------------------------
 
 	@RequestMapping(value = "/edit", method = RequestMethod.GET)
-	public ModelAndView edit(@RequestParam final int segmentId, final int paradeId) {
+	public ModelAndView edit(@RequestParam final int segmentId, @RequestParam final int paradeId) {
 		ModelAndView result;
 		Segment segment;
 
 		segment = this.segmentService.findOne(segmentId);
 
-		if (segment != null)
+		if (segment != null) {
 			result = this.createEditModelAndView(segment, paradeId);
+			result.addObject("paradeId", paradeId);
+			result.addObject("segment", segment);
 
-		else
+		} else
 			result = new ModelAndView("redirect:/misc/403.jsp");
 
 		return result;
@@ -132,29 +136,27 @@ public class SegmentBrotherhoodController extends AbstractController {
 	// SAVE --------------------------------------------------------
 
 	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "save")
-	public ModelAndView save(@Valid final SegmentForm segmentForm, final BindingResult binding) {
+	public ModelAndView save(@Valid final Segment segment, final HttpServletRequest request, final BindingResult binding) {
 		ModelAndView result;
-		final int paradeId = segmentForm.getParadeId();
+		String paramParadeId;
+		Integer paradeId;
 
-		final Segment segment = this.segmentService.reconstruct(segmentForm, binding);
+		paramParadeId = request.getParameter("paradeId");
+		paradeId = paramParadeId.isEmpty() ? null : Integer.parseInt(paramParadeId);
 
 		if (binding.hasErrors())
 			result = this.createEditModelAndView(segment, paradeId);
 		else {
-			//			try {
+			System.out.println(segment);
 			this.segmentService.save(segment, paradeId);
-			//				result = this.createEditModelAndView(segment, "segment.commit.congrat");
 			result = this.paradeBrotherhoodController.display(paradeId);
-
-			//			} catch (final Throwable oops) {
-			//				result = this.createEditModelAndView(segment, "segment.commit.save.error");
-			//
 		}
 		final String banner = this.configurationParametersService.findBanner();
 		result.addObject("banner", banner);
 
 		return result;
 	}
+
 	//	// DELETE
 	//
 	//	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "delete")
@@ -192,32 +194,29 @@ public class SegmentBrotherhoodController extends AbstractController {
 		final Parade parade = this.paradeService.findOne(paradeId);
 		segments = parade.getSegments();
 
-		if (segment.getId() == 0 && !segments.isEmpty()) {
-			final Segment lastSegment = segments.get(segments.size() - 1);
-			final Date originTime = lastSegment.getDestinationTime();
-			final GPS originCoordinates = lastSegment.getDestinationCoordinates();
-			result.addObject("suggestOriginTime", originTime);
-			result.addObject("suggestOriginCoordinates", originCoordinates);
-		}
+		if (!segments.isEmpty())
+			if (segment.getId() == 0) {
+				final Segment lastSegment = segments.get(segments.size() - 1);
+				final Date originTime = lastSegment.getDestinationTime();
+				final GPS originCoordinates = lastSegment.getDestinationCoordinates();
+				result.addObject("segment", segment);
+				result.addObject("lastSegment", lastSegment);
+				result.addObject("suggestOriginTime", originTime);
+				result.addObject("suggestOriginCoordinates", originCoordinates);
+			} else {
+				final Segment lastSegment = segments.get(segments.size() - 1);
+				final Date originTime = lastSegment.getOriginTime();
+				final GPS originCoordinates = lastSegment.getOriginCoordinates();
+				result.addObject("segment", segment);
+				result.addObject("lastSegment", lastSegment);
+				result.addObject("suggestOriginTime", originTime);
+				result.addObject("suggestOriginCoordinates", originCoordinates);
+			}
 
-		result.addObject("segment", this.constructSegmentForm(segment, paradeId)); // this.constructPruned(parade));
+		result.addObject("segment", segment); // this.constructPruned(parade));
 
 		result.addObject("message", messageCode);
 
 		return result;
-	}
-
-	public SegmentForm constructSegmentForm(final Segment segment, final int paradeId) {
-		final SegmentForm segmentForm = new SegmentForm();
-		segmentForm.setId(segment.getId());
-		segmentForm.setVersion(segment.getVersion());
-		segmentForm.setOriginTime(segment.getOriginTime());
-		segmentForm.setDestinationTime(segment.getDestinationTime());
-		segmentForm.setOriginCoordinates(segment.getOriginCoordinates());
-		segmentForm.setDestinationCoordinates(segment.getDestinationCoordinates());
-		segmentForm.setParadeId(paradeId);
-
-		return segmentForm;
-
 	}
 }

@@ -1,7 +1,6 @@
 
 package services;
 
-import java.util.Date;
 import java.util.List;
 
 import javax.validation.ValidationException;
@@ -83,21 +82,17 @@ public class SegmentService {
 			Assert.isTrue(this.brotherhoodService.findByPrincipal().equals(this.segmentRepository.findBrotherhoodBySegment(segment.getId())), "El usuario logueado debe ser la hermandad que tiene la parade a la que corresponde ese segmento");
 
 			//Comprobamos que es el último de la lista (del path)
-			final Parade parade = this.segmentRepository.findParadeBySegment(segment.getId());
+			final Parade parade = this.paradeService.findOne(idParade);
 			final List<Segment> segments = parade.getSegments();
 			final Segment lastSegment = segments.get(segments.size() - 1);
 			Assert.isTrue(segment.equals(lastSegment), "No se puede editar un segmento si no es el último del path");
 
-			//Comprobamos que solo se modifica el tiempo o la posicion final
-			final Segment oldSegment = this.segmentRepository.findOne(segment.getId());
-			final Date oldOriginDate = oldSegment.getOriginTime();
-			final GPS oldOriginGPS = oldSegment.getOriginCoordinates();
-			final Date newOriginDate = segment.getOriginTime();
-			final GPS newOriginGPS = segment.getOriginCoordinates();
-			Assert.isTrue(oldOriginDate.equals(newOriginDate) && oldOriginGPS.equals(newOriginGPS), "No se puede modificar ni la posicion ni la fecha de origen");
+			segment.setOriginTime(lastSegment.getOriginTime());
+			segment.setOriginCoordinates(lastSegment.getOriginCoordinates());
 
+			Assert.isTrue(segment.getOriginTime().before(segment.getDestinationTime()), "El horario de llegada no puede ser anterior al horario de salida.");
 			result = this.segmentRepository.save(segment);
-			Assert.notNull(result);
+			Assert.notNull(result, "El segmento guardado es nulo");
 
 		} else {
 			//En el caso de que el segmento se cree nuevo, hay que comprobar que
@@ -113,13 +108,10 @@ public class SegmentService {
 			final List<Segment> segments = parade.getSegments();
 			if (!segments.isEmpty()) {
 				final Segment lastSegment = segments.get(segments.size() - 1);
-				final Date initialDate = segment.getOriginTime();
-				final GPS initialGPS = segment.getOriginCoordinates();
-				final Date finalDate = lastSegment.getDestinationTime();
-				final GPS finalGPS = lastSegment.getDestinationCoordinates();
-				Assert.isTrue(initialDate.equals(finalDate) && initialGPS.equals(finalGPS), "El instante y la posición de inicio del nuevo segmento no coincide con la fecha y posición final del segmnto precedente");
-
+				segment.setOriginTime(lastSegment.getDestinationTime());
+				segment.setOriginCoordinates(lastSegment.getDestinationCoordinates());
 			}
+			Assert.isTrue(segment.getOriginTime().before(segment.getDestinationTime()), "El horario de llegada no puede ser anterior al horario de salida.");
 
 			//Guardar el segment
 			result = this.segmentRepository.save(segment);
@@ -134,7 +126,6 @@ public class SegmentService {
 		return result;
 
 	}
-
 	public void delete(final Segment segment) {
 
 		Assert.isTrue(this.segmentRepository.findOne(segment.getId()).equals(segment), "No se puede borrar un segmento que no existe");

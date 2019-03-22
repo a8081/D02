@@ -96,11 +96,11 @@
 <spring:message code="parade.segments"/>:
 <acme:button url="segment/brotherhood/create.do?paradeId=${parade.id}" name="create" code="parade.segment.create" />
 <display:table name="segments" id="row"
-	requestURI="segment/brotherhood/list.do?paradeId=${parade.id}" pagesize="5"
+	requestURI="parade/brotherhood/display.do?paradeId=${parade.id}" pagesize="5"
 	class="displaytag">
 
 	<display:column>
-	<acme:button url="segment/brotherhood/edit.do?segmentId=${row.id}" name="edit" code="parade.segment.edit" />
+	<acme:button url="segment/brotherhood/edit.do?segmentId=${row.id}&paradeId=${parade.id}" name="edit" code="parade.segment.edit" />
 	</display:column>
 
 	<acme:dataTableColumn code="segment.originTime" property="originTime" />

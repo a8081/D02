@@ -104,8 +104,9 @@
 	</display:column>
 	
 	<display:column>
-		<acme:link url="parade${rolURL}/display.do?paradeId=${row.id}"
-			code="parade.display" />
+			
+		<acme:button url="parade${rolURL}/display.do?paradeId=${row.id}" name="display" code="parade.display"/>
+			
 	</display:column>
 	
 	<security:authorize access="hasRole('BROTHERHOOD')">
@@ -135,10 +136,6 @@
 	<security:authorize access="hasRole('BROTHERHOOD')">
 	<display:column>
 	<acme:button url="parade/brotherhood/copyBrotherhoodParade.do?paradeId=${row.id}" name="copy" code="parade.copy"/>
-	</display:column>
-
-	<display:column>
-	<acme:button url="segment/brotherhood/create.do?paradeId=${row.id}" name="create" code="parade.segment.create"/>
 	</display:column>
 	
 	</security:authorize>
