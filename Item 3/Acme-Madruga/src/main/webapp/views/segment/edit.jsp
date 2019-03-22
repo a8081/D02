@@ -11,6 +11,7 @@
 <%@taglib prefix="display" uri="http://displaytag.sf.net"%>
 <%@taglib prefix="acme" tagdir="/WEB-INF/tags"%>
 
+
 <form:form action="segment/brotherhood/edit.do" modelAttribute="segment">
 
 	<form:hidden path="id"/>
@@ -50,5 +51,11 @@
 	
 	<acme:button url="parade/brotherhood/display.do?paradeId=${paradeId}" name="cancel"
 		code="segment.cancel" />
+		
+	<jstl:if test="${isLastSegment}">
+	<input type="submit" name="delete"
+		value="<spring:message code="segment.delete" />" />
+	</jstl:if>
 
 </form:form>
+

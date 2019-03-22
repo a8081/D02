@@ -55,13 +55,20 @@ public class SegmentBrotherhoodController extends AbstractController {
 	public ModelAndView create(@RequestParam final int paradeId) {
 		ModelAndView result;
 		Segment segment;
+		final Parade parade = this.paradeService.findOne(paradeId);
 
 		// String lang = LocaleContextHolder.getLocale().getLanguage();
 
 		segment = this.segmentService.create();
-		result = this.createEditModelAndView(segment, paradeId);
-		result.addObject("segment", segment);
-		result.addObject("paradeId", paradeId);
+		if (parade.getStatus().equals("DEFAULT")) {
+			result = this.createEditModelAndView(segment, paradeId);
+			result.addObject("segment", segment);
+			result.addObject("paradeId", paradeId);
+
+		} else {
+			result = new ModelAndView("segment/error");
+			result.addObject("ok", "Cannot create a new segment in parade whose status is not DEFAULT.");
+		}
 		return result;
 	}
 
@@ -157,22 +164,18 @@ public class SegmentBrotherhoodController extends AbstractController {
 		return result;
 	}
 
-	//	// DELETE
-	//
-	//	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "delete")
-	//	public ModelAndView delete(final Parade parade, final BindingResult binding) {
-	//		ModelAndView result;
-	//
-	//		try {
-	//			this.paradeService.delete(parade);
-	//			result = new ModelAndView("redirect:list.do");
-	//		} catch (final Throwable oops) {
-	//			result = this.createEditModelAndView(parade, "parade.commit.error");
-	//		}
-	//
-	//		return result;
-	//
-	//	}
+	// DELETE
+
+	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "delete")
+	public ModelAndView delete(final Segment segment, final int paradeId, final BindingResult binding) {
+		ModelAndView result;
+
+		this.segmentService.delete(segment, paradeId);
+		result = this.paradeBrotherhoodController.display(paradeId);
+
+		return result;
+
+	}
 
 	// ANCILLIARY METHODS --------------------------------------------------------
 
@@ -203,14 +206,18 @@ public class SegmentBrotherhoodController extends AbstractController {
 				result.addObject("lastSegment", lastSegment);
 				result.addObject("suggestOriginTime", originTime);
 				result.addObject("suggestOriginCoordinates", originCoordinates);
+
 			} else {
 				final Segment lastSegment = segments.get(segments.size() - 1);
 				final Date originTime = lastSegment.getOriginTime();
 				final GPS originCoordinates = lastSegment.getOriginCoordinates();
+				final Boolean isLastSegment = segment.equals(lastSegment);
 				result.addObject("segment", segment);
 				result.addObject("lastSegment", lastSegment);
 				result.addObject("suggestOriginTime", originTime);
 				result.addObject("suggestOriginCoordinates", originCoordinates);
+				result.addObject("isLastSegment", isLastSegment);
+
 			}
 
 		result.addObject("segment", segment); // this.constructPruned(parade));

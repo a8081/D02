@@ -65,7 +65,19 @@
 </display:table>
 </security:authorize>
 
+<style type="text/css">
+.SUBMITTED {
+	background-color: #d9d9d9;
+}
 
+.ACCEPTED {
+	background-color: green;
+}
+
+.REJECTED {
+	background-color: red;
+}
+</style>
 
 <security:authorize access="hasAnyRole('CHAPTER','BROTHERHOOD')">
 
@@ -80,6 +92,9 @@
 <display:table name="parades" id="row"
 	requestURI="parade${rolURL}${chooseList}.do" pagesize="5"
 	class="displaytag">
+
+	<jstl:set var="colorStyle" value="${row.status}" />
+
 
 	<security:authorize access="hasRole('BROTHERHOOD')">
 		<display:column>
@@ -96,6 +111,13 @@
 	<display:column property="ticker" titleKey="parade.ticker" />
 
 	<acme:dataTableColumn code="parade.moment" property="moment" />
+	
+<jstl:if test="${row.mode eq 'FINAL'}">
+	<display:column titleKey="parade.status" class="${colorStyle}">
+		<acme:statusChooseParade status="${row.status}"/>
+	</display:column>
+
+</jstl:if>
 	
 	<display:column titleKey="parade.brotherhood">
 		<a href="brotherhood/displayTabla.do?brotherhoodId=${row.brotherhood.id}">

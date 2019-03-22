@@ -1085,7 +1085,7 @@
 				<ref bean="float3" />
 			</list>
 		</property>
-		<property name="brotherhood" ref="brotherhood1" />
+		<property name="brotherhood" ref="brotherhood2" />
 		<property name="segments">
 			<list>
 			</list>
@@ -1149,7 +1149,7 @@
 				<ref bean="float3" />
 			</list>
 		</property>
-		<property name="brotherhood" ref="brotherhood1" />
+		<property name="brotherhood" ref="brotherhood2" />
 		<property name="segments">
 			<list>
 			</list>

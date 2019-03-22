@@ -121,7 +121,9 @@ public class Parade extends DomainEntity {
 	@Valid
 	@ElementCollection
 	@NotNull
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany(cascade = {
+		CascadeType.ALL
+	})
 	public List<Segment> getSegments() {
 		return this.segments;
 	}

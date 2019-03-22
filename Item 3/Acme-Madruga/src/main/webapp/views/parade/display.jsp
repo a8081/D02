@@ -94,13 +94,18 @@
 </security:authorize>
 
 <spring:message code="parade.segments"/>:
+<jstl:if test="${parade.status eq 'DEFAULT'}">
 <acme:button url="segment/brotherhood/create.do?paradeId=${parade.id}" name="create" code="parade.segment.create" />
+</jstl:if>
 <display:table name="segments" id="row"
 	requestURI="parade/brotherhood/display.do?paradeId=${parade.id}" pagesize="5"
 	class="displaytag">
 
+
 	<display:column>
+	<jstl:if test="${parade.status eq 'DEFAULT'}">
 	<acme:button url="segment/brotherhood/edit.do?segmentId=${row.id}&paradeId=${parade.id}" name="edit" code="parade.segment.edit" />
+	</jstl:if>
 	</display:column>
 
 	<acme:dataTableColumn code="segment.originTime" property="originTime" />
@@ -111,7 +116,7 @@
 	</display:column>
 	
 </display:table>
-
+<br><br>
 
 <security:authorize access="hasRole('MEMBER')">
 <acme:button url="parade/member/list.do" name="back"

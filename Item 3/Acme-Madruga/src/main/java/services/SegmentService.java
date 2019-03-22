@@ -2,7 +2,6 @@
 package services;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.validation.ValidationException;
@@ -83,8 +82,12 @@ public class SegmentService {
 			//tiene la parade a la que corresponde este segmento
 			Assert.isTrue(this.brotherhoodService.findByPrincipal().equals(this.segmentRepository.findBrotherhoodBySegment(segment.getId())), "El usuario logueado debe ser la hermandad que tiene la parade a la que corresponde ese segmento");
 
-			//Comprobamos que es el �ltimo de la lista (del path)
 			final Parade parade = this.paradeService.findOne(idParade);
+
+			//Comprobamos que el status de la parade tiene que ser DEFAULT para poder modificar un segment.
+			Assert.isTrue(parade.getStatus().equals("DEFAULT"), "No puede modificar un segment de un desfile que tenga su estado distinto a DEFAULT.");
+
+			//Comprobamos que es el �ltimo de la lista (del path)
 			final List<Segment> segments = parade.getSegments();
 			final Segment lastSegment = segments.get(segments.size() - 1);
 			Assert.isTrue(segment.equals(lastSegment), "No se puede editar un segmento si no es el �ltimo del path");
@@ -101,7 +104,7 @@ public class SegmentService {
 			//el usuario logueado sea una brotherhood
 
 			this.brotherhoodService.findByPrincipal();
-			Assert.isTrue(this.brotherhoodService.findByPrincipal().equals(this.brotherhoodRepository.findBrotherhoodByParade(idParade)));
+			Assert.isTrue(this.brotherhoodService.findByPrincipal().equals(this.brotherhoodRepository.findBrotherhoodByParade(idParade)), "No puede crear un segment en un desfile que no pertenece a su hermandad.");
 
 			//Comprobamos que, el caso de que no sea el primer segment del path, 
 			//el instante y la posicion inicial coincidan con el instante y posicion final del segment
@@ -128,7 +131,7 @@ public class SegmentService {
 		return result;
 
 	}
-	public void delete(final Segment segment) {
+	public void delete(final Segment segment, final int paradeId) {
 
 		Assert.isTrue(this.segmentRepository.findOne(segment.getId()).equals(segment), "No se puede borrar un segmento que no existe");
 
@@ -137,11 +140,13 @@ public class SegmentService {
 		Assert.isTrue(this.brotherhoodService.findByPrincipal().equals(this.segmentRepository.findBrotherhoodBySegment(segment.getId())), "El usuario logueado debe ser la hermandad que tiene la parade a la que corresponde ese segmento");
 
 		//Comprobamos que es el �ltimo de la lista (del path)
-		final Parade parade = this.segmentRepository.findParadeBySegment(segment.getId());
+		final Parade parade = this.paradeService.findOne(paradeId);
 		final List<Segment> segments = parade.getSegments();
 		final Segment lastSegment = segments.get(segments.size() - 1);
 		Assert.isTrue(segment.equals(lastSegment), "No se puede borrar un segmento si no es el �ltimo del path");
 
+		segments.remove(segment);
+		this.segmentRepository.delete(segment);
 	}
 
 	public List<Segment> findAll() {
