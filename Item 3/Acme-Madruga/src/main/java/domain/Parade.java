@@ -29,7 +29,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @Access(AccessType.PROPERTY)
-public class Parade extends DomainEntity {
+public class Parade extends DomainEntity implements Cloneable {
 
 	private String				title;
 	private String				description;
@@ -167,6 +167,16 @@ public class Parade extends DomainEntity {
 
 	public void setRejectionReason(final String rejectionReason) {
 		this.rejectionReason = rejectionReason;
+	}
+
+	@Override
+	public Object clone() {
+		Object o = null;
+		try {
+			o = super.clone();
+		} catch (final CloneNotSupportedException e) {
+		}
+		return o;
 	}
 
 }

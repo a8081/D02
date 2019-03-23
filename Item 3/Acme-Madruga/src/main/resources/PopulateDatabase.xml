@@ -1136,7 +1136,7 @@
 	
 	<bean id="parade12" class="domain.Parade">
 		<property name="title" value="Carmen Doloroso" />
-		<property name="description" value="This is a description of a parade11" />
+		<property name="description" value="This is a description of a parade12" />
 		<property name="moment" value="2022/04/26 00:00" />
 		<property name="ticker" value="200486-QOUAS" />
 		<property name="mode" value="DRAFT" />
@@ -1158,7 +1158,7 @@
 	
 	<bean id="parade13" class="domain.Parade">
 		<property name="title" value="Los Javieres" />
-		<property name="description" value="This is a description of a parade14" />
+		<property name="description" value="This is a description of a parade13" />
 		<property name="moment" value="2022/04/26 00:00" />
 		<property name="ticker" value="203486-QUODF" />
 		<property name="mode" value="DRAFT" />

@@ -7,6 +7,8 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.validation.ConstraintViolationException;
 
 import org.junit.Test;
@@ -41,16 +43,23 @@ public class ParadeServiceTest extends AbstractTest {
 	@Autowired
 	private ChapterService		chapterService;
 
+	@PersistenceContext
+	private EntityManager		entityManager;
+
 
 	@Test
 	public void createAndSaveDriver() {
 		final Object testingData[][] = {
 			{	// Parade sin titulo
-				"brotherhood2", "brotherhood1", "", "Description1", "2019-12-12 20:00", "djehfahwrlfhajsdhfashdflov", "DRAFT", 120, 120, "DEFAULT", null, ConstraintViolationException.class
+				"brotherhood2", "brotherhood2", null, "Description1", "2019-12-12 20:00", "djehfahwrlfhajsdhfashdflov", "DRAFT", 120, 120, "DEFAULT", null, ConstraintViolationException.class
+			}, {	// Parade con titulo nulo
+				"brotherhood2", "brotherhood2", null, "Description1", "2019-12-12 20:00", "djehfahwrlfhajsdhfashdflov", "DRAFT", 120, 120, "DEFAULT", null, ConstraintViolationException.class
 			}, {	// Parade sin descripcion
-				"brotherhood2", "brotherhood1", "Title1", "", "2019-12-12 20:00", "djehfahwrlfhajsdhfashdflov", "DRAFT", 120, 120, "DEFAULT", null, ConstraintViolationException.class
+				"brotherhood2", "brotherhood2", "Title1", "", "2019-12-12 20:00", "djehfahwrlfhajsdhfashdflov", "DRAFT", 120, 120, "DEFAULT", null, ConstraintViolationException.class
 			}, { 	// Parade sin mode, status ni ticker. No debe fallar ya que se setea en el save
-				"brotherhood2", "brotherhood1", "Title1", "Description1", "2019-12-12 20:00", "", "", 120, 120, "", null, null
+				"brotherhood2", "brotherhood2", "Title1", "Description1", "2019-12-12 20:00", "", "", 120, 120, "", null, null
+			}, {	// Parade nueva con rejection reason seteada
+				"brotherhood2", "brotherhood2", "Title1", "Description1", "2019-12-12 20:00", "", "", 120, 120, "", "RejectionReason1", IllegalArgumentException.class
 			}, {		// Parade correcta
 				"brotherhood1", "brotherhood1", "Title1", "Description1", "2019-12-12 20:00", "djehfahwrlfhajsdhfashdflov", "DRAFT", 120, 120, "DEFAULT", null, null
 			}, {	// Guardar Parade a otra brotherhood 
@@ -70,6 +79,39 @@ public class ParadeServiceTest extends AbstractTest {
 			}
 	}
 
+	@Test
+	public void updateDriver() {
+		final Object testingData[][] = {
+			{		// Parade guardada sin ningun cambio
+				"brotherhood1", "brotherhood1", "Los Javieres", "This is a description of a parade13", "2022-04-26 00:00:00", "203486-QUODF", "DRAFT", 120, 300, "DEFAULT", null, "parade13", null
+			}, {	// Parade con titulo nulo
+				"brotherhood1", "brotherhood1", null, "This is a description of a parade13", "2022-04-26 00:00:00", "203486-QUODF", "DRAFT", 120, 300, "DEFAULT", null, "parade13", ConstraintViolationException.class
+			}, {	// Parade con descripcion vacia
+				"brotherhood1", "brotherhood1", "Los Javieres", "", "2022-04-26 00:00:00", "203486-QUODF", "DRAFT", 120, 300, "DEFAULT", null, "parade13", ConstraintViolationException.class
+			}, {		// Parade guardada sin status
+				"brotherhood1", "brotherhood1", "Los Javieres", "This is a description of a parade13", "2022-04-26 00:00:00", "203486-QUODF", "DRAFT", 120, 300, "", null, "parade13", IllegalArgumentException.class
+			}, {		// Parade guardada en draft mode con status accepted
+				"brotherhood1", "brotherhood1", "Los Javieres", "This is a description of a parade13", "2022-04-26 00:00:00", "203486-QUODF", "DRAFT", 120, 300, "ACCEPTED", null, "parade13", IllegalArgumentException.class
+			}, {		// Parade guardada sin mode
+				"brotherhood1", "brotherhood1", "Los Javieres", "This is a description of a parade13", "2022-04-26 00:00:00", "203486-QUODF", "", 120, 300, "DEFAULT", null, "parade13", ConstraintViolationException.class
+			}, {		// Parade guardada sin ticker
+				"brotherhood1", "brotherhood1", "Los Javieres", "This is a description of a parade13", "2022-04-26 00:00:00", "", "DRAFT", 120, 300, "DEFAULT", null, "parade13", IllegalArgumentException.class
+			}, {		// Parade guardada con ticker modificado
+				"brotherhood1", "brotherhood1", "Los Javieres", "This is a description of a parade13", "2022-04-26 00:00:00", "200006-QUADF", "DRAFT", 120, 300, "DEFAULT", null, "parade13", IllegalArgumentException.class
+			}
+		};
+
+		for (int i = 0; i < testingData.length; i++)
+			try {
+				super.startTransaction();
+				this.updateTemplate((String) testingData[i][0], (String) testingData[i][1], (String) testingData[i][2], (String) testingData[i][3], (String) testingData[i][4], (String) testingData[i][5], (String) testingData[i][6],
+					(int) testingData[i][7], (int) testingData[i][8], (String) testingData[i][9], (String) testingData[i][10], (String) testingData[i][11], (Class<?>) testingData[i][12]);
+			} catch (final Throwable oops) {
+				throw new RuntimeException(oops);
+			} finally {
+				super.rollbackTransaction();
+			}
+	}
 	@Test
 	public void toFinalModeDriver() {
 		final Object testingData[][] = {
@@ -124,20 +166,24 @@ public class ParadeServiceTest extends AbstractTest {
 	public void rejectParadeDriver() {
 		final Object testingData[][] = {
 			{		// Un chapter rechaza una parade en final mode con estado submitted, accion correcta
-				"chapter1", "parade1", null
+				"chapter1", "parade1", "My Rejection Reason", null
 			}, {		// Un actor que no es chapter rechaza una parade, accion incorrecta
-				"brotherhood1", "parade1", IllegalArgumentException.class
+				"brotherhood1", "parade1", "My Rejection Reason", IllegalArgumentException.class
 			}, {		// Un chapter rechaza una parade en draft mode con estado default, accion incorrecta
-				"chapter1", "parade13", IllegalArgumentException.class
+				"chapter1", "parade13", "My Rejection Reason", IllegalArgumentException.class
 			}, {		// Un chapter rechaza una parade en final mode con estado accepted, accion incorrecta
-				"chapter1", "parade2", IllegalArgumentException.class
+				"chapter1", "parade2", "My Rejection Reason", IllegalArgumentException.class
+			}, {		// Un chapter rechaza una parade y no añade rejection reason, accion incorrecta
+				"chapter1", "parade1", "", IllegalArgumentException.class
+			}, {		// Un chapter rechaza una parade con rejection reason en null, accion incorrecta
+				"chapter1", "parade1", null, IllegalArgumentException.class
 			}
 		};
 
 		for (int i = 0; i < testingData.length; i++)
 			try {
 				super.startTransaction();
-				this.rejectParadeTemplate((String) testingData[i][0], (String) testingData[i][1], (Class<?>) testingData[i][2]);
+				this.rejectParadeTemplate((String) testingData[i][0], (String) testingData[i][1], (String) testingData[i][2], (Class<?>) testingData[i][3]);
 			} catch (final Throwable oops) {
 				throw new RuntimeException(oops);
 			} finally {
@@ -211,10 +257,58 @@ public class ParadeServiceTest extends AbstractTest {
 			parade.setMoment(momentDate);
 
 			this.paradeService.save(parade);
+			this.unauthenticate();
 			this.paradeService.flush();
 
 		} catch (final Throwable oops) {
 			caught = oops.getClass();
+			this.entityManager.clear();
+		}
+
+		this.checkExceptions(expected, caught);
+	}
+
+	protected void updateTemplate(final String userName, final String brotherhoodBeanName, final String title, final String description, final String moment, final String ticker, final String mode, final int maxRows, final int maxColumns,
+		final String status, final String rejectionReason, final String paradeBeanName, final Class<?> expected) {
+
+		Class<?> caught;
+		Parade parade;
+		Brotherhood brotherhood;
+		Date momentDate;
+		int brotherhoodId;
+		int paradeId;
+		caught = null;
+		try {
+
+			this.authenticate(userName);
+			brotherhoodId = super.getEntityId(brotherhoodBeanName);
+			brotherhood = this.brotherhoodService.findOne(brotherhoodId);
+			paradeId = super.getEntityId(paradeBeanName);
+			parade = (Parade) this.paradeService.findOne(paradeId).clone();
+
+			parade.setBrotherhood(brotherhood);
+			parade.setRejectionReason(rejectionReason);
+			parade.setTitle(title);
+			parade.setDescription(description);
+			parade.setTicker(ticker);
+			parade.setStatus(status);
+			parade.setMode(mode);
+			parade.setMaxColumns(maxColumns);
+			parade.setMaxRows(maxRows);
+
+			if (moment != null)
+				momentDate = (new SimpleDateFormat("yyyy-MM-dd HH:mm")).parse(moment);
+			else
+				momentDate = null;
+			parade.setMoment(momentDate);
+
+			this.paradeService.save(parade);
+			this.unauthenticate();
+			this.paradeService.flush();
+
+		} catch (final Throwable oops) {
+			caught = oops.getClass();
+			this.entityManager.clear();
 		}
 
 		this.checkExceptions(expected, caught);
@@ -230,29 +324,37 @@ public class ParadeServiceTest extends AbstractTest {
 			paradeId = super.getEntityId(paradeBeanName);
 
 			this.paradeService.acceptParade(paradeId);
+			this.unauthenticate();
 			this.paradeService.flush();
 
 		} catch (final Throwable oops) {
 			caught = oops.getClass();
+			this.entityManager.clear();
 		}
 
 		this.checkExceptions(expected, caught);
 	}
 
-	protected void rejectParadeTemplate(final String chapterUserName, final String paradeBeanName, final Class<?> expected) {
+	protected void rejectParadeTemplate(final String chapterUserName, final String paradeBeanName, final String rejectionReason, final Class<?> expected) {
 		Class<?> caught;
+		Parade parade;
 		int paradeId;
 		caught = null;
 		try {
 
 			this.authenticate(chapterUserName);
 			paradeId = super.getEntityId(paradeBeanName);
+			parade = this.paradeService.findOne(paradeId);
+			parade.setRejectionReason(rejectionReason);
 
-			this.paradeService.rejectParade(paradeId);
+			this.paradeService.rejectParade(parade);
+			this.unauthenticate();
 			this.paradeService.flush();
 
 		} catch (final Throwable oops) {
 			caught = oops.getClass();
+			//Se borra la cache para que no salte siempre el error del primer objeto que ha fallado en el test
+			this.entityManager.clear();
 		}
 
 		this.checkExceptions(expected, caught);
@@ -268,10 +370,12 @@ public class ParadeServiceTest extends AbstractTest {
 			paradeId = super.getEntityId(paradeBeanName);
 
 			this.paradeService.toFinalMode(paradeId);
+			this.unauthenticate();
 			this.paradeService.flush();
 
 		} catch (final Throwable oops) {
 			caught = oops.getClass();
+			this.entityManager.clear();
 		}
 
 		this.checkExceptions(expected, caught);
@@ -286,10 +390,12 @@ public class ParadeServiceTest extends AbstractTest {
 			paradeId = super.getEntityId(paradeBeanName);
 
 			this.paradeService.copyBrotherhoodParade(paradeId);
+			this.unauthenticate();
 			this.paradeService.flush();
 
 		} catch (final Throwable oops) {
 			caught = oops.getClass();
+			this.entityManager.clear();
 		}
 	}
 }

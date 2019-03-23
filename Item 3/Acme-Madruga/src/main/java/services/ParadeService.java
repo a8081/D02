@@ -128,32 +128,33 @@ public class ParadeService {
 
 	public Parade save(final Parade parade) {
 		Assert.notNull(parade);
-		final Actor principal = this.actorService.findByPrincipal();
-		final Parade result;
-		final Boolean isBrotherhood = this.actorService.checkAuthority(principal, Authority.BROTHERHOOD);
-		final Brotherhood bro = this.brotherhoodService.findByUserId(principal.getUserAccount().getId());
+		final Brotherhood brotherhoodPrincipal = this.brotherhoodService.findByPrincipal();
+		Assert.isTrue(parade.getBrotherhood().equals(brotherhoodPrincipal), "You must be the owner of the parade");
+		Parade result;
 
-		if (isBrotherhood && bro.getArea() != null) {
-			final Brotherhood brotherhoodPrincipal = this.brotherhoodService.findByPrincipal();
+		if (brotherhoodPrincipal.getArea() != null) {
 			Assert.notEmpty(parade.getFloats(), "A parade must have some floats assigned to be saved");
-			Assert.isTrue(this.floatService.findByBrotherhood(brotherhoodPrincipal).containsAll(parade.getFloats()));
+			final Collection<Float> fs = this.floatService.findByBrotherhood(brotherhoodPrincipal);
+			Assert.isTrue(fs.containsAll(parade.getFloats()), "You must be the owner of the parade and parade floats must corresponds to your parades");
 
 			if (parade.getId() == 0) {
 				parade.setBrotherhood(brotherhoodPrincipal);
 				parade.setMode("DRAFT");
 				parade.setStatus("DEFAULT");
+				Assert.isNull(parade.getRejectionReason(), "A new parade cannot has rejection reason");
 				final Date moment = new Date(System.currentTimeMillis());
 				parade.setTicker(this.generateTicker(moment));
 			} else {
-				Assert.isTrue(parade.getStatus() != "REJECTED" || (parade.getRejectionReason() != "" || parade.getRejectionReason() != null), "If Parade is REJECTED must have a rejection reason");
+				final String ticker = this.findOne(parade.getId()).getTicker();
+				Assert.isTrue(ticker.equals(parade.getTicker()), "Ticker cannot be modified");
 				Assert.isTrue(!parade.getMode().equals("FINAL"), "Cannot edit a parade in FINAL mode");
-				Assert.isTrue(parade.getBrotherhood() == this.brotherhoodService.findByPrincipal());
+				Assert.isTrue(parade.getStatus().equals("DEFAULT"), "Cannot change parade status being a brotherhood");
+				Assert.isTrue(parade.getRejectionReason() == null, "Cannot set rejection reason being a brotherhood");
 			}
 		}
 		result = this.paradeRepository.save(parade);
 		return result;
 	}
-
 	/**
 	 * Make a copy of one of the parade (given as parameter) of the brotherhood logged. It set a new ticker, clear its status and its rejection reason, and changes it to draft mode.
 	 * 
@@ -278,15 +279,19 @@ public class ParadeService {
 		return result;
 	}
 
-	public Parade rejectParade(final int paradeId) {
-		final Parade parade = this.findOne(paradeId);
+	public Parade rejectParade(final Parade received) {
 		final Parade result;
+		final Parade parade = this.findOne(received.getId());
+		final String reason = received.getRejectionReason();
 		final Chapter chapter = this.chapterService.findByPrincipal();
-		Assert.isTrue(parade.getBrotherhood().getArea() == chapter.getArea(), "No puede rechazar una parade que no pertenece al �rea que coordina.");
-		Assert.isTrue(parade.getMode().equals("FINAL"), "La parade que desea rechazar no ha sido guardada en modo final.");
+		Assert.isTrue(reason != null && reason != "", "To reject a parade yo must provide a rejection reason");
+		Assert.isTrue(parade.getBrotherhood().getArea() == chapter.getArea(), "No puede rechazar una parade que no pertenece al area que coordina.");
+		Assert.isTrue(parade.getMode().equals("FINAL"), "La parade que desea rechazar no ha sido guardada en modo final");
 		Assert.isTrue(parade.getStatus().equals("SUBMITTED"), "No puede rechazar una parade que su estado sea distinto a Submitted");
-		if (chapter.getArea() != null)
+		if (chapter.getArea() != null) {
 			parade.setStatus("REJECTED");
+			parade.setRejectionReason(received.getRejectionReason());
+		}
 		result = this.paradeRepository.save(parade);
 		return result;
 
