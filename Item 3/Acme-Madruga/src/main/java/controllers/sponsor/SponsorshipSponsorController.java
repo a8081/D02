@@ -15,9 +15,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import services.ParadeService;
+import services.SponsorService;
 import services.SponsorshipService;
 import controllers.AbstractController;
 import domain.Parade;
+import domain.Sponsor;
 import domain.Sponsorship;
 
 @Controller
@@ -29,6 +31,9 @@ public class SponsorshipSponsorController extends AbstractController {
 
 	@Autowired
 	private ParadeService		paradeService;
+
+	@Autowired
+	private SponsorService		sponsorService;
 
 	final String				lang	= LocaleContextHolder.getLocale().getLanguage();
 
@@ -126,6 +131,25 @@ public class SponsorshipSponsorController extends AbstractController {
 		} catch (final Throwable oops) {
 			result = this.createEditModelAndView(sponsorship, "sponsorship.commit.error");
 		}
+		return result;
+	}
+
+	// =================DISPLAY=================
+
+	@RequestMapping(value = "/display", method = RequestMethod.GET)
+	public ModelAndView display(@RequestParam final int paradeId) {
+		final ModelAndView result;
+		Sponsorship sponsorship;
+		final Sponsor sponsor = this.sponsorService.findByPrincipal();
+
+		sponsorship = this.sponsorshipService.findByParade(paradeId, sponsor.getUserAccount().getId());
+
+		if (sponsorship != null) {
+			result = new ModelAndView("sponsorship/display");
+			result.addObject("parade", sponsorship);
+		} else
+			result = new ModelAndView("redirect:/misc/403.jsp");
+
 		return result;
 	}
 

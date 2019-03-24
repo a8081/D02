@@ -41,6 +41,7 @@ public class SocialProfile extends DomainEntity {
 		this.socialNetwork = socialNetwork;
 	}
 
+	@NotBlank
 	@URL
 	@SafeHtml
 	public String getProfileLink() {

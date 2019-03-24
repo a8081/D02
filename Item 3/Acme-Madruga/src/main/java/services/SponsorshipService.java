@@ -99,6 +99,13 @@ public class SponsorshipService {
 		return res;
 	}
 
+	public Sponsorship findByParade(final int paradeId, final int sponsorUAId) {
+		final Sponsorship res;
+		res = this.sponsorshipRepository.findByParade(paradeId, sponsorUAId);
+		Assert.notNull(res);
+		return res;
+	}
+
 	public Collection<Sponsorship> findAllActivateByUserId(final Sponsor s) {
 		final Collection<Sponsorship> res;
 		res = this.sponsorshipRepository.findAllActivateByUserId(s.getUserAccount().getId());

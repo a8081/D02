@@ -103,7 +103,7 @@ public class SponsorController extends AbstractController {
 			result.addObject("actorForm", actorForm);
 		} else
 			try {
-				final UserAccount ua = this.userAccountService.reconstruct(actorForm, Authority.MEMBER);
+				final UserAccount ua = this.userAccountService.reconstruct(actorForm, Authority.SPONSOR);
 				sponsor = this.sponsorService.reconstruct(actorForm);
 				sponsor.setUserAccount(ua);
 				this.registerService.saveSponsor(sponsor, binding);

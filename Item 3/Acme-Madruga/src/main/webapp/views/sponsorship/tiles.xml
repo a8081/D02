@@ -23,7 +23,7 @@
 	
 	<definition name="sponsorship/list" extends="master.page">
 		<put-attribute name="title" value="My sponsorships" />
-		<put-attribute name="body" value="/views/sponsorship/listSponsor.jsp" />
+		<put-attribute name="body" value="/views/sponsorship/list.jsp" />
 	</definition>
 	
 </tiles-definitions>

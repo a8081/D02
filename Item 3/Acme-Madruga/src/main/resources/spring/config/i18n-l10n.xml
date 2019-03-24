@@ -44,13 +44,15 @@
 		<value>/views/enrolment/messages</value>
 		<value>/views/finder/messages</value>
 		<value>/views/history/messages</value>
+		<value>/views/inceptionRecord/messages</value>
 		<value>/views/linkRecord/messages</value>
 		<value>/views/periodRecord/messages</value>
 		<value>/views/legalRecord/messages</value>
 		<value>/views/miscellaneousRecord/messages</value>
 		<value>/views/segment/messages</value>
 		
-		<value>/views/inceptionRecord/messages</value>
+		<value>/views/sponsor/messages</value>
+		<value>/views/sponsorship/messages</value>
 		
 	</util:list>
 

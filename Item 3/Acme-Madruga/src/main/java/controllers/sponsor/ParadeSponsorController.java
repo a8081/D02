@@ -8,6 +8,7 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import services.ParadeService;
@@ -29,37 +30,42 @@ public class ParadeSponsorController extends AbstractController {
 	final String			lang	= LocaleContextHolder.getLocale().getLanguage();
 
 
-	@RequestMapping(value = "/listParadeNoSponsors", method = RequestMethod.GET)
-	public ModelAndView listParadeNoSponsors() {
+	@RequestMapping(value = "/list", method = RequestMethod.GET)
+	public ModelAndView list() {
 		ModelAndView result;
 		Collection<Parade> parades;
+		Collection<Parade> myParades;
+		final Sponsor s = this.sponsorService.findByPrincipal();
 
-		parades = this.paradeService.paradesAvailableSponsor();
+		parades = this.paradeService.findAllAccepted();
+		myParades = this.paradeService.findAllParadeBySponsor(s);
 
 		result = new ModelAndView("parade/list");
+		result.addObject("sponsorparades", myParades);
 		result.addObject("parades", parades);
 		result.addObject("lang", this.lang);
-		result.addObject("requetURI", "parade/sponsor/listParadeNoSponsors.do");
+		result.addObject("rol", "sponsor");
+		result.addObject("requetURI", "parade/sponsor/listSponsorParade.do");
 
 		return result;
 
 	}
 
-	@RequestMapping(value = "/listSponsorParade", method = RequestMethod.GET)
-	public ModelAndView listSponsorParade() {
-		ModelAndView result;
-		Collection<Parade> myParades;
-		final Sponsor s = this.sponsorService.findByPrincipal();
+	@RequestMapping(value = "/display", method = RequestMethod.GET)
+	public ModelAndView display(@RequestParam final int paradeId) {
+		final ModelAndView result;
+		Parade parade;
 
-		myParades = this.paradeService.findAllParadeBySponsor(s);
+		parade = this.paradeService.findOne(paradeId);
 
-		result = new ModelAndView("parade/list");
-		result.addObject("parades", myParades);
-		result.addObject("lang", this.lang);
-		result.addObject("requetURI", "parade/sponsor/listSponsorParade.do");
+		if (parade != null && parade.getMode().equals("FINAL")) {
+			result = new ModelAndView("parade/display");
+			result.addObject("parade", parade);
+			result.addObject("rol", "sponsor");
+		} else
+			result = new ModelAndView("redirect:/misc/403.jsp");
 
 		return result;
-
 	}
 
 }

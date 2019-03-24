@@ -41,19 +41,19 @@
 				</ul>
 			</li>
 			
-			<li><a class="fNiv"><a href="position/administrator/list.do"><spring:message	code="master.page.position" /></a></a>
+			<li><a href="position/administrator/list.do"><spring:message	code="master.page.position" /></a>
 				
 			</li>
 			
-			<li><a class="fNiv"><a href="area/administrator/list.do"><spring:message	code="master.page.area" /></a></a>
+			<li><a href="area/administrator/list.do"><spring:message	code="master.page.area" /></a>
 				
 			</li>
 			
-			<li><a class="fNiv"><a href="ban/administrator/list.do"><spring:message	code="master.page.ban" /></a></a>
+			<li><a href="ban/administrator/list.do"><spring:message	code="master.page.ban" /></a>
 				
 			</li>
 			
-			<li><a class="fNiv"><a href="dashboard/administrator/statistics.do"><spring:message	code="master.page.dashboard" /></a></a>
+			<li><a href="dashboard/administrator/statistics.do"><spring:message	code="master.page.dashboard" /></a>
 			</li>
 			
 		</security:authorize>
@@ -93,7 +93,7 @@
 			
 			<li><a href="member/list.do"><spring:message code="master.page.member.list" /></a></li>
 			
-		<%-- MEMBERS --%>
+		<%-- HISTORY --%>
 		
 			<li><a href="history/list.do"><spring:message code="master.page.history" /></a></li>
 		
@@ -164,12 +164,40 @@
 		
 		</security:authorize>
 		
+		<!-- ========================================================================================================= -->
+		<!-- ========================================= SPONSOR =================================================== -->
+		<!-- ========================================================================================================= -->	
+	
+		<security:authorize access="hasRole('SPONSOR')">
+		
+		<%-- PARADES --%>
+		
+		<li><a href="parade/sponsor/list.do"><spring:message code="master.page.parade.sponsor" /></a></li>
+		
+		<%-- SPONSORSHIP --%>
+		
+		<li><a href="sponsorship/sponsor/list.do"><spring:message code="master.page.sponsor.sponsorship" /></a></li>
+		
+		</security:authorize>
+		
+		<!-- ========================================================================================================= -->
+		<!-- ========================================== ANONYMOUS ==================================================== -->
+		<!-- ========================================================================================================= -->	
+	
+		
 		<security:authorize access="isAnonymous()">
 			<li><a class="fNiv" href="security/login.do"><spring:message code="master.page.login" /></a></li>
 			<li><a class="fNiv" href="parade/list.do"><spring:message code="master.page.all.parade" /></a></li>
 			<li><a class="fNiv" href="brotherhood/create.do"><spring:message code="master.page.brotherhood.register" /></a></li>
 			<li><a class="fNiv" href="member/create.do"><spring:message code="master.page.member.register" /></a></li>
+			<li><a class="fNiv" href="sponsor/create.do"><spring:message code="master.page.sponsor.register" /></a></li>
 		</security:authorize>
+		
+		
+		<!-- ========================================================================================================= -->
+		<!-- ======================================== AUTHENTICATED ================================================== -->
+		<!-- ========================================================================================================= -->	
+	
 		
 		<security:authorize access="isAuthenticated()">
 			<li>
@@ -187,6 +215,10 @@
 					<security:authorize access="hasRole('MEMBER')">
 					<li><a href="member/edit.do"><spring:message code="master.page.member.edit" /></a></li>
 					<li><a href="member/display.do"><spring:message code="master.page.member.display" /></a></li>
+					</security:authorize>
+					<security:authorize access="hasRole('SPONSOR')">
+					<li><a href="sponsor/edit.do"><spring:message code="master.page.sponsor.edit" /></a></li>
+					<li><a href="sponsor/display.do"><spring:message code="master.page.sponsor.display" /></a></li>
 					</security:authorize>
 					<security:authorize access="hasRole('BROTHERHOOD')">
 					<li><a href="brotherhood/edit.do"><spring:message code="master.page.brotherhood.edit" /></a></li>

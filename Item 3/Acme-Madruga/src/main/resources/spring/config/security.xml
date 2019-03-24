@@ -50,6 +50,7 @@
 		<security:intercept-url pattern="/parade/brotherhood/**" access="hasRole('BROTHERHOOD')" />
 		<security:intercept-url pattern="/parade/chapter/**" access="hasRole('CHAPTER')" />
 		<security:intercept-url pattern="/parade/listByBrotherhood.do" access="permitAll" />
+		<security:intercept-url pattern="/parade/sponsor/**" access="hasRole('SPONSOR')" />
 		
 		<!-- History & Records -->
 		
@@ -90,25 +91,25 @@
 		<security:intercept-url pattern="/area/administrator/**" access="hasRole('ADMIN')" /> 
 		<security:intercept-url pattern="/ban/administrator/**" access="hasRole('ADMIN')" />
 		<security:intercept-url pattern="/dashboard/administrator/**" access="hasRole('ADMIN')" />
-		<security:intercept-url pattern="/folder/list.do" access="hasAnyRole('ADMIN', 'MEMBER', 'BROTHERHOOD', 'SUPER','CHAPTER')" />
-		<security:intercept-url pattern="/folder/listFolder.do" access="hasAnyRole('ADMIN', 'MEMBER', 'BROTHERHOOD', 'SUPER','CHAPTER')" /> 
-		<security:intercept-url pattern="/folder/edit.do" access="hasAnyRole('ADMIN', 'MEMBER', 'BROTHERHOOD', 'SUPER','CHAPTER')" /> 
-		<security:intercept-url pattern="/folder/create.do" access="hasAnyRole('ADMIN', 'MEMBER', 'BROTHERHOOD', 'SUPER','CHAPTER')" />
-		<security:intercept-url pattern="/folder/view.do" access="hasAnyRole('ADMIN', 'MEMBER', 'BROTHERHOOD', 'SUPER','CHAPTER')" />
-		<security:intercept-url pattern="/folder/display.do" access="hasAnyRole('ADMIN', 'MEMBER', 'BROTHERHOOD', 'SUPER','CHAPTER')" />
-		<security:intercept-url pattern="/folder/createInFolder.do" access="hasAnyRole('ADMIN', 'MEMBER', 'BROTHERHOOD', 'SUPER','CHAPTER')" />
-		<security:intercept-url pattern="/folder/saveInFather.do" access="hasAnyRole('ADMIN', 'MEMBER', 'BROTHERHOOD', 'SUPER','CHAPTER')" />
-		<security:intercept-url pattern="/folder/delete.do" access="hasAnyRole('ADMIN', 'MEMBER', 'BROTHERHOOD', 'SUPER','CHAPTER')" />
-		<security:intercept-url pattern="/message/create.do" access="hasAnyRole('ADMIN', 'MEMBER', 'BROTHERHOOD', 'SUPER','CHAPTER')" />
-		<security:intercept-url pattern="/message/edit.do" access="hasAnyRole('ADMIN', 'MEMBER', 'BROTHERHOOD', 'SUPER','CHAPTER')" />
-		<security:intercept-url pattern="/message/send.do" access="hasAnyRole('ADMIN', 'MEMBER', 'BROTHERHOOD', 'SUPER','CHAPTER')" />
-		<security:intercept-url pattern="/message/display.do" access="hasAnyRole('ADMIN', 'MEMBER', 'BROTHERHOOD', 'SUPER','CHAPTER')" />
-		<security:intercept-url pattern="/message/list.do" access="hasAnyRole('ADMIN', 'MEMBER', 'BROTHERHOOD', 'SUPER','CHAPTER')" />
-		<security:intercept-url pattern="/message/delete.do" access="hasAnyRole('ADMIN', 'MEMBER', 'BROTHERHOOD', 'SUPER','CHAPTER')" />
-		<security:intercept-url pattern="/message/move.do" access="hasAnyRole('ADMIN', 'MEMBER', 'BROTHERHOOD', 'SUPER','CHAPTER')" />
-		<security:intercept-url pattern="/message/saveMove.do" access="hasAnyRole('ADMIN', 'MEMBER', 'BROTHERHOOD', 'SUPER','CHAPTER')" />
-		<security:intercept-url pattern="/message/copy.do" access="hasAnyRole('ADMIN', 'MEMBER', 'BROTHERHOOD', 'SUPER','CHAPTER')" />
-		<security:intercept-url pattern="/message/saveCopy.do" access="hasAnyRole('ADMIN', 'MEMBER', 'BROTHERHOOD', 'SUPER','CHAPTER')" />
+		<security:intercept-url pattern="/folder/list.do" access="hasAnyRole('ADMIN', 'MEMBER', 'BROTHERHOOD', 'SUPER','CHAPTER','SPONSOR')" />
+		<security:intercept-url pattern="/folder/listFolder.do" access="hasAnyRole('ADMIN', 'MEMBER', 'BROTHERHOOD', 'SUPER','CHAPTER','SPONSOR')" /> 
+		<security:intercept-url pattern="/folder/edit.do" access="hasAnyRole('ADMIN', 'MEMBER', 'BROTHERHOOD', 'SUPER','CHAPTER','SPONSOR')" /> 
+		<security:intercept-url pattern="/folder/create.do" access="hasAnyRole('ADMIN', 'MEMBER', 'BROTHERHOOD', 'SUPER','CHAPTER','SPONSOR')" />
+		<security:intercept-url pattern="/folder/view.do" access="hasAnyRole('ADMIN', 'MEMBER', 'BROTHERHOOD', 'SUPER','CHAPTER','SPONSOR')" />
+		<security:intercept-url pattern="/folder/display.do" access="hasAnyRole('ADMIN', 'MEMBER', 'BROTHERHOOD', 'SUPER','CHAPTER','SPONSOR')" />
+		<security:intercept-url pattern="/folder/createInFolder.do" access="hasAnyRole('ADMIN', 'MEMBER', 'BROTHERHOOD', 'SUPER','CHAPTER','SPONSOR')" />
+		<security:intercept-url pattern="/folder/saveInFather.do" access="hasAnyRole('ADMIN', 'MEMBER', 'BROTHERHOOD', 'SUPER','CHAPTER','SPONSOR')" />
+		<security:intercept-url pattern="/folder/delete.do" access="hasAnyRole('ADMIN', 'MEMBER', 'BROTHERHOOD', 'SUPER','CHAPTER','SPONSOR')" />
+		<security:intercept-url pattern="/message/create.do" access="hasAnyRole('ADMIN', 'MEMBER', 'BROTHERHOOD', 'SUPER','CHAPTER','SPONSOR')" />
+		<security:intercept-url pattern="/message/edit.do" access="hasAnyRole('ADMIN', 'MEMBER', 'BROTHERHOOD', 'SUPER','CHAPTER','SPONSOR')" />
+		<security:intercept-url pattern="/message/send.do" access="hasAnyRole('ADMIN', 'MEMBER', 'BROTHERHOOD', 'SUPER','CHAPTER','SPONSOR')" />
+		<security:intercept-url pattern="/message/display.do" access="hasAnyRole('ADMIN', 'MEMBER', 'BROTHERHOOD', 'SUPER','CHAPTER','SPONSOR')" />
+		<security:intercept-url pattern="/message/list.do" access="hasAnyRole('ADMIN', 'MEMBER', 'BROTHERHOOD', 'SUPER','CHAPTER','SPONSOR')" />
+		<security:intercept-url pattern="/message/delete.do" access="hasAnyRole('ADMIN', 'MEMBER', 'BROTHERHOOD', 'SUPER','CHAPTER','SPONSOR')" />
+		<security:intercept-url pattern="/message/move.do" access="hasAnyRole('ADMIN', 'MEMBER', 'BROTHERHOOD', 'SUPER','CHAPTER','SPONSOR')" />
+		<security:intercept-url pattern="/message/saveMove.do" access="hasAnyRole('ADMIN', 'MEMBER', 'BROTHERHOOD', 'SUPER','CHAPTER','SPONSOR')" />
+		<security:intercept-url pattern="/message/copy.do" access="hasAnyRole('ADMIN', 'MEMBER', 'BROTHERHOOD', 'SUPER','CHAPTER','SPONSOR')" />
+		<security:intercept-url pattern="/message/saveCopy.do" access="hasAnyRole('ADMIN', 'MEMBER', 'BROTHERHOOD', 'SUPER','CHAPTER','SPONSOR')" />
 		<security:intercept-url pattern="/message/broadcast.do" access="hasRole('ADMIN')" />
 		<security:intercept-url pattern="/message/saveBroadcast.do" access="hasRole('ADMIN')" />
 		<security:intercept-url pattern="/brotherhood/listAll.do" access="hasAnyRole('ADMIN')" /> 
@@ -167,9 +168,20 @@
 		<security:intercept-url pattern="/finder/member/edit.do" access="hasRole('MEMBER')"/>
 		<security:intercept-url pattern="/finder/member/display.do" access="hasRole('MEMBER')"/>
 		
+		<!-- SPONSOR -->
+		
+		<security:intercept-url pattern="/sponsor/create.do" access="permitAll" /> 
+		<security:intercept-url pattern="/sponsor/edit.do" access="permitAll" /> 
+		<security:intercept-url pattern="/sponsor/display.do" access="hasRole('SPONSOR')" />
+		<security:intercept-url pattern="/sponsor/deletePersonalData.do" access="hasRole('SPONSOR')"/>
+		<security:intercept-url pattern="/sponsor/displayTabla.do" access="isAuthenticated()"/>
+		
 		<!-- SEGMENT -->
 		<security:intercept-url pattern="/segment/brotherhood/**" access="hasRole('BROTHERHOOD')" />
 		
+		<!-- SPONSORSHIP -->
+		
+		<security:intercept-url pattern="/sponsorship/sponsor/**" access="hasRole('SPONSOR')" /> 
 		
 
 		<security:intercept-url pattern="/profile/action-1.do" access="isAuthenticated()" /> 
