@@ -38,6 +38,8 @@
 				<ul>
 					<li class="arrow"></li>
 					<li><a href="configurationParameters/administrator/edit.do"><spring:message code="master.page.configurationParameters.edit" /></a></li>
+					<li><a href="ban/administrator/list.do"><spring:message	code="master.page.ban" /></a></li>
+					<li><a href="sponsorship/administrator//launchDeactivate.do"><spring:message	code="master.page.administrator.deactivate" /></a></li>	
 				</ul>
 			</li>
 			
@@ -46,10 +48,6 @@
 			</li>
 			
 			<li><a href="area/administrator/list.do"><spring:message	code="master.page.area" /></a>
-				
-			</li>
-			
-			<li><a href="ban/administrator/list.do"><spring:message	code="master.page.ban" /></a>
 				
 			</li>
 			

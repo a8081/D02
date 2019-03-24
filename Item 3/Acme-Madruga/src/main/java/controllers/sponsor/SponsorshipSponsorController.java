@@ -4,6 +4,7 @@ package controllers.sponsor;
 import java.util.Collection;
 
 import javax.validation.Valid;
+import javax.validation.ValidationException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -21,6 +22,7 @@ import controllers.AbstractController;
 import domain.Parade;
 import domain.Sponsor;
 import domain.Sponsorship;
+import forms.SponsorshipForm;
 
 @Controller
 @RequestMapping("/sponsorship/sponsor")
@@ -93,19 +95,25 @@ public class SponsorshipSponsorController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "save")
-	public ModelAndView save(@Valid final Sponsorship sponsorship, final BindingResult binding) {
+	public ModelAndView save(@Valid final SponsorshipForm sponsorshipForm, final BindingResult binding) {
 		ModelAndView result;
+		Sponsorship sponsorship;
+
+		sponsorship = this.sponsorshipService.reconstruct(sponsorshipForm, binding);
+
 		if (binding.hasErrors())
 			result = this.createEditModelAndView(sponsorship);
 		else
 			try {
 				this.sponsorshipService.save(sponsorship);
 				result = new ModelAndView("redirect:list.do");
+			} catch (final ValidationException oops) {
+				result = this.createEditModelAndView(sponsorshipForm);
 			} catch (final Throwable oops) {
 				String errorMessage = "sponsorship.commit.error";
 				if (oops.getMessage().contains("message.error"))
 					errorMessage = oops.getMessage();
-				result = this.createEditModelAndView(sponsorship, errorMessage);
+				result = this.createEditModelAndView(sponsorshipForm, errorMessage);
 			}
 		return result;
 	}
@@ -113,8 +121,12 @@ public class SponsorshipSponsorController extends AbstractController {
 	// =================REACTIVATE=================
 
 	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "reactivate")
-	public ModelAndView activate(@Valid final Sponsorship sponsorship, final BindingResult binding) {
+	public ModelAndView activate(@Valid final SponsorshipForm sponsorshipForm, final BindingResult binding) {
 		ModelAndView result;
+		Sponsorship sponsorship;
+
+		sponsorship = this.sponsorshipService.reconstruct(sponsorshipForm, binding);
+
 		try {
 			this.sponsorshipService.reactivate(sponsorship);
 			result = new ModelAndView("redirect:list.do");
@@ -127,8 +139,12 @@ public class SponsorshipSponsorController extends AbstractController {
 	// =================DEACTIVATE=================
 
 	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "deactivate")
-	public ModelAndView deactivate(@Valid final Sponsorship sponsorship, final BindingResult binding) {
+	public ModelAndView deactivate(@Valid final SponsorshipForm sponsorshipForm, final BindingResult binding) {
 		ModelAndView result;
+		Sponsorship sponsorship;
+
+		sponsorship = this.sponsorshipService.reconstruct(sponsorshipForm, binding);
+
 		try {
 			this.sponsorshipService.deactivate(sponsorship);
 			result = new ModelAndView("redirect:list.do");
@@ -159,6 +175,28 @@ public class SponsorshipSponsorController extends AbstractController {
 
 	//ANCILLIARY METHODS
 
+	protected ModelAndView createEditModelAndView(final SponsorshipForm sponsorship) {
+		ModelAndView result;
+
+		result = this.createEditModelAndView(sponsorship, null);
+
+		return result;
+	}
+
+	protected ModelAndView createEditModelAndView(final SponsorshipForm sponsorship, final String messageCode) {
+		final ModelAndView result;
+
+		final Collection<Parade> parades = this.paradeService.paradesAvailableSponsor();
+
+		result = new ModelAndView("sponsorship/edit");
+		result.addObject("sponsorship", sponsorship);
+		result.addObject("parades", parades);
+		//result.addObject("requestURI", "/sponsorship/sponsor/edit.do?sponsorshipId=" + sponsorship.getId());
+		result.addObject("paradesAvailable", this.paradeService.paradesAvailable());
+		result.addObject("message", messageCode);
+		return result;
+	}
+
 	protected ModelAndView createEditModelAndView(final Sponsorship sponsorship) {
 		ModelAndView result;
 
@@ -169,11 +207,14 @@ public class SponsorshipSponsorController extends AbstractController {
 
 	protected ModelAndView createEditModelAndView(final Sponsorship sponsorship, final String messageCode) {
 		final ModelAndView result;
+		SponsorshipForm sponsorshipForm;
+
+		sponsorshipForm = this.sponsorshipService.inyect(sponsorship);
 
 		final Collection<Parade> parades = this.paradeService.paradesAvailableSponsor();
 
 		result = new ModelAndView("sponsorship/edit");
-		result.addObject("sponsorship", sponsorship);
+		result.addObject("sponsorship", sponsorshipForm);
 		result.addObject("parades", parades);
 		//result.addObject("requestURI", "/sponsorship/sponsor/edit.do?sponsorshipId=" + sponsorship.getId());
 		result.addObject("paradesAvailable", this.paradeService.paradesAvailable());

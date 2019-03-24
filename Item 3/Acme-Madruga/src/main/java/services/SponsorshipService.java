@@ -2,11 +2,16 @@
 package services;
 
 import java.util.Collection;
+import java.util.Date;
+
+import javax.validation.ValidationException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.Validator;
 
 import repositories.SponsorshipRepository;
 import domain.CreditCard;
@@ -26,6 +31,12 @@ public class SponsorshipService {
 
 	@Autowired
 	private ParadeService			paradeService;
+
+	@Autowired
+	private AdministratorService	administratorService;
+
+	@Autowired
+	private Validator				validator;
 
 
 	public Sponsorship create() {
@@ -125,6 +136,21 @@ public class SponsorshipService {
 		return res;
 	}
 
+	/**
+	 * Launch a process that automatically deactivates the sponsorships whose credit cards have expired. It only can be launch by administrators.
+	 * 
+	 * @author a8081
+	 * */
+	public void deactivateExpiredCreditCard() {
+		this.administratorService.findByPrincipal();
+		final Date now = new Date();
+		final Collection<Sponsorship> sp = this.sponsorshipRepository.expiredSponsorships(now.getMonth() + 1, now.getYear() % 100);
+		for (final Sponsorship s : sp) {
+			s.setActivated(false);
+			this.sponsorshipRepository.save(s);
+		}
+	}
+
 	public SponsorshipForm inyect(final Sponsorship sponsorship) {
 		final SponsorshipForm result = new SponsorshipForm();
 
@@ -144,7 +170,7 @@ public class SponsorshipService {
 		return result;
 	}
 
-	public Sponsorship reconstruct(final SponsorshipForm sponsorshipForm) {
+	public Sponsorship reconstruct(final SponsorshipForm sponsorshipForm, final BindingResult binding) {
 		Sponsorship sponsorship;
 
 		if (sponsorshipForm.getId() == 0) {
@@ -180,6 +206,11 @@ public class SponsorshipService {
 			sponsorship.setSponsor(this.sponsorService.findByPrincipal());
 			sponsorship.setCreditCard(creditCard);
 		}
+
+		this.validator.validate(sponsorship, binding);
+		if (binding.hasErrors())
+			throw new ValidationException();
+
 		return sponsorship;
 	}
 

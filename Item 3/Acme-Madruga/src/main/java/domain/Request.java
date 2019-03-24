@@ -25,7 +25,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 @Entity
 @Access(AccessType.PROPERTY)
 @Table(indexes = {
-	@Index(columnList = "member, parade, status, row, column")
+	@Index(columnList = "member, parade, status")
 })
 public class Request extends DomainEntity {
 

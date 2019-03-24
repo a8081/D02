@@ -16,6 +16,15 @@
 <%@taglib prefix="security" uri="http://www.springframework.org/security/tags"%>
 <%@taglib prefix="display" uri="http://displaytag.sf.net"%>
 
+<jstl:if test="${not empty alert}">
+	<script>
+	 $(document).ready(function() {
+		 alert('<spring:message code="${alert}"/>');
+	    });
+		
+	</script>
+</jstl:if>
+
 <p>${mensaje }</p>
 
 <p><spring:message code="welcome.greeting.current.time" /> ${moment}</p> 

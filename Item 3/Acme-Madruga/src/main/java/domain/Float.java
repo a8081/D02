@@ -20,7 +20,7 @@ import cz.jirutka.validator.collection.constraints.EachURL;
 @Entity
 @Access(AccessType.PROPERTY)
 @Table(name = "`float`", indexes = {
-	@Index(columnList = "brootherhood, title")
+	@Index(columnList = "title")
 })
 public class Float extends DomainEntity {
 
