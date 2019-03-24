@@ -9,8 +9,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import repositories.SponsorshipRepository;
+import domain.CreditCard;
 import domain.Sponsor;
 import domain.Sponsorship;
+import forms.SponsorshipForm;
 
 @Service
 @Transactional
@@ -52,10 +54,13 @@ public class SponsorshipService {
 		if (s.getId() == 0) {
 			s.setActivated(true);
 			s.setSponsor(principal);
+			Assert.isTrue(this.sponsorshipRepository.availableSponsorshipParade(s.getParade().getId(), principal.getUserAccount().getId()), "Cannot sponsors twice the same parade");
 			Assert.notNull(s.getCreditCard(), "You must to set a credit card to create a sponsorship");
 			Assert.isTrue(this.paradeService.exists(s.getParade().getId()), "You must sponsors to a parade of the system");
-		} else
+		} else {
 			Assert.isTrue(ss.contains(s), "You only can modify your sponsorships, you haven't access to this resource");
+			Assert.isTrue(this.sponsorshipRepository.availableSponsorshipParade(s.getParade().getId(), principal.getUserAccount().getId()), "Cannot sponsors twice the same parade");
+		}
 		final Sponsorship saved = this.sponsorshipRepository.save(s);
 		return saved;
 	}
@@ -119,4 +124,63 @@ public class SponsorshipService {
 		Assert.notNull(res);
 		return res;
 	}
+
+	public SponsorshipForm inyect(final Sponsorship sponsorship) {
+		final SponsorshipForm result = new SponsorshipForm();
+
+		result.setId(sponsorship.getId());
+		result.setVersion(sponsorship.getVersion());
+		result.setBanner(sponsorship.getBanner());
+		result.setTargetPage(sponsorship.getTargetPage());
+		result.setActivated(sponsorship.isActivated());
+		result.setParade(sponsorship.getParade());
+		result.setNumber(sponsorship.getCreditCard().getNumber());
+		result.setHolderName(sponsorship.getCreditCard().getHolderName());
+		result.setMake(sponsorship.getCreditCard().getMake());
+		result.setExpirationMonth(sponsorship.getCreditCard().getExpirationMonth());
+		result.setExpirationYear(sponsorship.getCreditCard().getExpirationYear());
+		result.setCvv(sponsorship.getCreditCard().getCvv());
+
+		return result;
+	}
+
+	public Sponsorship reconstruct(final SponsorshipForm sponsorshipForm) {
+		Sponsorship sponsorship;
+
+		if (sponsorshipForm.getId() == 0) {
+			final CreditCard creditCard = new CreditCard();
+			creditCard.setNumber(sponsorshipForm.getNumber());
+			creditCard.setMake(sponsorshipForm.getMake());
+			creditCard.setHolderName(sponsorshipForm.getHolderName());
+			creditCard.setExpirationMonth(sponsorshipForm.getExpirationMonth());
+			creditCard.setExpirationYear(sponsorshipForm.getExpirationYear());
+			creditCard.setCvv(sponsorshipForm.getCvv());
+			sponsorship = this.create();
+			sponsorship.setId(sponsorshipForm.getId());
+			sponsorship.setVersion(sponsorshipForm.getVersion());
+			sponsorship.setActivated(sponsorshipForm.isActivated());
+			sponsorship.setBanner(sponsorshipForm.getBanner());
+			sponsorship.setParade(sponsorshipForm.getParade());
+			sponsorship.setTargetPage(sponsorshipForm.getTargetPage());
+			sponsorship.setSponsor(this.sponsorService.findByPrincipal());
+			sponsorship.setCreditCard(creditCard);
+		} else {
+			sponsorship = this.sponsorshipRepository.findOne(sponsorshipForm.getId());
+			final CreditCard creditCard = new CreditCard();
+			creditCard.setNumber(sponsorshipForm.getNumber());
+			creditCard.setMake(sponsorshipForm.getMake());
+			creditCard.setHolderName(sponsorshipForm.getHolderName());
+			creditCard.setExpirationMonth(sponsorshipForm.getExpirationMonth());
+			creditCard.setExpirationYear(sponsorshipForm.getExpirationYear());
+			creditCard.setCvv(sponsorshipForm.getCvv());
+			sponsorship.setActivated(sponsorshipForm.isActivated());
+			sponsorship.setBanner(sponsorshipForm.getBanner());
+			sponsorship.setParade(sponsorshipForm.getParade());
+			sponsorship.setTargetPage(sponsorshipForm.getTargetPage());
+			sponsorship.setSponsor(this.sponsorService.findByPrincipal());
+			sponsorship.setCreditCard(creditCard);
+		}
+		return sponsorship;
+	}
+
 }

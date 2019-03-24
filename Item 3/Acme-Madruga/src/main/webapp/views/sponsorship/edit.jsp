@@ -9,6 +9,7 @@
 <%@taglib prefix="security"
 	uri="http://www.springframework.org/security/tags"%>
 <%@taglib prefix="display" uri="http://displaytag.sf.net"%>
+<%@ taglib prefix="acme" tagdir="/WEB-INF/tags"%>
 
 <form:form action="sponsorship/sponsor/edit.do"
 	modelAttribute="sponsorship">
@@ -17,56 +18,32 @@
 		<form:hidden path="id" />
 		<form:hidden path="version" />
 	</jstl:if>
-
-	<form:hidden path="tutorials" />
-
-	<form:label path="banner">
-		<spring:message code="sponsorship.banner" />
-	</form:label>
-	<form:input path="banner" />
-	<form:errors cssClass="error" path="banner" />
-	<br />
-	<form:label path="targetPage">
-		<spring:message code="sponsorship.targetPage" />
-	</form:label>
-	<form:input path="targetPage" />
-	<form:errors cssClass="error" path="targetPage" />
-
-
+	
+	<form:hidden path="parade" value="${parade}" />
+	
+	<acme:textbox code="sponsorship.banner" path="banner"/>
+	<acme:textbox code="sponsorship.targetPage" path="targetPage"/>
+	<acme:textbox code="sponsorship.creditCard.holder" path="holder"/>
+	<acme:textbox code="sponsorship.creditCard.make" path="make"/>
+	<acme:textbox code="sponsorship.creditCard.number" path="number"/>
+	<acme:textbox code="sponsorship.creditCard.expirationMonth" path="expirationMonth" placeholder="09"/>
+	<acme:textbox code="sponsorship.creditCard.expirationYear" path="expirationYear" placeholder="21"/>
+	<acme:textbox code="sponsorship.creditCard.cvv" path="cvv"/>
 	<br />
 
-	<form:label path="creditCard">
-		<spring:message code="application.creditCard" />:
-			</form:label>
-	<form:select id="cards" path="creditCard">
-		<jstl:forEach var="card" items="${creditCards}">
-			<form:option value="${card.id}">
-				<jstl:out value="${card.brandName } - number: ${card.number}" />
-			</form:option>
-		</jstl:forEach>
-	</form:select>
-	<form:errors cssClass="error" path="creditCard" />
-	<br />
-
+	<input type="submit" name="save" value="<spring:message code="sponsorship.save"/> " />
+		
 	<jstl:if test="${sponsorship.id != 0}">
-		<spring:message code="sponsorship.tutorials" />:
-		<ul>
-			<jstl:forEach var="tutorial" items="${sponsorship.tutorials}">
-				<li><a href="tutorial/display.do?tutorialId=${tutorial.id}">${tutorial.title}</a>
-					- <a href="sponsorship/sponsor/remove.do?sponsorshipId=${sponsorship.id}&tutorialId=${tutorial.id}"><spring:message
-							code="sponsorship.deselect" /></a></li>
-			</jstl:forEach>
-		</ul>
+		<jstl:choose>
+			<jstl:when test="${sponsorship.activated == 0}">
+				<input type="submit" name="deactivate" value="<spring:message code="sponsorship.deactivate"/>" />
+			</jstl:when>
+			<jstl:otherwise>
+				<input type="submit" name="reactivate" value="<spring:message code="sponsorship.reactivate"/>" />
+			</jstl:otherwise>
+		</jstl:choose>
 	</jstl:if>
-
-	<br />
-
-	<input type="submit" name="save"
-		value="<spring:message code="sponsorship.save"/> " />
-	<jstl:if test="${sponsorship.id != 0}">
-		<input type="submit" name="delete"
-			value="<spring:message code="sponsorship.delete"/>" />
-	</jstl:if>
+	
 	<input type="button" name="cancel"
 		value="<spring:message code="sponsorship.cancel"/>" 
 		onclick="javascript: relativeRedir('#');"/>
