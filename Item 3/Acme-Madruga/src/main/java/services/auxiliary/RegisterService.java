@@ -12,15 +12,16 @@ import org.springframework.validation.BindingResult;
 
 import security.UserAccount;
 import security.UserAccountRepository;
-import services.ActorService;
 import services.AdministratorService;
 import services.BrotherhoodService;
 import services.MemberService;
+import services.SponsorService;
 import services.UserAccountService;
 import domain.Actor;
 import domain.Administrator;
 import domain.Brotherhood;
 import domain.Member;
+import domain.Sponsor;
 import forms.ActorFrom;
 import forms.BrotherhoodForm;
 
@@ -29,18 +30,22 @@ import forms.BrotherhoodForm;
 public class RegisterService {
 
 	@Autowired
-	private ActorService			actorService;
-	@Autowired
 	private UserAccountService		userAccountService;
+
 	@Autowired
 	private AdministratorService	administratorService;
+
 	@Autowired
 	private UserAccountRepository	userAccountRepository;
 
 	@Autowired
 	private MemberService			memberService;
+
 	@Autowired
 	private BrotherhoodService		brotherhoodService;
+
+	@Autowired
+	private SponsorService			sponsorService;
 
 
 	public Administrator saveAdmin(final Administrator admin, final BindingResult binding) {
@@ -97,6 +102,36 @@ public class RegisterService {
 				Assert.isTrue(this.userAccountRepository.findByUsername(ua.getUsername()) == null, "The username is register");
 
 			result = this.memberService.save(member);
+
+		}
+
+		return result;
+	}
+
+	public Sponsor saveSponsor(final Sponsor sponsor, final BindingResult binding) {
+		Sponsor result;
+		final UserAccount ua = sponsor.getUserAccount();
+		final Md5PasswordEncoder encoder = new Md5PasswordEncoder();
+		final String hash = encoder.encodePassword(ua.getPassword(), null);
+		if (sponsor.getId() == 0) {
+			Assert.isTrue(this.userAccountRepository.findByUsername(ua.getUsername()) == null, "The username is register");
+			ua.setPassword(hash);
+			sponsor.setUserAccount(ua);
+			result = this.sponsorService.save(sponsor);
+			UserAccount uaSaved = result.getUserAccount();
+			uaSaved.setAuthorities(ua.getAuthorities());
+			uaSaved.setUsername(ua.getUsername());
+			uaSaved.setPassword(ua.getPassword());
+			uaSaved = this.userAccountService.save(uaSaved);
+			result.setUserAccount(uaSaved);
+		} else {
+			final Sponsor old = this.sponsorService.findOne(sponsor.getId());
+
+			ua.setPassword(hash);
+			if (!old.getUserAccount().getUsername().equals(ua.getUsername()))
+				Assert.isTrue(this.userAccountRepository.findByUsername(ua.getUsername()) == null, "The username is register");
+
+			result = this.sponsorService.save(sponsor);
 
 		}
 

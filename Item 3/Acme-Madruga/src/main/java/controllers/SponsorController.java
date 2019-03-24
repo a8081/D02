@@ -1,8 +1,6 @@
 
 package controllers;
 
-import java.util.Collection;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,14 +14,10 @@ import org.springframework.web.servlet.ModelAndView;
 import security.Authority;
 import security.UserAccount;
 import services.ActorService;
-import services.BrotherhoodService;
-import services.ConfigurationParametersService;
-import services.EnrolmentService;
 import services.SponsorService;
 import services.UserAccountService;
 import services.auxiliary.RegisterService;
 import domain.Actor;
-import domain.Brotherhood;
 import domain.Sponsor;
 import forms.ActorFrom;
 
@@ -32,27 +26,16 @@ import forms.ActorFrom;
 public class SponsorController extends AbstractController {
 
 	@Autowired
-	private BrotherhoodService				brotherhoodService;
+	private UserAccountService	userAccountService;
 
 	@Autowired
-	private UserAccountService				userAccountService;
+	private RegisterService		registerService;
 
 	@Autowired
-	private ConfigurationParametersService	configurationParametersService;
+	private ActorService		actorService;
 
 	@Autowired
-	private EnrolmentService				enrolmentService;
-
-	@Autowired
-	private BrotherhoodController			brotherhoodController;
-
-	@Autowired
-	private RegisterService					registerService;
-	@Autowired
-	private ActorService					actorService;
-
-	@Autowired
-	private SponsorService					sponsorService;
+	private SponsorService		sponsorService;
 
 
 	// Constructors -----------------------------------------------------------
@@ -145,28 +128,6 @@ public class SponsorController extends AbstractController {
 		result.addObject("actorForm", actor);
 		return result;
 
-	}
-
-	// LIST MY MEMBERS  ---------------------------------------------------------------		
-
-	@RequestMapping(value = "/list", method = RequestMethod.GET)
-	public ModelAndView list() {
-		final ModelAndView result;
-		final Brotherhood brotherhood = this.brotherhoodService.findByPrincipal();
-		final Collection<Sponsor> sponsors;
-
-		sponsors = this.sponsorService.allSponsorsFromBrotherhood();
-
-		result = new ModelAndView("sponsor/list");
-		result.addObject("sponsors", sponsors);
-		result.addObject("brotherhood", brotherhood);
-		result.addObject("ok", true);
-		result.addObject("requetURI", "sponsor/list.do");
-
-		final String banner = this.configurationParametersService.findBanner();
-		result.addObject("banner", banner);
-
-		return result;
 	}
 
 	//GDPR

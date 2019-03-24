@@ -112,5 +112,4 @@ public class SponsorshipService {
 		Assert.notNull(res);
 		return res;
 	}
-
 }

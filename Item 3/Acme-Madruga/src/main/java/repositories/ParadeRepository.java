@@ -71,4 +71,10 @@ public interface ParadeRepository extends JpaRepository<Parade, Integer> {
 	@Query("select p from Parade p join p.segments s where s.id=?1")
 	Parade findParadeBySegment(int segmentId);
 
+	@Query("select p from Parade p where p.status='ACCEPTED'")
+	Collection<Parade> findAllAccepted();
+
+	@Query("select sp.parade from Sponsorship sp where sp.sponsor.userAccount.id=?1")
+	Collection<Parade> findAllParadeBySponsor(int sponsorUAId);
+
 }

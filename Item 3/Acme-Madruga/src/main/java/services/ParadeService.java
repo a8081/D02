@@ -24,6 +24,7 @@ import domain.Float;
 import domain.Member;
 import domain.Parade;
 import domain.Segment;
+import domain.Sponsor;
 import forms.ParadeChapterForm;
 import forms.ParadeForm;
 
@@ -51,6 +52,9 @@ public class ParadeService {
 
 	@Autowired
 	private SegmentService		segmentService;
+
+	@Autowired
+	private SponsorService		sponsorService;
 
 
 	//@Autowired
@@ -86,6 +90,13 @@ public class ParadeService {
 
 	public Collection<Parade> findAllFinalMode() {
 		final Collection<Parade> result = this.paradeRepository.findAllFinalMode();
+		Assert.notNull(result);
+
+		return result;
+	}
+
+	public Collection<Parade> findAllAccepted() {
+		final Collection<Parade> result = this.paradeRepository.findAllAccepted();
 		Assert.notNull(result);
 
 		return result;
@@ -245,6 +256,28 @@ public class ParadeService {
 		final Collection<Parade> parades = this.findAllFinalMode();
 		parades.removeAll(memberparades);
 		return parades;
+	}
+
+	/**
+	 * It returns all parades which principal has not sponsors yet. The principal must be a sponsor.
+	 * 
+	 * @author a8081
+	 * */
+	public Collection<Parade> paradesAvailableSponsor() {
+		Collection<Parade> myParades;
+		Collection<Parade> parades;
+		final Sponsor s = this.sponsorService.findByPrincipal();
+		parades = this.findAllAccepted();
+		myParades = this.findAllParadeBySponsor(s);
+		parades.removeAll(myParades);
+		return parades;
+	}
+
+	public Collection<Parade> findAllParadeBySponsor(final Sponsor s) {
+		Collection<Parade> res;
+		res = this.paradeRepository.findAllParadeBySponsor(s.getUserAccount().getId());
+		Assert.notNull(res);
+		return res;
 	}
 
 	public boolean exists(final Integer paradeId) {
