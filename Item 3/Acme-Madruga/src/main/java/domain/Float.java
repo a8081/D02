@@ -7,6 +7,7 @@ import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.Index;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.Valid;
@@ -18,7 +19,9 @@ import cz.jirutka.validator.collection.constraints.EachURL;
 
 @Entity
 @Access(AccessType.PROPERTY)
-@Table(name = "`float`")
+@Table(name = "`float`", indexes = {
+	@Index(columnList = "brootherhood, title")
+})
 public class Float extends DomainEntity {
 
 	private String				title;

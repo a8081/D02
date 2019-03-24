@@ -1,14 +1,9 @@
 
 package services;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-
-import javax.validation.ConstraintViolationException;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,9 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 
 import utilities.AbstractTest;
-import domain.Brotherhood;
 import domain.GPS;
 import domain.Parade;
 import domain.Segment;
@@ -31,77 +26,72 @@ import domain.Segment;
 public class SegmentServiceTest extends AbstractTest {
 
 	@Autowired
-	private SegmentService		segmentService;
+	private SegmentService	segmentService;
 
 	@Autowired
-	private BrotherhoodService	brotherhoodService;
-
-	@Autowired
-	private ParadeService		paradeService;
+	private ParadeService	paradeService;
 
 
-	/* ========================= Test Create and Save Chapter =========================== */
+	/* ========================= Test Create Segment =========================== */
 
 	@Test
-	public void driverCreateAndSaveSegment() {
-
-		final Collection<GPS> listaGPS;
-		final Iterator<GPS> iterator;
-		GPS gpsOk;
-
-		listaGPS = this.listaGPSTest();
-		iterator = listaGPS.iterator();
-		gpsOk = iterator.next();
+	public void driverCreateSegment() {
 
 		final Object testingData[][] = {
 			{
 				// Crear segment correctamente
-				"2018/03/16 15:20", "2018/03/16 15:40", gpsOk, gpsOk, null
+				"brotherhood1", "parade1", "2020/03/16 15:20", "2020/03/16 15:40", null
 			}, {
-				//Crear segment con parametro incorrecto
-				"2018/03/16 15:40", "2018/03/16 17:00", iterator.next(), iterator.next(), ConstraintViolationException.class
+				//Crear segment con fecha vacía
+				"brotherhood1", "parade1", "2020/03/16 15:20", "", ParseException.class
+			}, {
+				//Crear segment con parametro a null
+				"brotherhood1", "parade1", null, "2020/03/16 15:40", NullPointerException.class
+			}, {
+				//Crear segment con Brotherhood vacía
+				"", "parade1", "2020/03/16 15:20", "2020/03/16 15:40", IllegalArgumentException.class
+			}, {
+				// Crear segment con parade vacía
+				"brotherhood1", "", "2020/03/16 15:20", "2020/03/16 15:40", AssertionError.class
+			}, {
+				// Crear segment con parade invalida
+				"brotherhood1", "parade2", "2020/03/16 15:20", "2020/03/16 15:40", IllegalArgumentException.class
+			}, {
+				// Crear segment con fecha destino anterior a fecha origen
+				"brotherhood1", "parade1", "2020/03/16 15:40", "2020/03/16 15:00", IllegalArgumentException.class
 			}
 		};
 		for (int i = 0; i < testingData.length; i++)
-			this.templateCreateAndSave((String) testingData[i][0], (String) testingData[i][1], (GPS) testingData[i][2], (GPS) testingData[i][3], (Class<?>) testingData[i][4]);
+			this.templateCreateSegment((String) testingData[i][0], (String) testingData[i][1], (String) testingData[i][2], (String) testingData[i][3], (Class<?>) testingData[i][4]);
 	}
-
-	private void templateCreateAndSave(final String originTime, final String destinationTime, final GPS originCoordinates, final GPS destinationCoordinates, final Class<?> expected) {
+	private void templateCreateSegment(final String brotherhood, final String parade, final String originTime, final String destinationTime, final Class<?> expected) {
 
 		Class<?> caught;
-		Segment segment;
-		final Integer brotherhoodId = this.getEntityId("brotherhood1");
-		final Brotherhood brotherhood = this.brotherhoodService.findOne(brotherhoodId);
-		final List<Parade> parades = new ArrayList<>(this.paradeService.findAllParadeByBrotherhoodId(brotherhood.getUserAccount().getId()));
 
-		final Parade parade = this.paradeService.findOne(parades.get(0).getId());
-
-		final Date timeOrigin;
-		final Date timeDestination;
+		Date timeOrigin;
+		Date timeDestination;
 
 		caught = null;
 
 		try {
-			this.authenticate(brotherhood.getUserAccount().getUsername());
-			segment = this.segmentService.create();
-			if (destinationTime != null)
-				timeDestination = (new SimpleDateFormat("yyyy/MM/dd HH:mm")).parse(destinationTime);
-			else
-				timeDestination = null;
 
-			if (originTime != null)
-				timeOrigin = (new SimpleDateFormat("yyyy/MM/dd HH:mm")).parse(originTime);
+			final Parade p = this.paradeService.findOne(this.getEntityId(parade));
+			this.authenticate(brotherhood);
 
-			else
-				timeOrigin = null;
+			final Segment segment = this.segmentService.create();
+
+			timeOrigin = (new SimpleDateFormat("yyyy/MM/dd HH:mm")).parse(originTime);
+			timeDestination = (new SimpleDateFormat("yyyy/MM/dd HH:mm")).parse(destinationTime);
 
 			segment.setOriginTime(timeOrigin);
 			segment.setDestinationTime(timeDestination);
 
-			segment.setOriginCoordinates(originCoordinates);
-			segment.setDestinationCoordinates(destinationCoordinates);
-			segment = this.segmentService.save(segment, parade.getId());
+			final Segment saved = this.segmentService.save(segment, p.getId());
+			p.getSegments().add(segment);
 			this.segmentService.flush();
+
+			Assert.notNull(saved);
+			Assert.isTrue(saved.getId() != 0);
 		} catch (final Throwable oops) {
 			caught = oops.getClass();
 
@@ -111,89 +101,134 @@ public class SegmentServiceTest extends AbstractTest {
 		this.unauthenticate();
 	}
 
-	private Collection<GPS> listaGPSTest() {
-		final Collection<GPS> result;
-		final GPS gpsOK;
-		final GPS gpsLongitudeErronea;
-		final GPS gpsLatitudeErronea;
-		final GPS gpsLongitudeYLatitudeErronea;
+	/* ========================= Test Save Segment =========================== */
 
-		result = new ArrayList<GPS>();
+	@Test
+	public void driverSaveSegment() {
 
-		gpsOK = new GPS();
-		gpsOK.setLongitude(-24.36);
-		gpsOK.setLatitude(58.41);
-		result.add(gpsOK);
+		final Object testingData[][] = {
+			{
+				// Guardar segment correctamente
+				"brotherhood1", "parade1", "2020/03/16 15:20", "2020/03/16 15:40", 40.89654, 10.23568, 41.89654, 11.23568, null
+			}, {
+				//Guardar segment con fecha vacía
+				"brotherhood1", "parade1", "2020/03/16 15:20", "", 42.89654, 12.23568, 41.89654, 11.23568, ParseException.class
+			}, {
+				//Guardar segment con parametro a null
+				"brotherhood1", "parade1", "2020/03/16 15:20", null, 41.89654, 11.23568, 42.89654, 12.23568, NullPointerException.class
+			}, {
+				//Guardar segment con brotherhood vacía
+				"", "parade1", "2020/03/16 15:20", "2020/03/16 15:40", 43.89654, 13.23568, 44.89654, 14.23568, IllegalArgumentException.class
+			}, {
+				//Guardar segment con parade vacía
+				"brotherhood1", "", "2020/03/16 15:20", "2020/03/16 15:40", 45.89654, 15.23568, 46.89654, 16.23568, AssertionError.class
+			}, {
+				// Guardar segment con parade no correspondiente a esa brotherhood
+				"brotherhood1", "parade2", "2020/03/16 15:20", "2020/03/16 15:40", 47.89654, 17.23568, 48.89654, 18.23568, IllegalArgumentException.class
+			}, {
+				// Guardar segment con fecha destino anterior a fecha origen
+				"brotherhood1", "parade1", "2020/03/16 15:40", "2020/03/16 15:00", 49.89654, 19.23568, 40.89654, 10.23568, IllegalArgumentException.class
+			}
 
-		gpsLongitudeErronea = new GPS();
-		gpsLongitudeErronea.setLongitude(194.32);
-		gpsLongitudeErronea.setLatitude(24.60);
-		result.add(gpsLongitudeErronea);
-
-		gpsLatitudeErronea = new GPS();
-		gpsLatitudeErronea.setLatitude(96.92);
-		gpsLatitudeErronea.setLongitude(145.12);
-		result.add(gpsLatitudeErronea);
-
-		gpsLongitudeYLatitudeErronea = new GPS();
-		gpsLongitudeYLatitudeErronea.setLatitude(115.07);
-		gpsLongitudeYLatitudeErronea.setLongitude(188.09);
-
-		return result;
+		};
+		for (int i = 0; i < testingData.length; i++)
+			this.templateSaveSegment((String) testingData[i][0], (String) testingData[i][1], (String) testingData[i][2], (String) testingData[i][3], (Double) testingData[i][4], (Double) testingData[i][5], (Double) testingData[i][6],
+				(Double) testingData[i][7], (Class<?>) testingData[i][8]);
 	}
-	/* ========================= Test Edit Chapter =========================== */
-	//
-	//	@Test
-	//	public void driverEditChapter() {
-	//
-	//		final Object testingData[][] = {
-	//			{
-	//				// Editar tus datos
-	//				"chapter1", "Name chapter 1", "Surname chapter 1", "chapter1@hotmail.es", "+34655398675", "Title chapter 1", null
-	//			}, {
-	//				//Editar phone vacio
-	//				"chapter1", "Name chapter 1", "Surname chapter 1", "chapter1@hotmail.es", "", "Title chapter 1", null
-	//			}, {
-	//				//Editar email incorrecto
-	//				"chapter1", "Name chapter 1", "Surname chapter 1", "no tengo email", "+34655398675", "Title chapter 1", ConstraintViolationException.class
-	//			}, {
-	//				//Editar usuario y dejar nombre en blanco
-	//				"chapter1", "", "Surname chapter 1", "chapter1@hotmail.es", "+34655398675", "Title chapter 1", ConstraintViolationException.class
-	//			}, {
-	//				//Editar usuario y dejar apellido en blanco
-	//				"chapter1", "Name chapter 1", "", "chapter1@hotmail.es", "+34655398675", "Title chapter 1", ConstraintViolationException.class
-	//			}, {
-	//				//Editar usuario y dejar title en blanco
-	//				"chapter1", "Name chapter 1", "Surname chapter 1", "chapter1@hotmail.es", "+34655398675", "", ConstraintViolationException.class
-	//			}
-	//		};
-	//		for (int i = 0; i < testingData.length; i++)
-	//			this.templateEditChapter((String) testingData[i][0], (String) testingData[i][1], (String) testingData[i][2], (String) testingData[i][3], (String) testingData[i][4], (String) testingData[i][5], (Class<?>) testingData[i][6]);
-	//	}
-	//
-	//	private void templateEditChapter(final String username, final String name, final String surname, final String email, final String phone, final String title, final Class<?> expected) {
-	//		Class<?> caught;
-	//		Chapter chapter;
-	//		chapter = this.chapterService.findOne(this.getEntityId(username));
-	//
-	//		caught = null;
-	//		try {
-	//			super.authenticate(username);
-	//			chapter.setName(name);
-	//			chapter.setSurname(surname);
-	//			chapter.setEmail(email);
-	//			chapter.setPhone(phone);
-	//			chapter.setTitle(title);
-	//			this.unauthenticate();
-	//			this.chapterService.flush();
-	//
-	//		} catch (final Throwable oops) {
-	//			caught = oops.getClass();
-	//
-	//		}
-	//
-	//		this.checkExceptions(expected, caught);
-	//
-	//	}
 
+	private void templateSaveSegment(final String brotherhood, final String parade, final String originTime, final String destinationTime, final Double originLatitude, final Double originLongitude, final Double destinationLatitude,
+		final Double destinationLongitude, final Class<?> expected) {
+
+		Class<?> caught;
+		Segment segment;
+
+		GPS origin;
+		GPS destination;
+
+		final Date timeOrigin;
+		final Date timeDestination;
+
+		caught = null;
+
+		try {
+			final Parade p = this.paradeService.findOne(this.getEntityId(parade));
+
+			this.authenticate(brotherhood);
+
+			origin = new GPS();
+			origin.setLatitude(originLatitude);
+			origin.setLongitude(originLongitude);
+
+			destination = new GPS();
+			destination.setLatitude(destinationLatitude);
+			destination.setLongitude(destinationLongitude);
+
+			timeOrigin = (new SimpleDateFormat("yyyy/MM/dd HH:mm")).parse(originTime);
+
+			timeDestination = (new SimpleDateFormat("yyyy/MM/dd HH:mm")).parse(destinationTime);
+
+			segment = new Segment();
+			segment.setOriginTime(timeOrigin);
+			segment.setDestinationTime(timeDestination);
+
+			segment.setOriginCoordinates(origin);
+			segment.setDestinationCoordinates(destination);
+
+			segment = this.segmentService.save(segment, p.getId());
+			this.segmentService.flush();
+
+		} catch (final Throwable oops) {
+			caught = oops.getClass();
+
+		}
+
+		this.checkExceptions(expected, caught);
+		this.unauthenticate();
+	}
+
+	/* ========================= Test Delete Segment =========================== */
+
+	@Test
+	public void testDeleteSegment() {
+		Segment segment;
+		Parade parade;
+
+		segment = this.segmentService.findOne(this.getEntityId("segment2"));
+		parade = this.paradeService.findOne(this.getEntityId("parade1"));
+
+		super.authenticate("brotherhood1");
+		this.segmentService.delete(segment, parade.getId());
+		super.unauthenticate();
+
+	}
+
+	//No se puede borrar un segmento si no es el ultimo del path
+	@Test(expected = IllegalArgumentException.class)
+	public void testDeleteSegmentInvalid() {
+		Segment segment;
+		Parade parade;
+
+		segment = this.segmentService.findOne(this.getEntityId("segment1"));
+		parade = this.paradeService.findOne(this.getEntityId("parade1"));
+
+		super.authenticate("brotherhood1");
+		this.segmentService.delete(segment, parade.getId());
+		super.unauthenticate();
+
+	}
+
+	//El usuario logueado debe ser la hermandad que tiene la parade a la que corresponde ese segmento
+	@Test(expected = IllegalArgumentException.class)
+	public void testDeleteLogInvalid() {
+		Segment segment;
+		Parade parade;
+
+		segment = this.segmentService.findOne(this.getEntityId("segment3"));
+		parade = this.paradeService.findOne(this.getEntityId("parade1"));
+
+		super.authenticate("brotherhood1");
+		this.segmentService.delete(segment, parade.getId());
+		super.unauthenticate();
+
+	}
 }
