@@ -102,6 +102,8 @@ public class RequestService {
 			final boolean hasMemberRequestToParade = this.requestRepository.hasMemberRequestToParade(req.getParade().getId(), req.getMember().getUserAccount().getId());
 			Assert.isTrue(!hasMemberRequestToParade, "A member cannot request twice to the same parade");
 			Assert.isTrue((req.getRow() == null && req.getColumn() == null && req.getExplanation() == null), "Row, column and explanation attributes only can be set by brotherhood");
+			Assert.isTrue(this.requestRepository.availableRowColumn(req.getRow(), req.getColumn(), req.getParade().getId()), "Position is ot available");
+			req = this.requestRepository.save(req);
 		} else {
 			Assert.isTrue(!isMember, "A member cannot update the request");
 			Assert.isTrue(isBrotherhood, "Only brotherhood can update a Request (to change it's status)");
@@ -114,18 +116,17 @@ public class RequestService {
 				final boolean rowIsNull = req.getRow() == null || req.getRow() > req.getParade().getMaxRows();
 				final boolean columnIsNull = req.getColumn() == null || req.getColumn() > req.getParade().getMaxColumns();
 				Assert.isTrue(!(rowIsNull || columnIsNull), "If Request is APPROVED, row and column cannot be null or greater than maximum allowed");
-				System.out.println("q" + req.getRow());
-				System.out.println("qw" + req.getColumn());
-				System.out.println("qq" + req.getParade().getId());
-				System.out.println("hey" + this.requestRepository.availableRowColumn(req.getRow(), req.getColumn(), req.getParade().getId()));
-				Assert.isTrue(this.requestRepository.availableRowColumn(req.getRow(), req.getColumn(), req.getParade().getId()), "If Request is APPROVED, row and column assigned by brotherhood must be unique");
-				System.out.println("eee");
+				System.out.println("eee" + req.getRow());
+				System.out.println("dddd" + req.getColumn());
+				System.out.println("ccc" + req.getParade());
+				System.out.println(this.availableRowColumn(req));
+				Assert.isTrue(this.availableRowColumn(req), "If Request is APPROVED, row and column assigned by brotherhood must be unique");
+				req = this.requestRepository.save(req);
 			}
 		}
-		req = this.requestRepository.save(req);
+
 		return req;
 	}
-
 	public boolean availableRowColumn(final Request req) {
 		Assert.notNull(req);
 		return this.requestRepository.availableRowColumn(req.getRow(), req.getColumn(), req.getParade().getId());

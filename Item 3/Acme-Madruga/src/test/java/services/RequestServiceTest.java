@@ -1,9 +1,6 @@
 
 package services;
 
-import java.sql.Date;
-import java.util.Collection;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +11,6 @@ import org.springframework.util.Assert;
 
 import repositories.RequestRepository;
 import utilities.AbstractTest;
-import domain.Member;
 import domain.Request;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -39,54 +35,65 @@ public class RequestServiceTest extends AbstractTest {
 	private RequestRepository	requestRepository;
 
 
-	@Test
-	public void test() {
-		Assert.isNull(null);
-	}
-
-	@Test
-	public void driverSaveByMember() {
-		final Object testingData[][] = {
-			{
-				"member1", "PENDING", null, null, null, null, "parade11", null
-			}
-		};
-
-		for (int i = 0; i < testingData.length; i++)
-			this.templateSaveByMember((String) testingData[i][0], (String) testingData[i][1], (Date) testingData[i][2], (String) testingData[i][3], (Integer) testingData[i][4], (Integer) testingData[i][5], (String) testingData[i][6],
-				(Class<?>) testingData[i][7]);
-	}
-
-	protected void templateSaveByMember(final String member, final String status, final Date moment, final String explanation, final Integer row, final Integer column, final String parade, final Class<?> expected) {
-
-		Class<?> caught = null;
-
-		try {
-			this.authenticate(member);
-			final Integer myId = this.actorService.findByPrincipal().getId();
-			Request req = this.requestService.create();
-			req.setStatus(status);
-			req.setMoment(moment);
-			req.setExplanation(explanation);
-			req.setParade(this.paradeService.findOne(this.getEntityId(parade)));
-			req.setMember(this.memberService.findOne(myId));
-			req.setRow(row);
-			req.setColumn(column);
-
-			req = this.requestService.save(req);
-			Assert.isTrue(req.getId() != 0);
-			this.unauthenticate();
-
-			this.requestRepository.flush();
-		} catch (final Throwable oops) {
-			caught = oops.getClass();
-		}
-
-		super.checkExceptions(expected, caught);
-	}
+	/*
+	 * @Test
+	 * public void driverSaveByMember() {
+	 * final Object testingData[][] = {
+	 * {
+	 * "member1", "PENDING", null, null, null, null, "parade11", null
+	 * }
+	 * };
+	 * 
+	 * for (int i = 0; i < testingData.length; i++)
+	 * this.templateSaveByMember((String) testingData[i][0], (String) testingData[i][1], (Date) testingData[i][2], (String) testingData[i][3], (Integer) testingData[i][4], (Integer) testingData[i][5], (String) testingData[i][6],
+	 * (Class<?>) testingData[i][7]);
+	 * }
+	 * 
+	 * protected void templateSaveByMember(final String member, final String status, final Date moment, final String explanation, final Integer row, final Integer column, final String parade, final Class<?> expected) {
+	 * 
+	 * Class<?> caught = null;
+	 * 
+	 * try {
+	 * this.authenticate(member);
+	 * final Integer myId = this.actorService.findByPrincipal().getId();
+	 * Request req = this.requestService.create();
+	 * req.setStatus(status);
+	 * req.setMoment(moment);
+	 * req.setExplanation(explanation);
+	 * req.setParade(this.paradeService.findOne(this.getEntityId(parade)));
+	 * req.setMember(this.memberService.findOne(myId));
+	 * req.setRow(row);
+	 * req.setColumn(column);
+	 * 
+	 * req = this.requestService.save(req);
+	 * Assert.isTrue(req.getId() != 0);
+	 * this.unauthenticate();
+	 * 
+	 * this.requestRepository.flush();
+	 * } catch (final Throwable oops) {
+	 * caught = oops.getClass();
+	 * }
+	 * 
+	 * super.checkExceptions(expected, caught);
+	 * }
+	 */
 
 	/******************************************************************************************/
 
+	/**
+	 * 
+	 * testingData[1]:
+	 * Acme Madruga - Req 7: a member may request to march in a procession
+	 * Negative: a member cannot request twitce to the a parade in DRAFT mode
+	 * % recorre 4 de las 28 líneas posibles
+	 * cobertura de datos =
+	 * 
+	 * testingData[1]:
+	 * Acme Madruga - Req 7: a member may request to march in a procession
+	 * Positive
+	 * % recorre 28 de las 28 líneas posibles
+	 * cobertura de datos =
+	 * **/
 	@Test
 	public void driverRequestToParade() {  //FUNCIONA
 		final Object testingData[][] = {
@@ -101,6 +108,12 @@ public class RequestServiceTest extends AbstractTest {
 			this.templateRequestToParade((String) testingData[i][0], (String) testingData[i][1], (Class<?>) testingData[i][2]);
 	}
 
+	/**
+	 * Acme Madruga - Req 7: a member may request to march in a procession
+	 * Negative: a member cannot request twitce to the same parade
+	 * % recorre 11 de las 28 líneas posibles
+	 * cobertura de datos =
+	 * **/
 	@Test
 	public void driverMemberRequestsTwice() {
 		final Object testingData[][] = {
@@ -123,7 +136,6 @@ public class RequestServiceTest extends AbstractTest {
 			this.authenticate(member);
 			final Integer myId = this.actorService.findByPrincipal().getId();
 			final int idParade = this.getEntityId(parade);
-			System.out.println("HOLAAAAA");
 			final Request req = this.requestService.requestToParade(idParade);
 			Assert.isTrue(req.getId() != 0);
 			this.unauthenticate();
@@ -134,41 +146,6 @@ public class RequestServiceTest extends AbstractTest {
 		}
 
 		super.checkExceptions(expected, caught);
-	}
-
-	@Test
-	public void loopRequestToParade() { //TO FIX
-		final Collection<Member> members = this.memberService.findAll();
-		final Object testingData[][] = new Object[members.size()][3];
-		int x = 0;
-		for (final Member m : members) {
-			System.out.println(m);
-			testingData[x][0] = m.getUserAccount().getUsername();
-			testingData[x][1] = "parade11";
-			testingData[x][2] = null;
-			x++;
-		}
-
-		System.out.println(testingData);
-
-		for (int i = 0; i < testingData.length; i++)
-			this.templateRequestToParade((String) testingData[i][0], (String) testingData[i][1], (Class<?>) testingData[i][2]);
-	}
-
-	@Test
-	public void requestToParade() {  //funciona
-
-		this.authenticate("member1");
-		//final Integer myId = this.actorService.findByPrincipal().getId();
-		final int p = this.getEntityId("parade11");
-		System.out.println(p);
-		//final Parade parade = this.paradeService.findOne(this.getEntityId("parade11"));
-		final Request req = this.requestService.requestToParade(p);
-		Assert.isTrue(req.getId() != 0);
-		this.unauthenticate();
-
-		this.requestRepository.flush();
-
 	}
 
 	/***
@@ -197,17 +174,35 @@ public class RequestServiceTest extends AbstractTest {
 			req.setRow(row);
 			req.setColumn(column);
 			req.setStatus(status);
-			System.out.println(req.getParade().getId());
 			final Request result = this.requestService.save(req);
 			Assert.isTrue(result.getId() != 0);
-			this.unauthenticate();
 
 			this.requestRepository.flush();
+			this.unauthenticate();
 		} catch (final Throwable oops) {
 			caught = oops.getClass();
 		}
 
 		super.checkExceptions(expected, caught);
+	}
+
+	/**
+	 * Acme Madruga - Req 7: a member may request to march in a procession
+	 * Negative: a member cannot request twitce to the same parade
+	 * % recorre 11 de las 28 líneas posibles
+	 * cobertura de datos =
+	 * **/
+	//reuquests 1 y 3 son sobre la parade 1 que pertenece a la brotherhood 1
+	@Test
+	public void testGiveSamePositionTwice() {
+		final Object testingData[][] = {
+			{
+				"brotherhood1", "request1", "APPROVED", null, 1, 1, null
+			}
+		};
+
+		for (int i = 0; i < testingData.length; i++)
+			this.templateUpdateRequest((String) testingData[i][0], (String) testingData[i][1], (String) testingData[i][2], (String) testingData[i][3], (Integer) testingData[i][4], (Integer) testingData[i][5], (Class<?>) testingData[i][6]);
 	}
 
 	@Test
@@ -317,12 +312,4 @@ public class RequestServiceTest extends AbstractTest {
 		super.checkExceptions(expected, caught);
 	}
 
-	/*
-	 * 
-	 * @Test
-	 * public void findAll() {
-	 * this.authenticate("member1");
-	 * Assert.isTrue(this.requestService.findAll().size() > 0);
-	 * }
-	 */
 }

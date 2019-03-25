@@ -45,6 +45,9 @@ public interface RequestRepository extends JpaRepository<Request, Integer> {
 	@Query("select case when (count(r)=0) then true else false end from Request r where r.row=?1 and r.column=?2 and r.parade.id=?3")
 	Boolean availableRowColumn(Integer rowNumber, Integer columnNumber, int idParade);
 
+	@Query("select count(r) from Request r where r.row=?1 and r.column=?2 and r.parade.id=?3")
+	Integer existsRowColumn(Integer rowNumber, Integer columnNumber, int idParade);
+
 	@Query("select sum(case when r.status='PENDING' then 1.0 else 0.0 end) / count(r) from Request r")
 	Double findPendingRequestRatio();
 
