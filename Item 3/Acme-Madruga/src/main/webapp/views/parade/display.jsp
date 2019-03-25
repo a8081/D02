@@ -24,6 +24,10 @@
 .REJECTED {
 	background-color: orange;
 }
+img.resize {
+  max-width:10%;
+  max-height:10%;
+}
 </style>
 
 <jstl:if test="${not empty rol}">
@@ -146,5 +150,10 @@
 </jstl:if>
 </security:authorize>
 
+<jstl:if test="${not empty imgbanner}">
+	<a href="<jstl:out value="${targetpage}"/>">
+		<img class="resize" src="${imgbanner}" alt="Banner"/>
+	</a><br /><br />
+</jstl:if>
 
 <br />

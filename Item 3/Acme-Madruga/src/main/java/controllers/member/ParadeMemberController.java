@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import services.ConfigurationParametersService;
 import services.ParadeService;
+import services.SponsorshipService;
 import controllers.AbstractController;
 import domain.Parade;
 
@@ -21,10 +21,10 @@ import domain.Parade;
 public class ParadeMemberController extends AbstractController {
 
 	@Autowired
-	private ParadeService					paradeService;
+	private ParadeService		paradeService;
 
 	@Autowired
-	private ConfigurationParametersService	configurationParametersService;
+	private SponsorshipService	sponsorshipService;
 
 
 	@RequestMapping(value = "/display", method = RequestMethod.GET)
@@ -40,6 +40,10 @@ public class ParadeMemberController extends AbstractController {
 			result.addObject("parade", parade);
 			result.addObject("rol", "member");
 			result.addObject("lang", lang);
+			final String imgbanner = this.sponsorshipService.findRandomSponsorship(paradeId).getBanner();
+			result.addObject("imgbanner", imgbanner);
+			final String targetpage = this.sponsorshipService.findRandomSponsorship(paradeId).getTargetPage();
+			result.addObject("targetpage", targetpage);
 
 		} else
 			result = new ModelAndView("redirect:/misc/403.jsp");

@@ -17,6 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 import services.ChapterService;
 import services.ConfigurationParametersService;
 import services.ParadeService;
+import services.SponsorshipService;
 import controllers.AbstractController;
 import domain.Chapter;
 import domain.Parade;
@@ -31,6 +32,9 @@ public class ParadeChapterController extends AbstractController {
 
 	@Autowired
 	private ChapterService					chapterService;
+
+	@Autowired
+	private SponsorshipService				sponsorshipService;
 
 	@Autowired
 	private ConfigurationParametersService	configurationParametersService;
@@ -205,7 +209,10 @@ public class ParadeChapterController extends AbstractController {
 			result.addObject("parade", parade);
 			result.addObject("lang", lang);
 			result.addObject("rol", "chapter");
-
+			final String imgbanner = this.sponsorshipService.findRandomSponsorship(paradeId).getBanner();
+			result.addObject("imgbanner", imgbanner);
+			final String targetpage = this.sponsorshipService.findRandomSponsorship(paradeId).getTargetPage();
+			result.addObject("targetpage", targetpage);
 		} else
 			result = new ModelAndView("parade.commit.error");
 
