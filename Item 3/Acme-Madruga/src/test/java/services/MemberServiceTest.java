@@ -1,9 +1,7 @@
 
 package services;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,7 +14,6 @@ import org.springframework.util.Assert;
 
 import repositories.MemberRepository;
 import security.UserAccount;
-import services.auxiliary.RegisterService;
 import utilities.AbstractTest;
 import domain.Member;
 
@@ -31,35 +28,19 @@ public class MemberServiceTest extends AbstractTest {
 	@Autowired
 	private MemberService		memberService;
 
-	//Repositorys
 	@Autowired
 	private MemberRepository	memberRepository;
-
-	@Autowired
-	private RegisterService		registerService;
 
 	@Autowired
 	private UserAccountService	userAccountService;
 
 
-	@Test
-	public void testCreate() {
-		final Member member = this.memberService.create();
-		Assert.notNull(member);
-	}
-
-	@Test
-	public void testFindAll() {
-		Assert.isTrue(this.memberService.findAll().size() > 0);
-	}
-
-	@Test
-	public void testFindOne() {
-		final List<Member> members = new ArrayList<>(this.memberService.findAll());
-		Assert.isTrue(members.size() > 0);
-		Assert.notNull(this.memberService.findOne(members.get(0).getId()));
-	}
-
+	/**
+	 * Acme Madruga - Req 8: an actor who is not authenticated must be able register to the system as a member
+	 * Postive
+	 * % recorre 8 de las 12 líneas posibles
+	 * cobertura de datos = 1
+	 * **/
 	@Test
 	public void driverLoopSaveNew() {
 		final Object testingData[][] = new Object[20][10];
@@ -82,17 +63,19 @@ public class MemberServiceTest extends AbstractTest {
 	}
 
 	/**
-	 * 1
+	 * Acme Madruga - Req 8: an actor who is not authenticated must be able register to the system as a member
+	 * Negative: a user not authenticated try to register with a existing username
+	 * % recorre 8 de las 12 líneas posibles
+	 * cobertura de datos =
 	 * **/
 	@Test
-	public void driverSaveNew() {
+	public void registerExistingUsername() {
 		final Object testingData[][] = {
+
 			{
-				"test1", "test1", "name test 1", "middlename test 1", "surname test 1", "http://phototest1.com", "testemail1@gmail.com", "+3465765", "avd test", javax.validation.ConstraintViolationException.class
+				"test2", "test2", "name test 2", "middlename test 2", "surname test 2", "http://phototest2.com", "testem2@gmail.com", "+34654654654", "avd test 2", null
 			}, {
-				"test2", "test2", "name test 2", "middlename test 2", "surname test 2", "http://phototest2.com", "testemail2.com", "+34657456234", "avd test", org.springframework.dao.DataIntegrityViolationException.class
-			}, {
-				"test3", "test3", "name test 3", "middlename test 3", "surname test 3", "http://phototest3.com", "testemail3@gmail.com", "+34657651234", "avd test 3", org.springframework.dao.DataIntegrityViolationException.class
+				"test2", "test2", "name test 3", "middlename test 3", "surname test 3", "http://phototest3.com", "testemail3@gmail.com", "+34654321234", "avd test 3", org.springframework.dao.DataIntegrityViolationException.class
 			}
 		};
 
@@ -115,19 +98,19 @@ public class MemberServiceTest extends AbstractTest {
 			member.setAddress(address);
 			member.setSpammer(false);
 
-			System.out.println("holaa");
 			final Member saved = this.memberService.save(member);
-			final UserAccount ua = saved.getUserAccount();
+			//final UserAccount ua = saved.getUserAccount();
+			final UserAccount ua = member.getUserAccount();
 			ua.setUsername(username);
 			final Md5PasswordEncoder encoder = new Md5PasswordEncoder();
 			final String hash = encoder.encodePassword(password, null);
 			ua.setPassword(hash);
 			final UserAccount uaSaved = this.userAccountService.save(ua);
-			System.out.println("adioos");
 			final Collection<Member> members = this.memberService.findAll();
 
 			Assert.isTrue(members.contains(saved));
 			this.memberRepository.flush();
+
 		} catch (final Throwable oops) {
 			caught = oops.getClass();
 		}
@@ -135,8 +118,45 @@ public class MemberServiceTest extends AbstractTest {
 		super.checkExceptions(expected, caught);
 	}
 
+	/**
+	 * Acme Madruga - Req 8: an actor who is not authenticated must be able register to the system as a member
+	 * Negative: incorrect email pattern
+	 * % recorre 8 de las 12 líneas posibles
+	 * cobertura de datos = 1
+	 * **/
+	@Test(expected = javax.validation.ConstraintViolationException.class)
+	public void saveNew() {
+		final Member member = this.memberService.create();
+		member.setName("name test1");
+		member.setMiddleName("middlename test1");
+		member.setSurname("surname test1");
+		member.setPhoto("http://phototest1.com");
+		member.setEmail("emailtil.com");
+		member.setPhone("+34675874321");
+		member.setAddress("avd test 1");
+		member.setSpammer(false);
+
+		final Member saved = this.memberService.save(member);
+		final UserAccount ua = member.getUserAccount();
+		ua.setUsername("test1");
+		final Md5PasswordEncoder encoder = new Md5PasswordEncoder();
+		final String hash = encoder.encodePassword("test1", null);
+		ua.setPassword(hash);
+		final UserAccount uaSaved = this.userAccountService.save(ua);
+
+		Assert.isTrue(this.memberService.findAll().contains(saved));
+		this.memberRepository.flush();
+
+	}
+
+	/**
+	 * Acme Madruga - Req 8: An actor who is not authenticated must be able to delete his/her perdonal data
+	 * Positive: logged member deletes his/her data
+	 * % recorre 8 de las 12 líneas posibles
+	 * cobertura de datos = 1
+	 * **/
 	@Test
-	public void testDelete() {
+	public void testDeletePostive() {
 		super.authenticate("member1");
 		final Member principal = this.memberService.findByPrincipal();
 		final Integer myId = principal.getId();
@@ -149,20 +169,59 @@ public class MemberServiceTest extends AbstractTest {
 
 	}
 
-	@Test
-	public void testFindByPrincipal() {
+	/**
+	 * Acme Madruga - Req 8: An actor who is not authenticated must be able to delete his/her perdonal data
+	 * Negative: the logged member tries to delete another member's data
+	 * % recorre 8 de las 12 líneas posibles
+	 * cobertura de datos = 1
+	 * **/
+	@Test(expected = java.lang.IllegalArgumentException.class)
+	public void testDeleteNegative() {
 		super.authenticate("member1");
-		final Member res = this.memberService.findByPrincipal();
-		Assert.notNull(res);
-		Assert.isTrue(res.getUserAccount().getUsername().equals("member1"));
+		final Member principal = this.memberService.findOne(this.getEntityId("member2"));
+
+		this.memberService.delete(principal);
+		final Member member = this.memberRepository.findOne(this.getEntityId("member2"));
+		Assert.isTrue(member == null);
+
 	}
 
-	@Test
-	public void testFindByUserId() {
-		final Member retrieved = (Member) this.memberService.findAll().toArray()[0];
-		final int id = retrieved.getUserAccount().getId();
-		final Member member = this.memberService.findByUserId(id);
-		Assert.isTrue(member.equals(retrieved));
+	/**
+	 * Acme Madruga - Req 8: An actor who is authenticated must be able to edit her/his personal data
+	 * Positive: the logged member edits his/her data
+	 * % recorre 8 de las 12 líneas posibles
+	 * cobertura de datos = 1
+	 * **/
+	@Test()
+	public void updatePostive() {
+		this.authenticate("member1");
+		final Member member = this.memberService.findOne(this.getEntityId("member1"));
+		member.setAddress("avd test 1 modificada");
+		final Member saved = this.memberService.save(member);
+		Assert.isTrue(this.memberService.findOne(this.getEntityId("member1")).getAddress().equals("avd test 1 modificada"));
+		this.unauthenticate();
+		this.memberRepository.flush();
+
+	}
+
+	/**
+	 * Acme Madruga - Req 9: An actor who is authenticated must be able to edit her/his personal data
+	 * Positive: the logged member tries to delete another member's data
+	 * % recorre 8 de las 12 líneas posibles
+	 * cobertura de datos = 1
+	 * **/
+	@Test(expected = java.lang.IllegalArgumentException.class)
+	public void updateNegative() {
+		this.authenticate("member1");
+		final Member member = this.memberService.findOne(this.getEntityId("member2"));
+		member.setAddress("avd test 1 modificada");
+
+		final Member saved = this.memberService.save(member);
+
+		Assert.isTrue(this.memberService.findOne(this.getEntityId("member2")).getAddress().equals("avd test 1 modificada"));
+		this.memberRepository.flush();
+		this.unauthenticate();
+
 	}
 
 }
