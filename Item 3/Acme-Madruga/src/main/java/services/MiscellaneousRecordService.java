@@ -83,4 +83,8 @@ public class MiscellaneousRecordService {
 		return bro;
 	}
 
+	public void flush() {
+		this.miscellaneousRecordRepository.flush();
+	}
+
 }

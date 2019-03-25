@@ -31,8 +31,12 @@
 	<form:input path="keyword" />
 	<form:errors cssClass="error" path="keyword" />
 	<br />
-	<br>
-	<input type="submit" name="save" value="<spring:message code="proclaim.save" />" />
+<!-- 	<script type="text/javascript"> function alertName(){alert("<spring:message code="proclaim.alert" />");}</script>
+ 	<br>
+	<input type="submit" name="save" <script type="text/javascript"> window.onload = alertName; </script>
+	 value="<spring:message code="proclaim.save" />" />-->
+	 <input type="submit" name="save" onclick="<spring:message code="proclaim.alert" />" 
+	 value="<spring:message code="proclaim.save" />" />
 	<br>
 		
 </form:form>

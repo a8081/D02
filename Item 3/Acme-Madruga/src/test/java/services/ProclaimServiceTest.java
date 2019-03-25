@@ -72,11 +72,11 @@ public class ProclaimServiceTest extends AbstractTest {
 			Assert.isTrue(procSaved.getId() != 0);
 			if (text.equals("edit"))
 				this.proclaimService.save(procSaved);
+			this.proclaimService.flush();
 			this.unauthenticate();
 		} catch (final Throwable oops) {
 			caught = oops.getClass();
 		}
-
 		super.checkExceptions(expected, caught);
 	}
 }

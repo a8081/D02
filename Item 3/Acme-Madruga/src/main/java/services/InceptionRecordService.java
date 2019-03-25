@@ -84,4 +84,8 @@ public class InceptionRecordService {
 		return bro;
 	}
 
+	public void flush() {
+		this.inceptionRecordRepository.flush();
+	}
+
 }

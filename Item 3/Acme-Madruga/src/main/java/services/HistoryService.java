@@ -115,4 +115,8 @@ public class HistoryService {
 
 	/* ========================= OTHER METHODS =========================== */
 
+	public void flush() {
+		this.historyRepository.flush();
+	}
+
 }

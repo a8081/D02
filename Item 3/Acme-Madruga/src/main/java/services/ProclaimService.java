@@ -68,4 +68,8 @@ public class ProclaimService {
 		return this.proclaimRepository.getChapterProclaims(id);
 	}
 
+	public void flush() {
+		this.proclaimRepository.flush();
+	}
+
 }

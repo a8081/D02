@@ -70,6 +70,7 @@ public class MiscellaneousRecordServiceTest extends AbstractTest {
 			pRec.setDescription(description);
 			final MiscellaneousRecord pRecSaved = this.miscellaneousRecordService.save(pRec);
 			Assert.isTrue(pRecSaved.getId() != 0);
+			this.miscellaneousRecordService.flush();
 			this.unauthenticate();
 		} catch (final Throwable oops) {
 			caught = oops.getClass();
@@ -117,6 +118,7 @@ public class MiscellaneousRecordServiceTest extends AbstractTest {
 			bPRec.setTitle(title);
 			bPRec.setDescription(description);
 			this.miscellaneousRecordService.save(bPRec);
+			this.miscellaneousRecordService.flush();
 			this.unauthenticate();
 		} catch (final Throwable oops) {
 			caught = oops.getClass();
@@ -155,6 +157,7 @@ public class MiscellaneousRecordServiceTest extends AbstractTest {
 			else
 				pRec = new MiscellaneousRecord();
 			this.miscellaneousRecordService.delete(pRec);
+			this.miscellaneousRecordService.flush();
 			this.unauthenticate();
 		} catch (final Throwable oops) {
 			caught = oops.getClass();

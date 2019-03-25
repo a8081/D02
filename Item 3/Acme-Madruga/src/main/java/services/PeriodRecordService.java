@@ -83,4 +83,8 @@ public class PeriodRecordService {
 		return bro;
 	}
 
+	public void flush() {
+		this.periodRecordRepository.flush();
+	}
+
 }

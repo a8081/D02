@@ -85,6 +85,7 @@ public class LegalRecordServiceTest extends AbstractTest {
 				lRec.setLaws(laws);
 			final LegalRecord lRecSaved = this.legalRecordService.save(lRec);
 			Assert.isTrue(lRecSaved.getId() != 0);
+			this.legalRecordService.flush();
 			this.unauthenticate();
 		} catch (final Throwable oops) {
 			caught = oops.getClass();
@@ -146,6 +147,7 @@ public class LegalRecordServiceTest extends AbstractTest {
 			if (laws != null)
 				lR.setLaws(laws);
 			this.legalRecordService.save(lR);
+			this.legalRecordService.flush();
 			this.unauthenticate();
 		} catch (final Throwable oops) {
 			caught = oops.getClass();
@@ -184,6 +186,7 @@ public class LegalRecordServiceTest extends AbstractTest {
 			else
 				lRec = new LegalRecord();
 			this.legalRecordService.delete(lRec);
+			this.legalRecordService.flush();
 			this.unauthenticate();
 		} catch (final Throwable oops) {
 			caught = oops.getClass();
