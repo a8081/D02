@@ -35,6 +35,11 @@ img.resize {
 <acme:display code="sponsorship.creditCard.expirationYear" value="${sponsorship.creditCard.expirationYear}" />
 <acme:display code="sponsorship.creditCard.cvv" value="${sponsorship.creditCard.cvv}" />
 <br>
+
+<jstl:if test="${sponsorship.activated eq false}">
+	<strong><spring:message code="sponsorship.deactivated"/></strong><br><br>
+</jstl:if>
+
 <acme:button url="parade/display.do?paradeId=${sponsorship.parade.id}" name="parade" code="sponsorship.parade"/>
 
 

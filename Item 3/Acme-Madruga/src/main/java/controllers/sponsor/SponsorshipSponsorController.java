@@ -4,7 +4,6 @@ package controllers.sponsor;
 import java.util.Collection;
 
 import javax.validation.Valid;
-import javax.validation.ValidationException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -103,22 +102,21 @@ public class SponsorshipSponsorController extends AbstractController {
 		ModelAndView result;
 		Sponsorship sponsorship;
 
-		sponsorship = this.sponsorshipService.reconstruct(sponsorshipForm, binding);
-
-		if (binding.hasErrors())
-			result = this.createEditModelAndView(sponsorship);
-		else
-			try {
-				this.sponsorshipService.save(sponsorship);
-				result = new ModelAndView("redirect:list.do");
-			} catch (final ValidationException oops) {
-				result = this.createEditModelAndView(sponsorshipForm);
-			} catch (final Throwable oops) {
-				String errorMessage = "sponsorship.commit.error";
-				if (oops.getMessage().contains("message.error"))
-					errorMessage = oops.getMessage();
-				result = this.createEditModelAndView(sponsorshipForm, errorMessage);
-			}
+		try {
+			sponsorship = this.sponsorshipService.reconstruct(sponsorshipForm, binding);
+			this.sponsorshipService.save(sponsorship);
+			result = new ModelAndView("redirect:list.do");
+			//		} catch (final ValidationException oops) {
+			//			String errorMessage = "sponsorship.commit.error";
+			//			if (oops.getMessage().contains("message.error"))
+			//				errorMessage = oops.getMessage();
+			//			result = this.createEditModelAndView(sponsorshipForm, errorMessage);
+		} catch (final Throwable oops) {
+			String errorMessage = "sponsorship.commit.error";
+			if (oops.getMessage().contains("message.error"))
+				errorMessage = oops.getMessage();
+			result = this.createEditModelAndView(sponsorshipForm, errorMessage);
+		}
 		return result;
 	}
 
