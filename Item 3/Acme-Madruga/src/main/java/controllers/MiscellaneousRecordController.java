@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import services.BrotherhoodService;
+import services.ConfigurationParametersService;
 import services.HistoryService;
 import services.MiscellaneousRecordService;
 import domain.Brotherhood;
@@ -26,13 +27,15 @@ import domain.MiscellaneousRecord;
 public class MiscellaneousRecordController extends AbstractController {
 
 	@Autowired
-	private MiscellaneousRecordService	miscellaneousRecordService;
+	private MiscellaneousRecordService		miscellaneousRecordService;
 	@Autowired
-	private HistoryService				historyService;
+	private HistoryService					historyService;
 	@Autowired
-	private HistoryController			historyController;
+	private HistoryController				historyController;
 	@Autowired
-	private BrotherhoodService			brotherhoodService;
+	private BrotherhoodService				brotherhoodService;
+	@Autowired
+	private ConfigurationParametersService	configurationParametersService;
 
 
 	@RequestMapping(value = "/create", method = RequestMethod.GET)
@@ -99,6 +102,31 @@ public class MiscellaneousRecordController extends AbstractController {
 		}
 		return result;
 	}
+
+	@RequestMapping(value = "/display", method = RequestMethod.GET)
+	public ModelAndView display(@RequestParam final int miscellaneousRecordId) {
+
+		ModelAndView res;
+
+		final Brotherhood brotherhood = this.brotherhoodService.findByPrincipal();
+		final Brotherhood brotherhoodMiscellaneous = this.miscellaneousRecordService.findBrotherhoodByMiscellaneous(miscellaneousRecordId);
+		final MiscellaneousRecord miscellaneousRecord = this.miscellaneousRecordService.findOne(miscellaneousRecordId);
+		Assert.isTrue(brotherhood.equals(brotherhoodMiscellaneous));
+
+		if (miscellaneousRecord != null) {
+
+			res = new ModelAndView("miscellaneousRecord/display");
+			res.addObject("miscellaneousRecord", miscellaneousRecord);
+
+			final String banner = this.configurationParametersService.find().getBanner();
+			res.addObject("banner", banner);
+		} else
+			res = new ModelAndView("redirect:/misc/403.jsp");
+
+		return res;
+
+	}
+
 	protected ModelAndView createEditModelAndView(final MiscellaneousRecord miscellaneousRecord) {
 		ModelAndView result;
 
@@ -106,6 +134,7 @@ public class MiscellaneousRecordController extends AbstractController {
 
 		return result;
 	}
+
 	// Edition ---------------------------------------------------------
 
 	protected ModelAndView createEditModelAndView(final MiscellaneousRecord miscellaneousRecord, final String message) {

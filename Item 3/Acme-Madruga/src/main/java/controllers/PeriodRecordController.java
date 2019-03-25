@@ -2,6 +2,7 @@
 package controllers;
 
 import java.util.Collection;
+import java.util.Date;
 
 import javax.validation.Valid;
 
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import services.BrotherhoodService;
+import services.ConfigurationParametersService;
 import services.HistoryService;
 import services.PeriodRecordService;
 import domain.Brotherhood;
@@ -26,13 +28,15 @@ import domain.PeriodRecord;
 public class PeriodRecordController extends AbstractController {
 
 	@Autowired
-	private PeriodRecordService	periodRecordService;
+	private PeriodRecordService				periodRecordService;
 	@Autowired
-	private HistoryService		historyService;
+	private HistoryService					historyService;
 	@Autowired
-	private HistoryController	historyController;
+	private HistoryController				historyController;
 	@Autowired
-	private BrotherhoodService	brotherhoodService;
+	private BrotherhoodService				brotherhoodService;
+	@Autowired
+	private ConfigurationParametersService	configurationParametersService;
 
 
 	@RequestMapping(value = "/create", method = RequestMethod.GET)
@@ -69,6 +73,10 @@ public class PeriodRecordController extends AbstractController {
 			result = this.createEditModelAndView(periodRecord);
 		else
 			try {
+				final Date fechaActual = new Date();
+				final Integer Año = fechaActual.getYear() + 1900;
+				Assert.isTrue(Año <= periodRecord.getStartYear());
+				Assert.isTrue(periodRecord.getStartYear() <= periodRecord.getEndYear());
 				if (periodRecord.getId() == 0) {
 					final Brotherhood brotherhood = this.brotherhoodService.findByPrincipal();
 					final History history = brotherhood.getHistory();
@@ -99,6 +107,31 @@ public class PeriodRecordController extends AbstractController {
 		}
 		return result;
 	}
+
+	@RequestMapping(value = "/display", method = RequestMethod.GET)
+	public ModelAndView display(@RequestParam final int periodRecordId) {
+
+		ModelAndView res;
+
+		final Brotherhood brotherhood = this.brotherhoodService.findByPrincipal();
+		final Brotherhood brotherhoodPeriod = this.periodRecordService.findBrotherhoodByPeriod(periodRecordId);
+		final PeriodRecord periodRecord = this.periodRecordService.findOne(periodRecordId);
+		Assert.isTrue(brotherhood.equals(brotherhoodPeriod));
+
+		if (periodRecord != null) {
+
+			res = new ModelAndView("periodRecord/display");
+			res.addObject("periodRecord", periodRecord);
+
+			final String banner = this.configurationParametersService.find().getBanner();
+			res.addObject("banner", banner);
+		} else
+			res = new ModelAndView("redirect:/misc/403.jsp");
+
+		return res;
+
+	}
+
 	protected ModelAndView createEditModelAndView(final PeriodRecord periodRecord) {
 		ModelAndView result;
 

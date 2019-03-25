@@ -30,6 +30,11 @@
                     value="<spring:message code="record.edit" />"
                     onclick="relativeRedir('inceptionRecord/edit.do?inceptionRecordId=${row.id}')" />
 	</display:column>
+	<display:column>
+			<input type="button" name="display"
+                value="<spring:message code="record.display" />"
+                onclick="relativeRedir('inceptionRecord/display.do?inceptionRecordId=${row.id}')" />
+	</display:column>
         
 	</display:table>
 
@@ -64,6 +69,11 @@
 			<input type="button" name="delete"
                 value="<spring:message code="record.delete" />"
                 onclick="relativeRedir('periodRecord/delete.do?periodRecordId=${row.id}')" />
+	</display:column>
+	<display:column>
+			<input type="button" name="display"
+                value="<spring:message code="record.display" />"
+                onclick="relativeRedir('periodRecord/display.do?periodRecordId=${row.id}')" />
 	</display:column>
         
 	</display:table>
@@ -102,6 +112,12 @@
                 value="<spring:message code="record.delete" />"
                 onclick="relativeRedir('legalRecord/delete.do?legalRecordId=${row.id}')" />
 	</display:column>
+	<display:column>
+			<input type="button" name="display"
+                value="<spring:message code="record.display" />"
+                onclick="relativeRedir('legalRecord/display.do?legalRecordId=${row.id}')" />
+	</display:column>
+    
         
 	</display:table>
 	
@@ -135,6 +151,11 @@
                 value="<spring:message code="record.delete" />"
                 onclick="relativeRedir('linkRecord/delete.do?linkRecordId=${row.id}')" />
 	</display:column>
+	<display:column>
+			<input type="button" name="display"
+                value="<spring:message code="record.display" />"
+                onclick="relativeRedir('linkRecord/display.do?linkRecordId=${row.id}')" />
+	</display:column>
         
 	</display:table>
 	
@@ -165,6 +186,11 @@
 			<input type="button" name="delete"
                 value="<spring:message code="record.delete" />"
                 onclick="relativeRedir('miscellaneousRecord/delete.do?miscellaneousRecordId=${row.id}')" />
+	</display:column>
+	<display:column>
+			<input type="button" name="display"
+                value="<spring:message code="record.display" />"
+                onclick="relativeRedir('miscellaneousRecord/display.do?miscellaneousRecordId=${row.id}')" />
 	</display:column>
         
 	</display:table>

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import services.BrotherhoodService;
+import services.ConfigurationParametersService;
 import services.HistoryService;
 import services.InceptionRecordService;
 import domain.Brotherhood;
@@ -23,13 +24,15 @@ import domain.InceptionRecord;
 public class InceptionRecordController extends AbstractController {
 
 	@Autowired
-	private InceptionRecordService	inceptionRecordService;
+	private InceptionRecordService			inceptionRecordService;
 	@Autowired
-	private HistoryService			historyService;
+	private HistoryService					historyService;
 	@Autowired
-	private HistoryController		historyController;
+	private HistoryController				historyController;
 	@Autowired
-	private BrotherhoodService		brotherhoodService;
+	private BrotherhoodService				brotherhoodService;
+	@Autowired
+	private ConfigurationParametersService	configurationParametersService;
 
 
 	@RequestMapping(value = "/create", method = RequestMethod.GET)
@@ -74,6 +77,31 @@ public class InceptionRecordController extends AbstractController {
 
 		return result;
 	}
+
+	@RequestMapping(value = "/display", method = RequestMethod.GET)
+	public ModelAndView display(@RequestParam final int inceptionRecordId) {
+
+		ModelAndView res;
+
+		final Brotherhood brotherhood = this.brotherhoodService.findByPrincipal();
+		final Brotherhood brotherhoodInception = this.inceptionRecordService.findBrotherhoodByInception(inceptionRecordId);
+		final InceptionRecord inceptionRecord = this.inceptionRecordService.findOne(inceptionRecordId);
+		Assert.isTrue(brotherhood.equals(brotherhoodInception));
+
+		if (inceptionRecord != null) {
+
+			res = new ModelAndView("inceptionRecord/display");
+			res.addObject("inceptionRecord", inceptionRecord);
+
+			final String banner = this.configurationParametersService.find().getBanner();
+			res.addObject("banner", banner);
+		} else
+			res = new ModelAndView("redirect:/misc/403.jsp");
+
+		return res;
+
+	}
+
 	protected ModelAndView createEditModelAndView(final InceptionRecord inceptionRecord) {
 		ModelAndView result;
 

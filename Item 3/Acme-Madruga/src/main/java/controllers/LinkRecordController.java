@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import services.BrotherhoodService;
+import services.ConfigurationParametersService;
 import services.HistoryService;
 import services.LinkRecordService;
 import domain.Brotherhood;
@@ -26,13 +27,15 @@ import domain.LinkRecord;
 public class LinkRecordController extends AbstractController {
 
 	@Autowired
-	private LinkRecordService	linkRecordService;
+	private LinkRecordService				linkRecordService;
 	@Autowired
-	private HistoryService		historyService;
+	private HistoryService					historyService;
 	@Autowired
-	private HistoryController	historyController;
+	private HistoryController				historyController;
 	@Autowired
-	private BrotherhoodService	brotherhoodService;
+	private BrotherhoodService				brotherhoodService;
+	@Autowired
+	private ConfigurationParametersService	configurationParametersService;
 
 
 	@RequestMapping(value = "/create", method = RequestMethod.GET)
@@ -102,6 +105,30 @@ public class LinkRecordController extends AbstractController {
 			result.addObject("id", linkRecord.getId());
 		}
 		return result;
+	}
+
+	@RequestMapping(value = "/display", method = RequestMethod.GET)
+	public ModelAndView display(@RequestParam final int linkRecordId) {
+
+		ModelAndView res;
+
+		final Brotherhood brotherhood = this.brotherhoodService.findByPrincipal();
+		final Brotherhood brotherhoodLink = this.linkRecordService.findBrotherhoodByLink(linkRecordId);
+		final LinkRecord linkRecord = this.linkRecordService.findOne(linkRecordId);
+		Assert.isTrue(brotherhood.equals(brotherhoodLink));
+
+		if (linkRecord != null) {
+
+			res = new ModelAndView("linkRecord/display");
+			res.addObject("linkRecord", linkRecord);
+
+			final String banner = this.configurationParametersService.find().getBanner();
+			res.addObject("banner", banner);
+		} else
+			res = new ModelAndView("redirect:/misc/403.jsp");
+
+		return res;
+
 	}
 
 	protected ModelAndView createEditModelAndView(final LinkRecord linkRecord) {

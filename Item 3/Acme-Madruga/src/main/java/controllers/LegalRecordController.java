@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import services.BrotherhoodService;
+import services.ConfigurationParametersService;
 import services.HistoryService;
 import services.LegalRecordService;
 import domain.Brotherhood;
@@ -26,13 +27,15 @@ import domain.LegalRecord;
 public class LegalRecordController extends AbstractController {
 
 	@Autowired
-	private LegalRecordService	legalRecordService;
+	private LegalRecordService				legalRecordService;
 	@Autowired
-	private HistoryService		historyService;
+	private HistoryService					historyService;
 	@Autowired
-	private HistoryController	historyController;
+	private HistoryController				historyController;
 	@Autowired
-	private BrotherhoodService	brotherhoodService;
+	private BrotherhoodService				brotherhoodService;
+	@Autowired
+	private ConfigurationParametersService	configurationParametersService;
 
 
 	@RequestMapping(value = "/create", method = RequestMethod.GET)
@@ -98,6 +101,30 @@ public class LegalRecordController extends AbstractController {
 			result.addObject("id", legalRecord.getId());
 		}
 		return result;
+	}
+
+	@RequestMapping(value = "/display", method = RequestMethod.GET)
+	public ModelAndView display(@RequestParam final int legalRecordId) {
+
+		ModelAndView res;
+
+		final Brotherhood brotherhood = this.brotherhoodService.findByPrincipal();
+		final Brotherhood brotherhoodLegal = this.legalRecordService.findBrotherhoodByLegal(legalRecordId);
+		final LegalRecord legalRecord = this.legalRecordService.findOne(legalRecordId);
+		Assert.isTrue(brotherhood.equals(brotherhoodLegal));
+
+		if (legalRecord != null) {
+
+			res = new ModelAndView("legalRecord/display");
+			res.addObject("legalRecord", legalRecord);
+
+			final String banner = this.configurationParametersService.find().getBanner();
+			res.addObject("banner", banner);
+		} else
+			res = new ModelAndView("redirect:/misc/403.jsp");
+
+		return res;
+
 	}
 
 	protected ModelAndView createEditModelAndView(final LegalRecord legalRecord) {
