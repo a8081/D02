@@ -17,14 +17,14 @@
 
 <h3><spring:message code="sponsorship.creditCard"/></h3>
 
-<acme:display code="sponsorship.creditCard.holderName" value="${sponsorship.holderName}" />
-<acme:display code="sponsorship.creditCard.make" value="${sponsorship.}" />
-<acme:display code="sponsorship.creditCard.number" value="${sponsorship.number}" />
-<acme:display code="sponsorship.creditCard.expirationMonth" value="${sponsorship.expirationMonth}" />
-<acme:display code="sponsorship.creditCard.expirationYear" value="${sponsorship.expirationYear}" />
-<acme:display code="sponsorship.creditCard.cvv" value="${sponsorship.cvv}" />
+<acme:display code="sponsorship.creditCard.holderName" value="${sponsorship.creditCard.holderName}" />
+<acme:display code="sponsorship.creditCard.brandName" value="${sponsorship.creditCard.make}" />
+<acme:display code="sponsorship.creditCard.number" value="${sponsorship.creditCard.number}" />
+<acme:display code="sponsorship.creditCard.expirationMonth" value="${sponsorship.creditCard.expirationMonth}" />
+<acme:display code="sponsorship.creditCard.expirationYear" value="${sponsorship.creditCard.expirationYear}" />
+<acme:display code="sponsorship.creditCard.cvv" value="${sponsorship.creditCard.cvv}" />
 <br>
-<acme:button url="parade/display.do?paradeId=${parade.id}" name="parade" code="sponsorship.parade"/>
+<acme:button url="parade/display.do?paradeId=${sponsorship.parade.id}" name="parade" code="sponsorship.parade"/>
 
 
 

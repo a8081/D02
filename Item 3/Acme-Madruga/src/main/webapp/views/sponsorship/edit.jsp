@@ -23,8 +23,16 @@
 	
 	<acme:textbox code="sponsorship.banner" path="banner"/>
 	<acme:textbox code="sponsorship.targetPage" path="targetPage"/>
-	<acme:textbox code="sponsorship.creditCard.holder" path="holder"/>
-	<acme:textbox code="sponsorship.creditCard.make" path="make"/>
+	<acme:textbox code="sponsorship.creditCard.holderName" path="holderName"/>
+
+	<form:label path="make">
+		<spring:message code="sponsorship.creditCard.brandName" />
+	</form:label>	
+	<form:select  path="make">
+		<form:options items="${makes}"/>
+	</form:select>
+	<form:errors path="make" cssClass="error" />
+	
 	<acme:textbox code="sponsorship.creditCard.number" path="number"/>
 	<acme:textbox code="sponsorship.creditCard.expirationMonth" path="expirationMonth" placeholder="09"/>
 	<acme:textbox code="sponsorship.creditCard.expirationYear" path="expirationYear" placeholder="21"/>
@@ -35,7 +43,7 @@
 		
 	<jstl:if test="${sponsorship.id != 0}">
 		<jstl:choose>
-			<jstl:when test="${sponsorship.activated == 0}">
+			<jstl:when test="${sponsorship.activated eq true}">
 				<input type="submit" name="deactivate" value="<spring:message code="sponsorship.deactivate"/>" />
 			</jstl:when>
 			<jstl:otherwise>

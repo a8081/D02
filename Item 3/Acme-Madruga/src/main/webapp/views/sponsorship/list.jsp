@@ -38,6 +38,6 @@
 
 <br />
 
-<a href="sponsorship/sponsor/create.do">
+<a href="parade/sponsor/list.do">
 		<spring:message code="sponsorship.create"/>
 	</a>

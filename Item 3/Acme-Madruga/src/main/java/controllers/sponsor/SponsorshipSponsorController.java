@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import services.ConfigurationParametersService;
 import services.ParadeService;
 import services.SponsorService;
 import services.SponsorshipService;
@@ -29,15 +30,18 @@ import forms.SponsorshipForm;
 public class SponsorshipSponsorController extends AbstractController {
 
 	@Autowired
-	private SponsorshipService	sponsorshipService;
+	private SponsorshipService				sponsorshipService;
 
 	@Autowired
-	private ParadeService		paradeService;
+	private ParadeService					paradeService;
 
 	@Autowired
-	private SponsorService		sponsorService;
+	private SponsorService					sponsorService;
 
-	final String				lang	= LocaleContextHolder.getLocale().getLanguage();
+	@Autowired
+	private ConfigurationParametersService	configurationParametersService;
+
+	final String							lang	= LocaleContextHolder.getLocale().getLanguage();
 
 
 	// =================LIST=================
@@ -166,7 +170,7 @@ public class SponsorshipSponsorController extends AbstractController {
 
 		if (sponsorship != null) {
 			result = new ModelAndView("sponsorship/display");
-			result.addObject("parade", sponsorship);
+			result.addObject("sponsorship", sponsorship);
 		} else
 			result = new ModelAndView("redirect:/misc/403.jsp");
 
@@ -192,8 +196,8 @@ public class SponsorshipSponsorController extends AbstractController {
 		result.addObject("sponsorship", sponsorship);
 		result.addObject("parades", parades);
 		//result.addObject("requestURI", "/sponsorship/sponsor/edit.do?sponsorshipId=" + sponsorship.getId());
-		result.addObject("paradesAvailable", this.paradeService.paradesAvailable());
 		result.addObject("message", messageCode);
+		result.addObject("makes", this.configurationParametersService.find().getCreditCardMake());
 		return result;
 	}
 
@@ -209,7 +213,10 @@ public class SponsorshipSponsorController extends AbstractController {
 		final ModelAndView result;
 		SponsorshipForm sponsorshipForm;
 
-		sponsorshipForm = this.sponsorshipService.inyect(sponsorship);
+		if (sponsorship.getId() == 0)
+			sponsorshipForm = new SponsorshipForm();
+		else
+			sponsorshipForm = this.sponsorshipService.inyect(sponsorship);
 
 		final Collection<Parade> parades = this.paradeService.paradesAvailableSponsor();
 
@@ -217,7 +224,7 @@ public class SponsorshipSponsorController extends AbstractController {
 		result.addObject("sponsorship", sponsorshipForm);
 		result.addObject("parades", parades);
 		//result.addObject("requestURI", "/sponsorship/sponsor/edit.do?sponsorshipId=" + sponsorship.getId());
-		result.addObject("paradesAvailable", this.paradeService.paradesAvailable());
+		result.addObject("makes", this.configurationParametersService.find().getCreditCardMake());
 		result.addObject("message", messageCode);
 		return result;
 	}
