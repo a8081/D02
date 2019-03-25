@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import services.ConfigurationParametersService;
 import services.ParadeService;
+import services.SponsorshipService;
 import domain.Parade;
 
 @Controller
@@ -20,10 +20,12 @@ import domain.Parade;
 public class ParadeController extends AbstractController {
 
 	@Autowired
-	private ParadeService					paradeService;
+	private ParadeService		paradeService;
 
 	@Autowired
-	private ConfigurationParametersService	configurationParametersService;
+	private SponsorshipService	sponsorshipService;
+
+	final String				lang	= LocaleContextHolder.getLocale().getLanguage();
 
 
 	@RequestMapping(value = "/display", method = RequestMethod.GET)
@@ -37,8 +39,11 @@ public class ParadeController extends AbstractController {
 			result = new ModelAndView("parade/display");
 			result.addObject("parade", parade);
 
-			final String banner = this.configurationParametersService.findBanner();
-			result.addObject("banner", banner);
+			final String imgbanner = this.sponsorshipService.findRandomSponsorship(paradeId).getBanner();
+			result.addObject("imgbanner", imgbanner);
+			result.addObject("lang", this.lang);
+			final String targetpage = this.sponsorshipService.findRandomSponsorship(paradeId).getTargetPage();
+			result.addObject("targetpage", targetpage);
 		} else
 			result = new ModelAndView("redirect:/misc/403.jsp");
 
@@ -51,15 +56,11 @@ public class ParadeController extends AbstractController {
 		final Collection<Parade> parades;
 
 		parades = this.paradeService.findAllFinalMode();
-		final String lang = LocaleContextHolder.getLocale().getLanguage();
 
 		result = new ModelAndView("parade/list");
 		result.addObject("parades", parades);
-		result.addObject("lang", lang);
+		result.addObject("lang", this.lang);
 		result.addObject("requetURI", "parade/list.do");
-
-		final String banner = this.configurationParametersService.findBanner();
-		result.addObject("banner", banner);
 
 		return result;
 	}
@@ -76,9 +77,6 @@ public class ParadeController extends AbstractController {
 		result.addObject("parades", parades);
 		result.addObject("lang", lang);
 		result.addObject("requetURI", "parade/list.do");
-
-		final String banner = this.configurationParametersService.findBanner();
-		result.addObject("banner", banner);
 
 		return result;
 	}

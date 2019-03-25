@@ -1680,6 +1680,15 @@
 		<property name="activated" value="true" />
 	</bean>
 
+	<bean id="sponsorship5" class="domain.Sponsorship">
+		<property name="banner"
+			value="https://ghc.anitab.org/wp-content/uploads/sites/2/2017/08/example-banner-announcement-1.png" />
+		<property name="targetPage" value="https://ghc.anitab.org" />
+		<property name="sponsor" ref="sponsor3" />
+		<property name="creditCard" ref="creditCard5" />
+		<property name="parade" ref="parade7" />
+		<property name="activated" value="true" />
+	</bean>
 
 	<!-- =================================================================== 
 		======= CreditCard ========= =================================================================== -->
@@ -1718,6 +1727,15 @@
 		<property name="expirationMonth" value="10" />
 		<property name="expirationYear" value="19" />
 		<property name="cvv" value="266" />
+	</bean>
+	
+	<bean id="creditCard5" class="domain.CreditCard">
+		<property name="holderName" value="Sponsor 3" />
+		<property name="make" value="VISA" />
+		<property name="number" value="4716699361876929" />
+		<property name="expirationMonth" value="02" />
+		<property name="expirationYear" value="19" />
+		<property name="cvv" value="885" />
 	</bean>
 
 	<!-- =================================================================== 

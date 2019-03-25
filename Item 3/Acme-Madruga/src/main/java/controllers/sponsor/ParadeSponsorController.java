@@ -13,6 +13,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import services.ParadeService;
 import services.SponsorService;
+import services.SponsorshipService;
 import controllers.AbstractController;
 import domain.Parade;
 import domain.Sponsor;
@@ -22,12 +23,15 @@ import domain.Sponsor;
 public class ParadeSponsorController extends AbstractController {
 
 	@Autowired
-	private SponsorService	sponsorService;
+	private SponsorService		sponsorService;
 
 	@Autowired
-	private ParadeService	paradeService;
+	private ParadeService		paradeService;
 
-	final String			lang	= LocaleContextHolder.getLocale().getLanguage();
+	@Autowired
+	private SponsorshipService	sponsorshipService;
+
+	final String				lang	= LocaleContextHolder.getLocale().getLanguage();
 
 
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
@@ -62,6 +66,10 @@ public class ParadeSponsorController extends AbstractController {
 			result = new ModelAndView("parade/display");
 			result.addObject("parade", parade);
 			result.addObject("rol", "sponsor");
+			final String imgbanner = this.sponsorshipService.findRandomSponsorship(paradeId).getBanner();
+			result.addObject("imgbanner", imgbanner);
+			final String targetpage = this.sponsorshipService.findRandomSponsorship(paradeId).getTargetPage();
+			result.addObject("targetpage", targetpage);
 		} else
 			result = new ModelAndView("redirect:/misc/403.jsp");
 

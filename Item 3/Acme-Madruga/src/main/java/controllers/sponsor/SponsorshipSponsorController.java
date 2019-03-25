@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -99,26 +100,22 @@ public class SponsorshipSponsorController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "save")
-	public ModelAndView save(@Valid final SponsorshipForm sponsorshipForm, final BindingResult binding) {
+	public ModelAndView save(@Valid @ModelAttribute("sponsorship") final SponsorshipForm sponsorshipForm, final BindingResult binding) {
 		ModelAndView result;
 		Sponsorship sponsorship;
 
-		sponsorship = this.sponsorshipService.reconstruct(sponsorshipForm, binding);
-
-		if (binding.hasErrors())
-			result = this.createEditModelAndView(sponsorship);
-		else
-			try {
-				this.sponsorshipService.save(sponsorship);
-				result = new ModelAndView("redirect:list.do");
-			} catch (final ValidationException oops) {
-				result = this.createEditModelAndView(sponsorshipForm);
-			} catch (final Throwable oops) {
-				String errorMessage = "sponsorship.commit.error";
-				if (oops.getMessage().contains("message.error"))
-					errorMessage = oops.getMessage();
-				result = this.createEditModelAndView(sponsorshipForm, errorMessage);
-			}
+		try {
+			sponsorship = this.sponsorshipService.reconstruct(sponsorshipForm, binding);
+			this.sponsorshipService.save(sponsorship);
+			result = new ModelAndView("redirect:list.do");
+		} catch (final ValidationException oops) {
+			result = this.createEditModelAndView(sponsorshipForm);
+		} catch (final Throwable oops) {
+			String errorMessage = "sponsorship.commit.error";
+			if (oops.getMessage().contains("message.error"))
+				errorMessage = oops.getMessage();
+			result = this.createEditModelAndView(sponsorshipForm, errorMessage);
+		}
 		return result;
 	}
 
@@ -167,6 +164,22 @@ public class SponsorshipSponsorController extends AbstractController {
 		final Sponsor sponsor = this.sponsorService.findByPrincipal();
 
 		sponsorship = this.sponsorshipService.findByParade(paradeId, sponsor.getUserAccount().getId());
+
+		if (sponsorship != null) {
+			result = new ModelAndView("sponsorship/display");
+			result.addObject("sponsorship", sponsorship);
+		} else
+			result = new ModelAndView("redirect:/misc/403.jsp");
+
+		return result;
+	}
+
+	@RequestMapping(value = "/displaySponsorship", method = RequestMethod.GET)
+	public ModelAndView displaySponsorship(@RequestParam final int sponsorshipId) {
+		final ModelAndView result;
+		Sponsorship sponsorship;
+
+		sponsorship = this.sponsorshipService.findOneSponsorship(sponsorshipId);
 
 		if (sponsorship != null) {
 			result = new ModelAndView("sponsorship/display");

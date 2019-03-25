@@ -11,9 +11,20 @@
 <%@taglib prefix="display" uri="http://displaytag.sf.net"%>
 <%@ taglib prefix="acme" tagdir="/WEB-INF/tags"%>
 
+<style>
+img.resize {
+  max-width:15%;
+  max-height:15%;
+}
+</style>
 
-<acme:display code="sponsorship.banner" value="${sponsorship.banner}" />
-<acme:display code="sponsorship.targetPage" value="${sponsorship.targetPage}" />
+
+<spring:message code="sponsorship.banner" />:
+<br/>
+<a href="<jstl:out value="${sponsorship.targetPage}"/>">
+<img class="resize" src="${sponsorship.banner}" alt="<spring:message code='sponsorship.my.banner'/>"/></a>
+<br /><br />
+<acme:url labelCode="sponsorship.targetPage" url="${sponsorship.targetPage}" code="sponsorship.my.targetPage" />
 
 <h3><spring:message code="sponsorship.creditCard"/></h3>
 
@@ -24,6 +35,11 @@
 <acme:display code="sponsorship.creditCard.expirationYear" value="${sponsorship.creditCard.expirationYear}" />
 <acme:display code="sponsorship.creditCard.cvv" value="${sponsorship.creditCard.cvv}" />
 <br>
+
+<jstl:if test="${sponsorship.activated eq false}">
+	<strong><spring:message code="sponsorship.deactivated"/></strong><br><br>
+</jstl:if>
+
 <acme:button url="parade/display.do?paradeId=${sponsorship.parade.id}" name="parade" code="sponsorship.parade"/>
 
 

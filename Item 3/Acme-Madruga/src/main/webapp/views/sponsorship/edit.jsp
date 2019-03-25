@@ -14,12 +14,18 @@
 <form:form action="sponsorship/sponsor/edit.do"
 	modelAttribute="sponsorship">
 
-	<jstl:if test="${sponsorship.id != 0}">
+<jstl:choose>
+	<jstl:when test="${sponsorship.id != 0}">
 		<form:hidden path="id" />
 		<form:hidden path="version" />
-	</jstl:if>
+		<form:hidden path="parade" value="${sponsorship.parade.id}" />
+	</jstl:when>
+	<jstl:otherwise>
+		<form:hidden path="parade" value="${parade.id}" />
+	</jstl:otherwise>
+</jstl:choose>
 	
-	<form:hidden path="parade" value="${parade}" />
+	<form:hidden path="activated" value="${sponsorship.activated}"/>
 	
 	<acme:textbox code="sponsorship.banner" path="banner"/>
 	<acme:textbox code="sponsorship.targetPage" path="targetPage"/>

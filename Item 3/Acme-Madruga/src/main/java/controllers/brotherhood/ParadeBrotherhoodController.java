@@ -22,6 +22,7 @@ import services.FloatService;
 import services.ParadeService;
 import services.RequestService;
 import services.SegmentService;
+import services.SponsorshipService;
 import controllers.AbstractController;
 import domain.Brotherhood;
 import domain.Parade;
@@ -50,6 +51,9 @@ public class ParadeBrotherhoodController extends AbstractController {
 
 	@Autowired
 	private SegmentService					segmentService;
+
+	@Autowired
+	private SponsorshipService				sponsorshipService;
 
 
 	// CREATE
@@ -90,6 +94,10 @@ public class ParadeBrotherhoodController extends AbstractController {
 			result.addObject("rol", "brotherhood");
 			result.addObject("requests", requests);
 			result.addObject("segments", segments);
+			final String imgbanner = this.sponsorshipService.findRandomSponsorship(paradeId).getBanner();
+			result.addObject("imgbanner", imgbanner);
+			final String targetpage = this.sponsorshipService.findRandomSponsorship(paradeId).getTargetPage();
+			result.addObject("targetpage", targetpage);
 
 		} else
 			result = new ModelAndView("redirect:/misc/403.jsp");

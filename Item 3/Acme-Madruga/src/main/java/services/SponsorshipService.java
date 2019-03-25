@@ -68,9 +68,10 @@ public class SponsorshipService {
 			Assert.isTrue(this.sponsorshipRepository.availableSponsorshipParade(s.getParade().getId(), principal.getUserAccount().getId()), "Cannot sponsors twice the same parade");
 			Assert.notNull(s.getCreditCard(), "You must to set a credit card to create a sponsorship");
 			Assert.isTrue(this.paradeService.exists(s.getParade().getId()), "You must sponsors to a parade of the system");
+			Assert.isTrue(!this.expiredCreditCard(s.getCreditCard()));
 		} else {
 			Assert.isTrue(ss.contains(s), "You only can modify your sponsorships, you haven't access to this resource");
-			Assert.isTrue(this.sponsorshipRepository.availableSponsorshipParade(s.getParade().getId(), principal.getUserAccount().getId()), "Cannot sponsors twice the same parade");
+			Assert.isTrue(!this.expiredCreditCard(s.getCreditCard()));
 		}
 		final Sponsorship saved = this.sponsorshipRepository.save(s);
 		return saved;
@@ -172,46 +173,58 @@ public class SponsorshipService {
 
 	public Sponsorship reconstruct(final SponsorshipForm sponsorshipForm, final BindingResult binding) {
 		Sponsorship sponsorship;
+		final CreditCard creditCard = new CreditCard();
 
 		if (sponsorshipForm.getId() == 0) {
-			final CreditCard creditCard = new CreditCard();
-			creditCard.setNumber(sponsorshipForm.getNumber());
-			creditCard.setMake(sponsorshipForm.getMake());
-			creditCard.setHolderName(sponsorshipForm.getHolderName());
-			creditCard.setExpirationMonth(sponsorshipForm.getExpirationMonth());
-			creditCard.setExpirationYear(sponsorshipForm.getExpirationYear());
-			creditCard.setCvv(sponsorshipForm.getCvv());
 			sponsorship = this.create();
-			sponsorship.setId(sponsorshipForm.getId());
-			sponsorship.setVersion(sponsorshipForm.getVersion());
-			sponsorship.setActivated(sponsorshipForm.isActivated());
-			sponsorship.setBanner(sponsorshipForm.getBanner());
 			sponsorship.setParade(sponsorshipForm.getParade());
-			sponsorship.setTargetPage(sponsorshipForm.getTargetPage());
-			sponsorship.setSponsor(this.sponsorService.findByPrincipal());
-			sponsorship.setCreditCard(creditCard);
-		} else {
+		} else
 			sponsorship = this.sponsorshipRepository.findOne(sponsorshipForm.getId());
-			final CreditCard creditCard = new CreditCard();
-			creditCard.setNumber(sponsorshipForm.getNumber());
-			creditCard.setMake(sponsorshipForm.getMake());
-			creditCard.setHolderName(sponsorshipForm.getHolderName());
-			creditCard.setExpirationMonth(sponsorshipForm.getExpirationMonth());
-			creditCard.setExpirationYear(sponsorshipForm.getExpirationYear());
-			creditCard.setCvv(sponsorshipForm.getCvv());
-			sponsorship.setActivated(sponsorshipForm.isActivated());
-			sponsorship.setBanner(sponsorshipForm.getBanner());
-			sponsorship.setParade(sponsorshipForm.getParade());
-			sponsorship.setTargetPage(sponsorshipForm.getTargetPage());
-			sponsorship.setSponsor(this.sponsorService.findByPrincipal());
-			sponsorship.setCreditCard(creditCard);
-		}
+
+		final String number = sponsorshipForm.getNumber().replace(" ", "");
+		creditCard.setMake(sponsorshipForm.getMake());
+		creditCard.setNumber(number);
+		creditCard.setHolderName(sponsorshipForm.getHolderName());
+		creditCard.setExpirationMonth(sponsorshipForm.getExpirationMonth());
+		creditCard.setExpirationYear(sponsorshipForm.getExpirationYear());
+		creditCard.setCvv(sponsorshipForm.getCvv());
+		sponsorship.setActivated(sponsorshipForm.isActivated());
+		sponsorship.setBanner(sponsorshipForm.getBanner());
+		sponsorship.setTargetPage(sponsorshipForm.getTargetPage());
+		sponsorship.setSponsor(this.sponsorService.findByPrincipal());
+		sponsorship.setCreditCard(creditCard);
 
 		this.validator.validate(sponsorship, binding);
+
+		this.sponsorshipRepository.flush();
+
 		if (binding.hasErrors())
 			throw new ValidationException();
 
 		return sponsorship;
 	}
 
+	public Sponsorship findOneSponsorship(final int sponsorshipId) {
+		final Sponsor sponsor = this.sponsorService.findByPrincipal();
+		final Sponsorship sponsorship = this.findOne(sponsorshipId);
+		Assert.isTrue(sponsorship.getSponsor().getId() == sponsor.getId());
+		return sponsorship;
+	}
+
+	// ancilliary
+	boolean expiredCreditCard(final CreditCard c) {
+		boolean res = false;
+		final Date now = new Date();
+		final boolean mesCaducado = c.getExpirationMonth() < (now.getMonth() + 1);
+		final boolean mismoAnyo = (c.getExpirationYear()) == (now.getYear() % 100);
+		final boolean anyoCaducado = (c.getExpirationYear()) < (now.getYear() % 100);
+		if (anyoCaducado || (mismoAnyo && mesCaducado))
+			res = true;
+
+		return res;
+	}
+
+	public void flush() {
+		this.sponsorshipRepository.flush();
+	}
 }

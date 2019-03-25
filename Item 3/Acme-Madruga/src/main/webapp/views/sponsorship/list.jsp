@@ -9,29 +9,26 @@
 <%@taglib prefix="security"
 	uri="http://www.springframework.org/security/tags"%>
 <%@taglib prefix="display" uri="http://displaytag.sf.net"%>
-
+<%@ taglib prefix="acme" tagdir="/WEB-INF/tags"%>
 
 <display:table name="sponsorships" id="row" pagesize="5"
 	requestURI="sponsorship/sponsor/list.do" class="displaytag">
 
 
 	<display:column>
-		<a href="sponsorship/sponsor/edit.do?sponsorshipId=${row.id}"> <spring:message
-				code="sponsorship.edit" />
-		</a>
-	</display:column>
-	<display:column titleKey="sponsorship.banner">
-		<a href="${row.banner}"> <jstl:out value="${row.banner}" />
-		</a>
+		<acme:link url="sponsorship/sponsor/edit.do?sponsorshipId=${row.id}" code="sponsorship.edit" />
 	</display:column>
 
 	<display:column titleKey="sponsorship.targetPage">
-		<a href="${row.targetPage}"> <jstl:out value="${row.targetPage}" />
-		</a>
+		<acme:url url="${row.targetPage}" code="sponsorship.my.targetPage"/>
 	</display:column>
 
 	<display:column titleKey="sponsorship.creditCard">
 		<jstl:out value="${row.creditCard.number}" />
+	</display:column>
+	
+	<display:column>
+		<acme:link url="sponsorship/sponsor/displaySponsorship.do?sponsorshipId=${row.id}" code="sponsorship.display" />
 	</display:column>
 
 </display:table>
