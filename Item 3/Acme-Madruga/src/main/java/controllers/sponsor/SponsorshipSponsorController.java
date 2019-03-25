@@ -4,11 +4,13 @@ package controllers.sponsor;
 import java.util.Collection;
 
 import javax.validation.Valid;
+import javax.validation.ValidationException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -98,7 +100,7 @@ public class SponsorshipSponsorController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "save")
-	public ModelAndView save(@Valid final SponsorshipForm sponsorshipForm, final BindingResult binding) {
+	public ModelAndView save(@Valid @ModelAttribute("sponsorship") final SponsorshipForm sponsorshipForm, final BindingResult binding) {
 		ModelAndView result;
 		Sponsorship sponsorship;
 
@@ -106,11 +108,8 @@ public class SponsorshipSponsorController extends AbstractController {
 			sponsorship = this.sponsorshipService.reconstruct(sponsorshipForm, binding);
 			this.sponsorshipService.save(sponsorship);
 			result = new ModelAndView("redirect:list.do");
-			//		} catch (final ValidationException oops) {
-			//			String errorMessage = "sponsorship.commit.error";
-			//			if (oops.getMessage().contains("message.error"))
-			//				errorMessage = oops.getMessage();
-			//			result = this.createEditModelAndView(sponsorshipForm, errorMessage);
+		} catch (final ValidationException oops) {
+			result = this.createEditModelAndView(sponsorshipForm);
 		} catch (final Throwable oops) {
 			String errorMessage = "sponsorship.commit.error";
 			if (oops.getMessage().contains("message.error"))
