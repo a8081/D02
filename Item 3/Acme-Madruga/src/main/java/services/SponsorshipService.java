@@ -68,10 +68,8 @@ public class SponsorshipService {
 			Assert.isTrue(this.sponsorshipRepository.availableSponsorshipParade(s.getParade().getId(), principal.getUserAccount().getId()), "Cannot sponsors twice the same parade");
 			Assert.notNull(s.getCreditCard(), "You must to set a credit card to create a sponsorship");
 			Assert.isTrue(this.paradeService.exists(s.getParade().getId()), "You must sponsors to a parade of the system");
-		} else {
+		} else
 			Assert.isTrue(ss.contains(s), "You only can modify your sponsorships, you haven't access to this resource");
-			Assert.isTrue(this.sponsorshipRepository.availableSponsorshipParade(s.getParade().getId(), principal.getUserAccount().getId()), "Cannot sponsors twice the same parade");
-		}
 		final Sponsorship saved = this.sponsorshipRepository.save(s);
 		return saved;
 	}
@@ -211,6 +209,13 @@ public class SponsorshipService {
 		if (binding.hasErrors())
 			throw new ValidationException();
 
+		return sponsorship;
+	}
+
+	public Sponsorship findOneSponsorship(final int sponsorshipId) {
+		final Sponsor sponsor = this.sponsorService.findByPrincipal();
+		final Sponsorship sponsorship = this.findOne(sponsorshipId);
+		Assert.isTrue(sponsorship.getSponsor().getId() == sponsor.getId());
 		return sponsorship;
 	}
 
