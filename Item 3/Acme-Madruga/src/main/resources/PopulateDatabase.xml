@@ -121,10 +121,10 @@
 		<property name="creationDate" value="2019/03/06 15:20"></property>
 
 		<!-- Reletions -->
-		<property name="processions">
+		<property name="parades">
 			<list>
-				<ref bean="procession1" />
-				<ref bean="procession2" />
+				<ref bean="parade1" />
+				<ref bean="parade2" />
 			</list>
 		</property>
 

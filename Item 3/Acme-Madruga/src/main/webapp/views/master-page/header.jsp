@@ -218,6 +218,7 @@
 					<security:authorize access="hasRole('SPONSOR')">
 					<li><a href="sponsor/edit.do"><spring:message code="master.page.sponsor.edit" /></a></li>
 					<li><a href="sponsor/display.do"><spring:message code="master.page.sponsor.display" /></a></li>
+					</security:authorize>
 					<security:authorize access="hasRole('CHAPTER')">
 					<li><a href="chapter/edit.do"><spring:message code="master.page.chapter.edit" /></a></li>
 					<li><a href="chapter/display.do"><spring:message code="master.page.chapter.display" /></a></li>
