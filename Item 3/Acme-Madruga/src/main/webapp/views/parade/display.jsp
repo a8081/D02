@@ -24,6 +24,10 @@
 .REJECTED {
 	background-color: orange;
 }
+img.resize {
+  max-width:10%;
+  max-height:10%;
+}
 </style>
 
 <jstl:if test="${not empty rol}">
@@ -90,30 +94,66 @@
 		</display:column>
 	</display:table>
 	<br />
+	
 </security:authorize>
 
+<spring:message code="parade.segments"/>:
+<jstl:if test="${parade.status eq 'DEFAULT'}">
+<acme:button url="segment/brotherhood/create.do?paradeId=${parade.id}" name="create" code="parade.segment.create" />
+</jstl:if>
+<display:table name="segments" id="row"
+	requestURI="parade/brotherhood/display.do?paradeId=${parade.id}" pagesize="5"
+	class="displaytag">
 
-<security:authorize access="hasAnyRole('BROTHERHOOD','MEMBER')">
-<acme:button url="parade${rolURL}/list.do" name="back"
+
+	<display:column>
+	<jstl:if test="${parade.status eq 'DEFAULT'}">
+	<acme:button url="segment/brotherhood/edit.do?segmentId=${row.id}&paradeId=${parade.id}" name="edit" code="parade.segment.edit" />
+	</jstl:if>
+	</display:column>
+
+	<acme:dataTableColumn code="segment.originTime" property="originTime" />
+	<acme:dataTableColumn code="segment.destinationTime" property="destinationTime" />
+	
+	<display:column>
+	<acme:button url="segment/brotherhood/display.do?segmentId=${row.id}" name="display" code="parade.segment.display" />
+	</display:column>
+	
+</display:table>
+<br><br>
+
+<security:authorize access="hasRole('MEMBER')">
+<acme:button url="parade/member/list.do" name="back"
 	code="parade.list.button" />
 </security:authorize>
 
-<security:authorize access="hasRole('CHAPTER')">
+<security:authorize access="hasAnyRole('CHAPTER','BROTHERHOOD')">
+
+<jstl:if test="${parade.status eq 'DEFAULT'}">
+<acme:button url="parade${rolURL}/listDefault.do" name="back"
+	code="parade.list.button" />
+</jstl:if>
+
 <jstl:if test="${parade.status eq 'ACCEPTED'}">
-<acme:button url="parade/chapter/listAccepted.do" name="back"
+<acme:button url="parade${rolURL}/listAccepted.do" name="back"
 	code="parade.list.button" />
 </jstl:if>
 
 <jstl:if test="${parade.status eq 'REJECTED'}">
-<acme:button url="parade/chapter/listRejected.do" name="back"
+<acme:button url="parade${rolURL}/listRejected.do" name="back"
 	code="parade.list.button" />
 </jstl:if>
 
 <jstl:if test="${parade.status eq 'SUBMITTED'}">
-<acme:button url="parade/chapter/listSubmitted.do" name="back"
+<acme:button url="parade${rolURL}/listSubmitted.do" name="back"
 	code="parade.list.button" />
 </jstl:if>
 </security:authorize>
 
+<jstl:if test="${not empty imgbanner}">
+	<a href="<jstl:out value="${targetpage}"/>">
+		<img class="resize" src="${imgbanner}" alt="Banner"/>
+	</a><br /><br />
+</jstl:if>
 
 <br />

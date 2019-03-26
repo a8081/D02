@@ -1,19 +1,24 @@
 
 package services;
 
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.List;
+
+import javax.validation.ValidationException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.Validator;
 
 import repositories.BrotherhoodRepository;
 import repositories.SegmentRepository;
 import domain.GPS;
 import domain.Parade;
 import domain.Segment;
+import forms.SegmentForm;
 
 @Service
 @Transactional
@@ -28,20 +33,26 @@ public class SegmentService {
 	@Autowired
 	private BrotherhoodRepository	brotherhoodRepository;
 
+	@Autowired
+	private ParadeService			paradeService;
+
+	@Autowired
+	private Validator				validator;
+
 
 	/**
 	 * 
 	 * los segmentos se guardan en una lista
 	 * 
 	 * RESTRICCIONES:
-	 * Sólo se puede borrar el segmento del último
-	 * Sólo se pueden agregar segmentos con un orden un nivel superior al nivel más alto que hay en ese momento
+	 * Sï¿½lo se puede borrar el segmento del ï¿½ltimo
+	 * Sï¿½lo se pueden agregar segmentos con un orden un nivel superior al nivel mï¿½s alto que hay en ese momento
 	 * Si se quiere modificar un segmento de nivel intermedio, la unica opcion es editarlo
 	 * 
 	 * En el jsp, al hacer click sobre ver el path de la parade:
-	 * aparecerán los segmentos ordenador por su orden
-	 * aparecerá el botón de borrar siempre al lado del último segmento
-	 * en el modo edición no se podrá modificar el orden
+	 * aparecerï¿½n los segmentos ordenador por su orden
+	 * aparecerï¿½ el botï¿½n de borrar siempre al lado del ï¿½ltimo segmento
+	 * en el modo ediciï¿½n no se podrï¿½ modificar el orden
 	 * **/
 
 	public Segment create() {
@@ -60,60 +71,57 @@ public class SegmentService {
 	}
 
 	/**
-	 * Es necesario pasarle el id de la parade a la que se le quiere añadir el segmento cuando
+	 * Es necesario pasarle el id de la parade a la que se le quiere aï¿½adir el segmento cuando
 	 * se cree un segmento nuevo
 	 **/
 	public Segment save(final Segment segment, final int idParade) {
 		Segment result;
 
-		if (segment.getId() != 0) { //Sólo se puede modificar el último segment
+		if (segment.getId() != 0) { //Sï¿½lo se puede modificar el ï¿½ltimo segment
 			//Comprobamos que el usuario logueado es una brotherhood que 
 			//tiene la parade a la que corresponde este segmento
 			Assert.isTrue(this.brotherhoodService.findByPrincipal().equals(this.segmentRepository.findBrotherhoodBySegment(segment.getId())), "El usuario logueado debe ser la hermandad que tiene la parade a la que corresponde ese segmento");
 
-			//Comprobamos que es el último de la lista (del path)
-			final Parade parade = this.segmentRepository.findParadeBySegment(segment.getId());
+			final Parade parade = this.paradeService.findOne(idParade);
+
+			//Comprobamos que el status de la parade tiene que ser DEFAULT para poder modificar un segment.
+			Assert.isTrue(parade.getStatus().equals("DEFAULT"), "No puede modificar un segment de un desfile que tenga su estado distinto a DEFAULT.");
+
+			//Comprobamos que es el ï¿½ltimo de la lista (del path)
 			final List<Segment> segments = parade.getSegments();
 			final Segment lastSegment = segments.get(segments.size() - 1);
-			Assert.isTrue(segment.equals(lastSegment), "No se puede editar un segmento si no es el último del path");
+			Assert.isTrue(segment.equals(lastSegment), "No se puede editar un segmento si no es el ï¿½ltimo del path");
 
-			//Comprobamos que solo se modifica el tiempo o la posicion final
-			final Segment oldSegment = this.segmentRepository.findOne(segment.getId());
-			final Date oldOriginDate = oldSegment.getOriginTime();
-			final GPS oldOriginGPS = oldSegment.getOriginCoordinates();
-			final Date newOriginDate = segment.getOriginTime();
-			final GPS newOriginGPS = segment.getOriginCoordinates();
-			Assert.isTrue(oldOriginDate.equals(newOriginDate) && oldOriginGPS.equals(newOriginGPS), "No se puede modificar ni la posicion ni la fecha de origen");
+			segment.setOriginTime(lastSegment.getOriginTime());
+			segment.setOriginCoordinates(lastSegment.getOriginCoordinates());
 
+			Assert.isTrue(segment.getOriginTime().before(segment.getDestinationTime()), "El horario de llegada no puede ser anterior al horario de salida.");
 			result = this.segmentRepository.save(segment);
-			Assert.notNull(result);
+			Assert.notNull(result, "El segmento guardado es nulo");
 
 		} else {
 			//En el caso de que el segmento se cree nuevo, hay que comprobar que
 			//el usuario logueado sea una brotherhood
 
 			this.brotherhoodService.findByPrincipal();
-			Assert.isTrue(this.brotherhoodService.findByPrincipal().equals(this.brotherhoodRepository.findBrotherhoodByParade(idParade)));
+			Assert.isTrue(this.brotherhoodService.findByPrincipal().equals(this.brotherhoodRepository.findBrotherhoodByParade(idParade)), "No puede crear un segment en un desfile que no pertenece a su hermandad.");
 
 			//Comprobamos que, el caso de que no sea el primer segment del path, 
 			//el instante y la posicion inicial coincidan con el instante y posicion final del segment
 			//anterior
-			final Parade parade = this.segmentRepository.findParadeBySegment(segment.getId());
+			final Parade parade = this.paradeService.findOne(idParade);
 			final List<Segment> segments = parade.getSegments();
 			if (!segments.isEmpty()) {
 				final Segment lastSegment = segments.get(segments.size() - 1);
-				final Date initialDate = segment.getOriginTime();
-				final GPS initialGPS = segment.getOriginCoordinates();
-				final Date finalDate = lastSegment.getDestinationTime();
-				final GPS finalGPS = lastSegment.getDestinationCoordinates();
-				Assert.isTrue(initialDate.equals(finalDate) && initialGPS.equals(finalGPS), "El instante y la posición de inicio del nuevo segmento no coincide con la fecha y posición final del segmnto precedente");
-
+				segment.setOriginTime(lastSegment.getDestinationTime());
+				segment.setOriginCoordinates(lastSegment.getDestinationCoordinates());
 			}
+			Assert.isTrue(segment.getOriginTime().before(segment.getDestinationTime()), "El horario de llegada no puede ser anterior al horario de salida.");
 
 			//Guardar el segment
 			result = this.segmentRepository.save(segment);
 			Assert.notNull(result);
-			//Guardarlo en la última posición de la lista de segments del parade
+			//Guardarlo en la ï¿½ltima posiciï¿½n de la lista de segments del parade
 
 			segments.add(result);
 			parade.setSegments(segments);
@@ -123,8 +131,7 @@ public class SegmentService {
 		return result;
 
 	}
-
-	public void delete(final Segment segment) {
+	public void delete(final Segment segment, final int paradeId) {
 
 		Assert.isTrue(this.segmentRepository.findOne(segment.getId()).equals(segment), "No se puede borrar un segmento que no existe");
 
@@ -132,12 +139,14 @@ public class SegmentService {
 		//tiene la parade a la que corresponde este segmento
 		Assert.isTrue(this.brotherhoodService.findByPrincipal().equals(this.segmentRepository.findBrotherhoodBySegment(segment.getId())), "El usuario logueado debe ser la hermandad que tiene la parade a la que corresponde ese segmento");
 
-		//Comprobamos que es el último de la lista (del path)
-		final Parade parade = this.segmentRepository.findParadeBySegment(segment.getId());
+		//Comprobamos que es el ï¿½ltimo de la lista (del path)
+		final Parade parade = this.paradeService.findOne(paradeId);
 		final List<Segment> segments = parade.getSegments();
 		final Segment lastSegment = segments.get(segments.size() - 1);
-		Assert.isTrue(segment.equals(lastSegment), "No se puede borrar un segmento si no es el último del path");
+		Assert.isTrue(segment.equals(lastSegment), "No se puede borrar un segmento si no es el ï¿½ltimo del path");
 
+		segments.remove(segment);
+		this.segmentRepository.delete(segment);
 	}
 
 	public List<Segment> findAll() {
@@ -160,8 +169,44 @@ public class SegmentService {
 		return result;
 	}
 
+	public List<Segment> copyPath(final List<Segment> path) {
+		final List<Segment> result = new ArrayList<>();
+		Segment retrieved;
+		final Segment copia = new Segment();
+		for (final Segment segment : path) {
+			copia.setOriginTime(segment.getOriginTime());
+			copia.setOriginCoordinates(segment.getOriginCoordinates());
+			copia.setDestinationTime(segment.getDestinationTime());
+			copia.setDestinationCoordinates(segment.getDestinationCoordinates());
+			retrieved = this.segmentRepository.save(copia);
+			result.add(retrieved);
+		}
+		return result;
+	}
+
 	public void flush() {
 		this.segmentRepository.flush();
 	}
 
+	public Segment reconstruct(final SegmentForm segmentForm, final BindingResult binding) {
+		Segment result;
+
+		Assert.isTrue(segmentForm.getId() != 0);
+
+		result = this.findOne(segmentForm.getId());
+
+		result.setId(segmentForm.getId());
+		result.setVersion(segmentForm.getVersion());
+		result.setOriginTime(segmentForm.getOriginTime());
+		result.setDestinationTime(segmentForm.getDestinationTime());
+		result.setOriginCoordinates(segmentForm.getOriginCoordinates());
+		result.setDestinationCoordinates(segmentForm.getDestinationCoordinates());
+
+		this.validator.validate(result, binding);
+
+		if (binding.hasErrors())
+			throw new ValidationException();
+
+		return result;
+	}
 }

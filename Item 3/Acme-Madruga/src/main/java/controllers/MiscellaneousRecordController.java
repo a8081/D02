@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import services.BrotherhoodService;
+import services.ConfigurationParametersService;
 import services.HistoryService;
 import services.MiscellaneousRecordService;
 import domain.Brotherhood;
@@ -26,11 +27,15 @@ import domain.MiscellaneousRecord;
 public class MiscellaneousRecordController extends AbstractController {
 
 	@Autowired
-	private MiscellaneousRecordService	miscellaneousRecordService;
+	private MiscellaneousRecordService		miscellaneousRecordService;
 	@Autowired
-	private HistoryService				historyService;
+	private HistoryService					historyService;
 	@Autowired
-	private BrotherhoodService			brotherhoodService;
+	private HistoryController				historyController;
+	@Autowired
+	private BrotherhoodService				brotherhoodService;
+	@Autowired
+	private ConfigurationParametersService	configurationParametersService;
 
 
 	@RequestMapping(value = "/create", method = RequestMethod.GET)
@@ -49,7 +54,7 @@ public class MiscellaneousRecordController extends AbstractController {
 			final MiscellaneousRecord miscellaneousRecord;
 			final Brotherhood brotherhood = this.brotherhoodService.findByPrincipal();
 			miscellaneousRecord = this.miscellaneousRecordService.findOne(miscellaneousRecordId);
-			Assert.isTrue(brotherhood.getHistory().getMiscellaneousRecords().equals(miscellaneousRecord), "This miscellaneous-record is not of your property");
+			Assert.isTrue(brotherhood.getHistory().getMiscellaneousRecords().contains(miscellaneousRecord), "This miscellaneous-record is not of your property");
 			result = this.createEditModelAndView(miscellaneousRecord);
 		} catch (final Exception e) {
 			result = new ModelAndView("administrator/error");
@@ -67,16 +72,16 @@ public class MiscellaneousRecordController extends AbstractController {
 			result = this.createEditModelAndView(miscellaneousRecord);
 		else
 			try {
-				final MiscellaneousRecord miscellaneousRecord1 = this.miscellaneousRecordService.save(miscellaneousRecord);
-				if (miscellaneousRecord.getVersion() == 0) {
+				if (miscellaneousRecord.getId() == 0) {
 					final Brotherhood brotherhood = this.brotherhoodService.findByPrincipal();
 					final History history = brotherhood.getHistory();
 					final Collection<MiscellaneousRecord> mr = history.getMiscellaneousRecords();
-					mr.add(miscellaneousRecord1);
+					mr.add(miscellaneousRecord);
 					history.setMiscellaneousRecords(mr);
 					this.historyService.save(history);
-				}
-				result = new ModelAndView("redirect:../history/list.do");
+				} else
+					this.miscellaneousRecordService.save(miscellaneousRecord);
+				result = this.historyController.list();
 			} catch (final Throwable oops) {
 				result = this.createEditModelAndView(miscellaneousRecord, "general.commit.error");
 			}
@@ -90,12 +95,36 @@ public class MiscellaneousRecordController extends AbstractController {
 		final MiscellaneousRecord miscellaneousRecord = this.miscellaneousRecordService.findOne(miscellaneousRecordId);
 		try {
 			this.miscellaneousRecordService.delete(miscellaneousRecord);
-			result = new ModelAndView("redirect:list.do");
+			result = this.historyController.list();
 		} catch (final Throwable oops) {
 			result = this.createEditModelAndView(miscellaneousRecord, "general.commit.error");
 			result.addObject("id", miscellaneousRecord.getId());
 		}
 		return result;
+	}
+
+	@RequestMapping(value = "/display", method = RequestMethod.GET)
+	public ModelAndView display(@RequestParam final int miscellaneousRecordId) {
+
+		ModelAndView res;
+
+		final Brotherhood brotherhood = this.brotherhoodService.findByPrincipal();
+		final Brotherhood brotherhoodMiscellaneous = this.miscellaneousRecordService.findBrotherhoodByMiscellaneous(miscellaneousRecordId);
+		final MiscellaneousRecord miscellaneousRecord = this.miscellaneousRecordService.findOne(miscellaneousRecordId);
+		Assert.isTrue(brotherhood.equals(brotherhoodMiscellaneous));
+
+		if (miscellaneousRecord != null) {
+
+			res = new ModelAndView("miscellaneousRecord/display");
+			res.addObject("miscellaneousRecord", miscellaneousRecord);
+
+			final String banner = this.configurationParametersService.find().getBanner();
+			res.addObject("banner", banner);
+		} else
+			res = new ModelAndView("redirect:/misc/403.jsp");
+
+		return res;
+
 	}
 
 	protected ModelAndView createEditModelAndView(final MiscellaneousRecord miscellaneousRecord) {
@@ -105,6 +134,7 @@ public class MiscellaneousRecordController extends AbstractController {
 
 		return result;
 	}
+
 	// Edition ---------------------------------------------------------
 
 	protected ModelAndView createEditModelAndView(final MiscellaneousRecord miscellaneousRecord, final String message) {

@@ -2,6 +2,7 @@
 package controllers;
 
 import java.util.Collection;
+import java.util.Date;
 
 import javax.validation.Valid;
 
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import services.BrotherhoodService;
+import services.ConfigurationParametersService;
 import services.HistoryService;
 import services.PeriodRecordService;
 import domain.Brotherhood;
@@ -26,11 +28,15 @@ import domain.PeriodRecord;
 public class PeriodRecordController extends AbstractController {
 
 	@Autowired
-	private PeriodRecordService	periodRecordService;
+	private PeriodRecordService				periodRecordService;
 	@Autowired
-	private HistoryService		historyService;
+	private HistoryService					historyService;
 	@Autowired
-	private BrotherhoodService	brotherhoodService;
+	private HistoryController				historyController;
+	@Autowired
+	private BrotherhoodService				brotherhoodService;
+	@Autowired
+	private ConfigurationParametersService	configurationParametersService;
 
 
 	@RequestMapping(value = "/create", method = RequestMethod.GET)
@@ -49,7 +55,7 @@ public class PeriodRecordController extends AbstractController {
 			final PeriodRecord periodRecord;
 			final Brotherhood brotherhood = this.brotherhoodService.findByPrincipal();
 			periodRecord = this.periodRecordService.findOne(periodRecordId);
-			Assert.isTrue(brotherhood.getHistory().getPeriodRecords().equals(periodRecord), "This period-record is not of your property");
+			Assert.isTrue(brotherhood.getHistory().getPeriodRecords().contains(periodRecord), "This period-record is not of your property");
 			result = this.createEditModelAndView(periodRecord);
 		} catch (final Exception e) {
 			result = new ModelAndView("administrator/error");
@@ -67,16 +73,20 @@ public class PeriodRecordController extends AbstractController {
 			result = this.createEditModelAndView(periodRecord);
 		else
 			try {
-				final PeriodRecord periodRecord1 = this.periodRecordService.save(periodRecord);
-				if (periodRecord.getVersion() == 0) {
+				final Date fechaActual = new Date();
+				final Integer Año = fechaActual.getYear() + 1900;
+				Assert.isTrue(Año <= periodRecord.getStartYear());
+				Assert.isTrue(periodRecord.getStartYear() <= periodRecord.getEndYear());
+				if (periodRecord.getId() == 0) {
 					final Brotherhood brotherhood = this.brotherhoodService.findByPrincipal();
 					final History history = brotherhood.getHistory();
 					final Collection<PeriodRecord> pr = history.getPeriodRecords();
-					pr.add(periodRecord1);
+					pr.add(periodRecord);
 					history.setPeriodRecords(pr);
 					this.historyService.save(history);
-				}
-				result = new ModelAndView("redirect:../history/list.do");
+				} else
+					this.periodRecordService.save(periodRecord);
+				result = this.historyController.list();
 			} catch (final Throwable oops) {
 				result = this.createEditModelAndView(periodRecord, "general.commit.error");
 			}
@@ -90,12 +100,36 @@ public class PeriodRecordController extends AbstractController {
 		final PeriodRecord periodRecord = this.periodRecordService.findOne(periodRecordId);
 		try {
 			this.periodRecordService.delete(periodRecord);
-			result = new ModelAndView("redirect:list.do");
+			result = this.historyController.list();
 		} catch (final Throwable oops) {
 			result = this.createEditModelAndView(periodRecord, "general.commit.error");
 			result.addObject("id", periodRecord.getId());
 		}
 		return result;
+	}
+
+	@RequestMapping(value = "/display", method = RequestMethod.GET)
+	public ModelAndView display(@RequestParam final int periodRecordId) {
+
+		ModelAndView res;
+
+		final Brotherhood brotherhood = this.brotherhoodService.findByPrincipal();
+		final Brotherhood brotherhoodPeriod = this.periodRecordService.findBrotherhoodByPeriod(periodRecordId);
+		final PeriodRecord periodRecord = this.periodRecordService.findOne(periodRecordId);
+		Assert.isTrue(brotherhood.equals(brotherhoodPeriod));
+
+		if (periodRecord != null) {
+
+			res = new ModelAndView("periodRecord/display");
+			res.addObject("periodRecord", periodRecord);
+
+			final String banner = this.configurationParametersService.find().getBanner();
+			res.addObject("banner", banner);
+		} else
+			res = new ModelAndView("redirect:/misc/403.jsp");
+
+		return res;
+
 	}
 
 	protected ModelAndView createEditModelAndView(final PeriodRecord periodRecord) {

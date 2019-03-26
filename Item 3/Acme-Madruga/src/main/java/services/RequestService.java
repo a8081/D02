@@ -40,6 +40,9 @@ public class RequestService {
 	@Autowired
 	private BrotherhoodService	brotherhoodService;
 
+	@Autowired
+	private MessageService		messageService;
+
 
 	// ======================= CRUD ================================
 	/**
@@ -106,15 +109,17 @@ public class RequestService {
 			Assert.isTrue(!isMember, "A member cannot update the request");
 			Assert.isTrue(isBrotherhood, "Only brotherhood can update a Request (to change it's status)");
 			Assert.isTrue(this.requestRepository.checkBrotherhoodAccess(principal.getUserAccount().getId(), req.getId()), "This Brotherhood haven't access to this request");
-			if (req.getStatus().equals("REJECTED"))
+			if (req.getStatus().equals("REJECTED")) {
 				Assert.isTrue(!(req.getExplanation() == "" || req.getExplanation() == null), "If Request is REJECTED must have a explanation");
-			if (req.getStatus().equals("APPROVED")) {
+				this.messageService.requestStatusChangedMessage(req);
+			} else if (req.getStatus().equals("APPROVED")) {
 				Assert.isTrue(!this.paradeRequested(req.getParade().getId()));
 				Assert.isTrue((req.getExplanation() == "" || req.getExplanation() == null), "A explanation musn't be written if you approve the request");
 				final boolean rowIsNull = req.getRow() == null || req.getRow() > req.getParade().getMaxRows();
 				final boolean columnIsNull = req.getColumn() == null || req.getColumn() > req.getParade().getMaxColumns();
 				Assert.isTrue(!(rowIsNull || columnIsNull), "If Request is APPROVED, row and column cannot be null or greater than maximum allowed");
 				Assert.isTrue(this.requestRepository.availableRowColumn(req.getRow(), req.getColumn(), req.getParade().getId()), "If Request is APPROVED, row and column assigned by brotherhood must be unique");
+				this.messageService.requestStatusChangedMessage(req);
 			}
 		}
 		req = this.requestRepository.save(req);
@@ -239,39 +244,43 @@ public class RequestService {
 	}
 
 	public Double findPendingRequestRadio() {
-		final Double result = this.requestRepository.findPendingRequestRatio();
-		Assert.notNull(result);
+		Double result = this.requestRepository.findPendingRequestRatio();
+		if (result == null)
+			result = 0.0;
 		return result;
 	}
-
 	public Double findApprovedRequestRadio() {
-		final Double result = this.requestRepository.findApprovedRequestRatio();
-		Assert.notNull(result);
+		Double result = this.requestRepository.findApprovedRequestRatio();
+		if (result == null)
+			result = 0.0;
 		return result;
 	}
 
 	public Double findRejectedRequestRadio() {
-		final Double result = this.requestRepository.findRejectedRequestRatio();
-		Assert.notNull(result);
+		Double result = this.requestRepository.findRejectedRequestRatio();
+		if (result == null)
+			result = 0.0;
 		return result;
 	}
 
 	public Double findPendingRequestByParadeRadio(final Integer id) {
-		final Double result = this.requestRepository.findPendingRequestByParadeRatio(id);
-		Assert.notNull(result);
+		Double result = this.requestRepository.findPendingRequestByParadeRatio(id);
+		if (result == null)
+			result = 0.0;
 		return result;
 	}
 
 	public Double findApprovedRequestByParadeRadio(final Integer id) {
-		final Double result = this.requestRepository.findApprovedRequestByParadeRatio(id);
-		System.out.println("BBBBBBBBBBBBBBBBBBBBBBBBA" + result);
-		Assert.notNull(result);
+		Double result = this.requestRepository.findApprovedRequestByParadeRatio(id);
+		if (result == null)
+			result = 0.0;
 		return result;
 	}
 
 	public Double findRejectedRequestByParadeRadio(final Integer id) {
-		final Double result = this.requestRepository.findRejectedRequestByParadeRatio(id);
-		Assert.notNull(result);
+		Double result = this.requestRepository.findRejectedRequestByParadeRatio(id);
+		if (result == null)
+			result = 0.0;
 		return result;
 	}
 

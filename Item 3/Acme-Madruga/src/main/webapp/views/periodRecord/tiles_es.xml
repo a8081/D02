@@ -21,4 +21,9 @@
 		<put-attribute name="body" value="/views/periodRecord/edit.jsp" />
 	</definition>
 	
+	<definition name="periodRecord/display" extends="master.page">	
+		<put-attribute name="title" value="Mostrar: Period Record" />
+		<put-attribute name="body" value="/views/periodRecord/display.jsp" />
+	</definition>
+	
 </tiles-definitions>

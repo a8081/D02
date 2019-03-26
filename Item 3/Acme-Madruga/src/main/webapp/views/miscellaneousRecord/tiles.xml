@@ -21,4 +21,9 @@
 		<put-attribute name="body" value="/views/miscellaneousRecord/edit.jsp" />
 	</definition>
 	
+	<definition name="miscellaneousRecord/display" extends="master.page">	
+		<put-attribute name="title" value="Display: Miscellaneous Record" />
+		<put-attribute name="body" value="/views/miscellaneousRecord/display.jsp" />
+	</definition>
+	
 </tiles-definitions>

@@ -110,6 +110,25 @@
 		/> <property name="authorities"> <list> <bean class="security.Authority"> 
 		<property name="authority" value="BROTHERHOOD" /> </bean> </list> </property> 
 		</bean> -->
+		
+		
+		<bean id="finder1" class="domain.Finder">
+		<!-- Finder -->
+		<property name="keyword" value="poder"></property>
+		<property name="areaName" value=""></property>
+		<property name="minDate" value="2018/04/16 15:20"></property>
+		<property name="maxDate" value="2030/04/16 15:20"></property>
+		<property name="creationDate" value="2019/03/06 15:20"></property>
+
+		<!-- Reletions -->
+		<property name="parades">
+			<list>
+				<ref bean="parade1" />
+				<ref bean="parade2" />
+			</list>
+		</property>
+
+	</bean>
 
 	<!-- ========================= CHAPTER =========================== -->
 
@@ -262,6 +281,7 @@
 		<property name="score" value="0.5"></property>
 		<property name="spammer" value="false"></property>
 		<property name="userAccount" ref="userAccountMember1"></property>
+		<property name="finder" ref="finder1"></property>
 		<!-- Member -->
 	</bean>
 
@@ -647,6 +667,97 @@
 			</list>
 		</property>
 	</bean>
+	
+	<bean id="inBoxChapter1" class="domain.Folder">
+		<property name="name" value="In box" />
+		<property name="isSystemFolder" value="true" />
+		<property name="actor" ref="chapter1" />
+		<property name="messages">
+			<list>
+				<!-- <ref bean="message1"/> -->
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="outBoxChapter1" class="domain.Folder">
+		<property name="name" value="Out box" />
+		<property name="isSystemFolder" value="true" />
+		<property name="actor" ref="chapter1" />
+		<property name="messages">
+			<list>
+				<!-- <ref bean="message1"/> -->
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="trashBoxChapter1" class="domain.Folder">
+		<property name="name" value="Trash box" />
+		<property name="isSystemFolder" value="true" />
+		<property name="actor" ref="chapter1" />
+		<property name="messages">
+			<list>
+				<!-- <ref bean="message1"/> -->
+			</list>
+		</property>
+	</bean>
+	
+	
+	<bean id="spamBoxChapter1" class="domain.Folder">
+		<property name="name" value="Spam box" />
+		<property name="isSystemFolder" value="true" />
+		<property name="actor" ref="chapter1" />
+		<property name="messages">
+			<list>
+				<!-- <ref bean="message1"/> -->
+			</list>
+		</property>
+	</bean>
+	
+	
+	<bean id="inBoxChapter2" class="domain.Folder">
+		<property name="name" value="In box" />
+		<property name="isSystemFolder" value="true" />
+		<property name="actor" ref="chapter2" />
+		<property name="messages">
+			<list>
+				<!-- <ref bean="message1"/> -->
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="outBoxChapter2" class="domain.Folder">
+		<property name="name" value="Out box" />
+		<property name="isSystemFolder" value="true" />
+		<property name="actor" ref="chapter2" />
+		<property name="messages">
+			<list>
+				<!-- <ref bean="message1"/> -->
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="trashBoxChapter2" class="domain.Folder">
+		<property name="name" value="Trash box" />
+		<property name="isSystemFolder" value="true" />
+		<property name="actor" ref="chapter2" />
+		<property name="messages">
+			<list>
+				<!-- <ref bean="message1"/> -->
+			</list>
+		</property>
+	</bean>
+	
+	
+	<bean id="spamBoxChapter2" class="domain.Folder">
+		<property name="name" value="Spam box" />
+		<property name="isSystemFolder" value="true" />
+		<property name="actor" ref="chapter2" />
+		<property name="messages">
+			<list>
+				<!-- <ref bean="message1"/> -->
+			</list>
+		</property>
+	</bean>
 
 	<!-- ========================================= <bean id="outBoxMember3" 
 		class="domain.Folder"> <property name="name" value="Out box" /> <property 
@@ -922,12 +1033,12 @@
 		<property name="mode" value="FINAL" />
 		<property name="maxRows" value="120" />
 		<property name="maxColumns" value="300" />
-		<property name="status" value="ACCEPTED" />
+		<property name="status" value="SUBMITTED" />
 
 		<!-- Relations -->
 		<property name="floats">
 			<list>
-				<ref bean="float3" />
+				<ref bean="float5" />
 			</list>
 		</property>
 		<property name="brotherhood" ref="brotherhood2" />
@@ -943,10 +1054,10 @@
 		<property name="description" value="This is a description of a parade3" />
 		<property name="moment" value="2025/04/26 00:00" />
 		<property name="ticker" value="200427-DOUBA" />
-		<property name="mode" value="FINAL" />
+		<property name="mode" value="DRAFT" />
 		<property name="maxRows" value="120" />
 		<property name="maxColumns" value="300" />
-		<property name="status" value="REJECTED" />
+		<property name="status" value="DEFAULT" />
 		<!-- Relations -->
 		<property name="floats">
 			<list>
@@ -1012,6 +1123,8 @@
 		<property name="maxRows" value="120" />
 		<property name="maxColumns" value="300" />
 		<property name="status" value="REJECTED" />
+		<property name="rejectionReason" value="No me gusta"/>
+		
 		<!-- Relations -->
 		<property name="floats">
 			<list>
@@ -1032,7 +1145,7 @@
 		<property name="mode" value="FINAL" />
 		<property name="maxRows" value="120" />
 		<property name="maxColumns" value="300" />
-		<property name="status" value="SUBMITTED" />
+		<property name="status" value="ACCEPTED" />
 
 		<!-- Relations -->
 		<property name="floats">
@@ -1054,7 +1167,8 @@
 		<property name="mode" value="FINAL" />
 		<property name="maxRows" value="120" />
 		<property name="maxColumns" value="300" />
-		<property name="status" value="ACCEPTED" />
+		<property name="status" value="REJECTED" />
+		<property name="rejectionReason" value="No me gusta"/>
 		<!-- Relations -->
 		<property name="floats">
 			<list>
@@ -1072,17 +1186,17 @@
 		<property name="description" value="This is a description of a parade9s" />
 		<property name="moment" value="2021/04/26 00:00" />
 		<property name="ticker" value="200466-DOUIG" />
-		<property name="mode" value="FINAL" />
+		<property name="mode" value="DRAFT" />
 		<property name="maxRows" value="120" />
 		<property name="maxColumns" value="300" />
-		<property name="status" value="REJECTED" />
+		<property name="status" value="DEFAULT" />
 		<!-- Relations -->
 		<property name="floats">
 			<list>
 				<ref bean="float3" />
 			</list>
 		</property>
-		<property name="brotherhood" ref="brotherhood1" />
+		<property name="brotherhood" ref="brotherhood2" />
 		<property name="segments">
 			<list>
 			</list>
@@ -1117,7 +1231,7 @@
 		<property name="mode" value="FINAL" />
 		<property name="maxRows" value="120" />
 		<property name="maxColumns" value="300" />
-		<property name="status" value="ACCEPTED" />
+		<property name="status" value="SUBMITTED" />
 		<!-- Relations -->
 		<property name="floats">
 			<list>
@@ -1132,17 +1246,40 @@
 	</bean>
 	
 	<bean id="parade12" class="domain.Parade">
-		<property name="title" value="La amargura" />
-		<property name="description" value="This is a description of a parade11" />
+		<property name="title" value="Carmen Doloroso" />
+		<property name="description" value="This is a description of a parade12" />
 		<property name="moment" value="2022/04/26 00:00" />
 		<property name="ticker" value="200486-QOUAS" />
 		<property name="mode" value="DRAFT" />
 		<property name="maxRows" value="120" />
 		<property name="maxColumns" value="300" />
-		<property name="status" value="ACCEPTED" />
+		<property name="status" value="DEFAULT" />
 		<!-- Relations -->
 		<property name="floats">
 			<list>
+				<ref bean="float3" />
+			</list>
+		</property>
+		<property name="brotherhood" ref="brotherhood2" />
+		<property name="segments">
+			<list>
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="parade13" class="domain.Parade">
+		<property name="title" value="Los Javieres" />
+		<property name="description" value="This is a description of a parade13" />
+		<property name="moment" value="2022/04/26 00:00" />
+		<property name="ticker" value="203486-QUODF" />
+		<property name="mode" value="DRAFT" />
+		<property name="maxRows" value="120" />
+		<property name="maxColumns" value="300" />
+		<property name="status" value="DEFAULT" />
+		<!-- Relations -->
+		<property name="floats">
+			<list>
+				<ref bean="float1" />
 				<ref bean="float3" />
 			</list>
 		</property>
@@ -1298,7 +1435,7 @@
 			</list>
 		</property>
 		<!-- Relations -->
-		<property name="brotherhood" ref="brotherhood1" />
+		<property name="brotherhood" ref="brotherhood2" />
 	</bean>
 
 
@@ -1372,7 +1509,6 @@
 			</list>
 		</property>
 		<property name="area" ref="area1"></property>
-		<property name="history" ref="history1" />
 	</bean>
 
 
@@ -1624,7 +1760,7 @@
 		<property name="targetPage" value="https://ghc.anitab.org" />
 		<property name="sponsor" ref="sponsor1" />
 		<property name="creditCard" ref="creditCard1" />
-		<property name="parade" ref="parade1" />
+		<property name="parade" ref="parade5" />
 		<property name="activated" value="true" />
 	</bean>
 	<bean id="sponsorship2" class="domain.Sponsorship">
@@ -1633,7 +1769,7 @@
 		<property name="targetPage" value="https://ghc.anitab.org" />
 		<property name="sponsor" ref="sponsor2" />
 		<property name="creditCard" ref="creditCard2" />
-		<property name="parade" ref="parade2" />
+		<property name="parade" ref="parade5" />
 		<property name="activated" value="false" />
 	</bean>
 	<bean id="sponsorship3" class="domain.Sponsorship">
@@ -1642,7 +1778,7 @@
 		<property name="targetPage" value="https://ghc.anitab.org" />
 		<property name="sponsor" ref="sponsor3" />
 		<property name="creditCard" ref="creditCard3" />
-		<property name="parade" ref="parade3" />
+		<property name="parade" ref="parade5" />
 		<property name="activated" value="true" />
 	</bean>
 	<bean id="sponsorship4" class="domain.Sponsorship">
@@ -1651,10 +1787,19 @@
 		<property name="targetPage" value="https://ghc.anitab.org" />
 		<property name="sponsor" ref="sponsor1" />
 		<property name="creditCard" ref="creditCard4" />
-		<property name="parade" ref="parade4" />
+		<property name="parade" ref="parade7" />
 		<property name="activated" value="true" />
 	</bean>
 
+	<bean id="sponsorship5" class="domain.Sponsorship">
+		<property name="banner"
+			value="https://ghc.anitab.org/wp-content/uploads/sites/2/2017/08/example-banner-announcement-1.png" />
+		<property name="targetPage" value="https://ghc.anitab.org" />
+		<property name="sponsor" ref="sponsor3" />
+		<property name="creditCard" ref="creditCard5" />
+		<property name="parade" ref="parade7" />
+		<property name="activated" value="true" />
+	</bean>
 
 	<!-- =================================================================== 
 		======= CreditCard ========= =================================================================== -->
@@ -1693,6 +1838,15 @@
 		<property name="expirationMonth" value="10" />
 		<property name="expirationYear" value="19" />
 		<property name="cvv" value="266" />
+	</bean>
+	
+	<bean id="creditCard5" class="domain.CreditCard">
+		<property name="holderName" value="Sponsor 3" />
+		<property name="make" value="VISA" />
+		<property name="number" value="4716699361876929" />
+		<property name="expirationMonth" value="02" />
+		<property name="expirationYear" value="19" />
+		<property name="cvv" value="885" />
 	</bean>
 
 	<!-- =================================================================== 

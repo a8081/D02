@@ -13,7 +13,7 @@ import domain.Sponsorship;
 @Repository
 public interface SponsorshipRepository extends JpaRepository<Sponsorship, Integer> {
 
-	@Query("select sp.sponsor from Sponsorship sp where sp.sponsor.userAccount.id=?1")
+	@Query("select sp from Sponsorship sp where sp.sponsor.userAccount.id=?1")
 	Collection<Sponsorship> findAllByUserId(final Integer userAccountId);
 
 	@Query("select sp.sponsor from Sponsorship sp where sp.sponsor.userAccount.id=?1 and sp.activated=1")
@@ -39,4 +39,12 @@ public interface SponsorshipRepository extends JpaRepository<Sponsorship, Intege
 	@Query("select s from Sponsorship s where s.parade.id=?1")
 	Collection<Sponsorship> findByParade(int paradeId);
 
+	@Query("select s from Sponsorship s where s.parade.id=?1 and s.sponsor.userAccount.id=?2")
+	Sponsorship findByParade(int paradeId, int sponsorUAId);
+
+	@Query("select case when (count(sp) > 0) then false else true end from Sponsorship sp where sp.parade.id=?1 and sp.sponsor.userAccount.id=?2")
+	boolean availableSponsorshipParade(int paradeId, int sponsorUAId);
+
+	@Query("select sp from Sponsorship sp where sp.creditCard.expirationYear<?2 or (sp.creditCard.expirationMonth<?1 and sp.creditCard.expirationYear=?2)")
+	Collection<Sponsorship> expiredSponsorships(int month, int year);
 }

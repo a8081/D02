@@ -24,6 +24,7 @@ import domain.Float;
 import domain.Member;
 import domain.Parade;
 import domain.Segment;
+import domain.Sponsor;
 import forms.ParadeChapterForm;
 import forms.ParadeForm;
 
@@ -49,6 +50,15 @@ public class ParadeService {
 	@Autowired
 	private ChapterService		chapterService;
 
+	@Autowired
+	private SegmentService		segmentService;
+
+	@Autowired
+	private SponsorService		sponsorService;
+
+	@Autowired
+	private MessageService		messageService;
+
 
 	//@Autowired
 	//private Validator			validator;
@@ -61,8 +71,9 @@ public class ParadeService {
 		parade.setFloats(floats);
 		parade.setSegments(segments);
 
-		parade.setBrotherhood(this.brotherhoodService.findByPrincipal());
+		//		parade.setBrotherhood(this.brotherhoodService.findByPrincipal());
 		parade.setMode("DRAFT");
+		parade.setStatus("DEFAULT");
 		final Date moment = new Date(System.currentTimeMillis());
 		parade.setTicker(this.generateTicker(moment));
 
@@ -82,6 +93,13 @@ public class ParadeService {
 
 	public Collection<Parade> findAllFinalMode() {
 		final Collection<Parade> result = this.paradeRepository.findAllFinalMode();
+		Assert.notNull(result);
+
+		return result;
+	}
+
+	public Collection<Parade> findAllAccepted() {
+		final Collection<Parade> result = this.paradeRepository.findAllAccepted();
 		Assert.notNull(result);
 
 		return result;
@@ -124,53 +142,69 @@ public class ParadeService {
 
 	public Parade save(final Parade parade) {
 		Assert.notNull(parade);
-		final Actor principal = this.actorService.findByPrincipal();
-		final Parade result;
-		final Boolean isBrotherhood = this.actorService.checkAuthority(principal, Authority.BROTHERHOOD);
-		final Brotherhood bro = this.brotherhoodService.findByUserId(principal.getUserAccount().getId());
+		final Brotherhood brotherhoodPrincipal = this.brotherhoodService.findByPrincipal();
+		Assert.isTrue(parade.getBrotherhood().equals(brotherhoodPrincipal), "You must be the owner of the parade");
+		Parade result;
 
-		if (isBrotherhood && bro.getArea() != null) {
-			final Brotherhood brotherhoodPrincipal = this.brotherhoodService.findByPrincipal();
+		if (brotherhoodPrincipal.getArea() != null) {
 			Assert.notEmpty(parade.getFloats(), "A parade must have some floats assigned to be saved");
-			Assert.isTrue(this.floatService.findByBrotherhood(brotherhoodPrincipal).containsAll(parade.getFloats()));
+			final Collection<Float> fs = this.floatService.findByBrotherhood(brotherhoodPrincipal);
+			Assert.isTrue(fs.containsAll(parade.getFloats()), "You must be the owner of the parade and parade floats must corresponds to your parades");
 
 			if (parade.getId() == 0) {
 				parade.setBrotherhood(brotherhoodPrincipal);
 				parade.setMode("DRAFT");
-				parade.setStatus("SUBMITTED");
+				parade.setStatus("DEFAULT");
+				Assert.isNull(parade.getRejectionReason(), "A new parade cannot has rejection reason");
 				final Date moment = new Date(System.currentTimeMillis());
 				parade.setTicker(this.generateTicker(moment));
 			} else {
-				Assert.isTrue(parade.getStatus() != "REJECTED" || (parade.getRejectionReason() != "" || parade.getRejectionReason() != null), "If Parade is REJECTED must have a rejection reason");
+				final String ticker = this.findOne(parade.getId()).getTicker();
+				Assert.isTrue(ticker.equals(parade.getTicker()), "Ticker cannot be modified");
 				Assert.isTrue(!parade.getMode().equals("FINAL"), "Cannot edit a parade in FINAL mode");
-				Assert.isTrue(parade.getBrotherhood() == this.brotherhoodService.findByPrincipal());
+				Assert.isTrue(parade.getStatus().equals("DEFAULT"), "Cannot change parade status being a brotherhood");
+				Assert.isTrue(parade.getRejectionReason() == null, "Cannot set rejection reason being a brotherhood");
 			}
 		}
 		result = this.paradeRepository.save(parade);
 		return result;
 	}
-
 	/**
 	 * Make a copy of one of the parade (given as parameter) of the brotherhood logged. It set a new ticker, clear its status and its rejection reason, and changes it to draft mode.
 	 * 
 	 * @author a8081
 	 * */
 	public Parade copyBrotherhoodParade(final int paradeId) {
+
 		final Parade parade = this.findOne(paradeId);
 		Assert.notNull(parade);
-		final Parade result;
+		Parade newParade;
 		final Brotherhood brotherhoodPrincipal = this.brotherhoodService.findByPrincipal();
 
+		Assert.isTrue(brotherhoodPrincipal.equals(parade.getBrotherhood()), "Brotherhood only can copy one of their parades");
 		Assert.notEmpty(parade.getFloats(), "A parade must have some floats assigned to be saved");
 		Assert.isTrue(this.floatService.findByBrotherhood(brotherhoodPrincipal).containsAll(parade.getFloats()));
 
-		parade.setBrotherhood(brotherhoodPrincipal);
-		parade.setMode("DRAFT");
-		parade.setStatus("SUBMITTED");
-		final Date moment = new Date(System.currentTimeMillis());
-		parade.setTicker(this.generateTicker(moment));
+		newParade = new Parade();
+		//		No es necesario hacer esto ya que se setea en el metodo save
+		//
+		//		newParade.setBrotherhood(brotherhoodPrincipal);
+		//		newParade.setMode("DRAFT");
+		//		newParade.setStatus("DEFAULT");
+		//		final Date moment = new Date(System.currentTimeMillis());
+		//		newParade.setTicker(this.generateTicker(moment));
 
-		result = this.paradeRepository.save(parade);
+		newParade.setTitle(parade.getTitle());
+		newParade.setDescription(parade.getDescription());
+		newParade.setMaxColumns(parade.getMaxColumns());
+		newParade.setMaxRows(parade.getMaxRows());
+		newParade.setFloats(parade.getFloats());
+		final List<Segment> pathCopied = this.segmentService.copyPath(parade.getSegments());
+		newParade.setSegments(pathCopied);
+		newParade.setMoment(parade.getMoment());
+
+		final Parade result = this.paradeRepository.save(newParade);
+
 		return result;
 	}
 
@@ -227,6 +261,28 @@ public class ParadeService {
 		return parades;
 	}
 
+	/**
+	 * It returns all parades which principal has not sponsors yet. The principal must be a sponsor.
+	 * 
+	 * @author a8081
+	 * */
+	public Collection<Parade> paradesAvailableSponsor() {
+		Collection<Parade> myParades;
+		Collection<Parade> parades;
+		final Sponsor s = this.sponsorService.findByPrincipal();
+		parades = this.findAllAccepted();
+		myParades = this.findAllParadeBySponsor(s);
+		parades.removeAll(myParades);
+		return parades;
+	}
+
+	public Collection<Parade> findAllParadeBySponsor(final Sponsor s) {
+		Collection<Parade> res;
+		res = this.paradeRepository.findAllParadeBySponsor(s.getUserAccount().getId());
+		Assert.notNull(res);
+		return res;
+	}
+
 	public boolean exists(final Integer paradeId) {
 		Assert.isTrue(paradeId != 0, "parade id cannot be zero");
 		return this.paradeRepository.exists(paradeId);
@@ -236,12 +292,14 @@ public class ParadeService {
 		final Parade parade = this.findOne(paradeId);
 		final Parade result;
 		final Brotherhood bro = this.brotherhoodService.findByPrincipal();
+		Assert.isTrue(bro.getArea() != null);
 		Assert.isTrue(parade.getBrotherhood() == bro, "Actor who want to edit parade mode to FINAL is not his owner");
-		Assert.isTrue(parade.getMode().equals("DRAFT"));
-		Assert.isTrue(parade.getStatus().equals("ACCEPTED"), "Only parades that hace status accepted can be shown publicly");
-		if (bro.getArea() != null)
-			parade.setMode("FINAL");
+		Assert.isTrue(parade.getMode().equals("DRAFT"), "To set final mode, parade must be in draft mode");
+		Assert.isTrue(parade.getStatus().equals("DEFAULT"), "Parades must have status default if they are in draft mode");
+		parade.setMode("FINAL");
+		parade.setStatus("SUBMITTED");
 		result = this.paradeRepository.save(parade);
+		this.messageService.processionPublished(parade);
 		return result;
 	}
 
@@ -249,11 +307,28 @@ public class ParadeService {
 		final Parade parade = this.findOne(paradeId);
 		final Parade result;
 		final Chapter chapter = this.chapterService.findByPrincipal();
-		Assert.isTrue(parade.getBrotherhood().getArea() == chapter.getArea(), "No puede aceptar una parade que no pertenece al área que coordina.");
+		Assert.isTrue(parade.getBrotherhood().getArea() == chapter.getArea(), "No puede aceptar una parade que no pertenece al ï¿½rea que coordina.");
 		Assert.isTrue(parade.getMode().equals("FINAL"), "La parade que desea aceptar no ha sido guardada en modo final.");
 		Assert.isTrue(parade.getStatus().equals("SUBMITTED"), "No puede aceptar una parade que su estado sea distinto a Submitted");
 		if (chapter.getArea() != null)
 			parade.setStatus("ACCEPTED");
+		result = this.paradeRepository.save(parade);
+		return result;
+	}
+
+	public Parade rejectParade(final Parade received) {
+		final Parade result;
+		final Parade parade = this.findOne(received.getId());
+		final String reason = received.getRejectionReason();
+		final Chapter chapter = this.chapterService.findByPrincipal();
+		Assert.isTrue(reason != null && reason != "", "To reject a parade yo must provide a rejection reason");
+		Assert.isTrue(parade.getBrotherhood().getArea() == chapter.getArea(), "No puede rechazar una parade que no pertenece al area que coordina.");
+		Assert.isTrue(parade.getMode().equals("FINAL"), "La parade que desea rechazar no ha sido guardada en modo final");
+		Assert.isTrue(parade.getStatus().equals("SUBMITTED"), "No puede rechazar una parade que su estado sea distinto a Submitted");
+		if (chapter.getArea() != null) {
+			parade.setStatus("REJECTED");
+			parade.setRejectionReason(received.getRejectionReason());
+		}
 		result = this.paradeRepository.save(parade);
 		return result;
 
@@ -336,12 +411,48 @@ public class ParadeService {
 		return res;
 	}
 
+	public Collection<Parade> findAllDefaultByBrotherhood() {
+		final Brotherhood principal = this.brotherhoodService.findByPrincipal();
+		final Collection<Parade> res = this.paradeRepository.findAllDefaultByBrotherhood(principal.getId());
+		Assert.notNull(res);
+		return res;
+	}
+
 	public Collection<Parade> findAllParadeByBrotherhoodId(final Integer broUAId) {
 		Collection<Parade> res = new ArrayList<>();
 		res = this.paradeRepository.findAllParadeByBrotherhoodId(broUAId);
 		Assert.notNull(res);
 		return res;
+	}
 
+	public Double findRatioDraftVsFinalParades() {
+		final Double result = this.paradeRepository.findRatioDraftVsFinalParades();
+		Assert.notNull(result);
+		return result;
+	}
+
+	public Double findSubmittedParadesRatio() {
+		final Double result = this.paradeRepository.findSubmittedParadesRatio();
+		Assert.notNull(result);
+		return result;
+	}
+
+	public Double findAcceptedParadesRatio() {
+		final Double result = this.paradeRepository.findAcceptedParadesRatio();
+		Assert.notNull(result);
+		return result;
+	}
+
+	public Double findRejectedParadesRatio() {
+		final Double result = this.paradeRepository.findRejectedParadesRatio();
+		Assert.notNull(result);
+		return result;
+	}
+
+	public Parade findParadeBySegment(final Integer segmentId) {
+		Parade res;
+		res = this.paradeRepository.findParadeBySegment(segmentId);
+		return res;
 	}
 
 	public Parade reconstruct2(final ParadeChapterForm paradeChapterForm, final BindingResult binding) {
@@ -357,5 +468,9 @@ public class ParadeService {
 		result.setRejectionReason(paradeChapterForm.getRejectionReason());
 
 		return result;
+	}
+
+	public void flush() {
+		this.paradeRepository.flush();
 	}
 }

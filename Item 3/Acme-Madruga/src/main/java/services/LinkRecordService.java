@@ -10,6 +10,7 @@ import org.springframework.util.Assert;
 
 import repositories.LinkRecordRepository;
 import domain.Brotherhood;
+import domain.History;
 import domain.LinkRecord;
 
 @Service
@@ -18,10 +19,8 @@ public class LinkRecordService {
 
 	@Autowired
 	private LinkRecordRepository	linkRecordRepository;
-
 	@Autowired
 	private BrotherhoodService		brotherhoodService;
-
 	@Autowired
 	private ActorService			actorService;
 
@@ -67,14 +66,17 @@ public class LinkRecordService {
 	}
 
 	public void delete(final LinkRecord linkRecord) {
-		final Brotherhood me = this.brotherhoodService.findByPrincipal();
-		Assert.notNull(me, "You must be logged in the system");
+		final Brotherhood brotherhood = this.brotherhoodService.findByPrincipal();
+		Assert.notNull(brotherhood, "You must be logged in the system");
 		Assert.notNull(linkRecord);
 		Assert.isTrue(linkRecord.getId() != 0);
-		Assert.isTrue(this.findBrotherhoodByLink(linkRecord.getId()) == me);
+		Assert.isTrue(this.findBrotherhoodByLink(linkRecord.getId()) == brotherhood);
 		final LinkRecord retrieved = this.findOne(linkRecord.getId());
-		Assert.isTrue(me.getHistory().getLinkRecords().contains(retrieved));
-		this.linkRecordRepository.delete(retrieved);
+		final History history = brotherhood.getHistory();
+		final Collection<LinkRecord> linkRecords = history.getLinkRecords();
+		Assert.isTrue(linkRecords.contains(retrieved));
+		linkRecords.remove(retrieved);
+		this.linkRecordRepository.delete(retrieved.getId());
 	}
 
 	public Brotherhood findBrotherhoodByLink(final Integer id) {
@@ -83,6 +85,7 @@ public class LinkRecordService {
 		final Brotherhood bro = this.linkRecordRepository.findBrotherhoodByLink(id);
 		Assert.notNull(bro);
 		return bro;
+
 	}
 
 	public void flush() {

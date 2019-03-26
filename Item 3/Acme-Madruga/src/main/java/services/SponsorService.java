@@ -1,6 +1,9 @@
 
 package services;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,6 +15,7 @@ import security.LoginService;
 import security.UserAccount;
 import domain.Actor;
 import domain.Sponsor;
+import forms.ActorFrom;
 
 @Service
 @Transactional
@@ -23,7 +27,11 @@ public class SponsorService {
 	@Autowired
 	private ActorService		actorService;
 
+	@Autowired
 	private FolderService		folderService;
+
+	@Autowired
+	private UserAccountService	userAccountService;
 
 
 	public Sponsor create() {
@@ -40,6 +48,13 @@ public class SponsorService {
 	public Sponsor findOne(final int id) {
 		Assert.isTrue(id != 0);
 		final Sponsor result = this.sponsorRepository.findOne(id);
+		Assert.notNull(result);
+		return result;
+	}
+
+	public Collection<Sponsor> findAll() {
+
+		final Collection<Sponsor> result = this.sponsorRepository.findAll();
 		Assert.notNull(result);
 		return result;
 	}
@@ -70,6 +85,45 @@ public class SponsorService {
 			result = (Sponsor) this.actorService.save(s);
 		}
 		return result;
+	}
+
+	public Sponsor reconstruct(final ActorFrom actorForm) {
+		Sponsor sponsor;
+		if (actorForm.getId() == 0) {
+			sponsor = this.create();
+			sponsor.setName(actorForm.getName());
+			sponsor.setMiddleName(actorForm.getMiddleName());
+			sponsor.setSurname(actorForm.getSurname());
+			sponsor.setPhoto(actorForm.getPhoto());
+			sponsor.setPhone(actorForm.getPhone());
+			sponsor.setEmail(actorForm.getEmail());
+			sponsor.setAddress(actorForm.getAddress());
+			sponsor.setScore(0.0);
+			sponsor.setSpammer(false);
+			final UserAccount account = this.userAccountService.create();
+			final Collection<Authority> authorities = new ArrayList<>();
+			final Authority auth = new Authority();
+			auth.setAuthority(Authority.SPONSOR);
+			authorities.add(auth);
+			account.setAuthorities(authorities);
+			account.setUsername(actorForm.getUserAccountuser());
+			account.setPassword(actorForm.getUserAccountpassword());
+			sponsor.setUserAccount(account);
+		} else {
+			sponsor = this.sponsorRepository.findOne(actorForm.getId());
+			sponsor.setName(actorForm.getName());
+			sponsor.setMiddleName(actorForm.getMiddleName());
+			sponsor.setSurname(actorForm.getSurname());
+			sponsor.setPhoto(actorForm.getPhoto());
+			sponsor.setPhone(actorForm.getPhone());
+			sponsor.setEmail(actorForm.getEmail());
+			sponsor.setAddress(actorForm.getAddress());
+			final UserAccount account = this.userAccountService.findOne(sponsor.getUserAccount().getId());
+			account.setUsername(actorForm.getUserAccountuser());
+			account.setPassword(actorForm.getUserAccountpassword());
+			sponsor.setUserAccount(account);
+		}
+		return sponsor;
 	}
 
 }

@@ -34,9 +34,13 @@ public class HistoryService {
 
 	public History create() {
 		final History history = new History();
+		final Brotherhood brotherhood = this.brotherhoodService.findByPrincipal();
+
 		final InceptionRecord inceptionRecord = this.inceptionRecordService.create();
-		final InceptionRecord saved = this.inceptionRecordService.saveForNewHistory(inceptionRecord);
-		history.setInceptionRecord(saved);
+		inceptionRecord.setTitle("Title inception " + brotherhood.getName());
+		inceptionRecord.setDescription("Decription inception " + brotherhood.getName());
+		history.setInceptionRecord(inceptionRecord);
+
 		final Collection<PeriodRecord> periodRecords = new ArrayList<PeriodRecord>();
 		history.setPeriodRecords(periodRecords);
 
@@ -53,28 +57,28 @@ public class HistoryService {
 
 	}
 
-	public History createForNewBrotherhood() {
-		final History history = new History();
-
-		final InceptionRecord inceptionRecord = this.inceptionRecordService.create();
-		final InceptionRecord saved = this.inceptionRecordService.save(inceptionRecord);
-		history.setInceptionRecord(saved);
-
-		final Collection<PeriodRecord> periodRecords = new ArrayList<PeriodRecord>();
-		history.setPeriodRecords(periodRecords);
-
-		final Collection<LegalRecord> legalRecords = new ArrayList<LegalRecord>();
-		history.setLegalRecords(legalRecords);
-
-		final Collection<LinkRecord> linkRecords = new ArrayList<LinkRecord>();
-		history.setLinkRecords(linkRecords);
-
-		final Collection<MiscellaneousRecord> miscellaneousRecords = new ArrayList<MiscellaneousRecord>();
-		history.setMiscellaneousRecords(miscellaneousRecords);
-
-		final History res = this.historyRepository.save(history);
-		return res;
-	}
+	//	public History createForNewBrotherhood() {
+	//		final History history = new History();
+	//
+	//		final InceptionRecord inceptionRecord = this.inceptionRecordService.create();
+	//		final InceptionRecord saved = this.inceptionRecordService.save(inceptionRecord);
+	//		history.setInceptionRecord(saved);
+	//
+	//		final Collection<PeriodRecord> periodRecords = new ArrayList<PeriodRecord>();
+	//		history.setPeriodRecords(periodRecords);
+	//
+	//		final Collection<LegalRecord> legalRecords = new ArrayList<LegalRecord>();
+	//		history.setLegalRecords(legalRecords);
+	//
+	//		final Collection<LinkRecord> linkRecords = new ArrayList<LinkRecord>();
+	//		history.setLinkRecords(linkRecords);
+	//
+	//		final Collection<MiscellaneousRecord> miscellaneousRecords = new ArrayList<MiscellaneousRecord>();
+	//		history.setMiscellaneousRecords(miscellaneousRecords);
+	//
+	//		final History res = this.historyRepository.save(history);
+	//		return res;
+	//	}
 
 	public Collection<History> findAll() {
 		Collection<History> res = new ArrayList<>();
@@ -94,11 +98,9 @@ public class HistoryService {
 		Assert.notNull(history);
 		final History res;
 		final Brotherhood brotherhood = this.brotherhoodService.findByPrincipal();
-		if (history.getId() != 0) {
-			final Brotherhood bro = this.brotherhoodService.findBrotherhoodByHistory(history.getId());
-			Assert.isTrue(bro == brotherhood);
-		}
-		Assert.notNull(history.getInceptionRecord());
+
+		if (history.getId() != 0)
+			Assert.isTrue(this.brotherhoodService.findBrotherhoodByHistory(history.getId()).equals(brotherhood));
 		res = this.historyRepository.save(history);
 		return res;
 	}
@@ -107,16 +109,36 @@ public class HistoryService {
 		Assert.notNull(history);
 		Assert.isTrue(history.getId() != 0);
 		final Brotherhood brotherhood = this.brotherhoodService.findByPrincipal();
-
 		final History retrieved = this.findOne(history.getId());
 		Assert.isTrue(this.brotherhoodService.findBrotherhoodByHistory(retrieved.getId()) == brotherhood);
-		this.historyRepository.delete(history);
+		brotherhood.setHistory(null);
+		this.historyRepository.delete(retrieved.getId());
 	}
 
 	/* ========================= OTHER METHODS =========================== */
 
+
 	public void flush() {
 		this.historyRepository.flush();
+  }
+
+	public Double[] getStatisticsOfRecordsPerHistory() {
+		final Double[] result = this.historyRepository.getStatisticsOfRecordsPerHistory();
+		Assert.notNull(result);
+		return result;
+	}
+
+	public Collection<Brotherhood> getLargestBrotherhoodPerHistory() {
+		final Collection<Brotherhood> result = this.historyRepository.getLargestBrotherhoodPerHistory();
+		Assert.notNull(result);
+		return result;
+	}
+
+	public Collection<Brotherhood> getBrotherhoodPerHistoryLargerThanStd() {
+		final Collection<Brotherhood> result = this.historyRepository.getBrotherhoodPerHistoryLargerThanStd();
+		Assert.notNull(result);
+		return result;
+
 	}
 
 }

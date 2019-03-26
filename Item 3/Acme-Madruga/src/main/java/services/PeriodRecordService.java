@@ -10,6 +10,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import repositories.PeriodRecordRepository;
+import security.Authority;
+import domain.Actor;
+import domain.Brotherhood;
+import domain.History;
 import domain.Brotherhood;
 import domain.PeriodRecord;
 
@@ -21,6 +25,8 @@ public class PeriodRecordService {
 	private PeriodRecordRepository	periodRecordRepository;
 	@Autowired
 	private BrotherhoodService		brotherhoodService;
+	@Autowired
+	private ActorService			actorService;
 
 
 	//Metodos CRUD
@@ -66,13 +72,15 @@ public class PeriodRecordService {
 	public void delete(final PeriodRecord pR) {
 		final Brotherhood me = this.brotherhoodService.findByPrincipal();
 		Assert.notNull(me, "You must be logged in the system");
+    Assert.isTrue(this.findBrotherhoodByPeriod(pR.getId()) == me);
 		Assert.notNull(pR);
-		Assert.isTrue(pR.getId() != 0);
-		Assert.isTrue(this.findBrotherhoodByPeriod(pR.getId()) == me);
-		final PeriodRecord retrieved = this.findOne(pR.getId());
-		Assert.isTrue(me.getHistory().getPeriodRecords().contains(retrieved));
-		this.periodRecordRepository.delete(retrieved);
-
+    Assert.isTrue(pR.getId() != 0);
+    final PeriodRecord retrieved = this.findOne(pR.getId());
+		final History history = me.getHistory();
+		final Collection<PeriodRecord> periodRecords = history.getPeriodRecords();
+    Assert.isTrue(periodRecords.contains(retrieved));
+		periodRecords.remove(retrieved);
+		this.periodRecordRepository.delete(retrieved.getId());
 	}
 
 	public Brotherhood findBrotherhoodByPeriod(final Integer id) {

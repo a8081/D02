@@ -18,7 +18,6 @@ import security.UserAccount;
 import domain.Actor;
 import domain.Area;
 import domain.Brotherhood;
-import domain.History;
 import forms.BrotherhoodAreaForm;
 import forms.BrotherhoodForm;
 
@@ -64,15 +63,24 @@ public class BrotherhoodService {
 		return result;
 	}
 
+	public Brotherhood findByRequestId(final int requestId) {
+		Assert.isTrue(requestId != 0);
+		final Brotherhood member = this.brotherhoodRepository.findByRequestId(requestId);
+		return member;
+	}
+
+	public Brotherhood findByEnrolmentId(final int enrolmentId) {
+		Assert.isTrue(enrolmentId != 0);
+		final Brotherhood member = this.brotherhoodRepository.findByEnrolmentId(enrolmentId);
+		return member;
+	}
+
 	public Brotherhood save(final Brotherhood brotherhood) {
 		Assert.notNull(brotherhood);
 		Brotherhood result;
 
 		if (brotherhood.getId() == 0) {
 			this.actorService.setAuthorityUserAccount(Authority.BROTHERHOOD, brotherhood);
-			//Al crear una nueva hermandad se le asigna por defecto una History
-			final History history = this.historyService.createForNewBrotherhood();
-			brotherhood.setHistory(history);
 			result = this.brotherhoodRepository.save(brotherhood);
 			this.folderService.setFoldersByDefault(result);
 
@@ -199,10 +207,10 @@ public class BrotherhoodService {
 
 	public List<Brotherhood> getSmallestBrotherhood() {
 		final Integer[] bs = this.brotherhoodRepository.getSmallestBrotherhood();
-		Assert.notNull(bs);
 		final List<Brotherhood> result = new ArrayList<Brotherhood>();
-		for (final Integer id : bs)
-			result.add(this.findOne(id));
+		if (bs.length > 0 || bs != null)
+			for (final Integer id : bs)
+				result.add(this.findOne(id));
 		return result;
 	}
 
@@ -210,8 +218,9 @@ public class BrotherhoodService {
 		final Integer[] bs = this.brotherhoodRepository.getLargestBrotherhood();
 		Assert.notNull(bs);
 		final List<Brotherhood> result = new ArrayList<Brotherhood>();
-		for (final Integer id : bs)
-			result.add(this.findOne(id));
+		if (bs.length > 0 || bs != null)
+			for (final Integer id : bs)
+				result.add(this.findOne(id));
 		return result;
 	}
 

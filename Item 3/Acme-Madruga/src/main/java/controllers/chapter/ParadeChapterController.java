@@ -17,9 +17,11 @@ import org.springframework.web.servlet.ModelAndView;
 import services.ChapterService;
 import services.ConfigurationParametersService;
 import services.ParadeService;
+import services.SponsorshipService;
 import controllers.AbstractController;
 import domain.Chapter;
 import domain.Parade;
+import domain.Sponsorship;
 import forms.ParadeChapterForm;
 
 @Controller
@@ -31,6 +33,9 @@ public class ParadeChapterController extends AbstractController {
 
 	@Autowired
 	private ChapterService					chapterService;
+
+	@Autowired
+	private SponsorshipService				sponsorshipService;
 
 	@Autowired
 	private ConfigurationParametersService	configurationParametersService;
@@ -46,8 +51,11 @@ public class ParadeChapterController extends AbstractController {
 		parades = this.paradeService.findAll();
 
 		String listParades;
+		String rol;
 
 		listParades = "listAll";
+		rol = "chapter";
+
 		final String lang = LocaleContextHolder.getLocale().getLanguage();
 
 		result = new ModelAndView("parade/list");
@@ -56,6 +64,7 @@ public class ParadeChapterController extends AbstractController {
 		result.addObject("lang", lang);
 		result.addObject("requetURI", "parade/chapter/listAll.do");
 		result.addObject("listParades", listParades);
+		result.addObject("rol", rol);
 
 		return result;
 	}
@@ -71,8 +80,11 @@ public class ParadeChapterController extends AbstractController {
 		parades = this.paradeService.findAllFinalModeAccepted(chapter.getArea().getId());
 
 		String listParades;
+		String rol;
 
 		listParades = "listAccepted";
+		rol = "chapter";
+
 		final String lang = LocaleContextHolder.getLocale().getLanguage();
 
 		result = new ModelAndView("parade/list");
@@ -81,6 +93,7 @@ public class ParadeChapterController extends AbstractController {
 		result.addObject("lang", lang);
 		result.addObject("requetURI", "parade/chapter/listAccepted.do");
 		result.addObject("listParades", listParades);
+		result.addObject("rol", rol);
 
 		return result;
 	}
@@ -96,8 +109,11 @@ public class ParadeChapterController extends AbstractController {
 		parades = this.paradeService.findAllFinalModeRejected(chapter.getArea().getId());
 
 		String listParades;
+		String rol;
 
 		listParades = "listRejected";
+		rol = "chapter";
+
 		final String lang = LocaleContextHolder.getLocale().getLanguage();
 
 		result = new ModelAndView("parade/list");
@@ -106,6 +122,7 @@ public class ParadeChapterController extends AbstractController {
 		result.addObject("lang", lang);
 		result.addObject("requetURI", "parade/chapter/listRejected.do");
 		result.addObject("listParades", listParades);
+		result.addObject("rol", rol);
 
 		return result;
 	}
@@ -121,8 +138,10 @@ public class ParadeChapterController extends AbstractController {
 		parades = this.paradeService.findAllFinalModeSubmitted(chapter.getArea().getId());
 
 		String listParades;
+		String rol;
 
 		listParades = "listRejected";
+		rol = "chapter";
 		final String lang = LocaleContextHolder.getLocale().getLanguage();
 
 		result = new ModelAndView("parade/list");
@@ -131,6 +150,7 @@ public class ParadeChapterController extends AbstractController {
 		result.addObject("lang", lang);
 		result.addObject("requetURI", "parade/chapter/listSubmitted.do");
 		result.addObject("listParades", listParades);
+		result.addObject("rol", rol);
 
 		return result;
 	}
@@ -190,7 +210,13 @@ public class ParadeChapterController extends AbstractController {
 			result.addObject("parade", parade);
 			result.addObject("lang", lang);
 			result.addObject("rol", "chapter");
-
+			final Sponsorship sp = this.sponsorshipService.findRandomSponsorship(paradeId);
+			if (sp != null) {
+				final String imgbanner = sp.getBanner();
+				result.addObject("imgbanner", imgbanner);
+				final String targetpage = sp.getTargetPage();
+				result.addObject("targetpage", targetpage);
+			}
 		} else
 			result = new ModelAndView("parade.commit.error");
 

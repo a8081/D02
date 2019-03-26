@@ -23,4 +23,5 @@ public interface ActorRepository extends JpaRepository<Actor, Integer> {
 
 	@Query("select a from Actor a where a.score<-0.5 ")
 	Collection<Actor> findAllTooNegativeScore();
+
 }
