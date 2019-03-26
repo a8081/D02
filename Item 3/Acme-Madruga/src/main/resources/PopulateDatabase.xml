@@ -1205,6 +1205,16 @@
 		<property name="member" ref="member2" />
 		<property name="parade" ref="parade2" />
 	</bean>
+	
+	<bean id="request3" class="domain.Request">
+		<property name="status" value="PENDING" />
+		<property name="moment" value="2018/04/16 15:20" />
+		 <property name="row" value=""/> <property name="column" value=""/> 
+
+		<!-- Relations -->
+		<property name="member" ref="member3" />
+		<property name="parade" ref="parade1" />
+	</bean>
 
 	<!-- =================================================================== 
 		======= AREA ========= =================================================================== -->

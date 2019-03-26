@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.Validator;
 
 import repositories.EnrolmentRepository;
 import security.Authority;
@@ -35,9 +36,9 @@ public class EnrolmentService {
 	@Autowired
 	private BrotherhoodService	brotherhoodService;
 
+	@org.springframework.beans.factory.annotation.Autowired(required = true)
+	private Validator			validator;
 
-	//@Autowired
-	//private Validator			validator;
 
 	public Enrolment create() {
 		final Enrolment enrolment = new Enrolment();

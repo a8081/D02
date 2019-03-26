@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.Validator;
 
 import repositories.BrotherhoodRepository;
 import security.Authority;
@@ -34,8 +35,8 @@ public class BrotherhoodService {
 	@Autowired
 	private UserAccountService		userAccountService;
 
-	//@Autowired
-	//private Validator				validator;
+	@org.springframework.beans.factory.annotation.Autowired(required = true)
+	private Validator				validator;
 
 	@Autowired
 	private HistoryService			historyService;
@@ -221,7 +222,7 @@ public class BrotherhoodService {
 		result.setVersion(brotherhoodAreaForm.getVersion());
 		result.setArea(brotherhoodAreaForm.getArea());
 
-		//this.validator.validate(result, binding);
+		this.validator.validate(result, binding);
 
 		return result;
 	}

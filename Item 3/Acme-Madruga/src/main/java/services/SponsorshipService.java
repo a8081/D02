@@ -35,7 +35,7 @@ public class SponsorshipService {
 	@Autowired
 	private AdministratorService	administratorService;
 
-	@Autowired
+	@org.springframework.beans.factory.annotation.Autowired(required = true)
 	private Validator				validator;
 
 
