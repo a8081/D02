@@ -167,6 +167,7 @@ public class FolderService {
 		inbox.setActor(actor);
 		inbox.setMessages(messages);
 		inbox.setFather(null);
+		this.save(inbox, actor);
 		folders.add(inbox);
 
 		final Folder outbox = this.create();
@@ -175,6 +176,7 @@ public class FolderService {
 		outbox.setActor(actor);
 		outbox.setMessages(messages);
 		outbox.setFather(null);
+		this.save(outbox, actor);
 		folders.add(outbox);
 
 		final Folder trash = this.create();
@@ -183,6 +185,7 @@ public class FolderService {
 		trash.setActor(actor);
 		trash.setMessages(messages);
 		trash.setFather(null);
+		this.save(trash, actor);
 		folders.add(trash);
 
 		final Folder spam = this.create();
@@ -191,6 +194,7 @@ public class FolderService {
 		spam.setActor(actor);
 		spam.setMessages(messages);
 		spam.setFather(null);
+		this.save(spam, actor);
 		folders.add(spam);
 
 		final Folder notification = this.create();
@@ -199,6 +203,7 @@ public class FolderService {
 		notification.setActor(actor);
 		notification.setMessages(messages);
 		notification.setFather(null);
+		this.save(notification, actor);
 		folders.add(notification);
 
 		return folders;
