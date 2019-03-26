@@ -44,10 +44,7 @@
             <li><b><spring:message code="periodRecords"/></b>
         </ul>
     </div>
-    <input type="button" name="create"
-    value="<spring:message code="record.create.periodRecord" />"
-    onclick="relativeRedir('periodRecord/create.do')" />
-    <br />
+    
     <display:table pagesize="10" class="displaytag" keepStatus="true"
                name="history.periodRecords" requestURI="${requestURI}" id="row">
     <!-- Attributes -->
@@ -77,17 +74,19 @@
 	</display:column>
         
 	</display:table>
-	
+	<br />
+	<input type="button" name="create"
+    value="<spring:message code="record.create.periodRecord" />"
+    onclick="relativeRedir('periodRecord/create.do')" />
+    <br />
+    
 	<%-- Legal records --%>
 	<div id="legalRecord">
         <ul style="list-style-type: disc">
             <li><b><spring:message code="legalRecords"/></b>
         </ul>
     </div>
-    <input type="button" name="create"
-    value="<spring:message code="record.create.legalRecord" />"
-    onclick="relativeRedir('legalRecord/create.do')" />
-    <br />
+   
     <display:table pagesize="10" class="displaytag" keepStatus="true"
                name="history.legalRecords" requestURI="${requestURI}" id="row">
     <!-- Attributes -->
@@ -120,17 +119,19 @@
     
         
 	</display:table>
-	
+	<br />
+	 <input type="button" name="create"
+    value="<spring:message code="record.create.legalRecord" />"
+    onclick="relativeRedir('legalRecord/create.do')" />
+    <br />
+    
 	<%-- Link records --%>
 	<div id="linkRecords">
         <ul style="list-style-type: disc">
             <li><b><spring:message code="linkRecords"/></b>
         </ul>
     </div>
-    <input type="button" name="create"
-    value="<spring:message code="record.create.linkRecord" />"
-    onclick="relativeRedir('linkRecord/create.do')" />
-    <br />
+    
     <display:table pagesize="10" class="displaytag" keepStatus="true"
                name="history.linkRecords" requestURI="${requestURI}" id="row">
     <!-- Attributes -->
@@ -158,6 +159,11 @@
 	</display:column>
         
 	</display:table>
+	<br />
+	<input type="button" name="create"
+    value="<spring:message code="record.create.linkRecord" />"
+    onclick="relativeRedir('linkRecord/create.do')" />
+    <br />
 	
 	<%-- Miscellaneous records --%>
 	<div id="miscellaneousRecords">
@@ -165,10 +171,7 @@
             <li><b><spring:message code="miscellaneousRecords"/></b>
         </ul>
     </div>
-    <input type="button" name="create"
-    value="<spring:message code="record.create.miscellaneousRecord" />"
-    onclick="relativeRedir('miscellaneousRecord/create.do')" />
-    <br />
+    
     <display:table pagesize="10" class="displaytag" keepStatus="true"
                name="history.miscellaneousRecords" requestURI="${requestURI}" id="row">
     <!-- Attributes -->
@@ -194,6 +197,11 @@
 	</display:column>
         
 	</display:table>
+	<br />
+	<input type="button" name="create"
+    value="<spring:message code="record.create.miscellaneousRecord" />"
+    onclick="relativeRedir('miscellaneousRecord/create.do')" />
+    <br />
 	<br>
 	<br>
 	<input type="button" name="delete"

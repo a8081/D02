@@ -36,6 +36,8 @@
 	<form:hidden path="mode" />
 	<form:hidden path="ticker" />
 	<form:hidden path="brotherhood"/>
+	<form:hidden path="segments"/>
+	<form:hidden path="status"/>
 
 	<acme:textbox code="parade.title" path="title" />
 	<acme:textbox code="parade.description" path="description" />
