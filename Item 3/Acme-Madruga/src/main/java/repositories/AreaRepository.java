@@ -2,6 +2,7 @@
 package repositories;
 
 import java.util.Collection;
+import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -34,4 +35,7 @@ public interface AreaRepository extends JpaRepository<Area, Integer> {
 
 	@Query("select count(a) from Area a where exists(select b from Brotherhood b where a =b.area)")
 	Integer getNumberOfAreasWithAnyBrotherhood();
+
+	@Query("select a from Area a where exists(select c from Chapter c where c.area=a) ")
+	List<Area> findAreasAssignedToChapter();
 }

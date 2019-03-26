@@ -29,10 +29,10 @@ public interface MemberRepository extends JpaRepository<Member, Integer> {
 	 * es al menos el 10% del número de solicitudes aceptadas que tiene el miembro con
 	 * el maximo numero de solicitudes aceptadas
 	 **/
-	/*
-	 * @Query(
-	 * value = "SELECT MEMBER FROM `acme-madruga`.REQUEST WHERE status='ACCEPTED' GROUP BY procession HAVING COUNT(*) >= 0.1*(SELECT MAX(x) FROM (SELECT COUNT(*) AS x FROM `acme-madruga`.REQUEST WHERE REQUEST.status='ACCEPTED'  GROUP BY procession)AS X)",
-	 * nativeQuery = true)
-	 * List<Member> getMembersTenPercent();
-	 */
+
+	@Query(
+		value = "SELECT R.member FROM `acme-parade`.REQUEST R WHERE R.status='APPROVED' GROUP BY R.parade HAVING COUNT(*) >= 0.1*(SELECT MAX(x) FROM (SELECT COUNT(*) AS x FROM `acme-parade`.REQUEST WHERE REQUEST.status='APPROVED'  GROUP BY parade)AS X)",
+		nativeQuery = true)
+	Integer[] getMembersTenPercent();
+
 }

@@ -3,6 +3,7 @@ package services;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -165,12 +166,13 @@ public class MemberService {
 		return member;
 	}
 
-	/*
-	 * public List<Member> getMembersTenPercent() {
-	 * final List<Member> result = this.memberRepository.getMembersTenPercent();
-	 * Assert.notNull(result);
-	 * return result;
-	 * }
-	 */
+	public List<Member> getMembersTenPercent() {
+		final Integer[] members = this.memberRepository.getMembersTenPercent();
+		final List<Member> result = new ArrayList<Member>();
+		if (members != null || members.length > 0)
+			for (final Integer id : members)
+				result.add(this.findOne(id));
+		return result;
+	}
 
 }
