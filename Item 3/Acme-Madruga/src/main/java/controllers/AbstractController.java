@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.ClassUtils;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.servlet.ModelAndView;
 
 import services.ConfigurationParametersService;
@@ -40,12 +41,10 @@ public class AbstractController {
 		return result;
 	}
 
-	/*
-	 * @ModelAttribute(value = "bannerURL")
-	 * public String getBannerURL() {
-	 * final String result = this.configurationParametersService.find().getBanner();
-	 * return result;
-	 * }
-	 */
+	@ModelAttribute(value = "bannerURL")
+	public String getBannerURL() {
+		final String result = this.configurationParametersService.find().getBanner();
+		return result;
+	}
 
 }
