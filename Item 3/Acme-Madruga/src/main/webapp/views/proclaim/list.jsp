@@ -19,7 +19,7 @@
 
 	
 <display:table name="${proclaims}" id="row" requestURI="/proclaim/chapter/list.do" pagesize="10" class="displaytag">
-	<display:column property="moment" titleKey="proclaim.moment" />
+	<acme:dataTableColumn code="proclaim.moment" property="moment" />
 	<display:column property="text" titleKey="proclaim.text" />
 	<display:column>
 		<acme:link url="proclaim${rolURL}/display.do?proclaimId=${row.id}"
@@ -27,4 +27,8 @@
 	</display:column>
 </display:table>
 
-<acme:link url="proclaim/edit.do" code="proclaim.create" />
+<div>
+        <input type="button" class="btn btn-danger" name="createProclaim"
+               value="<spring:message code="proclaim.create" />"
+               onclick="relativeRedir('proclaim/create.do');"/>
+</div>

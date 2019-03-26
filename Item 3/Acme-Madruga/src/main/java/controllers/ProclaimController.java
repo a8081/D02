@@ -14,6 +14,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import services.ChapterService;
 import services.ProclaimService;
+import controllers.chapter.ProclaimChapterController;
 import domain.Proclaim;
 
 @Controller
@@ -21,10 +22,13 @@ import domain.Proclaim;
 public class ProclaimController extends AbstractController {
 
 	@Autowired
-	private ProclaimService	proclaimService;
+	private ProclaimService				proclaimService;
 
 	@Autowired
-	private ChapterService	chapterService;
+	private ChapterService				chapterService;
+
+	@Autowired
+	private ProclaimChapterController	proclaimChapterController;
 
 
 	// DISPLAY  --------------------------------------------------------
@@ -57,7 +61,6 @@ public class ProclaimController extends AbstractController {
 		Proclaim proclaim;
 		proclaim = this.proclaimService.create();
 		result = this.createEditModelAndView(proclaim);
-
 		return result;
 	}
 
@@ -71,7 +74,7 @@ public class ProclaimController extends AbstractController {
 		else
 			try {
 				this.proclaimService.save(proclaim);
-				result = new ModelAndView("redirect:list.do");
+				result = this.proclaimChapterController.list();
 			} catch (final Throwable e) {
 				result = this.createEditModelAndView(proclaim, "proclaim.commit.error");
 			}

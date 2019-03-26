@@ -26,10 +26,11 @@ public class ProclaimService {
 	//Metodos CRUD
 
 	public Proclaim create() {
+		final Chapter chapter = this.chapterService.findByPrincipal();
 		final Proclaim res = new Proclaim();
-		res.setMoment(null);
+		res.setMoment(new Date(System.currentTimeMillis() - 1));
 		res.setText("");
-		res.setChapter(new Chapter());
+		res.setChapter(chapter);
 		return res;
 	}
 

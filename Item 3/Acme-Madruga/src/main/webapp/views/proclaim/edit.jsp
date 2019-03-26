@@ -17,26 +17,37 @@
 <%@taglib prefix="display" uri="http://displaytag.sf.net"%>
 <%@taglib prefix="acme" tagdir="/WEB-INF/tags"%>
 
+<script type="text/javascript">
+		function Confirmacion(e) {
+		//Ingresamos un mensaje a mostrar
+		var mensaje = confirm("<spring:message code="proclaim.confirm" />");
+		//Detectamos si el usuario acepto el mensaje
+		if (mensaje) {
+			relativeRedir('proclaim/chapter/list.do');
+		}
+		//Detectamos si el usuario denegó el mensaje
+		else {
+			e.preventDefault();
+		}
+		}
+	</script>
 
 <form:form action="proclaim/edit.do" modelAttribute="proclaim" method="POST">
     
     <form:hidden path="id"/>
 	<form:hidden path="version"/>
 	<form:hidden path="moment"/>
-	<form:hidden path="text"/>
 	<form:hidden path="chapter"/>
 	
-	<form:label path="text">
-		<spring:message code="proclaim.text" />: </form:label>
-	<form:input path="keyword" />
-	<form:errors cssClass="error" path="keyword" />
+	<acme:textarea path="text" code="proclaim.text" />
 	<br />
-<!-- 	<script type="text/javascript"> function alertName(){alert("<spring:message code="proclaim.alert" />");}</script>
- 	<br>
-	<input type="submit" name="save" <script type="text/javascript"> window.onload = alertName; </script>
-	 value="<spring:message code="proclaim.save" />" />-->
-	 <input type="submit" name="save" onclick="<spring:message code="proclaim.alert" />" 
-	 value="<spring:message code="proclaim.save" />" />
+
+ 	
+	<input type="submit" name="save" onclick="Confirmacion(event)" value="<spring:message code="proclaim.save" />" />
+	
+	<input type="button" class="btn btn-danger" name="cancel"
+           value="<spring:message code="general.cancel" />"
+           onclick="relativeRedir('proclaim/chapter/list.do');"/>
 	<br>
 		
 </form:form>
