@@ -21,6 +21,7 @@ import services.SponsorshipService;
 import controllers.AbstractController;
 import domain.Chapter;
 import domain.Parade;
+import domain.Sponsorship;
 import forms.ParadeChapterForm;
 
 @Controller
@@ -209,10 +210,13 @@ public class ParadeChapterController extends AbstractController {
 			result.addObject("parade", parade);
 			result.addObject("lang", lang);
 			result.addObject("rol", "chapter");
-			final String imgbanner = this.sponsorshipService.findRandomSponsorship(paradeId).getBanner();
-			result.addObject("imgbanner", imgbanner);
-			final String targetpage = this.sponsorshipService.findRandomSponsorship(paradeId).getTargetPage();
-			result.addObject("targetpage", targetpage);
+			final Sponsorship sp = this.sponsorshipService.findRandomSponsorship(paradeId);
+			if (sp != null) {
+				final String imgbanner = sp.getBanner();
+				result.addObject("imgbanner", imgbanner);
+				final String targetpage = sp.getTargetPage();
+				result.addObject("targetpage", targetpage);
+			}
 		} else
 			result = new ModelAndView("parade.commit.error");
 

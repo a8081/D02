@@ -16,6 +16,7 @@ import services.SegmentService;
 import services.SponsorshipService;
 import domain.Parade;
 import domain.Segment;
+import domain.Sponsorship;
 
 @Controller
 @RequestMapping("/parade")
@@ -45,13 +46,14 @@ public class ParadeController extends AbstractController {
 		if (parade != null && parade.getMode().equals("FINAL")) {
 			result = new ModelAndView("parade/display");
 			result.addObject("parade", parade);
-			result.addObject("segments", segments);
-
-			final String imgbanner = this.sponsorshipService.findRandomSponsorship(paradeId).getBanner();
-			result.addObject("imgbanner", imgbanner);
 			result.addObject("lang", this.lang);
-			final String targetpage = this.sponsorshipService.findRandomSponsorship(paradeId).getTargetPage();
-			result.addObject("targetpage", targetpage);
+			final Sponsorship sp = this.sponsorshipService.findRandomSponsorship(paradeId);
+			if (sp != null) {
+				final String imgbanner = sp.getBanner();
+				result.addObject("imgbanner", imgbanner);
+				final String targetpage = sp.getTargetPage();
+				result.addObject("targetpage", targetpage);
+			}
 		} else
 			result = new ModelAndView("redirect:/misc/403.jsp");
 

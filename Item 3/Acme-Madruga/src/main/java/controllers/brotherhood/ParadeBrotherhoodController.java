@@ -28,6 +28,7 @@ import domain.Brotherhood;
 import domain.Parade;
 import domain.Request;
 import domain.Segment;
+import domain.Sponsorship;
 import forms.ParadeForm;
 
 @Controller
@@ -94,10 +95,13 @@ public class ParadeBrotherhoodController extends AbstractController {
 			result.addObject("rol", "brotherhood");
 			result.addObject("requests", requests);
 			result.addObject("segments", segments);
-			final String imgbanner = this.sponsorshipService.findRandomSponsorship(paradeId).getBanner();
-			result.addObject("imgbanner", imgbanner);
-			final String targetpage = this.sponsorshipService.findRandomSponsorship(paradeId).getTargetPage();
-			result.addObject("targetpage", targetpage);
+			final Sponsorship sp = this.sponsorshipService.findRandomSponsorship(paradeId);
+			if (sp != null) {
+				final String imgbanner = sp.getBanner();
+				result.addObject("imgbanner", imgbanner);
+				final String targetpage = sp.getTargetPage();
+				result.addObject("targetpage", targetpage);
+			}
 
 		} else
 			result = new ModelAndView("redirect:/misc/403.jsp");
