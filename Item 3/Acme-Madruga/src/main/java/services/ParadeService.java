@@ -56,6 +56,9 @@ public class ParadeService {
 	@Autowired
 	private SponsorService		sponsorService;
 
+	@Autowired
+	private MessageService		messageService;
+
 
 	//@Autowired
 	//private Validator			validator;
@@ -296,6 +299,7 @@ public class ParadeService {
 		parade.setMode("FINAL");
 		parade.setStatus("SUBMITTED");
 		result = this.paradeRepository.save(parade);
+		this.messageService.processionPublished(parade);
 		return result;
 	}
 
@@ -419,7 +423,30 @@ public class ParadeService {
 		res = this.paradeRepository.findAllParadeByBrotherhoodId(broUAId);
 		Assert.notNull(res);
 		return res;
+	}
 
+	public Double findRatioDraftVsFinalParades() {
+		final Double result = this.paradeRepository.findRatioDraftVsFinalParades();
+		Assert.notNull(result);
+		return result;
+	}
+
+	public Double findSubmittedParadesRatio() {
+		final Double result = this.paradeRepository.findSubmittedParadesRatio();
+		Assert.notNull(result);
+		return result;
+	}
+
+	public Double findAcceptedParadesRatio() {
+		final Double result = this.paradeRepository.findAcceptedParadesRatio();
+		Assert.notNull(result);
+		return result;
+	}
+
+	public Double findRejectedParadesRatio() {
+		final Double result = this.paradeRepository.findRejectedParadesRatio();
+		Assert.notNull(result);
+		return result;
 	}
 
 	public Parade findParadeBySegment(final Integer segmentId) {

@@ -189,6 +189,7 @@
 			<li><a class="fNiv" href="brotherhood/create.do"><spring:message code="master.page.brotherhood.register" /></a></li>
 			<li><a class="fNiv" href="member/create.do"><spring:message code="master.page.member.register" /></a></li>
 			<li><a class="fNiv" href="sponsor/create.do"><spring:message code="master.page.sponsor.register" /></a></li>
+			<li><a class="fNiv" href="chapter/create.do"><spring:message code="master.page.chapter.register" /></a></li>
 		</security:authorize>
 		
 		
@@ -217,6 +218,10 @@
 					<security:authorize access="hasRole('SPONSOR')">
 					<li><a href="sponsor/edit.do"><spring:message code="master.page.sponsor.edit" /></a></li>
 					<li><a href="sponsor/display.do"><spring:message code="master.page.sponsor.display" /></a></li>
+					</security:authorize>
+					<security:authorize access="hasRole('CHAPTER')">
+					<li><a href="chapter/edit.do"><spring:message code="master.page.chapter.edit" /></a></li>
+					<li><a href="chapter/display.do"><spring:message code="master.page.chapter.display" /></a></li>
 					</security:authorize>
 					<security:authorize access="hasRole('BROTHERHOOD')">
 					<li><a href="brotherhood/edit.do"><spring:message code="master.page.brotherhood.edit" /></a></li>

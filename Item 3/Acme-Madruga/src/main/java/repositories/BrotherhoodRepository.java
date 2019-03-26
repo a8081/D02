@@ -23,15 +23,11 @@ public interface BrotherhoodRepository extends JpaRepository<Brotherhood, Intege
 	Double[] getStatisticsOfMembersPerBrotherhood();
 
 	/** The largest brotherhood is the one with highest number of members **/
-	@Query(
-		value = "SELECT ENROLMENT.brotherhood FROM `acme-parade`.ENROLMENT INNER JOIN BROTHERHOOD  WHERE ENROLMENT.drop_out IS NULL GROUP BY brotherhood HAVING COUNT(*) = (SELECT MAX(x) FROM (SELECT COUNT(*) AS x FROM `acme-madruga`.ENROLMENT GROUP BY brotherhood)AS T)",
-		nativeQuery = true)
+	@Query(value = "SELECT brotherhood AS x FROM `acme-parade`.ENROLMENT GROUP BY brotherhood HAVING COUNT(*)= (SELECT MAX(x) FROM (SELECT COUNT(*) AS x FROM `acme-parade`.ENROLMENT GROUP BY brotherhood)AS T)", nativeQuery = true)
 	Integer[] getLargestBrotherhood();
 
 	/** The smallest brotherhood is the one with lowest number of members **/
-	@Query(
-		value = "SELECT ENROLMENT.brotherhood FROM `acme-parade`.ENROLMENT INNER JOIN BROTHERHOOD WHERE ENROLMENT.drop_out IS NULL GROUP BY brotherhood HAVING COUNT(*) = (SELECT MIN(x) FROM (SELECT COUNT(*) AS x FROM `acme-madruga`.ENROLMENT GROUP BY brotherhood)AS T)",
-		nativeQuery = true)
+	@Query(value = "SELECT brotherhood AS x FROM `acme-parade`.ENROLMENT GROUP BY brotherhood HAVING COUNT(*)= (SELECT MIN(x) FROM (SELECT COUNT(*) AS x FROM `acme-parade`.ENROLMENT GROUP BY brotherhood)AS T)", nativeQuery = true)
 	Integer[] getSmallestBrotherhood();
 
 	@Query("select distinct b from Enrolment e join e.brotherhood b where e.member.userAccount.id=?1 and e.dropOut!=null")
@@ -43,7 +39,10 @@ public interface BrotherhoodRepository extends JpaRepository<Brotherhood, Intege
 	@Query("select p.brotherhood from Parade p where p.id=?1 ")
 	Brotherhood findBrotherhoodByParade(int idParade);
 
-	@Query("select b from Parade p join p.brotherhood b join p.floats f where f.id=?1")
-	Brotherhood findBrotherhoodByFloat(int floatId);
+	@Query("select req.parade.brotherhood from Request req where req.id=?1")
+	Brotherhood findByRequestId(int requestId);
+
+	@Query("select e.brotherhood from Enrolment e where e.id=?1")
+	Brotherhood findByEnrolmentId(int enrolmentId);
 
 }

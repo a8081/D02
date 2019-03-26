@@ -110,6 +110,25 @@
 		/> <property name="authorities"> <list> <bean class="security.Authority"> 
 		<property name="authority" value="BROTHERHOOD" /> </bean> </list> </property> 
 		</bean> -->
+		
+		
+		<bean id="finder1" class="domain.Finder">
+		<!-- Finder -->
+		<property name="keyword" value="poder"></property>
+		<property name="areaName" value=""></property>
+		<property name="minDate" value="2018/04/16 15:20"></property>
+		<property name="maxDate" value="2030/04/16 15:20"></property>
+		<property name="creationDate" value="2019/03/06 15:20"></property>
+
+		<!-- Reletions -->
+		<property name="parades">
+			<list>
+				<ref bean="parade1" />
+				<ref bean="parade2" />
+			</list>
+		</property>
+
+	</bean>
 
 	<!-- ========================= CHAPTER =========================== -->
 
@@ -262,6 +281,7 @@
 		<property name="score" value="0.5"></property>
 		<property name="spammer" value="false"></property>
 		<property name="userAccount" ref="userAccountMember1"></property>
+		<property name="finder" ref="finder1"></property>
 		<!-- Member -->
 	</bean>
 
@@ -641,6 +661,97 @@
 		<property name="name" value="Spam box" />
 		<property name="isSystemFolder" value="true" />
 		<property name="actor" ref="member3" />
+		<property name="messages">
+			<list>
+				<!-- <ref bean="message1"/> -->
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="inBoxChapter1" class="domain.Folder">
+		<property name="name" value="In box" />
+		<property name="isSystemFolder" value="true" />
+		<property name="actor" ref="chapter1" />
+		<property name="messages">
+			<list>
+				<!-- <ref bean="message1"/> -->
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="outBoxChapter1" class="domain.Folder">
+		<property name="name" value="Out box" />
+		<property name="isSystemFolder" value="true" />
+		<property name="actor" ref="chapter1" />
+		<property name="messages">
+			<list>
+				<!-- <ref bean="message1"/> -->
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="trashBoxChapter1" class="domain.Folder">
+		<property name="name" value="Trash box" />
+		<property name="isSystemFolder" value="true" />
+		<property name="actor" ref="chapter1" />
+		<property name="messages">
+			<list>
+				<!-- <ref bean="message1"/> -->
+			</list>
+		</property>
+	</bean>
+	
+	
+	<bean id="spamBoxChapter1" class="domain.Folder">
+		<property name="name" value="Spam box" />
+		<property name="isSystemFolder" value="true" />
+		<property name="actor" ref="chapter1" />
+		<property name="messages">
+			<list>
+				<!-- <ref bean="message1"/> -->
+			</list>
+		</property>
+	</bean>
+	
+	
+	<bean id="inBoxChapter2" class="domain.Folder">
+		<property name="name" value="In box" />
+		<property name="isSystemFolder" value="true" />
+		<property name="actor" ref="chapter2" />
+		<property name="messages">
+			<list>
+				<!-- <ref bean="message1"/> -->
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="outBoxChapter2" class="domain.Folder">
+		<property name="name" value="Out box" />
+		<property name="isSystemFolder" value="true" />
+		<property name="actor" ref="chapter2" />
+		<property name="messages">
+			<list>
+				<!-- <ref bean="message1"/> -->
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="trashBoxChapter2" class="domain.Folder">
+		<property name="name" value="Trash box" />
+		<property name="isSystemFolder" value="true" />
+		<property name="actor" ref="chapter2" />
+		<property name="messages">
+			<list>
+				<!-- <ref bean="message1"/> -->
+			</list>
+		</property>
+	</bean>
+	
+	
+	<bean id="spamBoxChapter2" class="domain.Folder">
+		<property name="name" value="Spam box" />
+		<property name="isSystemFolder" value="true" />
+		<property name="actor" ref="chapter2" />
 		<property name="messages">
 			<list>
 				<!-- <ref bean="message1"/> -->
