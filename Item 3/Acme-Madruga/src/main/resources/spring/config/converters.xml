@@ -81,6 +81,10 @@
 	<!-- PROCLAIM -->
 	<bean class="converters.ProclaimToStringConverter"/>
 	<bean class="converters.StringToProclaimConverter"/>
+	
+	<!-- PROCLAIM -->
+	<bean class="converters.ChapterToStringConverter"/>
+	<bean class="converters.StringToChapterConverter"/>
 
 	<!-- SEGMENT -->
 	<bean class="converters.SegmentToStringConverter"/>
