@@ -35,6 +35,9 @@ public class EnrolmentService {
 	@Autowired
 	private BrotherhoodService	brotherhoodService;
 
+	@Autowired
+	private MessageService		messageService;
+
 
 	//@Autowired
 	//private Validator			validator;
@@ -127,6 +130,7 @@ public class EnrolmentService {
 		Assert.notNull(enrolment, "No puede expulsar de la hermandad a un miembro que no pertenece a ella.");
 		enrolment.setDropOut(new Date(System.currentTimeMillis() - 1));
 		this.enrolmentRepository.save(enrolment);
+		this.messageService.memberDropOutMessage(enrolment);
 	}
 
 	/* Un miembro sale de una hermandad */
@@ -203,7 +207,7 @@ public class EnrolmentService {
 		final Enrolment enrolment = this.create();
 
 		final Enrolment retrieved = this.save(enrolment, brotherhoodId);
-
+		this.messageService.brotherhoodEnrolsMessage(enrolment);
 		return retrieved;
 	}
 

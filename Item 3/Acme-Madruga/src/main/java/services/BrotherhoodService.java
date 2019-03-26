@@ -63,6 +63,18 @@ public class BrotherhoodService {
 		return result;
 	}
 
+	public Brotherhood findByRequestId(final int requestId) {
+		Assert.isTrue(requestId != 0);
+		final Brotherhood member = this.brotherhoodRepository.findByRequestId(requestId);
+		return member;
+	}
+
+	public Brotherhood findByEnrolmentId(final int enrolmentId) {
+		Assert.isTrue(enrolmentId != 0);
+		final Brotherhood member = this.brotherhoodRepository.findByEnrolmentId(enrolmentId);
+		return member;
+	}
+
 	public Brotherhood save(final Brotherhood brotherhood) {
 		Assert.notNull(brotherhood);
 		Brotherhood result;
