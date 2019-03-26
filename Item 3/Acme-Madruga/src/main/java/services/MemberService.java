@@ -107,6 +107,18 @@ public class MemberService {
 		return member;
 	}
 
+	public Member findByRequestId(final int requestId) {
+		Assert.isTrue(requestId != 0);
+		final Member member = this.memberRepository.findByRequestId(requestId);
+		return member;
+	}
+
+	public Member findByEnrolmentId(final int enrolmentId) {
+		Assert.isTrue(enrolmentId != 0);
+		final Member member = this.memberRepository.findByEnrolmentId(enrolmentId);
+		return member;
+	}
+
 	public Collection<Member> allMembersFromBrotherhood() {
 		final Actor principal = this.actorService.findByPrincipal();
 		Assert.isTrue(this.actorService.checkAuthority(principal, Authority.BROTHERHOOD));

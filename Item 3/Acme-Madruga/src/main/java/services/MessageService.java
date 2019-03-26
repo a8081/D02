@@ -12,8 +12,13 @@ import org.springframework.util.Assert;
 
 import repositories.MessageRepository;
 import domain.Actor;
+import domain.Brotherhood;
+import domain.Enrolment;
 import domain.Folder;
+import domain.Member;
 import domain.Message;
+import domain.Parade;
+import domain.Request;
 
 @Service
 @Transactional
@@ -33,6 +38,12 @@ public class MessageService {
 
 	@Autowired
 	private ConfigurationParametersService	configurationParametersService;
+
+	@Autowired
+	private MemberService					memberService;
+
+	@Autowired
+	private BrotherhoodService				brotherhoodService;
 
 
 	public Message create() {
@@ -282,6 +293,73 @@ public class MessageService {
 		b.setMessages(bms);
 		this.folderService.save(b, principal);
 		this.folderService.save(a, principal);
+	}
+
+	public void requestStatusChangedMessage(final Request req) {
+		final Message m = this.create();
+		final Member member = this.memberService.findByRequestId(req.getId());
+		final Brotherhood b = this.brotherhoodService.findByRequestId(req.getId());
+
+		m.setSubject("Request's status changed.\n" + "Cambio de estado de solicitud.");
+		m.setBody("The request's status regarding parade " + req.getParade().getTitle() + ": " + req.getParade().getTicker() + " was changed to " + req.getStatus() + ".\n" + "El estado de la solicitud al desfile " + req.getParade().getTitle() + ": "
+			+ req.getParade().getTicker() + "ha sido cambiado a " + req.getStatus() + ".");
+		m.setPriority("HIGH");
+
+		final Collection<Actor> recipients = new ArrayList<>();
+		recipients.add(member);
+		recipients.add(b);
+		m.setRecipients(recipients);
+
+		this.send(m);
+	}
+
+	public void brotherhoodEnrolsMessage(final Enrolment enrolment) {
+		final Message m = this.create();
+		final Member member = this.memberService.findByEnrolmentId(enrolment.getId());
+		final Brotherhood b = this.brotherhoodService.findByEnrolmentId(enrolment.getId());
+
+		m.setSubject("Brotherhood enrols a member.\n" + "Hermandad añade a un miembo.");
+		m.setBody("Brotherhood " + b.getName() + "+ enrols member " + member.getName() + ".\n" + "La hermandad " + b.getName() + "+ añade como miembro a " + member.getName() + ".");
+		m.setPriority("HIGH");
+
+		final Collection<Actor> recipients = new ArrayList<>();
+		recipients.add(member);
+		recipients.add(b);
+		m.setRecipients(recipients);
+
+		this.send(m);
+	}
+
+	public void memberDropOutMessage(final Enrolment enrolment) {
+		final Message m = this.create();
+		final Member member = this.memberService.findByEnrolmentId(enrolment.getId());
+		final Brotherhood b = this.brotherhoodService.findByEnrolmentId(enrolment.getId());
+
+		m.setSubject("Member drops out of a brotherhood.\n" + "Miembro se va de una hermandad.");
+		m.setBody("Member " + member.getName() + "+ drops out of a " + b.getName() + ".\n" + "El miembro " + member.getName() + "+ se va de la hermandad " + b.getName() + ".");
+		m.setPriority("HIGH");
+
+		final Collection<Actor> recipients = new ArrayList<>();
+		recipients.add(member);
+		recipients.add(b);
+		m.setRecipients(recipients);
+
+		this.send(m);
+	}
+
+	public void processionPublished(final Parade parade) {
+		final Message m = this.create();
+
+		m.setSubject("Parade is published.\n" + "Desfile publicado.");
+		m.setBody("A new parade is published. Parade identified as " + parade.getTitle() + ": " + parade.getTicker() + " has been published by the brotherhood with name: " + parade.getBrotherhood().getName() + ".\n"
+			+ "Un nuevo desfile ha sido publicado. El desfile identificado por " + parade.getTitle() + ": " + parade.getTicker() + " ha sido publicado por la hermandad con el nombre: " + parade.getBrotherhood().getName() + ".");
+		m.setPriority("HIGH");
+
+		final Collection<Actor> recipients = new ArrayList<>();
+		recipients.addAll(this.memberService.findAll());
+		m.setRecipients(recipients);
+
+		this.send(m);
 	}
 
 }

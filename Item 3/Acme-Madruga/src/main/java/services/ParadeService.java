@@ -56,6 +56,9 @@ public class ParadeService {
 	@Autowired
 	private SponsorService		sponsorService;
 
+	@Autowired
+	private MessageService		messageService;
+
 
 	//@Autowired
 	//private Validator			validator;
@@ -296,6 +299,7 @@ public class ParadeService {
 		parade.setMode("FINAL");
 		parade.setStatus("SUBMITTED");
 		result = this.paradeRepository.save(parade);
+		this.messageService.processionPublished(parade);
 		return result;
 	}
 
