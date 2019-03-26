@@ -76,6 +76,7 @@ public class LinkRecordServiceTest extends AbstractTest {
 			lRec.setLinkedBrotherhood(bro);
 			final LinkRecord lRecSaved = this.linkRecordService.save(lRec);
 			Assert.isTrue(lRecSaved.getId() != 0);
+			this.linkRecordService.flush();
 			this.unauthenticate();
 		} catch (final Throwable oops) {
 			caught = oops.getClass();
@@ -127,6 +128,7 @@ public class LinkRecordServiceTest extends AbstractTest {
 			lRec.setDescription(description);
 			lRec.setLinkedBrotherhood(bro);
 			this.linkRecordService.save(lRec);
+			this.linkRecordService.flush();
 			this.unauthenticate();
 		} catch (final Throwable oops) {
 			caught = oops.getClass();
@@ -165,6 +167,7 @@ public class LinkRecordServiceTest extends AbstractTest {
 			else
 				lRec = new LinkRecord();
 			this.linkRecordService.delete(lRec);
+			this.linkRecordService.flush();
 			this.unauthenticate();
 		} catch (final Throwable oops) {
 			caught = oops.getClass();

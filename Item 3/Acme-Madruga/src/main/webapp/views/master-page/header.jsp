@@ -160,6 +160,8 @@
 				</ul>
 			</li>
 		
+		<li><a href="proclaim/chapter/list.do"><spring:message code="master.page.parade.proclaims" /></a></li>
+		
 		</security:authorize>
 		
 		<!-- ========================================================================================================= -->

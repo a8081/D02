@@ -88,4 +88,8 @@ public class LinkRecordService {
 
 	}
 
+	public void flush() {
+		this.linkRecordRepository.flush();
+	}
+
 }

@@ -90,4 +90,8 @@ public class LegalRecordService {
 		Assert.notNull(bro);
 		return bro;
 	}
+
+	public void flush() {
+		this.legalRecordRepository.flush();
+	}
 }

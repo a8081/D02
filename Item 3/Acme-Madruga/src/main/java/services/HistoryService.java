@@ -117,6 +117,11 @@ public class HistoryService {
 
 	/* ========================= OTHER METHODS =========================== */
 
+
+	public void flush() {
+		this.historyRepository.flush();
+  }
+
 	public Double[] getStatisticsOfRecordsPerHistory() {
 		final Double[] result = this.historyRepository.getStatisticsOfRecordsPerHistory();
 		Assert.notNull(result);
@@ -133,6 +138,7 @@ public class HistoryService {
 		final Collection<Brotherhood> result = this.historyRepository.getBrotherhoodPerHistoryLargerThanStd();
 		Assert.notNull(result);
 		return result;
+
 	}
 
 }

@@ -78,6 +78,10 @@
 	<bean class="converters.RequestToStringConverter"/>
 	<bean class="converters.StringToRequestConverter"/>
 	
+	<!-- PROCLAIM -->
+	<bean class="converters.ProclaimToStringConverter"/>
+	<bean class="converters.StringToProclaimConverter"/>
+
 	<!-- SEGMENT -->
 	<bean class="converters.SegmentToStringConverter"/>
 	<bean class="converters.StringToSegmentConverter"/>
@@ -104,6 +108,7 @@
 	<bean class="converters.MiscellaneousRecordToStringConverter"/>
 	<bean class="converters.StringToMiscellaneousRecordConverter"/>
 	
+
 	
 	</util:list>
 	
