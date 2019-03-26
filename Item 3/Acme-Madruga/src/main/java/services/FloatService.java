@@ -125,4 +125,10 @@ public class FloatService {
 		Assert.notNull(res);
 		return res;
 	}
+
+	public Collection<Float> findFloatsByBrotherhood(final int brotherhoodUAId) {
+		final Collection<Float> res = this.floatRepository.findByBrotherhood(brotherhoodUAId);
+		Assert.notNull(res);
+		return res;
+	}
 }

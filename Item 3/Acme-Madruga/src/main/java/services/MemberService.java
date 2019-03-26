@@ -114,6 +114,11 @@ public class MemberService {
 		return all;
 	}
 
+	public Collection<Member> allMembersByBrotherhood(final int brotherhoodUAId) {
+		final Collection<Member> all = this.memberRepository.allMembersFromBrotherhood(brotherhoodUAId);
+		return all;
+	}
+
 	public Member reconstruct(final ActorFrom actorForm) {
 		Member member;
 		if (actorForm.getId() == 0) {

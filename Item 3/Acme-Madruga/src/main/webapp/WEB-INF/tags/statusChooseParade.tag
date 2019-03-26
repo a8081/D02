@@ -29,6 +29,9 @@
 <%-- Definition --%>
 
 <jstl:choose>
+	<jstl:when test="${status eq 'DEFAULT'}">
+		<spring:message code="default" />
+	</jstl:when>
 	<jstl:when test="${status eq 'ACCEPTED'}">
 		<spring:message code="accepted" />
 	</jstl:when>

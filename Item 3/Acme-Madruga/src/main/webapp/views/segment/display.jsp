@@ -44,9 +44,14 @@
 <acme:display code="segment.destinationCoordinates.latitude" value="${segment.destinationCoordinates.latitude}" />
 <acme:display code="segment.destinationCoordinates.longitude" value="${segment.destinationCoordinates.longitude}" />
 <br>
-<acme:button url="parade/brotherhood/display.do?paradeId=${parade.id}" name="cancel" code="segment.back"/>
 
+	<jstl:choose>
+		<jstl:when test="${rol eq brotherhood }">
+			<acme:button url="parade/brotherhood/display.do?paradeId=${parade.id}" name="cancel" code="segment.back"/>
+		</jstl:when>
+		
+		<jstl:otherwise>
+			<acme:button url="parade/all/display.do?paradeId=${parade.id}" name="cancel" code="segment.back"/>
+		</jstl:otherwise>
 
-
-
-
+	</jstl:choose>

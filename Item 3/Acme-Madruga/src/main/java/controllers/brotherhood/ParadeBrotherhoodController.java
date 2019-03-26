@@ -218,31 +218,31 @@ public class ParadeBrotherhoodController extends AbstractController {
 		return result;
 	}
 
-	//	// LIST
-	//
-	//	@RequestMapping(value = "/list", method = RequestMethod.GET)
-	//	public ModelAndView list() {
-	//		final ModelAndView result;
-	//		final Collection<Parade> parades;
-	//		String rol;
-	//		String listParades;
-	//
-	//		parades = this.paradeService.findAllByPrincipal();
-	//
-	//		listParades = "list";
-	//		rol = "brotherhood";
-	//
-	//		final String lang = LocaleContextHolder.getLocale().getLanguage();
-	//
-	//		result = new ModelAndView("parade/list");
-	//		result.addObject("parades", parades);
-	//		result.addObject("lang", lang);
-	//		result.addObject("requetURI", "parade/brotherhood/list.do");
-	//		result.addObject("listParades", listParades);
-	//		result.addObject("rol", rol);
-	//
-	//		return result;
-	//	}
+	// LIST
+
+	@RequestMapping(value = "/list", method = RequestMethod.GET)
+	public ModelAndView list() {
+		final ModelAndView result;
+		final Collection<Parade> parades;
+		String rol;
+		String listParades;
+
+		parades = this.paradeService.findAllByPrincipal();
+
+		listParades = "list";
+		rol = "brotherhood";
+
+		final String lang = LocaleContextHolder.getLocale().getLanguage();
+
+		result = new ModelAndView("parade/list");
+		result.addObject("parades", parades);
+		result.addObject("lang", lang);
+		result.addObject("requetURI", "parade/brotherhood/list.do");
+		result.addObject("listParades", listParades);
+		result.addObject("rol", rol);
+
+		return result;
+	}
 
 	// MAKE COPY --------------------------------------------------------
 

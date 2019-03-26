@@ -102,7 +102,7 @@ img.resize {
 <acme:button url="segment/brotherhood/create.do?paradeId=${parade.id}" name="create" code="parade.segment.create" />
 </jstl:if>
 <display:table name="segments" id="row"
-	requestURI="parade/brotherhood/display.do?paradeId=${parade.id}" pagesize="5"
+	requestURI="parade${rolURL}/display.do?paradeId=${parade.id}" pagesize="5"
 	class="displaytag">
 
 
@@ -115,10 +115,21 @@ img.resize {
 	<acme:dataTableColumn code="segment.originTime" property="originTime" />
 	<acme:dataTableColumn code="segment.destinationTime" property="destinationTime" />
 	
-	<display:column>
-	<acme:button url="segment/brotherhood/display.do?segmentId=${row.id}" name="display" code="parade.segment.display" />
-	</display:column>
-	
+	<jstl:choose>
+		<jstl:when test="${rol eq 'brotherhood' }">
+		<display:column>
+			<acme:button url="segment/brotherhood/display.do?segmentId=${row.id}" name="display" code="parade.segment.display" />
+		</display:column>
+		</jstl:when>
+		
+		<jstl:otherwise>
+			<display:column>
+			<acme:button url="segment/all/display.do?segmentId=${row.id}" name="display" code="parade.segment.display" />
+			</display:column>
+		</jstl:otherwise>
+
+	</jstl:choose>
+
 </display:table>
 <br><br>
 
@@ -150,10 +161,16 @@ img.resize {
 </jstl:if>
 </security:authorize>
 
+<jstl:if test="${rol eq 'all' }">
+	<acme:button url="parade/all/list.do" name="back" code="parade.list.button"/>
+</jstl:if>
+
 <jstl:if test="${not empty imgbanner}">
 	<a href="<jstl:out value="${targetpage}"/>">
 		<img class="resize" src="${imgbanner}" alt="Banner"/>
 	</a><br /><br />
 </jstl:if>
+
+
 
 <br />

@@ -12,7 +12,7 @@
 
 
 <display:table name="members" id="row"
-	requestURI="member/list.do" pagesize="5"
+	requestURI="member/listMyMembers.do" pagesize="5"
 	class="displaytag">
 
 	<security:authorize access="hasRole('BROTHERHOOD')">
@@ -29,11 +29,13 @@
 	
 	<display:column property="surname" titleKey="actor.surname" />
 	
+	<security:authorize access="hasRole('BROTHERHOOD')">
 	<display:column titleKey="actor.enrolment">
 	<a href="enrolment/brotherhood/display.do?memberId=${row.id}"> <spring:message
 				code="member.enrolment" />
 		</a>
 	</display:column>
+	</security:authorize>
 	
 	<display:column>
 		<a href="member/displayTabla.do?memberId=${row.id}"> <spring:message

@@ -64,20 +64,19 @@
 
 		<acme:dataTableColumn code="parade.moment" property="moment" />
 
-		<jstl:if test="${row.mode eq 'FINAL'}">
 			<display:column titleKey="parade.status" class="${colorStyle}">
 				<acme:statusChooseParade status="${row.status}" />
 			</display:column>
 
-		</jstl:if>
-
+	<security:authorize access="hasAnyRole('BROTHERHOOD', 'MEMBER', 'CHAPTER')">
 		<display:column titleKey="parade.brotherhood">
 			<a
 				href="brotherhood/displayTabla.do?brotherhoodId=${row.brotherhood.id}">
 				<jstl:out value="${row.brotherhood.title}" />
 			</a>
 		</display:column>
-
+	</security:authorize>
+	
 		<display:column>
 
 			<acme:button url="parade${rolURL}/display.do?paradeId=${row.id}"

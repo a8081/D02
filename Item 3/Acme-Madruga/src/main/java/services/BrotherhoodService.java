@@ -43,6 +43,9 @@ public class BrotherhoodService {
 	@Autowired
 	private FolderService			folderService;
 
+	@Autowired
+	private FloatService			floatService;
+
 
 	public Brotherhood create() {
 		final Brotherhood brotherhood = new Brotherhood();
@@ -233,6 +236,12 @@ public class BrotherhoodService {
 		return res;
 	}
 
+	public Brotherhood findBrotherhoodByFloat(final int floatId) {
+		Brotherhood res;
+		res = this.brotherhoodRepository.findBrotherhoodByFloat(floatId);
+		Assert.notNull(res);
+		return res;
+	}
 	public void flush() {
 		this.brotherhoodRepository.flush();
 	}

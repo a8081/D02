@@ -78,7 +78,7 @@
 			<li><a class="fNiv"><spring:message	code="master.page.parades" /></a>
 				<ul>
 					<li class="arrow"></li>
-					<li><a href="parade/list.do"><spring:message code="master.page.all.parade" /></a></li>
+					<li><a href="parade/brotherhood/list.do"><spring:message code="master.page.all.parade" /></a></li>
 					<li><a href="parade/brotherhood/create.do"><spring:message code="master.page.parade.create" /></a></li>
 					<li><a href="parade/brotherhood/listDefault.do"><spring:message code="master.page.parade.default" /></a></li>
 					<li><a href="parade/brotherhood/listAccepted.do"><spring:message code="master.page.parade.accepted" /></a></li>
@@ -185,7 +185,7 @@
 		
 		<security:authorize access="isAnonymous()">
 			<li><a class="fNiv" href="security/login.do"><spring:message code="master.page.login" /></a></li>
-			<li><a class="fNiv" href="parade/list.do"><spring:message code="master.page.all.parade" /></a></li>
+			<li><a class="fNiv" href="brotherhood/listAll.do"><spring:message code="master.page.all.brotherhood" /></a></li>
 			<li><a class="fNiv" href="brotherhood/create.do"><spring:message code="master.page.brotherhood.register" /></a></li>
 			<li><a class="fNiv" href="member/create.do"><spring:message code="master.page.member.register" /></a></li>
 			<li><a class="fNiv" href="sponsor/create.do"><spring:message code="master.page.sponsor.register" /></a></li>

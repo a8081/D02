@@ -218,7 +218,6 @@ public class BrotherhoodController extends AbstractController {
 	@RequestMapping(value = "/listAll", method = RequestMethod.GET)
 	public ModelAndView listAll() {
 		final ModelAndView result;
-		final Actor actor = this.actorService.findByPrincipal();
 		final Collection<Brotherhood> brotherhoods;
 
 		brotherhoods = this.brotherhoodService.findAll();
@@ -228,7 +227,6 @@ public class BrotherhoodController extends AbstractController {
 		result = new ModelAndView("brotherhood/list");
 		result.addObject("lang", lang);
 		result.addObject("brotherhoods", brotherhoods);
-		result.addObject("actor", actor);
 		result.addObject("requestURI", "brotherhood/listAll.do");
 
 		final String banner = this.configurationParametersService.findBanner();
@@ -266,11 +264,12 @@ public class BrotherhoodController extends AbstractController {
 	@RequestMapping(value = "/dropOut", method = RequestMethod.GET)
 	public ModelAndView dropOut(@RequestParam final int memberId) {
 		final ModelAndView result;
+		final Brotherhood brotherhood = this.brotherhoodService.findByPrincipal();
 		final Member member = this.memberService.findOne(memberId);
 
 		this.enrolmentService.dropOut(member);
 
-		result = this.memberController.list();
+		result = this.memberController.listMyMembers(brotherhood.getUserAccount().getId());
 
 		final String banner = this.configurationParametersService.findBanner();
 		result.addObject("banner", banner);
