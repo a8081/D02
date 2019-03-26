@@ -12,8 +12,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import services.ParadeService;
+import services.SegmentService;
 import services.SponsorshipService;
 import domain.Parade;
+import domain.Segment;
 
 @Controller
 @RequestMapping("/parade")
@@ -25,6 +27,9 @@ public class ParadeController extends AbstractController {
 	@Autowired
 	private SponsorshipService	sponsorshipService;
 
+	@Autowired
+	private SegmentService		segmentService;
+
 	final String				lang	= LocaleContextHolder.getLocale().getLanguage();
 
 
@@ -32,12 +37,15 @@ public class ParadeController extends AbstractController {
 	public ModelAndView display(@RequestParam final int paradeId) {
 		final ModelAndView result;
 		Parade parade;
+		Collection<Segment> segments;
 
 		parade = this.paradeService.findOne(paradeId);
+		segments = this.segmentService.getPath(parade.getId());
 
 		if (parade != null && parade.getMode().equals("FINAL")) {
 			result = new ModelAndView("parade/display");
 			result.addObject("parade", parade);
+			result.addObject("segments", segments);
 
 			final String imgbanner = this.sponsorshipService.findRandomSponsorship(paradeId).getBanner();
 			result.addObject("imgbanner", imgbanner);
@@ -49,7 +57,6 @@ public class ParadeController extends AbstractController {
 
 		return result;
 	}
-
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	public ModelAndView list() {
 		final ModelAndView result;
