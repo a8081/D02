@@ -188,7 +188,6 @@ public class RegisterService {
 		final UserAccount ua = brotherhood.getUserAccount();
 		final Md5PasswordEncoder encoder = new Md5PasswordEncoder();
 		final String hash = encoder.encodePassword(ua.getPassword(), null);
-		System.out.println();
 		if (brotherhood.getId() == 0) {
 			Assert.isTrue(this.userAccountRepository.findByUsername(ua.getUsername()) == null, "The username is register");
 			final Date moment = new Date(System.currentTimeMillis() - 1);
@@ -228,7 +227,6 @@ public class RegisterService {
 
 		final Md5PasswordEncoder encoder = new Md5PasswordEncoder();
 		final String hash = encoder.encodePassword(ua.getPassword(), null);
-		System.out.println();
 		if (chapter.getId() == 0) {
 			Assert.isTrue(this.userAccountRepository.findByUsername(ua.getUsername()) == null, "The username is register");
 

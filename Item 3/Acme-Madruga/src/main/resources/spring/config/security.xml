@@ -67,8 +67,6 @@
 		<security:intercept-url pattern="/linkRecord/create.do" access="hasRole('BROTHERHOOD')" />
 		<security:intercept-url pattern="/linkRecord/edit.do" access="hasRole('BROTHERHOOD')" />
 		<security:intercept-url pattern="/linkRecord/display.do" access="hasRole('BROTHERHOOD')" />
-		<security:intercept-url pattern="/periodRecord/delete.do" access="hasRole('BROTHERHOOD')" />
-		<security:intercept-url pattern="/periodRecord/display.do" access="hasRole('BROTHERHOOD')" />
 		<security:intercept-url pattern="/miscellaneousRecord/create.do" access="hasRole('BROTHERHOOD')" />
 		<security:intercept-url pattern="/miscellaneousRecord/edit.do" access="hasRole('BROTHERHOOD')" />
 		<security:intercept-url pattern="/miscellaneousRecord/delete.do" access="hasRole('BROTHERHOOD')" />

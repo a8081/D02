@@ -56,6 +56,8 @@ public class ParadeBrotherhoodController extends AbstractController {
 	@Autowired
 	private SponsorshipService				sponsorshipService;
 
+	final String							lang	= LocaleContextHolder.getLocale().getLanguage();
+
 
 	// CREATE
 
@@ -84,14 +86,12 @@ public class ParadeBrotherhoodController extends AbstractController {
 		requests = this.requestService.findAll();
 		segments = this.segmentService.getPath(paradeId);
 
-		final String lang = LocaleContextHolder.getLocale().getLanguage();
-
 		final Brotherhood bro = this.brotherhoodService.findByPrincipal();
 
 		if (parade != null && (parade.getMode().equals("FINAL") || parade.getBrotherhood() == bro)) {
 			result = new ModelAndView("parade/display");
 			result.addObject("parade", parade);
-			result.addObject("lang", lang);
+			result.addObject("lang", this.lang);
 			result.addObject("rol", "brotherhood");
 			result.addObject("requests", requests);
 			result.addObject("segments", segments);
@@ -123,14 +123,14 @@ public class ParadeBrotherhoodController extends AbstractController {
 
 		listParades = "listAccepted";
 		rol = "brotherhood";
-		final String lang = LocaleContextHolder.getLocale().getLanguage();
 
 		result = new ModelAndView("parade/list");
 		result.addObject("parades", parades);
 
-		result.addObject("lang", lang);
+		result.addObject("lang", this.lang);
 		result.addObject("requetURI", "parade/brotherhood/listAccepted.do");
 		result.addObject("listParades", listParades);
+		result.addObject("principalID", this.brotherhoodService.findByPrincipal().getId());
 		result.addObject("rol", rol);
 
 		return result;
@@ -151,14 +151,13 @@ public class ParadeBrotherhoodController extends AbstractController {
 		listParades = "listRejected";
 		rol = "brotherhood";
 
-		final String lang = LocaleContextHolder.getLocale().getLanguage();
-
 		result = new ModelAndView("parade/list");
 		result.addObject("parades", parades);
 
-		result.addObject("lang", lang);
+		result.addObject("lang", this.lang);
 		result.addObject("requetURI", "parade/brotherhood/listRejected.do");
 		result.addObject("listParades", listParades);
+		result.addObject("principalID", this.brotherhoodService.findByPrincipal().getId());
 		result.addObject("rol", rol);
 
 		return result;
@@ -178,14 +177,14 @@ public class ParadeBrotherhoodController extends AbstractController {
 
 		listParades = "listSubmitted";
 		rol = "brotherhood";
-		final String lang = LocaleContextHolder.getLocale().getLanguage();
 
 		result = new ModelAndView("parade/list");
 		result.addObject("parades", parades);
 
-		result.addObject("lang", lang);
+		result.addObject("lang", this.lang);
 		result.addObject("requetURI", "parade/brotherhood/listSubmitted.do");
 		result.addObject("listParades", listParades);
+		result.addObject("principalID", this.brotherhoodService.findByPrincipal().getId());
 		result.addObject("rol", rol);
 
 		return result;
@@ -205,44 +204,43 @@ public class ParadeBrotherhoodController extends AbstractController {
 
 		listParades = "listDefault";
 		rol = "brotherhood";
-		final String lang = LocaleContextHolder.getLocale().getLanguage();
 
 		result = new ModelAndView("parade/list");
 		result.addObject("parades", parades);
 
-		result.addObject("lang", lang);
+		result.addObject("lang", this.lang);
 		result.addObject("requetURI", "parade/brotherhood/listDefault.do");
 		result.addObject("listParades", listParades);
+		result.addObject("principalID", this.brotherhoodService.findByPrincipal().getId());
 		result.addObject("rol", rol);
 
 		return result;
 	}
 
-	//	// LIST
-	//
-	//	@RequestMapping(value = "/list", method = RequestMethod.GET)
-	//	public ModelAndView list() {
-	//		final ModelAndView result;
-	//		final Collection<Parade> parades;
-	//		String rol;
-	//		String listParades;
-	//
-	//		parades = this.paradeService.findAllByPrincipal();
-	//
-	//		listParades = "list";
-	//		rol = "brotherhood";
-	//
-	//		final String lang = LocaleContextHolder.getLocale().getLanguage();
-	//
-	//		result = new ModelAndView("parade/list");
-	//		result.addObject("parades", parades);
-	//		result.addObject("lang", lang);
-	//		result.addObject("requetURI", "parade/brotherhood/list.do");
-	//		result.addObject("listParades", listParades);
-	//		result.addObject("rol", rol);
-	//
-	//		return result;
-	//	}
+	// LIST
+
+	@RequestMapping(value = "/list", method = RequestMethod.GET)
+	public ModelAndView list() {
+		final ModelAndView result;
+		final Collection<Parade> parades;
+		String rol;
+		String listParades;
+
+		parades = this.paradeService.findAllByPrincipal();
+
+		listParades = "list";
+		rol = "brotherhood";
+
+		result = new ModelAndView("parade/list");
+		result.addObject("parades", parades);
+		result.addObject("lang", this.lang);
+		result.addObject("requetURI", "parade/brotherhood/list.do");
+		result.addObject("listParades", listParades);
+		result.addObject("principalID", this.brotherhoodService.findByPrincipal().getId());
+		result.addObject("rol", rol);
+
+		return result;
+	}
 
 	// MAKE COPY --------------------------------------------------------
 
