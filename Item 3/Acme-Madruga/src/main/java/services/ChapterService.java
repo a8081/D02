@@ -188,11 +188,11 @@ public class ChapterService {
 
 	}
 
-	public Chapter reconstruct2(final ChapterAreaForm chapterAreaForm, final BindingResult binding) {
+	public Chapter reconstructChapterArea(final ChapterAreaForm chapterAreaForm, final BindingResult binding) {
 		Chapter result;
 		Assert.isTrue(chapterAreaForm.getId() != 0);
 
-		result = this.findOne(chapterAreaForm.getId());
+		result = this.findOne(chapterAreaForm.getId()); //ya que consideramos el id del objeto ChapterAreaForm como el id del chapter
 
 		result.setId(chapterAreaForm.getId());
 		result.setVersion(chapterAreaForm.getVersion());
@@ -205,5 +205,17 @@ public class ChapterService {
 
 	public void flush() {
 		this.chapterRepository.flush();
+	}
+
+	public Double[] getStatisticsOfParadesPerChapter() {
+		final Double[] result = this.chapterRepository.getStatisticsOfParadesPerChapter();
+		Assert.notNull(result);
+		return result;
+	}
+
+	public Collection<Chapter> findTenPerCentMoreParadesThanAverage() {
+		final Collection<Chapter> result = this.chapterRepository.findTenPerCentMoreParadesThanAverage();
+		Assert.notNull(result);
+		return result;
 	}
 }

@@ -14,16 +14,19 @@ import security.UserAccount;
 import security.UserAccountRepository;
 import services.AdministratorService;
 import services.BrotherhoodService;
+import services.ChapterService;
 import services.MemberService;
 import services.SponsorService;
 import services.UserAccountService;
 import domain.Actor;
 import domain.Administrator;
 import domain.Brotherhood;
+import domain.Chapter;
 import domain.Member;
 import domain.Sponsor;
 import forms.ActorFrom;
 import forms.BrotherhoodForm;
+import forms.ChapterForm;
 
 @Service
 @Transactional
@@ -46,6 +49,9 @@ public class RegisterService {
 
 	@Autowired
 	private SponsorService			sponsorService;
+
+	@Autowired
+	private ChapterService			chapterService;
 
 
 	public Administrator saveAdmin(final Administrator admin, final BindingResult binding) {
@@ -212,5 +218,63 @@ public class RegisterService {
 
 		return result;
 
+	}
+
+	//To encode the password. It also checks if the username already exists in case of new registration
+	public Chapter saveChapter(final Chapter chapter, final BindingResult binding) {
+		Chapter result;
+
+		final UserAccount ua = chapter.getUserAccount();
+
+		final Md5PasswordEncoder encoder = new Md5PasswordEncoder();
+		final String hash = encoder.encodePassword(ua.getPassword(), null);
+		System.out.println();
+		if (chapter.getId() == 0) {
+			Assert.isTrue(this.userAccountRepository.findByUsername(ua.getUsername()) == null, "The username is register");
+
+			ua.setPassword(hash);
+			chapter.setUserAccount(ua);
+
+			result = this.chapterService.save(chapter);
+			UserAccount uaSaved = result.getUserAccount();
+			uaSaved.setAuthorities(ua.getAuthorities());
+			uaSaved.setUsername(ua.getUsername());
+			uaSaved.setPassword(ua.getPassword());
+			uaSaved = this.userAccountService.save(uaSaved);
+			result.setUserAccount(uaSaved);
+		} else {
+
+			final Chapter old = this.chapterService.findOne(chapter.getId());
+
+			ua.setPassword(hash);
+			if (!old.getUserAccount().getUsername().equals(ua.getUsername()))
+				Assert.isTrue(this.userAccountRepository.findByUsername(ua.getUsername()) == null, "The username is register");
+
+			result = this.chapterService.save(chapter);
+
+		}
+
+		return result;
+
+	}
+
+	public ChapterForm inyect(final Chapter chapter) {
+		final ChapterForm result = new ChapterForm();
+
+		result.setAddress(chapter.getAddress());
+		result.setEmail(chapter.getEmail());
+		result.setId(chapter.getId());
+		result.setMiddleName(chapter.getMiddleName());
+		result.setName(chapter.getName());
+		result.setPhone(chapter.getPhone());
+		result.setPhoto(chapter.getPhoto());
+		result.setSurname(chapter.getSurname());
+		result.setUserAccountpassword(chapter.getUserAccount().getPassword());
+		result.setUserAccountuser(chapter.getUserAccount().getUsername());
+		result.setVersion(chapter.getVersion());
+
+		result.setTitle(chapter.getTitle());
+
+		return result;
 	}
 }

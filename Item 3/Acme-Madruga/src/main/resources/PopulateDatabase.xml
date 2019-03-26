@@ -110,6 +110,25 @@
 		/> <property name="authorities"> <list> <bean class="security.Authority"> 
 		<property name="authority" value="BROTHERHOOD" /> </bean> </list> </property> 
 		</bean> -->
+		
+		
+		<bean id="finder1" class="domain.Finder">
+		<!-- Finder -->
+		<property name="keyword" value="poder"></property>
+		<property name="areaName" value=""></property>
+		<property name="minDate" value="2018/04/16 15:20"></property>
+		<property name="maxDate" value="2030/04/16 15:20"></property>
+		<property name="creationDate" value="2019/03/06 15:20"></property>
+
+		<!-- Reletions -->
+		<property name="processions">
+			<list>
+				<ref bean="procession1" />
+				<ref bean="procession2" />
+			</list>
+		</property>
+
+	</bean>
 
 	<!-- ========================= CHAPTER =========================== -->
 
@@ -262,6 +281,7 @@
 		<property name="score" value="0.5"></property>
 		<property name="spammer" value="false"></property>
 		<property name="userAccount" ref="userAccountMember1"></property>
+		<property name="finder" ref="finder1"></property>
 		<!-- Member -->
 	</bean>
 

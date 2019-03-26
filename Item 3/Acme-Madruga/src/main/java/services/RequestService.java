@@ -239,39 +239,43 @@ public class RequestService {
 	}
 
 	public Double findPendingRequestRadio() {
-		final Double result = this.requestRepository.findPendingRequestRatio();
-		Assert.notNull(result);
+		Double result = this.requestRepository.findPendingRequestRatio();
+		if (result == null)
+			result = 0.0;
 		return result;
 	}
-
 	public Double findApprovedRequestRadio() {
-		final Double result = this.requestRepository.findApprovedRequestRatio();
-		Assert.notNull(result);
+		Double result = this.requestRepository.findApprovedRequestRatio();
+		if (result == null)
+			result = 0.0;
 		return result;
 	}
 
 	public Double findRejectedRequestRadio() {
-		final Double result = this.requestRepository.findRejectedRequestRatio();
-		Assert.notNull(result);
+		Double result = this.requestRepository.findRejectedRequestRatio();
+		if (result == null)
+			result = 0.0;
 		return result;
 	}
 
 	public Double findPendingRequestByParadeRadio(final Integer id) {
-		final Double result = this.requestRepository.findPendingRequestByParadeRatio(id);
-		Assert.notNull(result);
+		Double result = this.requestRepository.findPendingRequestByParadeRatio(id);
+		if (result == null)
+			result = 0.0;
 		return result;
 	}
 
 	public Double findApprovedRequestByParadeRadio(final Integer id) {
-		final Double result = this.requestRepository.findApprovedRequestByParadeRatio(id);
-		System.out.println("BBBBBBBBBBBBBBBBBBBBBBBBA" + result);
-		Assert.notNull(result);
+		Double result = this.requestRepository.findApprovedRequestByParadeRatio(id);
+		if (result == null)
+			result = 0.0;
 		return result;
 	}
 
 	public Double findRejectedRequestByParadeRadio(final Integer id) {
-		final Double result = this.requestRepository.findRejectedRequestByParadeRatio(id);
-		Assert.notNull(result);
+		Double result = this.requestRepository.findRejectedRequestByParadeRatio(id);
+		if (result == null)
+			result = 0.0;
 		return result;
 	}
 

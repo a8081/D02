@@ -195,10 +195,10 @@ public class BrotherhoodService {
 
 	public List<Brotherhood> getSmallestBrotherhood() {
 		final Integer[] bs = this.brotherhoodRepository.getSmallestBrotherhood();
-		Assert.notNull(bs);
 		final List<Brotherhood> result = new ArrayList<Brotherhood>();
-		for (final Integer id : bs)
-			result.add(this.findOne(id));
+		if (bs.length > 0 || bs != null)
+			for (final Integer id : bs)
+				result.add(this.findOne(id));
 		return result;
 	}
 
@@ -206,8 +206,9 @@ public class BrotherhoodService {
 		final Integer[] bs = this.brotherhoodRepository.getLargestBrotherhood();
 		Assert.notNull(bs);
 		final List<Brotherhood> result = new ArrayList<Brotherhood>();
-		for (final Integer id : bs)
-			result.add(this.findOne(id));
+		if (bs.length > 0 || bs != null)
+			for (final Integer id : bs)
+				result.add(this.findOne(id));
 		return result;
 	}
 
