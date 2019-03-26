@@ -158,7 +158,10 @@
 		<security:intercept-url pattern="/parade/chapter/edit.do" access="hasRole('CHAPTER')"/>
 		
 		<!-- PROCLAIM -->
-		<security:intercept-url pattern="/proclaim/chapter/**" access="hasRole('CHAPTER')"/>
+		<security:intercept-url pattern="/proclaim/chapter/list.do" access="hasRole('CHAPTER')"/>
+		<security:intercept-url pattern="/proclaim/display.do" access="hasRole('CHAPTER')"/>
+		<security:intercept-url pattern="/proclaim/edit.do" access="hasRole('CHAPTER')"/>
+
 
 		<security:intercept-url pattern="/profile/action-1.do" access="isAuthenticated()" /> 
 		<security:intercept-url pattern="/profile/action-2.do" access="isAuthenticated()" /> 

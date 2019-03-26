@@ -25,6 +25,6 @@
 		<acme:link url="proclaim${rolURL}/display.do?proclaimId=${row.id}"
 			code="proclaim.display" />
 	</display:column>
-	
-	
 </display:table>
+
+<acme:link url="proclaim/edit.do" code="proclaim.create" />

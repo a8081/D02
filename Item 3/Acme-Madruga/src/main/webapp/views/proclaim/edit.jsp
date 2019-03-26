@@ -18,7 +18,7 @@
 <%@taglib prefix="acme" tagdir="/WEB-INF/tags"%>
 
 
-<form:form action="proclaim/chapter/edit.do" modelAttribute="proclaim" method="POST">
+<form:form action="proclaim/edit.do" modelAttribute="proclaim" method="POST">
     
     <form:hidden path="id"/>
 	<form:hidden path="version"/>
