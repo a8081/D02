@@ -78,6 +78,10 @@ public class AdministratorService {
 		return a;
 	}
 
+	public Administrator findSystem() {
+		return this.administratorRepository.findSystem();
+	}
+
 	public Administrator reconstruct(final ActorFrom actorForm) {
 		Administrator admin;
 		if (actorForm.getId() == 0) {

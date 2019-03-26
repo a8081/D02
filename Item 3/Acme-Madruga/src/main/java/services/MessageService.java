@@ -19,6 +19,8 @@ import domain.Member;
 import domain.Message;
 import domain.Parade;
 import domain.Request;
+import domain.Sponsor;
+import domain.Sponsorship;
 
 @Service
 @Transactional
@@ -304,6 +306,7 @@ public class MessageService {
 		m.setBody("The request's status regarding parade " + req.getParade().getTitle() + ": " + req.getParade().getTicker() + " was changed to " + req.getStatus() + ".\n" + "El estado de la solicitud al desfile " + req.getParade().getTitle() + ": "
 			+ req.getParade().getTicker() + "ha sido cambiado a " + req.getStatus() + ".");
 		m.setPriority("HIGH");
+		m.setSender(this.administratorService.findSystem());
 
 		final Collection<Actor> recipients = new ArrayList<>();
 		recipients.add(member);
@@ -318,9 +321,10 @@ public class MessageService {
 		final Member member = this.memberService.findByEnrolmentId(enrolment.getId());
 		final Brotherhood b = this.brotherhoodService.findByEnrolmentId(enrolment.getId());
 
-		m.setSubject("Brotherhood enrols a member.\n" + "Hermandad añade a un miembo.");
-		m.setBody("Brotherhood " + b.getName() + "+ enrols member " + member.getName() + ".\n" + "La hermandad " + b.getName() + "+ añade como miembro a " + member.getName() + ".");
+		m.setSubject("Brotherhood enrols a member.\n" + "Hermandad aÃ±ade a un miembo.");
+		m.setBody("Brotherhood " + b.getName() + "+ enrols member " + member.getName() + ".\n" + "La hermandad " + b.getName() + "+ aÃ±ade como miembro a " + member.getName() + ".");
 		m.setPriority("HIGH");
+		m.setSender(this.administratorService.findSystem());
 
 		final Collection<Actor> recipients = new ArrayList<>();
 		recipients.add(member);
@@ -338,6 +342,7 @@ public class MessageService {
 		m.setSubject("Member drops out of a brotherhood.\n" + "Miembro se va de una hermandad.");
 		m.setBody("Member " + member.getName() + "+ drops out of a " + b.getName() + ".\n" + "El miembro " + member.getName() + "+ se va de la hermandad " + b.getName() + ".");
 		m.setPriority("HIGH");
+		m.setSender(this.administratorService.findSystem());
 
 		final Collection<Actor> recipients = new ArrayList<>();
 		recipients.add(member);
@@ -351,9 +356,10 @@ public class MessageService {
 		final Message m = this.create();
 
 		m.setSubject("Parade is published.\n" + "Desfile publicado.");
-		m.setBody("A new parade is published. Parade identified as " + parade.getTitle() + ": " + parade.getTicker() + " has been published by the brotherhood with name: " + parade.getBrotherhood().getName() + ".\n"
-			+ "Un nuevo desfile ha sido publicado. El desfile identificado por " + parade.getTitle() + ": " + parade.getTicker() + " ha sido publicado por la hermandad con el nombre: " + parade.getBrotherhood().getName() + ".");
+		m.setBody("New parade identified as " + parade.getTitle() + ": " + parade.getTicker() + " has been published by " + parade.getBrotherhood().getName() + ".\n" + "Desfile nuevo identificado por " + parade.getTitle() + ": " + parade.getTicker()
+			+ " ha sido publicado por " + parade.getBrotherhood().getName() + ".");
 		m.setPriority("HIGH");
+		m.setSender(this.administratorService.findSystem());
 
 		final Collection<Actor> recipients = new ArrayList<>();
 		recipients.addAll(this.memberService.findAll());
@@ -362,4 +368,21 @@ public class MessageService {
 		this.send(m);
 	}
 
+	public void sponsorshipDisplayedMessage(final Sponsorship sp) {
+		final Message m = this.create();
+		final Sponsor sponsor = sp.getSponsor();
+		final double flatFare = this.configurationParametersService.find().getFlatFare();
+		final double vat = this.configurationParametersService.find().getVat();
+
+		m.setSubject("Sponsorship of " + sp.getParade().getTitle() + ": " + sp.getParade().getTicker() + " displayed.\n" + "Patrocinio de " + sp.getParade().getTitle() + ": " + sp.getParade().getTicker() + " mostrado.");
+		m.setBody("System charge you a flat fare of " + flatFare + " (+" + flatFare * vat + " VAT).\n" + "El sistema le carga una tarifa plana de " + flatFare + " (+" + flatFare * vat + " IVA).");
+		m.setPriority("HIGH");
+		m.setSender(this.administratorService.findSystem());
+
+		final Collection<Actor> recipients = new ArrayList<>();
+		recipients.add(sponsor);
+		m.setRecipients(recipients);
+
+		this.send(m);
+	}
 }
