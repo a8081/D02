@@ -88,13 +88,12 @@ public class DashboardAdministratorController extends AbstractController {
 	public ModelAndView statistics(@RequestParam(value = "id", required = false) final Integer id) {
 		final ModelAndView result;
 
-		/*
-		 * final Double averageResults = this.finderService.getAverageFinderResults();
-		 * final Integer maxResults = this.finderService.getMaxFinderResults();
-		 * final Integer minResults = this.finderService.getMinFinderResults();
-		 * final Double desviationResults = this.finderService.getDesviationFinderResults();
-		 * final Double ratioFinders = this.finderService.getRatioEmptyFinders();
-		 */
+		final Double averageResults = this.finderService.getAverageFinderResults();
+		final Integer maxResults = this.finderService.getMaxFinderResults();
+		final Integer minResults = this.finderService.getMinFinderResults();
+		final Double desviationResults = this.finderService.getDesviationFinderResults();
+		final Double ratioFinders = this.finderService.getRatioEmptyFinders();
+
 		final Double[] statisticsMembersPerBrotherhood = this.brotherhoodService.getStatisticsOfMembersPerBrotherhood();
 		final Collection<Brotherhood> smallestBrotherhood = this.brotherhoodService.getSmallestBrotherhood();
 
@@ -145,13 +144,13 @@ public class DashboardAdministratorController extends AbstractController {
 		result.addObject("maxBrotherhoods", statisticsBrotherhoodsPerArea[1]);
 		result.addObject("desviationBrotherhoods", statisticsBrotherhoodsPerArea[3]);
 		result.addObject("ratioBrotherhoods", ratioBrotherhoodsPerArea);
-		/*
-		 * result.addObject("averageResults", averageResults);
-		 * result.addObject("minResults", minResults);
-		 * result.addObject("maxResults", maxResults);
-		 * result.addObject("desviationResults", desviationResults);
-		 * result.addObject("ratioFinders", ratioFinders);
-		 */
+
+		result.addObject("averageResults", averageResults);
+		result.addObject("minResults", minResults);
+		result.addObject("maxResults", maxResults);
+		result.addObject("desviationResults", desviationResults);
+		result.addObject("ratioFinders", ratioFinders);
+
 		result.addObject("parades", parades);
 
 		if (id != null) {
