@@ -93,13 +93,8 @@ public class MiscellaneousRecordController extends AbstractController {
 	public ModelAndView delete(@RequestParam final int miscellaneousRecordId) {
 		ModelAndView result;
 		final MiscellaneousRecord miscellaneousRecord = this.miscellaneousRecordService.findOne(miscellaneousRecordId);
-		try {
-			this.miscellaneousRecordService.delete(miscellaneousRecord);
-			result = this.historyController.list();
-		} catch (final Throwable oops) {
-			result = this.createEditModelAndView(miscellaneousRecord, "general.commit.error");
-			result.addObject("id", miscellaneousRecord.getId());
-		}
+		this.miscellaneousRecordService.delete(miscellaneousRecord);
+		result = this.historyController.list();
 		return result;
 	}
 
@@ -108,10 +103,7 @@ public class MiscellaneousRecordController extends AbstractController {
 
 		ModelAndView res;
 
-		final Brotherhood brotherhood = this.brotherhoodService.findByPrincipal();
-		final Brotherhood brotherhoodMiscellaneous = this.miscellaneousRecordService.findBrotherhoodByMiscellaneous(miscellaneousRecordId);
 		final MiscellaneousRecord miscellaneousRecord = this.miscellaneousRecordService.findOne(miscellaneousRecordId);
-		Assert.isTrue(brotherhood.equals(brotherhoodMiscellaneous));
 
 		if (miscellaneousRecord != null) {
 

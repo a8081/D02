@@ -65,7 +65,7 @@ public class MiscellaneousRecordService {
 	public void delete(final MiscellaneousRecord mR) {
 		final Brotherhood me = this.brotherhoodService.findByPrincipal();
 		Assert.notNull(me, "You must be logged in the system");
-		Assert.isTrue(this.findBrotherhoodByMiscellaneous(mR.getId()) == me);
+		Assert.isTrue(this.findBrotherhoodByMiscellaneous(mR.getId()) == me, "No puede borrar un MiscellaneousRecord que no pertenezca a su historia.");
 		Assert.notNull(mR);
 		Assert.isTrue(mR.getId() != 0);
 		final MiscellaneousRecord res = this.findOne(mR.getId());
@@ -86,10 +86,8 @@ public class MiscellaneousRecordService {
 		return bro;
 	}
 
-
 	public void flush() {
 		this.miscellaneousRecordRepository.flush();
 	}
-
 
 }

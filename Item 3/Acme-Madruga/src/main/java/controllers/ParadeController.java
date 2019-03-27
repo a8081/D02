@@ -21,7 +21,7 @@ import domain.Segment;
 import domain.Sponsorship;
 
 @Controller
-@RequestMapping("/parade/all")
+@RequestMapping("/parade")
 public class ParadeController extends AbstractController {
 
 	@Autowired
@@ -52,7 +52,6 @@ public class ParadeController extends AbstractController {
 			result = new ModelAndView("parade/display");
 			result.addObject("parade", parade);
 			result.addObject("segments", segments);
-			result.addObject("rol", "all");
 			result.addObject("lang", this.lang);
 			final Sponsorship sp = this.sponsorshipService.findRandomSponsorship(paradeId);
 			if (sp != null) {
@@ -76,9 +75,8 @@ public class ParadeController extends AbstractController {
 		result = new ModelAndView("parade/list");
 		result.addObject("parades", parades);
 		result.addObject("button", false);
-		result.addObject("rol", "all");
 		result.addObject("lang", this.lang);
-		result.addObject("requetURI", "parade/all/list.do");
+		result.addObject("requetURI", "parade/list.do");
 
 		return result;
 	}
@@ -96,9 +94,8 @@ public class ParadeController extends AbstractController {
 		result.addObject("parades", parades);
 		result.addObject("button", true);
 		result.addObject("brotherhood", brotherhood);
-		result.addObject("rol", "all");
 		result.addObject("lang", lang);
-		result.addObject("requetURI", "parade/all/list.do");
+		result.addObject("requetURI", "parade/listByBrotherhood.do");
 
 		return result;
 	}

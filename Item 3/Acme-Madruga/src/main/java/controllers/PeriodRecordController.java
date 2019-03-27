@@ -71,25 +71,22 @@ public class PeriodRecordController extends AbstractController {
 		ModelAndView result;
 		if (bindingResult.hasErrors())
 			result = this.createEditModelAndView(periodRecord);
-		else
-			try {
-				final Date fechaActual = new Date();
-				final Integer Año = fechaActual.getYear() + 1900;
-				Assert.isTrue(Año <= periodRecord.getStartYear());
-				Assert.isTrue(periodRecord.getStartYear() <= periodRecord.getEndYear());
-				if (periodRecord.getId() == 0) {
-					final Brotherhood brotherhood = this.brotherhoodService.findByPrincipal();
-					final History history = brotherhood.getHistory();
-					final Collection<PeriodRecord> pr = history.getPeriodRecords();
-					pr.add(periodRecord);
-					history.setPeriodRecords(pr);
-					this.historyService.save(history);
-				} else
-					this.periodRecordService.save(periodRecord);
-				result = this.historyController.list();
-			} catch (final Throwable oops) {
-				result = this.createEditModelAndView(periodRecord, "general.commit.error");
-			}
+		else {
+			final Date fechaActual = new Date();
+			final Integer Año = fechaActual.getYear() + 1900;
+			Assert.isTrue(Año <= periodRecord.getStartYear());
+			Assert.isTrue(periodRecord.getStartYear() <= periodRecord.getEndYear(), "El año de inicio debe de ser anterior al año de fin.");
+			if (periodRecord.getId() == 0) {
+				final Brotherhood brotherhood = this.brotherhoodService.findByPrincipal();
+				final History history = brotherhood.getHistory();
+				final Collection<PeriodRecord> pr = history.getPeriodRecords();
+				pr.add(periodRecord);
+				history.setPeriodRecords(pr);
+				this.historyService.save(history);
+			} else
+				this.periodRecordService.save(periodRecord);
+			result = this.historyController.list();
+		}
 
 		return result;
 	}
@@ -98,13 +95,9 @@ public class PeriodRecordController extends AbstractController {
 	public ModelAndView delete(@RequestParam final int periodRecordId) {
 		ModelAndView result;
 		final PeriodRecord periodRecord = this.periodRecordService.findOne(periodRecordId);
-		try {
-			this.periodRecordService.delete(periodRecord);
-			result = this.historyController.list();
-		} catch (final Throwable oops) {
-			result = this.createEditModelAndView(periodRecord, "general.commit.error");
-			result.addObject("id", periodRecord.getId());
-		}
+		this.periodRecordService.delete(periodRecord);
+		result = this.historyController.list();
+
 		return result;
 	}
 
@@ -113,10 +106,7 @@ public class PeriodRecordController extends AbstractController {
 
 		ModelAndView res;
 
-		final Brotherhood brotherhood = this.brotherhoodService.findByPrincipal();
-		final Brotherhood brotherhoodPeriod = this.periodRecordService.findBrotherhoodByPeriod(periodRecordId);
 		final PeriodRecord periodRecord = this.periodRecordService.findOne(periodRecordId);
-		Assert.isTrue(brotherhood.equals(brotherhoodPeriod));
 
 		if (periodRecord != null) {
 

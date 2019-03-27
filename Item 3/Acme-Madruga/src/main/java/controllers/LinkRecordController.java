@@ -112,10 +112,7 @@ public class LinkRecordController extends AbstractController {
 
 		ModelAndView res;
 
-		final Brotherhood brotherhood = this.brotherhoodService.findByPrincipal();
-		final Brotherhood brotherhoodLink = this.linkRecordService.findBrotherhoodByLink(linkRecordId);
 		final LinkRecord linkRecord = this.linkRecordService.findOne(linkRecordId);
-		Assert.isTrue(brotherhood.equals(brotherhoodLink));
 
 		if (linkRecord != null) {
 

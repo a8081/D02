@@ -79,7 +79,7 @@
 			<li><a class="fNiv"><spring:message	code="master.page.parades" /></a>
 				<ul>
 					<li class="arrow"></li>
-					<li><a href="parade/all/list.do"><spring:message code="master.page.all.parade" /></a></li>
+					<li><a href="parade/list.do"><spring:message code="master.page.all.parade" /></a></li>
 					<li><a href="parade/brotherhood/list.do"><spring:message code="master.page.parade.list" /></a></li>
 					<li><a href="parade/brotherhood/create.do"><spring:message code="master.page.parade.create" /></a></li>
 					<li><a href="parade/brotherhood/listDefault.do"><spring:message code="master.page.parade.default" /></a></li>

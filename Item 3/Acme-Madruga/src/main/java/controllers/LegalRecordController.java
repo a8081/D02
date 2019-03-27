@@ -93,13 +93,8 @@ public class LegalRecordController extends AbstractController {
 	public ModelAndView delete(@RequestParam final int legalRecordId) {
 		ModelAndView result;
 		final LegalRecord legalRecord = this.legalRecordService.findOne(legalRecordId);
-		try {
-			this.legalRecordService.delete(legalRecord);
-			result = this.historyController.list();
-		} catch (final Throwable oops) {
-			result = this.createEditModelAndView(legalRecord, "general.commit.error");
-			result.addObject("id", legalRecord.getId());
-		}
+		this.legalRecordService.delete(legalRecord);
+		result = this.historyController.list();
 		return result;
 	}
 
@@ -108,10 +103,7 @@ public class LegalRecordController extends AbstractController {
 
 		ModelAndView res;
 
-		final Brotherhood brotherhood = this.brotherhoodService.findByPrincipal();
-		final Brotherhood brotherhoodLegal = this.legalRecordService.findBrotherhoodByLegal(legalRecordId);
 		final LegalRecord legalRecord = this.legalRecordService.findOne(legalRecordId);
-		Assert.isTrue(brotherhood.equals(brotherhoodLegal));
 
 		if (legalRecord != null) {
 
