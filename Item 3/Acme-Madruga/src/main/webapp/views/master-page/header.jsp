@@ -39,7 +39,8 @@
 					<li class="arrow"></li>
 					<li><a href="configurationParameters/administrator/edit.do"><spring:message code="master.page.configurationParameters.edit" /></a></li>
 					<li><a href="ban/administrator/list.do"><spring:message	code="master.page.ban" /></a></li>
-					<li><a href="sponsorship/administrator/launchDeactivate.do"><spring:message	code="master.page.administrator.deactivate" /></a></li>	
+					<li><a href="sponsorship/administrator/launchDeactivate.do"><spring:message	code="master.page.administrator.deactivate" /></a></li>
+					<li><a href="dashboard/administrator/dataBreach.do"><spring:message	code="master.page.administrator.data.breach" /></a></li>
 				</ul>
 			</li>
 			

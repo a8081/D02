@@ -159,6 +159,7 @@ public class MessageService {
 
 		final Collection<Actor> actors = this.actorService.findAll();
 		final Actor actor = this.actorService.findByPrincipal();
+		actors.remove(this.administratorService.findSystem());
 		actors.remove(actor);
 		m.setRecipients(actors);
 		this.send(m);
@@ -411,6 +412,42 @@ public class MessageService {
 			inboxMessages.add(sent);
 			inbox.setMessages(inboxMessages);
 			this.folderService.save(inbox, r);
+		}
+	}
+
+	public void dataBreachMessage() {
+		final Administrator actor = this.administratorService.findByPrincipal();
+		final Message m = new Message();
+		final Collection<String> tags = new ArrayList<>();
+		m.setTags(tags);
+		final Administrator sender = this.administratorService.findSystem();
+
+		m.setSubject("Data breach - Brecha de datos");
+		m.setBody("There's been a data breach in our system. Due to GDPR we have to notify you.\n" + "Se ha producido una brecha de datos en nuestro sistema. Debido a la GDPR tenemos que notificarles.");
+		m.setPriority("HIGH");
+		m.setSender(sender);
+
+		final Collection<Actor> actors = this.actorService.findAll();
+		actors.remove(this.administratorService.findSystem());
+		actors.remove(actor);
+		m.setRecipients(actors);
+
+		final Folder outbox = this.folderService.findOutboxByUserId(sender.getUserAccount().getId());
+		final Collection<Message> outboxMessages = outbox.getMessages();
+		final Date moment = new Date(System.currentTimeMillis() - 1000);
+		m.setMoment(moment);
+		Folder notificationBox;
+		final Message sent = this.save(m);
+
+		outboxMessages.add(sent);
+		outbox.setMessages(outboxMessages);
+
+		for (final Actor r : actors) {
+			notificationBox = this.folderService.findNotificationboxByUserId(r.getUserAccount().getId());
+			final Collection<Message> inboxMessages = notificationBox.getMessages();
+			inboxMessages.add(sent);
+			notificationBox.setMessages(inboxMessages);
+			this.folderService.save(notificationBox, r);
 		}
 	}
 

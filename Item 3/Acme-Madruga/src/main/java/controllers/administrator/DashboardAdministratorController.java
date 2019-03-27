@@ -1,12 +1,15 @@
 
 package controllers.administrator;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,9 +20,11 @@ import org.springframework.web.servlet.ModelAndView;
 import services.AreaService;
 import services.BrotherhoodService;
 import services.ChapterService;
+import services.ConfigurationParametersService;
 import services.FinderService;
 import services.HistoryService;
 import services.MemberService;
+import services.MessageService;
 import services.ParadeService;
 import services.PositionService;
 import services.RequestService;
@@ -35,31 +40,37 @@ import domain.Position;
 public class DashboardAdministratorController extends AbstractController {
 
 	@Autowired
-	private PositionService		positionService;
+	private PositionService					positionService;
 
 	@Autowired
-	private FinderService		finderService;
+	private FinderService					finderService;
 
 	@Autowired
-	private BrotherhoodService	brotherhoodService;
+	private BrotherhoodService				brotherhoodService;
 
 	@Autowired
-	private AreaService			areaService;
+	private AreaService						areaService;
 
 	@Autowired
-	private ParadeService		paradeService;
+	private ParadeService					paradeService;
 
 	@Autowired
-	private RequestService		requestService;
+	private RequestService					requestService;
 
 	@Autowired
-	private MemberService		memberService;
+	private MemberService					memberService;
 
 	@Autowired
-	private HistoryService		historyService;
+	private HistoryService					historyService;
 
 	@Autowired
-	private ChapterService		chapterService;
+	private ChapterService					chapterService;
+
+	@Autowired
+	private MessageService					messageService;
+
+	@Autowired
+	private ConfigurationParametersService	configurationParametersService;
 
 
 	@RequestMapping(value = "/chart", method = RequestMethod.GET)
@@ -238,6 +249,34 @@ public class DashboardAdministratorController extends AbstractController {
 		result.addObject("requestsParadePending", requestPending);
 		result.addObject("requestsParadeRejected", requestRejected);
 		result.addObject("parades", parades);
+
+		return result;
+
+	}
+
+	@RequestMapping(value = "/dataBreach", method = RequestMethod.GET)
+	public ModelAndView launchDeactivate() {
+		ModelAndView result;
+
+		this.messageService.dataBreachMessage();
+
+		result = new ModelAndView("welcome/index");
+		final String lang = LocaleContextHolder.getLocale().getLanguage();
+
+		String mensaje = null;
+		if (lang.equals("en"))
+			mensaje = this.configurationParametersService.findWelcomeMessageEn();
+		else if (lang.equals("es"))
+			mensaje = this.configurationParametersService.findWelcomeMessageEsp();
+
+		final SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+		final String moment = formatter.format(new Date());
+
+		result = new ModelAndView("welcome/index");
+		result.addObject("moment", moment);
+		result.addObject("mensaje", mensaje);
+
+		result.addObject("alert", "data.breach.notified");
 
 		return result;
 

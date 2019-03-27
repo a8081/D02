@@ -81,13 +81,15 @@ public class SponsorshipService {
 	}
 
 	public void deactivate(final Sponsorship sp) {
-		sp.setActivated(false);
-		this.save(sp);
+		final Sponsorship retrieved = this.findOne(sp.getId());
+		retrieved.setActivated(false);
+		this.save(retrieved);
 	}
 
 	public void reactivate(final Sponsorship sp) {
-		sp.setActivated(true);
-		this.save(sp);
+		final Sponsorship retrieved = this.findOne(sp.getId());
+		retrieved.setActivated(true);
+		this.save(retrieved);
 	}
 
 	private Collection<Sponsorship> findAllByUserId(final int id) {

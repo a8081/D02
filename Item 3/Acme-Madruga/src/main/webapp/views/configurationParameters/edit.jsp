@@ -10,12 +10,6 @@
 <%@taglib prefix="security"	uri="http://www.springframework.org/security/tags"%>
 <%@taglib prefix="display" uri="http://displaytag.sf.net"%>
 
-<jstl:if test="${not empty errors}">
-	<jstl:forEach var="error" items="${errors}" >
-		<jstl:out value="${error}" /> 
-	</jstl:forEach>
-</jstl:if>
-
 <form:form action="${RequestURI }" modelAttribute="configurationParameters">
 
 	<form:hidden path="id" />
