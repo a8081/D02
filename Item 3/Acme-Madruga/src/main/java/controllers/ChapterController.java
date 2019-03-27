@@ -78,7 +78,7 @@ public class ChapterController extends AbstractController {
 
 	// SAVE ------------------------------------------------------------------
 	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "save")
-	public ModelAndView edit(@Valid final ChapterForm chapterForm, final BindingResult binding) {
+	public ModelAndView save(@Valid final ChapterForm chapterForm, final BindingResult binding) {
 		ModelAndView result;
 		result = new ModelAndView("chapter/edit");
 		Chapter chapter;
