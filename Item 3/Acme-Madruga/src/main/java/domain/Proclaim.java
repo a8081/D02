@@ -40,7 +40,7 @@ public class Proclaim extends DomainEntity {
 	}
 
 	@NotBlank
-	@Size(min = 1, max = 250)
+	@Size(min = 1, max = 251)
 	public String getText() {
 		return this.text;
 	}
