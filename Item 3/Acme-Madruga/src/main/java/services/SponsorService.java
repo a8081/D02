@@ -78,7 +78,7 @@ public class SponsorService {
 		if (s.getId() == 0) {
 			this.actorService.setAuthorityUserAccount(Authority.SPONSOR, s);
 			result = this.sponsorRepository.save(s);
-			this.folderService.setFoldersByDefault(s);
+			this.folderService.setFoldersByDefault(result);
 		} else {
 			final Actor principal = this.actorService.findByPrincipal();
 			Assert.isTrue(principal.getId() == s.getId(), "You only can edit your info");
