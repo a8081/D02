@@ -8,7 +8,7 @@
 
 <%@taglib prefix="acme" tagdir="/WEB-INF/tags"%>
 
-<h2><spring:message code="brotherhood.edit.msg"/></h2>
+<h2><spring:message code="chapter.edit.msg"/></h2>
 <jstl:if test="${not empty alert}">
 	<script>
 	 $(document).ready(function() {

@@ -117,6 +117,7 @@ public class FolderController extends AbstractController {
 			return result;
 		} else {
 			Assert.notNull(folder);
+
 			//			Assert.isTrue(!this.folderService.findAllByUserId(this.actorService.findByPrincipal().getUserAccount().getId()).contains(folder));
 			result = this.createEditModelAndView(folder);
 			result.addObject("id", folder.getId());
@@ -138,8 +139,6 @@ public class FolderController extends AbstractController {
 			try {
 				this.folderService.save(folder, principal);
 				res = new ModelAndView("redirect:list.do");
-				final String banner = this.configurationParametersService.find().getBanner();
-				res.addObject("banner", banner);
 			} catch (final Throwable oops) {
 				res = this.createEditModelAndView(folder, "folder.commit.error");
 			}
@@ -216,6 +215,7 @@ public class FolderController extends AbstractController {
 		Folder folder;
 
 		folder = this.folderService.findOne(folderId);
+
 		if (folder == null)
 			result = new ModelAndView("redirect:/misc/403.jsp");
 		else {

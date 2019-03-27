@@ -1,6 +1,8 @@
 
 package services;
 
+import javax.validation.ConstraintViolationException;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,34 +27,72 @@ public class ProclaimServiceTest extends AbstractTest {
 
 
 	@Test
-	public void driverCreateSave() {
+	public void driver1() {
 		final Object testingData[][] = {
+			//En la cobertura de datos no se contempla moment ya que se setea automaticamente en el sistema.
 			{
-				//Correcto
+				//				A: Acme Madruga Req. 17 -> Chapters can publish proclaims
+				//				B: Test Negativo: --
+				//				C: 100% Recorre 24 de las 24 lineas posibles
+				//				D: cobertura de datos=15/15
 				"chapter1", "descriptionTest", null
-			},
-			{
-				//Crear proclaim con usuario null
+			}, {
+				//				A: Acme Madruga Req. 17 -> Chapters can publish proclaims
+				//				B: Test Negativo: Usuario null
+				//				C: 10% Recorre 2 de la 24 lineas posibles
+				//				D: cobertura de datos=15/15
 				null, "descriptionTest", IllegalArgumentException.class
-			},
-			{
-				//Crear proclaim con usuairo no chapter
+			}, {
+				//				A: Acme Madruga Req. 17 -> Chapters can publish proclaims
+				//				B: Test Negativo: Registro con un member
+				//				C: 10% Recorre 2 de la 24 lineas posibles
+				//				D: cobertura de datos=15/15
 				"member1", "descriptionTest", IllegalArgumentException.class
+			}, {
+				//				A: Acme Madruga Req. 12 -> the system must store the moment when it's published and a piece of text that can't be longer than 250 characters
+				//				B: Test Negativo: Text cadena vacia
+				//				C: 100% Recorre 24 de la 24 lineas posibles(Al saltar con flush se ejecuta el 100%)
+				//				D: cobertura de datos=15/15
+				"chapter1", "", ConstraintViolationException.class
 			},
+		};
+
+		for (int i = 0; i < testingData.length; i++)
+			this.templateCreateSave((String) testingData[i][0], (String) testingData[i][1], (Class<?>) testingData[i][2]);
+	}
+
+	@Test
+	public void driver2() {
+		final Object testingData[][] = {
+
 			{
-				//Crear proclaim con cadena vacia
-				"chapter1", "", IllegalArgumentException.class
-			},
-			{
-				//Crear proclaim con cadena >250
+				//				A: Acme Madruga Req. 12 -> the system must store the moment when it's published and a piece of text that can't be longer than 250 characters
+				//				B: Test Positivo: text = 250
+				//				C: 100% Recorre 24 de la 24 lineas posibles(Al saltar con flush se ejecuta el 100%)
+				//				D: cobertura de datos=15/15
 				"chapter1",
 				"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" + "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-					+ "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", IllegalArgumentException.class
+					+ "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", null
+			},
+			{
+				//				A: Acme Madruga Req. 12 -> the system must store the moment when it's published and a piece of text that can't be longer than 250 characters
+				//				B: Test Negativo: text = 251
+				//				C: 100% Recorre 24 de la 24 lineas posibles(Al saltar con flush se ejecuta el 100%)
+				//				D: cobertura de datos=15/15
+				"chapter1",
+				"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" + "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+					+ "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", ConstraintViolationException.class
 			}, {
-				//Crear proclaim con text null
-				"chapter1", null, IllegalArgumentException.class
+				//				A: Acme Madruga Req. 12 -> the system must store the moment when it's published and a piece of text that can't be longer than 250 characters
+				//				B: Test Negativo: text null
+				//				C: 100% Recorre 24 de la 24 lineas posibles(Al saltar con flush se ejecuta el 100%)
+				//				D: cobertura de datos=15/15
+				"chapter1", null, NullPointerException.class
 			}, {
-				//Crear proclaim con cadena vacia
+				//				A: Acme Madruga Req. 17.1 ->  once a proclaim is published, there's no way to update or delete it
+				//				B: Test Negativo: Modificar proclaim ya guardada
+				//				C: 66,67% Recorre 16 de la 24 lineas posibles
+				//				D: cobertura de datos=15/15
 				"chapter1", "edit", IllegalArgumentException.class
 			},
 		};

@@ -95,7 +95,6 @@ public class ActorService {
 		Assert.notNull(result);
 
 		return result;
-
 	}
 
 	/**

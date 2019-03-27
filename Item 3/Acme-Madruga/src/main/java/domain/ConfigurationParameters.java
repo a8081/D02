@@ -45,6 +45,7 @@ public class ConfigurationParameters extends DomainEntity {
 		this.sysName = sysName;
 	}
 
+	@NotBlank
 	@URL
 	public String getBanner() {
 		return this.banner;

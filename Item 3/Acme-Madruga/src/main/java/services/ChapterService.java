@@ -100,12 +100,10 @@ public class ChapterService {
 	public Chapter findByPrincipal() {
 		final UserAccount userAccount = LoginService.getPrincipal();
 		Assert.notNull(userAccount);
-
 		final Chapter chapter = this.findByUserId(userAccount.getId());
 		Assert.notNull(chapter);
 		final boolean bool = this.actorService.checkAuthority(chapter, Authority.CHAPTER);
 		Assert.isTrue(bool);
-
 		return chapter;
 	}
 

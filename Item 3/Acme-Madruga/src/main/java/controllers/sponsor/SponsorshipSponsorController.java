@@ -121,15 +121,15 @@ public class SponsorshipSponsorController extends AbstractController {
 
 	// =================REACTIVATE=================
 
-	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "reactivate")
-	public ModelAndView activate(@Valid final SponsorshipForm sponsorshipForm, final BindingResult binding) {
+	@RequestMapping(value = "/reactivate", method = RequestMethod.GET)
+	public ModelAndView activate(@RequestParam final int sponsorshipId) {
 		ModelAndView result;
-		Sponsorship sponsorship;
+		final Sponsorship sponsorship;
 
-		sponsorship = this.sponsorshipService.reconstruct(sponsorshipForm, binding);
+		sponsorship = this.sponsorshipService.findOne(sponsorshipId);
 
 		try {
-			this.sponsorshipService.reactivate(sponsorship);
+			this.sponsorshipService.reactivate(sponsorshipId);
 			result = new ModelAndView("redirect:list.do");
 		} catch (final Throwable oops) {
 			result = this.createEditModelAndView(sponsorship, "sponsorship.commit.error");
@@ -139,15 +139,15 @@ public class SponsorshipSponsorController extends AbstractController {
 
 	// =================DEACTIVATE=================
 
-	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "deactivate")
-	public ModelAndView deactivate(@Valid final SponsorshipForm sponsorshipForm, final BindingResult binding) {
+	@RequestMapping(value = "/deactivate", method = RequestMethod.GET)
+	public ModelAndView deactivate(@RequestParam final int sponsorshipId) {
 		ModelAndView result;
-		Sponsorship sponsorship;
+		final Sponsorship sponsorship;
 
-		sponsorship = this.sponsorshipService.reconstruct(sponsorshipForm, binding);
+		sponsorship = this.sponsorshipService.findOne(sponsorshipId);
 
 		try {
-			this.sponsorshipService.deactivate(sponsorship);
+			this.sponsorshipService.deactivate(sponsorshipId);
 			result = new ModelAndView("redirect:list.do");
 		} catch (final Throwable oops) {
 			result = this.createEditModelAndView(sponsorship, "sponsorship.commit.error");

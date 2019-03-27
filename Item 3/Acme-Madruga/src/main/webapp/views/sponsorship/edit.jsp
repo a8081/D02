@@ -46,14 +46,16 @@
 	<br />
 
 	<input type="submit" name="save" value="<spring:message code="sponsorship.save"/> " />
-		
-	<jstl:if test="${sponsorship.id != 0}">
+	<br/>
+</form:form>
+
+<jstl:if test="${sponsorship.id != 0}">
 		<jstl:choose>
 			<jstl:when test="${sponsorship.activated eq true}">
-				<input type="submit" name="deactivate" value="<spring:message code="sponsorship.deactivate"/>" />
+				<acme:button url="sponsorship/sponsor/deactivate.do?sponsorshipId=${sponsorship.id}" name="deactivate" code="sponsorship.deactivate"/>
 			</jstl:when>
 			<jstl:otherwise>
-				<input type="submit" name="reactivate" value="<spring:message code="sponsorship.reactivate"/>" />
+				<acme:button url="sponsorship/sponsor/reactivate.do?sponsorshipId=${sponsorship.id}" name="reactivate" code="sponsorship.reactivate"/>
 			</jstl:otherwise>
 		</jstl:choose>
 	</jstl:if>
@@ -61,5 +63,3 @@
 	<input type="button" name="cancel"
 		value="<spring:message code="sponsorship.cancel"/>" 
 		onclick="javascript: relativeRedir('#');"/>
-
-</form:form>

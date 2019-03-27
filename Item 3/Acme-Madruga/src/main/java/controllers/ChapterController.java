@@ -92,11 +92,11 @@ public class ChapterController extends AbstractController {
 				chapter = this.chapterService.reconstruct(chapterForm);
 				chapter.setUserAccount(ua);
 				this.registerService.saveChapter(chapter, binding);
-				result.addObject("alert", "brotherhood.edit.correct");
+				result.addObject("alert", "chapter.edit.correct");
 				result.addObject("chapterForm", chapterForm);
 			} catch (final Throwable e) {
 				if (e.getMessage().contains("username is register"))
-					result.addObject("alert", "brotherhood.edit.usernameIsUsed");
+					result.addObject("alert", "chapter.edit.usernameIsUsed");
 				result.addObject("errors", binding.getAllErrors());
 				chapterForm.setTermsAndCondicions(false);
 				result.addObject("chapterForm", chapterForm);

@@ -26,7 +26,9 @@
     <acme:textbox path="title" code="record.title"/>
     <acme:textbox path="description" code="record.description"/>
     <acme:textbox path="startYear" code="record.startYear"/>
+    <h5 style="color: red;"><spring:message code="comprobacion.startYear"/></h5>
     <acme:textbox path="endYear" code="record.endYear"/>
+    <h5 style="color: red;"><spring:message code="comprobacion.endYear"/></h5>
     <acme:textbox path="photos" code="record.photos"/>
    
 
