@@ -118,6 +118,7 @@ public class LinkRecordController extends AbstractController {
 
 			res = new ModelAndView("linkRecord/display");
 			res.addObject("linkRecord", linkRecord);
+			res.addObject("buttons", false);
 
 			final String banner = this.configurationParametersService.find().getBanner();
 			res.addObject("banner", banner);

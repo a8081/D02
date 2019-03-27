@@ -109,6 +109,7 @@ public class MiscellaneousRecordController extends AbstractController {
 
 			res = new ModelAndView("miscellaneousRecord/display");
 			res.addObject("miscellaneousRecord", miscellaneousRecord);
+			res.addObject("buttons", false);
 
 			final String banner = this.configurationParametersService.find().getBanner();
 			res.addObject("banner", banner);

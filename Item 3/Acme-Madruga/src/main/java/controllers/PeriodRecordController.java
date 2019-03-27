@@ -112,6 +112,7 @@ public class PeriodRecordController extends AbstractController {
 
 			res = new ModelAndView("periodRecord/display");
 			res.addObject("periodRecord", periodRecord);
+			res.addObject("buttons", false);
 
 			final String banner = this.configurationParametersService.find().getBanner();
 			res.addObject("banner", banner);

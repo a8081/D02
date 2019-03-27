@@ -19,10 +19,10 @@
 <acme:display code="record.photos" value="${periodRecord.photos}" />
 
 <br>
-
+<jstl:if test="${buttons}">
 <input type="button" class="btn btn-danger" name="cancel"
            value="<spring:message code="general.cancel" />"
            onclick="relativeRedir('history/list.do');"/>
 
-
+</jstl:if>
 

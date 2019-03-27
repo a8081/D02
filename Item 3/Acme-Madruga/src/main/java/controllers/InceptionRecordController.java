@@ -89,6 +89,7 @@ public class InceptionRecordController extends AbstractController {
 
 			res = new ModelAndView("inceptionRecord/display");
 			res.addObject("inceptionRecord", inceptionRecord);
+			res.addObject("buttons", false);
 
 			final String banner = this.configurationParametersService.find().getBanner();
 			res.addObject("banner", banner);

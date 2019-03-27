@@ -109,6 +109,7 @@ public class LegalRecordController extends AbstractController {
 
 			res = new ModelAndView("legalRecord/display");
 			res.addObject("legalRecord", legalRecord);
+			res.addObject("buttons", false);
 
 			final String banner = this.configurationParametersService.find().getBanner();
 			res.addObject("banner", banner);
