@@ -4,6 +4,7 @@ package controllers;
 import java.util.Collection;
 
 import javax.validation.Valid;
+import javax.validation.ValidationException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -125,11 +126,13 @@ public class MemberController extends AbstractController {
 		} else
 			try {
 				final UserAccount ua = this.userAccountService.reconstruct(actorForm, Authority.MEMBER);
-				member = this.memberService.reconstruct(actorForm);
+				member = this.memberService.reconstruct(actorForm, binding);
 				member.setUserAccount(ua);
 				this.registerService.saveMember(member, binding);
 				result.addObject("alert", "member.edit.correct");
 				result.addObject("actorForm", actorForm);
+			} catch (final ValidationException oops) {
+				result = this.createEditModelAndViewForm(actorForm, null);
 			} catch (final Throwable e) {
 				if (e.getMessage().contains("username is register"))
 					result.addObject("alert", "member.edit.usernameIsUsed");
@@ -233,6 +236,17 @@ public class MemberController extends AbstractController {
 		this.actorService.save(principal);
 
 		final ModelAndView result = new ModelAndView("redirect:../j_spring_security_logout");
+		return result;
+	}
+
+	protected ModelAndView createEditModelAndViewForm(final ActorFrom actorForm, final String messageCode) {
+		final ModelAndView result;
+
+		result = new ModelAndView("member/edit");
+		result.addObject("actorForm", actorForm);
+
+		result.addObject("message", messageCode);
+
 		return result;
 	}
 

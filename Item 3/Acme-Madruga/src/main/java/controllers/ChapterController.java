@@ -4,6 +4,7 @@ package controllers;
 import java.util.List;
 
 import javax.validation.Valid;
+import javax.validation.ValidationException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -78,7 +79,7 @@ public class ChapterController extends AbstractController {
 
 	// SAVE ------------------------------------------------------------------
 	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "save")
-	public ModelAndView edit(@Valid final ChapterForm chapterForm, final BindingResult binding) {
+	public ModelAndView save(@Valid final ChapterForm chapterForm, final BindingResult binding) {
 		ModelAndView result;
 		result = new ModelAndView("chapter/edit");
 		Chapter chapter;
@@ -89,11 +90,13 @@ public class ChapterController extends AbstractController {
 		} else
 			try {
 				final UserAccount ua = this.userAccountService.reconstruct(chapterForm, Authority.CHAPTER);
-				chapter = this.chapterService.reconstruct(chapterForm);
+				chapter = this.chapterService.reconstruct(chapterForm, binding);
 				chapter.setUserAccount(ua);
 				this.registerService.saveChapter(chapter, binding);
 				result.addObject("alert", "chapter.edit.correct");
 				result.addObject("chapterForm", chapterForm);
+			} catch (final ValidationException oops) {
+				result = this.createEditModelAndViewForm(chapterForm, null);
 			} catch (final Throwable e) {
 				if (e.getMessage().contains("username is register"))
 					result.addObject("alert", "chapter.edit.usernameIsUsed");
@@ -195,6 +198,19 @@ public class ChapterController extends AbstractController {
 
 		result = new ModelAndView("chapter/assignArea");
 		result.addObject("chapter", this.constructPruned(chapter));
+		result.addObject("areas", libres);
+
+		result.addObject("message", messageCode);
+
+		return result;
+	}
+
+	protected ModelAndView createEditModelAndViewForm(final ChapterForm chapter, final String messageCode) {
+		final ModelAndView result;
+		final List<Area> libres = (List<Area>) this.areaService.findAll();
+
+		result = new ModelAndView("chapter/edit");
+		result.addObject("chapter", chapter);
 		result.addObject("areas", libres);
 
 		result.addObject("message", messageCode);
