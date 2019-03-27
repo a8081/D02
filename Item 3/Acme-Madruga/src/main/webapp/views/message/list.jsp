@@ -27,6 +27,7 @@
     </jstl:if>
 
 <!-- Listing grid -->
+<jstl:if test="${not empty folders}">
 <display:table pagesize="5" class="displaytag" keepStatus="true"
                name="folders" requestURI="${requestURI}" id="row">
 	<display:column>
@@ -36,7 +37,6 @@
     </display:column>
     <spring:message var="title" code="folder.name"/>
     <display:column property="name" title="${title}" sortable="true"/>
-    <security:authorize access="hasAnyRole('ADMIN', 'MEMBER', 'BROTHERHOOD', 'SUPER')">
                         
         <display:column>
             <input type="button" class="btn btn-danger" name="edit"
@@ -48,10 +48,11 @@
                    onclick="relativeRedir('folder/delete.do?folderId=${row.id}');"/>
         </display:column>
 
-    </security:authorize>
 	               
 </display:table>
+</jstl:if>
 
+<jstl:if test="${not empty m}">
 <display:table pagesize="5" class="displaytag" keepStatus="true"
                name="m" requestURI="${requestURI}" id="row">
 
@@ -87,6 +88,9 @@
     </display:column>
 	
 </display:table>
+</jstl:if>
+
+<br>
 
 <input type="button" class="btn btn-danger" name="back"
        value="<spring:message code="general.cancel" />"
