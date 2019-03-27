@@ -37,7 +37,9 @@
         <spring:message code="message.recipients"/>:
     </form:label>
     <form:select path="recipients" code="message.recipients">
-        <form:options items="${recipients}" itemLabel="name"/>
+    	<jstl:forEach items="${recipients}" var="r">
+    		<form:option value="${r.id}" label="${r.name}"/>
+    	</jstl:forEach>
     </form:select>
     <br/>
     <br/>
