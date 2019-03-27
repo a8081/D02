@@ -713,6 +713,17 @@
 		</property>
 	</bean>
 	
+	<bean id="notificationBoxChapter1" class="domain.Folder">
+		<property name="name" value="Notification box" />
+		<property name="isSystemFolder" value="true" />
+		<property name="actor" ref="chapter1" />
+		<property name="messages">
+			<list>
+				<!-- <ref bean="message1"/> -->
+			</list>
+		</property>
+	</bean>
+	
 	
 	<bean id="inBoxChapter2" class="domain.Folder">
 		<property name="name" value="In box" />
@@ -750,6 +761,17 @@
 	
 	<bean id="spamBoxChapter2" class="domain.Folder">
 		<property name="name" value="Spam box" />
+		<property name="isSystemFolder" value="true" />
+		<property name="actor" ref="chapter2" />
+		<property name="messages">
+			<list>
+				<!-- <ref bean="message1"/> -->
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="notificationBoxChapter2" class="domain.Folder">
+		<property name="name" value="Notification box" />
 		<property name="isSystemFolder" value="true" />
 		<property name="actor" ref="chapter2" />
 		<property name="messages">
