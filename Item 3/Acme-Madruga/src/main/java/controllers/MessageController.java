@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import services.ActorService;
+import services.AdministratorService;
 import services.ConfigurationParametersService;
 import services.FolderService;
 import services.MessageService;
@@ -36,6 +37,9 @@ public class MessageController extends AbstractController {
 
 	@Autowired
 	private ActorService					actorService;
+
+	@Autowired
+	private AdministratorService			administratorService;
 
 	@Autowired
 	private ConfigurationParametersService	configurationParametersService;
@@ -123,6 +127,7 @@ public class MessageController extends AbstractController {
 
 		message = this.messageService.create();
 		final Collection<Actor> actors = this.actorService.findAll();
+		actors.remove(this.administratorService.findSystem());
 		message.setRecipients(actors);
 		final Collection<String> priorities = new ArrayList<>();
 
@@ -388,6 +393,7 @@ public class MessageController extends AbstractController {
 
 		final ModelAndView res;
 		final Collection<Actor> recipients = this.actorService.findAll();
+		recipients.remove(this.administratorService.findSystem());
 		final Collection<String> priorities = new ArrayList<>();
 
 		priorities.add("HIGH");

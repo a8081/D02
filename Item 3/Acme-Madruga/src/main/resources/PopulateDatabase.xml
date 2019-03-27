@@ -1878,8 +1878,8 @@
 				<value>FLY</value>
 			</list>
 		</property>
-		<property name="flatFare" value="100.0" />
-		<property name="vat" value="0.25" />
+		<property name="flatFare" value="10.0" />
+		<property name="vat" value="0.21" />
 
 	</bean>
 
