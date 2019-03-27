@@ -106,15 +106,15 @@ public class FolderService {
 
 		Folder saved;
 		final boolean bool = this.checkForSpamWords(f);
-
 		if (bool)
 			a.setSpammer(true);
-
 		if (f.getId() == 0) {
 			Assert.isTrue(f.getFather() == null);
 			f.setActor(a);
 			saved = this.folderRepository.save(f);
 		} else {
+			final Folder folder = this.findOne(f.getId());
+			f.setActor(a);
 			final Collection<Folder> fs = this.findAllByUserId(a.getUserAccount().getId());
 			Assert.isTrue(fs.contains(f));
 			saved = this.folderRepository.save(f);
