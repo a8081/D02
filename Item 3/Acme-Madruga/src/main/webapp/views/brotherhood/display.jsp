@@ -78,6 +78,7 @@ function deletePersonalData(){
 	<acme:button url="parade/all/listByBrotherhood.do?brotherhoodId=${brotherhood.id}" name="back" code="brotherhood.processionList"/>
 	<acme:button url="member/listMyMembers.do?brotherhoodId=${brotherhood.id}" name="back" code="brotherhood.memberList"/>
 	<acme:button url="float/listMyFloats.do?brotherhoodId=${brotherhood.id}" name="back" code="brotherhood.floatList"/>
+	
 <br>
 <jstl:if test="${displayButtons}">
 	<button onClick="generatePDF()"><spring:message code="display.getData"/></button>

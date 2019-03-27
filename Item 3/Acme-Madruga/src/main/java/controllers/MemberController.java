@@ -188,6 +188,7 @@ public class MemberController extends AbstractController {
 		result.addObject("members", members);
 		result.addObject("brotherhood", brotherhood);
 		result.addObject("ok", true);
+		result.addObject("button", true);
 		result.addObject("requetURI", "member/listMyMembers.do");
 
 		final String banner = this.configurationParametersService.findBanner();

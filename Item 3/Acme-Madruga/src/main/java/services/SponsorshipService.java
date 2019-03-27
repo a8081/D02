@@ -107,9 +107,10 @@ public class SponsorshipService {
 		if (sponsorships.size() > 0) {
 			final int randomNumber = (int) (Math.random() * sponsorships.size());
 			res = (Sponsorship) sponsorships.toArray()[randomNumber];
+			this.messageService.sponsorshipDisplayedMessage(res);
 		} else
 			res = null;
-		this.messageService.sponsorshipDisplayedMessage(res);
+
 		return res;
 	}
 	public Collection<Sponsorship> findByParade(final int paradeId) {

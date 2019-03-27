@@ -67,8 +67,6 @@
 		<security:intercept-url pattern="/linkRecord/create.do" access="hasRole('BROTHERHOOD')" />
 		<security:intercept-url pattern="/linkRecord/edit.do" access="hasRole('BROTHERHOOD')" />
 		<security:intercept-url pattern="/linkRecord/display.do" access="hasRole('BROTHERHOOD')" />
-		<security:intercept-url pattern="/periodRecord/delete.do" access="hasRole('BROTHERHOOD')" />
-		<security:intercept-url pattern="/periodRecord/display.do" access="hasRole('BROTHERHOOD')" />
 		<security:intercept-url pattern="/miscellaneousRecord/create.do" access="hasRole('BROTHERHOOD')" />
 		<security:intercept-url pattern="/miscellaneousRecord/edit.do" access="hasRole('BROTHERHOOD')" />
 		<security:intercept-url pattern="/miscellaneousRecord/delete.do" access="hasRole('BROTHERHOOD')" />
@@ -119,7 +117,6 @@
 		<security:intercept-url pattern="/message/saveCopy.do" access="hasAnyRole('ADMIN', 'MEMBER', 'BROTHERHOOD', 'SUPER','CHAPTER','SPONSOR')" />
 		<security:intercept-url pattern="/message/broadcast.do" access="hasRole('ADMIN')" />
 		<security:intercept-url pattern="/message/saveBroadcast.do" access="hasRole('ADMIN')" />
-		<security:intercept-url pattern="/brotherhood/listAll.do" access="hasAnyRole('ADMIN')" /> 
 		
 		 
 		<!-- AREA: PROBLEMA 1 -->

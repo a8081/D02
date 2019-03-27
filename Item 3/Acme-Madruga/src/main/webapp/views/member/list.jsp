@@ -45,7 +45,3 @@
 
 
 </display:table>
-
-<jstl:if test="${button}">
-<acme:button url="brotherhood/displayTabla.do?brotherhoodId=${brotherhood.id}" name="back" code="float.back"/>
-</jstl:if>

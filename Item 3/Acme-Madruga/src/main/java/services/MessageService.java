@@ -12,6 +12,7 @@ import org.springframework.util.Assert;
 
 import repositories.MessageRepository;
 import domain.Actor;
+import domain.Administrator;
 import domain.Brotherhood;
 import domain.Enrolment;
 import domain.Folder;
@@ -298,7 +299,9 @@ public class MessageService {
 	}
 
 	public void requestStatusChangedMessage(final Request req) {
-		final Message m = this.create();
+		final Message m = new Message();
+		final Collection<String> tags = new ArrayList<>();
+		m.setTags(tags);
 		final Member member = this.memberService.findByRequestId(req.getId());
 		final Brotherhood b = this.brotherhoodService.findByRequestId(req.getId());
 
@@ -317,7 +320,9 @@ public class MessageService {
 	}
 
 	public void brotherhoodEnrolsMessage(final Enrolment enrolment) {
-		final Message m = this.create();
+		final Message m = new Message();
+		final Collection<String> tags = new ArrayList<>();
+		m.setTags(tags);
 		final Member member = this.memberService.findByEnrolmentId(enrolment.getId());
 		final Brotherhood b = this.brotherhoodService.findByEnrolmentId(enrolment.getId());
 
@@ -335,7 +340,9 @@ public class MessageService {
 	}
 
 	public void memberDropOutMessage(final Enrolment enrolment) {
-		final Message m = this.create();
+		final Message m = new Message();
+		final Collection<String> tags = new ArrayList<>();
+		m.setTags(tags);
 		final Member member = this.memberService.findByEnrolmentId(enrolment.getId());
 		final Brotherhood b = this.brotherhoodService.findByEnrolmentId(enrolment.getId());
 
@@ -353,7 +360,9 @@ public class MessageService {
 	}
 
 	public void processionPublished(final Parade parade) {
-		final Message m = this.create();
+		final Message m = new Message();
+		final Collection<String> tags = new ArrayList<>();
+		m.setTags(tags);
 
 		m.setSubject("Parade is published.\n" + "Desfile publicado.");
 		m.setBody("New parade identified as " + parade.getTitle() + ": " + parade.getTicker() + " has been published by " + parade.getBrotherhood().getName() + ".\n" + "Desfile nuevo identificado por " + parade.getTitle() + ": " + parade.getTicker()
@@ -369,7 +378,10 @@ public class MessageService {
 	}
 
 	public void sponsorshipDisplayedMessage(final Sponsorship sp) {
-		final Message m = this.create();
+		final Message m = new Message();
+		final Collection<String> tags = new ArrayList<>();
+		m.setTags(tags);
+		final Administrator sender = this.administratorService.findSystem();
 		final Sponsor sponsor = sp.getSponsor();
 		final double flatFare = this.configurationParametersService.find().getFlatFare();
 		final double vat = this.configurationParametersService.find().getVat();
@@ -377,12 +389,29 @@ public class MessageService {
 		m.setSubject("Sponsorship of " + sp.getParade().getTitle() + ": " + sp.getParade().getTicker() + " displayed.\n" + "Patrocinio de " + sp.getParade().getTitle() + ": " + sp.getParade().getTicker() + " mostrado.");
 		m.setBody("System charge you a flat fare of " + flatFare + " (+" + flatFare * vat + " VAT).\n" + "El sistema le carga una tarifa plana de " + flatFare + " (+" + flatFare * vat + " IVA).");
 		m.setPriority("HIGH");
-		m.setSender(this.administratorService.findSystem());
+		m.setSender(sender);
 
 		final Collection<Actor> recipients = new ArrayList<>();
 		recipients.add(sponsor);
 		m.setRecipients(recipients);
 
-		this.send(m);
+		final Folder outbox = this.folderService.findOutboxByUserId(sender.getUserAccount().getId());
+		final Collection<Message> outboxMessages = outbox.getMessages();
+		final Date moment = new Date(System.currentTimeMillis() - 1000);
+		m.setMoment(moment);
+		Folder inbox;
+		final Message sent = this.save(m);
+
+		outboxMessages.add(sent);
+		outbox.setMessages(outboxMessages);
+
+		for (final Actor r : recipients) {
+			inbox = this.folderService.findInboxByUserId(r.getUserAccount().getId());
+			final Collection<Message> inboxMessages = inbox.getMessages();
+			inboxMessages.add(sent);
+			inbox.setMessages(inboxMessages);
+			this.folderService.save(inbox, r);
+		}
 	}
+
 }

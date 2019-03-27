@@ -116,7 +116,9 @@ public class BrotherhoodController extends AbstractController {
 				final int principal = this.actorService.findByPrincipal().getId();
 				final boolean displayButtons = principal == brotherhood.getId();
 				result.addObject("displayButtons", displayButtons);
-			}
+				result.addObject("user", user);
+			} else
+				result.addObject("user", user);
 		} else
 			result = new ModelAndView("redirect:/misc/403.jsp");
 
