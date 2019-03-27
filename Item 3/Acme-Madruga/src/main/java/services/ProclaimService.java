@@ -52,12 +52,6 @@ public class ProclaimService {
 		Assert.notNull(me, "You must be logged in the system");
 		Assert.notNull(p);
 		Assert.isTrue(p.getId() == 0);
-		p.setMoment(new Date(System.currentTimeMillis() - 1));
-		p.setChapter(me);
-		Assert.notNull(p.getMoment());
-		Assert.notNull(p.getText());
-		Assert.isTrue(p.getText() != "");
-		Assert.isTrue(p.getText().length() <= 250);
 		final Proclaim saved = this.proclaimRepository.save(p);
 		Assert.notNull(this.findOne(saved.getId()));
 		return saved;
