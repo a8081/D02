@@ -2,6 +2,7 @@
 package services;
 
 import java.util.Collection;
+import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,10 +26,11 @@ public class ProclaimService {
 	//Metodos CRUD
 
 	public Proclaim create() {
+		final Chapter chapter = this.chapterService.findByPrincipal();
 		final Proclaim res = new Proclaim();
-		res.setMoment(null);
+		res.setMoment(new Date(System.currentTimeMillis() - 1));
 		res.setText("");
-		res.setChapter(new Chapter());
+		res.setChapter(chapter);
 		return res;
 	}
 
@@ -49,6 +51,13 @@ public class ProclaimService {
 		final Chapter me = this.chapterService.findByPrincipal();
 		Assert.notNull(me, "You must be logged in the system");
 		Assert.notNull(p);
+		Assert.isTrue(p.getId() == 0);
+		p.setMoment(new Date(System.currentTimeMillis() - 1));
+		p.setChapter(me);
+		Assert.notNull(p.getMoment());
+		Assert.notNull(p.getText());
+		Assert.isTrue(p.getText() != "");
+		Assert.isTrue(p.getText().length() <= 250);
 		final Proclaim saved = this.proclaimRepository.save(p);
 		Assert.notNull(this.findOne(saved.getId()));
 		return saved;
@@ -58,6 +67,10 @@ public class ProclaimService {
 		Assert.notNull(id);
 		Assert.isTrue(id != 0);
 		return this.proclaimRepository.getChapterProclaims(id);
+	}
+
+	public void flush() {
+		this.proclaimRepository.flush();
 	}
 
 }

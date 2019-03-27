@@ -93,6 +93,7 @@ public class PeriodRecordServiceTest extends AbstractTest {
 			//			incRec.setPhotos(photos);
 			final PeriodRecord pRecSaved = this.periodRecordService.save(pRec);
 			Assert.isTrue(pRecSaved.getId() != 0);
+			this.periodRecordService.flush();
 			this.unauthenticate();
 		} catch (final Throwable oops) {
 			caught = oops.getClass();
@@ -161,6 +162,7 @@ public class PeriodRecordServiceTest extends AbstractTest {
 			if (photos != null)
 				bPRec.setPhotos(photos);
 			this.periodRecordService.save(bPRec);
+			this.periodRecordService.flush();
 			this.unauthenticate();
 		} catch (final Throwable oops) {
 			caught = oops.getClass();
@@ -199,6 +201,7 @@ public class PeriodRecordServiceTest extends AbstractTest {
 			else
 				pRec = new PeriodRecord();
 			this.periodRecordService.delete(pRec);
+			this.periodRecordService.flush();
 			this.unauthenticate();
 		} catch (final Throwable oops) {
 			caught = oops.getClass();

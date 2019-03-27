@@ -93,6 +93,7 @@ public class InceptionRecordServiceTest extends AbstractTest {
 			//			incRec.setPhotos(photos);
 			final InceptionRecord incRecSaved = this.inceptionRecordService.save(incRec);
 			Assert.isTrue(incRecSaved.getId() != 0);
+			this.inceptionRecordService.flush();
 			this.unauthenticate();
 		} catch (final Throwable oops) {
 			caught = oops.getClass();
@@ -146,6 +147,7 @@ public class InceptionRecordServiceTest extends AbstractTest {
 			iR.setDescription(description);
 			history.setInceptionRecord(iR);
 			this.inceptionRecordService.save(iR);
+			this.inceptionRecordService.flush();
 			this.unauthenticate();
 		} catch (final Throwable oops) {
 			caught = oops.getClass();

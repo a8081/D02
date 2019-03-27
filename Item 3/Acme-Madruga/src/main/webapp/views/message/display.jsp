@@ -36,17 +36,26 @@
 
 <spring:message code="message.receiver" var="receiver1"/>
 <h3><jstl:out value="${receiver1}"/></h3>
-<jstl:out value="${m.recipients}"/>
-
+<ul>
+<jstl:forEach items="${m.recipients}" var="rec">
+	<li><jstl:out value="${rec.name}"/></li>
+</jstl:forEach>
+</ul>
 <spring:message code="message.priority" var="priority1"/>
 <h3><jstl:out value="${priority1}"/></h3>
 <jstl:out value="${m.priority}"/>
 
+<jstl:if test="${m.getTags().size() > 0}">
 <spring:message code="message.tags" var="tags1"/>
 <h3><jstl:out value="${tags1}"/></h3>
-<jstl:out value="${m.tags}"/>
+<ul>
+<jstl:forEach items="${m.tags}" var="t">
+	<li><jstl:out value="${t}"/></li>
+</jstl:forEach>
+</ul>
+</jstl:if>
 
-<br>
+</br></br>
 <input type="button" class="btn btn-danger" name="folder"
        value="<spring:message code="general.cancel" />"
        onclick="relativeRedir('folder/list.do');"/>

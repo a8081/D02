@@ -78,7 +78,8 @@
 			<li><a class="fNiv"><spring:message	code="master.page.parades" /></a>
 				<ul>
 					<li class="arrow"></li>
-					<li><a href="parade/brotherhood/list.do"><spring:message code="master.page.all.parade" /></a></li>
+					<li><a href="parade/all/list.do"><spring:message code="master.page.all.parade" /></a></li>
+					<li><a href="parade/brotherhood/list.do"><spring:message code="master.page.parade.list" /></a></li>
 					<li><a href="parade/brotherhood/create.do"><spring:message code="master.page.parade.create" /></a></li>
 					<li><a href="parade/brotherhood/listDefault.do"><spring:message code="master.page.parade.default" /></a></li>
 					<li><a href="parade/brotherhood/listAccepted.do"><spring:message code="master.page.parade.accepted" /></a></li>
@@ -154,11 +155,14 @@
 		<li><a class="fNiv"><spring:message	code="master.page.parades.chapter.list" /></a>
 				<ul>
 					<li class="arrow"></li>
+					<li><a href="parade/chapter/listAll.do"><spring:message code="master.page.parade.accepted" /></a></li>
 					<li><a href="parade/chapter/listAccepted.do"><spring:message code="master.page.parade.accepted" /></a></li>
 					<li><a href="parade/chapter/listRejected.do"><spring:message code="master.page.parade.rejected" /></a></li>
 					<li><a href="parade/chapter/listSubmitted.do"><spring:message code="master.page.parade.submitted" /></a></li>
 				</ul>
 			</li>
+		
+		<li><a href="proclaim/chapter/list.do"><spring:message code="master.page.parade.proclaims" /></a></li>
 		
 		</security:authorize>
 		

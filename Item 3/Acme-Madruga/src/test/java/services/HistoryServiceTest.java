@@ -63,6 +63,7 @@ public class HistoryServiceTest extends AbstractTest {
 			final History history = this.historyService.create();
 			final History saved = this.historyService.save(history);
 			Assert.isTrue(saved.getId() != 0);
+			this.historyService.flush();
 			this.unauthenticate();
 		} catch (final Throwable oops) {
 			caught = oops.getClass();

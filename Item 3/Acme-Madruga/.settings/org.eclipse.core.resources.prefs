@@ -1,5 +1,6 @@
 eclipse.preferences.version=1
 encoding//src/main/java=ISO-8859-1
+encoding//src/main/java/services/MessageService.java=UTF-8
 encoding//src/main/resources=ISO-8859-1
 encoding//src/main/webapp/views/misc/terms.jsp=UTF-8
 encoding//src/test/java=ISO-8859-1

@@ -186,13 +186,11 @@ public class ParadeService {
 		Assert.isTrue(this.floatService.findByBrotherhood(brotherhoodPrincipal).containsAll(parade.getFloats()));
 
 		newParade = new Parade();
-		//		No es necesario hacer esto ya que se setea en el metodo save
-		//
-		//		newParade.setBrotherhood(brotherhoodPrincipal);
-		//		newParade.setMode("DRAFT");
-		//		newParade.setStatus("DEFAULT");
-		//		final Date moment = new Date(System.currentTimeMillis());
-		//		newParade.setTicker(this.generateTicker(moment));
+		newParade.setBrotherhood(brotherhoodPrincipal);
+		newParade.setMode("DRAFT");
+		newParade.setStatus("DEFAULT");
+		final Date moment = new Date(System.currentTimeMillis());
+		newParade.setTicker(this.generateTicker(moment));
 
 		newParade.setTitle(parade.getTitle());
 		newParade.setDescription(parade.getDescription());
@@ -207,7 +205,6 @@ public class ParadeService {
 
 		return result;
 	}
-
 	public void delete(final Parade parade) {
 		Assert.notNull(parade);
 		Assert.isTrue(parade.getId() != 0);

@@ -82,15 +82,12 @@ public class ChapterController extends AbstractController {
 		ModelAndView result;
 		result = new ModelAndView("chapter/edit");
 		Chapter chapter;
-		System.out.println("aaaaa");
 		if (binding.hasErrors()) {
-			System.out.println("bbbbb");
 			result.addObject("errors", binding.getAllErrors());
 			chapterForm.setTermsAndCondicions(false);
 			result.addObject("chapterForm", chapterForm);
 		} else
 			try {
-				System.out.println("ccccc");
 				final UserAccount ua = this.userAccountService.reconstruct(chapterForm, Authority.CHAPTER);
 				chapter = this.chapterService.reconstruct(chapterForm);
 				chapter.setUserAccount(ua);
@@ -98,7 +95,6 @@ public class ChapterController extends AbstractController {
 				result.addObject("alert", "brotherhood.edit.correct");
 				result.addObject("chapterForm", chapterForm);
 			} catch (final Throwable e) {
-				System.out.println("dddd");
 				if (e.getMessage().contains("username is register"))
 					result.addObject("alert", "brotherhood.edit.usernameIsUsed");
 				result.addObject("errors", binding.getAllErrors());
@@ -195,7 +191,7 @@ public class ChapterController extends AbstractController {
 
 	protected ModelAndView createEditModelAndView2(final Chapter chapter, final String messageCode) {
 		final ModelAndView result;
-		final List<Area> libres = (List<Area>) this.areaService.findFreeOfChapter();
+		final List<Area> libres = this.areaService.findFreeOfChapter();
 
 		result = new ModelAndView("chapter/assignArea");
 		result.addObject("chapter", this.constructPruned(chapter));

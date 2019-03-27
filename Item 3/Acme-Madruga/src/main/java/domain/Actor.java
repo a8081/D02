@@ -145,4 +145,9 @@ public class Actor extends DomainEntity {
 		this.userAccount = userAccount;
 	}
 
+	@Override
+	public String toString() {
+		return this.name;
+	}
+
 }

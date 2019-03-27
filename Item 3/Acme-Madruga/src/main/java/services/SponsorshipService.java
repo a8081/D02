@@ -36,6 +36,9 @@ public class SponsorshipService {
 	private AdministratorService	administratorService;
 
 	@Autowired
+	private MessageService			messageService;
+
+	@Autowired
 	private Validator				validator;
 
 
@@ -106,9 +109,9 @@ public class SponsorshipService {
 			res = (Sponsorship) sponsorships.toArray()[randomNumber];
 		} else
 			res = null;
+		this.messageService.sponsorshipDisplayedMessage(res);
 		return res;
 	}
-
 	public Collection<Sponsorship> findByParade(final int paradeId) {
 		final Collection<Sponsorship> res;
 		res = this.sponsorshipRepository.findByParade(paradeId);
