@@ -80,14 +80,14 @@ public class SponsorshipService {
 		return saved;
 	}
 
-	public void deactivate(final Sponsorship sp) {
-		final Sponsorship retrieved = this.findOne(sp.getId());
+	public void deactivate(final int sponsorshipId) {
+		final Sponsorship retrieved = this.findOne(sponsorshipId);
 		retrieved.setActivated(false);
 		this.save(retrieved);
 	}
 
-	public void reactivate(final Sponsorship sp) {
-		final Sponsorship retrieved = this.findOne(sp.getId());
+	public void reactivate(final int sponsorshipId) {
+		final Sponsorship retrieved = this.findOne(sponsorshipId);
 		retrieved.setActivated(true);
 		this.save(retrieved);
 	}

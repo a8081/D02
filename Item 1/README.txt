@@ -15,4 +15,6 @@ pulsado: Calcular.
 - Administrator Header Menu: Data Breach
 Para implementar la normativa de notificar a todos los actores del sistema
 de una posible brecha de datos, se incluye en acciones del sistema el boton de
-Notificar una brecha de datos
+Notificar una brecha de datos. Este envia un mensaje a todos los actores del
+sistema menos el administrator que pulsa el boton. Al ser un broadcast, el mensaje
+se almacena en la carpeta notification.
