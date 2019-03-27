@@ -10,11 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import repositories.PeriodRecordRepository;
-import security.Authority;
-import domain.Actor;
 import domain.Brotherhood;
 import domain.History;
-import domain.Brotherhood;
 import domain.PeriodRecord;
 
 @Service
@@ -72,13 +69,13 @@ public class PeriodRecordService {
 	public void delete(final PeriodRecord pR) {
 		final Brotherhood me = this.brotherhoodService.findByPrincipal();
 		Assert.notNull(me, "You must be logged in the system");
-    Assert.isTrue(this.findBrotherhoodByPeriod(pR.getId()) == me);
+		Assert.isTrue(this.findBrotherhoodByPeriod(pR.getId()) == me, "No puede borrar un periodRecord que no pertenezca a su historia.");
 		Assert.notNull(pR);
-    Assert.isTrue(pR.getId() != 0);
-    final PeriodRecord retrieved = this.findOne(pR.getId());
+		Assert.isTrue(pR.getId() != 0);
+		final PeriodRecord retrieved = this.findOne(pR.getId());
 		final History history = me.getHistory();
 		final Collection<PeriodRecord> periodRecords = history.getPeriodRecords();
-    Assert.isTrue(periodRecords.contains(retrieved));
+		Assert.isTrue(periodRecords.contains(retrieved));
 		periodRecords.remove(retrieved);
 		this.periodRecordRepository.delete(retrieved.getId());
 	}

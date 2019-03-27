@@ -70,7 +70,7 @@ public class LinkRecordService {
 		Assert.notNull(brotherhood, "You must be logged in the system");
 		Assert.notNull(linkRecord);
 		Assert.isTrue(linkRecord.getId() != 0);
-		Assert.isTrue(this.findBrotherhoodByLink(linkRecord.getId()) == brotherhood);
+		Assert.isTrue(this.findBrotherhoodByLink(linkRecord.getId()) == brotherhood, "No puede borrar un linkRecord que no pertenezca a su historia.");
 		final LinkRecord retrieved = this.findOne(linkRecord.getId());
 		final History history = brotherhood.getHistory();
 		final Collection<LinkRecord> linkRecords = history.getLinkRecords();

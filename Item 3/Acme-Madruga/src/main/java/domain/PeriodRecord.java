@@ -8,6 +8,7 @@ import javax.persistence.AccessType;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.validation.constraints.Digits;
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.SafeHtml;
@@ -45,6 +46,7 @@ public class PeriodRecord extends DomainEntity {
 		this.description = description;
 	}
 
+	@NotNull
 	@Digits(integer = 4, fraction = 0)
 	public Integer getStartYear() {
 		return this.startYear;
@@ -54,6 +56,7 @@ public class PeriodRecord extends DomainEntity {
 		this.startYear = startYear;
 	}
 
+	@NotNull
 	@Digits(integer = 4, fraction = 0)
 	public Integer getEndYear() {
 		return this.endYear;

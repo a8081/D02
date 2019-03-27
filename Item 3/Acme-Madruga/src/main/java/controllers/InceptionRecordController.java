@@ -83,10 +83,7 @@ public class InceptionRecordController extends AbstractController {
 
 		ModelAndView res;
 
-		final Brotherhood brotherhood = this.brotherhoodService.findByPrincipal();
-		final Brotherhood brotherhoodInception = this.inceptionRecordService.findBrotherhoodByInception(inceptionRecordId);
 		final InceptionRecord inceptionRecord = this.inceptionRecordService.findOne(inceptionRecordId);
-		Assert.isTrue(brotherhood.equals(brotherhoodInception));
 
 		if (inceptionRecord != null) {
 

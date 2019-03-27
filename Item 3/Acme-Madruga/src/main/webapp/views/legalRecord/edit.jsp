@@ -27,7 +27,7 @@
     <acme:textbox path="title" code="record.title"/>
     <acme:textbox path="description" code="record.description"/>
     <acme:textbox path="legalName" code="record.legalName"/>
-    <acme:textbox path="vat" code="record.vat"/>
+    <acme:textbox path="vat" code="record.vat"/><spring:message code="vat.pattern" />
     <acme:textbox path="laws" code="record.laws"/>
    
 

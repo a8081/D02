@@ -71,6 +71,7 @@ public class LegalRecordService {
 	public void delete(final LegalRecord legalRecord) {
 		final Brotherhood brotherhood = this.brotherhoodService.findByPrincipal();
 		Assert.notNull(brotherhood, "You must be logged in the system");
+		Assert.isTrue(this.findBrotherhoodByLegal(legalRecord.getId()) == brotherhood, "No puede borrar un legalRecord que no pertenezca a su historia.");
 		Assert.notNull(legalRecord);
 		Assert.isTrue(legalRecord.getId() != 0);
 		final LegalRecord retrieved = this.findOne(legalRecord.getId());
