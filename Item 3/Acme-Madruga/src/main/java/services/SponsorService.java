@@ -4,10 +4,14 @@ package services;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import javax.validation.ValidationException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.Validator;
 
 import repositories.SponsorRepository;
 import security.Authority;
@@ -32,6 +36,9 @@ public class SponsorService {
 
 	@Autowired
 	private UserAccountService	userAccountService;
+
+	@Autowired
+	private Validator			validator;
 
 
 	public Sponsor create() {
@@ -87,7 +94,7 @@ public class SponsorService {
 		return result;
 	}
 
-	public Sponsor reconstruct(final ActorFrom actorForm) {
+	public Sponsor reconstruct(final ActorFrom actorForm, final BindingResult binding) {
 		Sponsor sponsor;
 		if (actorForm.getId() == 0) {
 			sponsor = this.create();
@@ -123,6 +130,11 @@ public class SponsorService {
 			account.setPassword(actorForm.getUserAccountpassword());
 			sponsor.setUserAccount(account);
 		}
+
+		this.validator.validate(sponsor, binding);
+		if (binding.hasErrors())
+			throw new ValidationException();
+
 		return sponsor;
 	}
 

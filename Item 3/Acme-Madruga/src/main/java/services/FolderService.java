@@ -95,6 +95,7 @@ public class FolderService {
 		} else {
 			final Collection<Folder> fs = this.findAllByUserId(a.getUserAccount().getId());
 			Assert.isTrue(fs.contains(f));
+			f.setActor(a);
 			saved = this.folderRepository.save(f);
 		}
 		return saved;

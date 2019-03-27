@@ -254,7 +254,7 @@ public class ParadeBrotherhoodController extends AbstractController {
 			result.addObject("ok", false);
 		} else {
 			this.paradeService.copyBrotherhoodParade(paradeId);
-			result = this.listSubmitted();
+			result = this.listDefault();
 		}
 
 		final String banner = this.configurationParametersService.findBanner();

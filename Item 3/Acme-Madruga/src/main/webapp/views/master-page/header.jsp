@@ -156,7 +156,7 @@
 		<li><a class="fNiv"><spring:message	code="master.page.parades.chapter.list" /></a>
 				<ul>
 					<li class="arrow"></li>
-					<li><a href="parade/chapter/listAll.do"><spring:message code="master.page.parade.accepted" /></a></li>
+					<li><a href="parade/chapter/listAll.do"><spring:message code="master.page.parade.all" /></a></li>
 					<li><a href="parade/chapter/listAccepted.do"><spring:message code="master.page.parade.accepted" /></a></li>
 					<li><a href="parade/chapter/listRejected.do"><spring:message code="master.page.parade.rejected" /></a></li>
 					<li><a href="parade/chapter/listSubmitted.do"><spring:message code="master.page.parade.submitted" /></a></li>
