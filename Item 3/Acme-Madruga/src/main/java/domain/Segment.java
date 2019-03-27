@@ -26,7 +26,7 @@ public class Segment extends DomainEntity {
 	private GPS		destinationCoordinates;
 
 
-	@NotNull
+	
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
 	public Date getOriginTime() {
@@ -37,7 +37,7 @@ public class Segment extends DomainEntity {
 		this.originTime = originTime;
 	}
 
-	@NotNull
+	
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
 	public Date getDestinationTime() {
@@ -48,7 +48,7 @@ public class Segment extends DomainEntity {
 		this.destinationTime = destinationTime;
 	}
 
-	@NotNull
+	
 	@Valid
 	public GPS getOriginCoordinates() {
 		return this.originCoordinates;
@@ -58,7 +58,7 @@ public class Segment extends DomainEntity {
 		this.originCoordinates = originCoordinates;
 	}
 
-	@NotNull
+	
 	@Valid
 	@AttributeOverrides({
 		@AttributeOverride(name = "latitude", column = @Column(name = "destinationLatitude")), @AttributeOverride(name = "longitude", column = @Column(name = "destinationLongitude"))
