@@ -5,6 +5,7 @@ import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Entity;
 import javax.validation.constraints.AssertTrue;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.Email;
@@ -105,6 +106,7 @@ public class ActorFrom extends DomainEntity {
 
 	//TODO: Phone Pattern
 	//@Pattern(regexp="^\+{1}[1-9]{0,3}\s\([1-9]{0,3}\)\s[0-9]{4,}|\+{1}[1-9]{0,3}\s[0-9]{4,}|[0-9]{4,}$")
+	@Pattern(regexp = "((\\+34|0034|34)?[ -]*(6|7)[ -]*([0-9][ -]*){8})||''")
 	public String getPhone() {
 		return this.phone;
 	}

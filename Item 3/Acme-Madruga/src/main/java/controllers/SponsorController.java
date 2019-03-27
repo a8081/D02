@@ -159,7 +159,7 @@ public class SponsorController extends AbstractController {
 		final ModelAndView result;
 
 		result = new ModelAndView("sponsor/edit");
-		result.addObject("sponsor", sponsor);
+		result.addObject("actorForm", sponsor); //actorForm es el model atrtibute del form
 
 		result.addObject("message", messageCode);
 
