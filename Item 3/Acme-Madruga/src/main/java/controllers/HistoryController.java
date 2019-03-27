@@ -129,14 +129,9 @@ public class HistoryController extends AbstractController {
 		ModelAndView result;
 		//		final Brotherhood brotherhood = this.brotherhoodService.findByPrincipal();
 		final History history = this.historyService.findOne(historyId);
-		try {
-			this.historyService.delete(history);
-			result = new ModelAndView("history/create");
-			result.addObject("history", history);
-		} catch (final Throwable oops) {
-			result = this.createEditModelAndView(history, "general.commit.error");
-			result.addObject("id", history.getId());
-		}
+		this.historyService.delete(history);
+		result = new ModelAndView("history/create");
+		result.addObject("history", history);
 		return result;
 	}
 	protected ModelAndView createEditModelAndView(final History history) {

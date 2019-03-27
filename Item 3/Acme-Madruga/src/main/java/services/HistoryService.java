@@ -110,17 +110,16 @@ public class HistoryService {
 		Assert.isTrue(history.getId() != 0);
 		final Brotherhood brotherhood = this.brotherhoodService.findByPrincipal();
 		final History retrieved = this.findOne(history.getId());
-		Assert.isTrue(this.brotherhoodService.findBrotherhoodByHistory(retrieved.getId()) == brotherhood);
+		Assert.isTrue(this.brotherhoodService.findBrotherhoodByHistory(retrieved.getId()) == brotherhood, "No puede borrar la historia de otra brotherhood.");
 		brotherhood.setHistory(null);
 		this.historyRepository.delete(retrieved.getId());
 	}
 
 	/* ========================= OTHER METHODS =========================== */
 
-
 	public void flush() {
 		this.historyRepository.flush();
-  }
+	}
 
 	public Double[] getStatisticsOfRecordsPerHistory() {
 		final Double[] result = this.historyRepository.getStatisticsOfRecordsPerHistory();
