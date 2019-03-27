@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.List;
 
 import javax.validation.Valid;
+import javax.validation.ValidationException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -138,11 +139,13 @@ public class BrotherhoodController extends AbstractController {
 		} else
 			try {
 				final UserAccount ua = this.userAccountService.reconstruct(brotherhoodForm, Authority.BROTHERHOOD);
-				brotherhood = this.brotherhoodService.reconstruct(brotherhoodForm);
+				brotherhood = this.brotherhoodService.reconstruct(brotherhoodForm, binding);
 				brotherhood.setUserAccount(ua);
 				this.registerService.saveBrotherhood(brotherhood, binding);
 				result.addObject("alert", "brotherhood.edit.correct");
 				result.addObject("brotherhoodForm", brotherhoodForm);
+			} catch (final ValidationException oops) {
+				result = this.createEditModelAndViewForm(brotherhoodForm, null);
 			} catch (final Throwable e) {
 				if (e.getMessage() != null && e.getMessage().contains("username is register"))
 					result.addObject("alert", "brotherhood.edit.usernameIsUsed");
@@ -329,6 +332,21 @@ public class BrotherhoodController extends AbstractController {
 	}
 
 	protected ModelAndView createEditModelAndView(final Brotherhood brotherhood, final String messageCode) {
+		final ModelAndView result;
+		final List<Area> libres = (List<Area>) this.areaService.findAll();
+
+		result = new ModelAndView("brotherhood/edit");
+		result.addObject("brotherhood", brotherhood);
+		result.addObject("areas", libres);
+
+		result.addObject("message", messageCode);
+		final String banner = this.configurationParametersService.findBanner();
+		result.addObject("banner", banner);
+
+		return result;
+	}
+
+	protected ModelAndView createEditModelAndViewForm(final BrotherhoodForm brotherhood, final String messageCode) {
 		final ModelAndView result;
 		final List<Area> libres = (List<Area>) this.areaService.findAll();
 

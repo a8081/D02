@@ -5,11 +5,14 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import javax.validation.ValidationException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.Validator;
 
 import repositories.BrotherhoodRepository;
 import security.Authority;
@@ -34,8 +37,8 @@ public class BrotherhoodService {
 	@Autowired
 	private UserAccountService		userAccountService;
 
-	//@Autowired
-	//private Validator				validator;
+	@Autowired
+	private Validator				validator;
 
 	@Autowired
 	private HistoryService			historyService;
@@ -158,7 +161,7 @@ public class BrotherhoodService {
 		return res;
 	}
 
-	public Brotherhood reconstruct(final BrotherhoodForm brotherhoodForm) {
+	public Brotherhood reconstruct(final BrotherhoodForm brotherhoodForm, final BindingResult binding) {
 		Brotherhood brotherhood;
 		if (brotherhoodForm.getId() == 0) {
 			brotherhood = new Brotherhood();
@@ -198,6 +201,11 @@ public class BrotherhoodService {
 			account.setPassword(brotherhoodForm.getUserAccountpassword());
 			brotherhood.setUserAccount(account);
 		}
+
+		this.validator.validate(brotherhood, binding);
+		if (binding.hasErrors())
+			throw new ValidationException();
+
 		return brotherhood;
 
 	}
