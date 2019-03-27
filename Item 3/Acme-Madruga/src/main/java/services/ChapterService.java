@@ -4,11 +4,14 @@ package services;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import javax.validation.ValidationException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.Validator;
 
 import repositories.ChapterRepository;
 import security.Authority;
@@ -33,8 +36,8 @@ public class ChapterService {
 	@Autowired
 	private UserAccountService	userAccountService;
 
-	//@Autowired
-	//private Validator			validator;
+	@Autowired
+	private Validator			validator;
 
 	@Autowired
 	private AreaService			areaService;
@@ -146,7 +149,7 @@ public class ChapterService {
 	//		return result;
 	//	}
 
-	public Chapter reconstruct(final ChapterForm chapterForm) {
+	public Chapter reconstruct(final ChapterForm chapterForm, final BindingResult binding) {
 		Chapter chapter;
 		if (chapterForm.getId() == 0) {
 			chapter = new Chapter();
@@ -184,6 +187,11 @@ public class ChapterService {
 			account.setPassword(chapterForm.getUserAccountpassword());
 			chapter.setUserAccount(account);
 		}
+
+		this.validator.validate(chapter, binding);
+		if (binding.hasErrors())
+			throw new ValidationException();
+
 		return chapter;
 
 	}

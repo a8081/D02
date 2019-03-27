@@ -355,8 +355,6 @@ public class BrotherhoodController extends AbstractController {
 		result.addObject("areas", libres);
 
 		result.addObject("message", messageCode);
-		final String banner = this.configurationParametersService.findBanner();
-		result.addObject("banner", banner);
 
 		return result;
 	}

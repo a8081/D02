@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+import org.springframework.validation.BindingResult;
 
 import repositories.MemberRepository;
 import security.Authority;
@@ -132,7 +133,7 @@ public class MemberService {
 		return all;
 	}
 
-	public Member reconstruct(final ActorFrom actorForm) {
+	public Member reconstruct(final ActorFrom actorForm, final BindingResult binding) {
 		Member member;
 		if (actorForm.getId() == 0) {
 			member = this.create();
@@ -168,6 +169,7 @@ public class MemberService {
 			account.setPassword(actorForm.getUserAccountpassword());
 			member.setUserAccount(account);
 		}
+
 		return member;
 	}
 

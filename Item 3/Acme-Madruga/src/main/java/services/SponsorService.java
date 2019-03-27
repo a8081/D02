@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+import org.springframework.validation.BindingResult;
 
 import repositories.SponsorRepository;
 import security.Authority;
@@ -87,7 +88,7 @@ public class SponsorService {
 		return result;
 	}
 
-	public Sponsor reconstruct(final ActorFrom actorForm) {
+	public Sponsor reconstruct(final ActorFrom actorForm, final BindingResult binding) {
 		Sponsor sponsor;
 		if (actorForm.getId() == 0) {
 			sponsor = this.create();
