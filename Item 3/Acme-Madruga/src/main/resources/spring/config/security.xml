@@ -169,6 +169,7 @@
 		
 		<security:intercept-url pattern="/member/create.do" access="permitAll" /> 
 		<security:intercept-url pattern="/member/edit.do" access="permitAll" /> 
+		<security:intercept-url pattern="/member/list.do" access="hasRole('BROTHERHOOD')" /> 
 		<security:intercept-url pattern="/member/display.do" access="hasRole('MEMBER')" />
 		<security:intercept-url pattern="/member/leave.do" access="hasRole('MEMBER')"/>
 		<security:intercept-url pattern="/member/deletePersonalData.do" access="hasRole('MEMBER')"/>

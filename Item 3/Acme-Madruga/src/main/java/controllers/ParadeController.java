@@ -11,9 +11,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import services.BrotherhoodService;
 import services.ParadeService;
 import services.SegmentService;
 import services.SponsorshipService;
+import domain.Brotherhood;
 import domain.Parade;
 import domain.Segment;
 import domain.Sponsorship;
@@ -30,6 +32,9 @@ public class ParadeController extends AbstractController {
 
 	@Autowired
 	private SegmentService		segmentService;
+
+	@Autowired
+	private BrotherhoodService	brotherhoodService;
 
 	final String				lang	= LocaleContextHolder.getLocale().getLanguage();
 
@@ -70,6 +75,7 @@ public class ParadeController extends AbstractController {
 
 		result = new ModelAndView("parade/list");
 		result.addObject("parades", parades);
+		result.addObject("button", false);
 		result.addObject("rol", "all");
 		result.addObject("lang", this.lang);
 		result.addObject("requetURI", "parade/all/list.do");
@@ -81,12 +87,15 @@ public class ParadeController extends AbstractController {
 	public ModelAndView listByBrotherhood(@RequestParam final int brotherhoodId) {
 		final ModelAndView result;
 		final Collection<Parade> parades;
+		final Brotherhood brotherhood = this.brotherhoodService.findOne(brotherhoodId);
 
 		parades = this.paradeService.findAllFinalModeByBrotherhood(brotherhoodId);
 		final String lang = LocaleContextHolder.getLocale().getLanguage();
 
 		result = new ModelAndView("parade/list");
 		result.addObject("parades", parades);
+		result.addObject("button", true);
+		result.addObject("brotherhood", brotherhood);
 		result.addObject("rol", "all");
 		result.addObject("lang", lang);
 		result.addObject("requetURI", "parade/all/list.do");

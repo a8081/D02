@@ -13,12 +13,12 @@
 
 	<form:hidden path="id" />
 	<form:hidden path="version" />
-	<form:hidden path="status" value="REJECTED"/>
+	<form:hidden path="status" value="SUBMITTED"/>
 
 	<acme:textarea code="parade.rejectionReason" path="rejectionReason"/>
 
 	<br>
-	<input type="submit" name="save" value="<spring:message code="parade.save" />" />
+	<input type="submit" name="reject" value="<spring:message code="parade.save" />" />
 	
 		
 	<acme:button url="parade/chapter/listSubmitted.do" name="cancel" code="parade.cancel" />

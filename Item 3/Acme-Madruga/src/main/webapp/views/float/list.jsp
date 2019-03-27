@@ -15,6 +15,8 @@
 <%@taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@taglib prefix="security" uri="http://www.springframework.org/security/tags"%>
 <%@taglib prefix="display" uri="http://displaytag.sf.net"%>
+<%@ taglib prefix="acme" tagdir="/WEB-INF/tags" %>
+
 
 <security:authorize access="hasRole('BROTHERHOOD')">
 <input type="button" name="create"
@@ -51,4 +53,6 @@
 
 </display:table>
 
-
+<jstl:if test="${button}">
+<acme:button url="brotherhood/displayTabla.do?brotherhoodId=${brotherhood.id}" name="back" code="float.back"/>
+</jstl:if>

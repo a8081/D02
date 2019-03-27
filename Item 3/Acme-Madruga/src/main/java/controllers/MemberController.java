@@ -151,27 +151,28 @@ public class MemberController extends AbstractController {
 
 	}
 
-	//	// LIST MY MEMBERS  ---------------------------------------------------------------		
-	//
-	//	@RequestMapping(value = "/list", method = RequestMethod.GET)
-	//	public ModelAndView list() {
-	//		final ModelAndView result;
-	//		final Brotherhood brotherhood = this.brotherhoodService.findByPrincipal();
-	//		final Collection<Member> members;
-	//
-	//		members = this.memberService.allMembersFromBrotherhood();
-	//
-	//		result = new ModelAndView("member/list");
-	//		result.addObject("members", members);
-	//		result.addObject("brotherhood", brotherhood);
-	//		result.addObject("ok", true);
-	//		result.addObject("requetURI", "member/list.do");
-	//
-	//		final String banner = this.configurationParametersService.findBanner();
-	//		result.addObject("banner", banner);
-	//
-	//		return result;
-	//	}
+	// LIST MY MEMBERS  ---------------------------------------------------------------		
+
+	@RequestMapping(value = "/list", method = RequestMethod.GET)
+	public ModelAndView list() {
+		final ModelAndView result;
+		final Brotherhood brotherhood = this.brotherhoodService.findByPrincipal();
+		final Collection<Member> members;
+
+		members = this.memberService.allMembersFromBrotherhood();
+
+		result = new ModelAndView("member/list");
+		result.addObject("members", members);
+		result.addObject("brotherhood", brotherhood);
+		result.addObject("ok", true);
+		result.addObject("button", false);
+		result.addObject("requetURI", "member/list.do");
+
+		final String banner = this.configurationParametersService.findBanner();
+		result.addObject("banner", banner);
+
+		return result;
+	}
 
 	// LIST MEMBERS BY BROTHERHOOD ---------------------------------------------------------------		
 

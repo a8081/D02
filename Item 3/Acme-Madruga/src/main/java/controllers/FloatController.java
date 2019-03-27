@@ -34,6 +34,7 @@ public class FloatController extends AbstractController {
 		final ModelAndView result = new ModelAndView("float/list");
 		final Collection<domain.Float> floats = this.floatService.findByBrotherhoodPrincipal();
 		result.addObject("floats", floats);
+		result.addObject("button", false);
 		return result;
 	}
 
@@ -46,6 +47,7 @@ public class FloatController extends AbstractController {
 		result = new ModelAndView("float/list");
 		result.addObject("floats", floats);
 		result.addObject("brotherhood", brotherhood);
+		result.addObject("button", true);
 		result.addObject("requestURI", "float/listMyFloats.do");
 		return result;
 	}
@@ -54,9 +56,11 @@ public class FloatController extends AbstractController {
 	public ModelAndView display(@RequestParam final int floatId) {
 		final ModelAndView result;
 		final domain.Float f = this.floatService.findOne(floatId);
+		final Brotherhood brotherhood = this.brotherhoodService.findBrotherhoodByFloat(floatId);
 
 		result = new ModelAndView("float/display");
 		result.addObject("f", f);
+		result.addObject("brotherhood", brotherhood);
 		return result;
 	}
 

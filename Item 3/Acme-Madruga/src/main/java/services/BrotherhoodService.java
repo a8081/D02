@@ -255,6 +255,7 @@ public class BrotherhoodService {
 		Assert.notNull(res);
 		return res;
 	}
+
 	public void flush() {
 		this.brotherhoodRepository.flush();
 	}

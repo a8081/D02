@@ -51,3 +51,4 @@ div.galleryContainer{
 
 <acme:display code="float.description" value="${f.description}" />
 
+<acme:button url="float/listMyFloats.do?brotherhoodId=${brotherhood.id}" name="back" code="float.back"/>

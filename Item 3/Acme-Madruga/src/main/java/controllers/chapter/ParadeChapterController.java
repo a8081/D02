@@ -265,6 +265,31 @@ public class ParadeChapterController extends AbstractController {
 		return result;
 	}
 
+	// SAVE - REJECT  ---------------------------------------------------------------		
+
+	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "reject")
+	public ModelAndView saveReject(@Valid final ParadeChapterForm paradeChapterForm, final BindingResult binding) {
+		ModelAndView result;
+
+		final Parade parade = this.paradeService.reconstruct2(paradeChapterForm, binding);
+
+		if (binding.hasErrors())
+			result = this.createEditModelAndView(parade);
+		else
+			try {
+				this.paradeService.rejectParade(parade);
+				result = this.listRejected();
+				final String banner = this.configurationParametersService.findBanner();
+				result.addObject("banner", banner);
+			} catch (final Throwable oops) {
+				result = this.createEditModelAndView(parade, "parade.commit.save.error");
+				result.addObject("ok", false);
+
+			}
+
+		return result;
+	}
+
 	// Ancillary methods --------------------------------------------------------
 
 	protected ModelAndView createEditModelAndView(final Parade parade) {
