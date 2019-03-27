@@ -9,7 +9,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import repositories.AdministratorRepository;
 import repositories.BrotherhoodRepository;
+import repositories.ChapterRepository;
 import repositories.MemberRepository;
+import repositories.SponsorRepository;
 import domain.Actor;
 
 @Component
@@ -25,6 +27,12 @@ public class StringToActorConverter implements Converter<String, Actor> {
 	@Autowired
 	AdministratorRepository	administratorRepository;
 
+	@Autowired
+	SponsorRepository		sponsorRepository;
+
+	@Autowired
+	ChapterRepository		chapterRepository;
+
 
 	@Override
 	public Actor convert(final String text) {
@@ -37,11 +45,14 @@ public class StringToActorConverter implements Converter<String, Actor> {
 			else {
 				id = Integer.valueOf(text);
 				result = this.brotherhoodRepository.findOne(id);
-				if (result == null) {
+				if (result == null)
 					result = this.memberRepository.findOne(id);
-					if (result == null)
-						result = this.administratorRepository.findOne(id);
-				}
+				if (result == null)
+					result = this.administratorRepository.findOne(id);
+				if (result == null)
+					result = this.sponsorRepository.findOne(id);
+				if (result == null)
+					result = this.chapterRepository.findOne(id);
 
 			}
 
