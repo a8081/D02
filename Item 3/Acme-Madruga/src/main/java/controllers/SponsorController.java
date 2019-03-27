@@ -2,6 +2,7 @@
 package controllers;
 
 import javax.validation.Valid;
+import javax.validation.ValidationException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -104,11 +105,13 @@ public class SponsorController extends AbstractController {
 		} else
 			try {
 				final UserAccount ua = this.userAccountService.reconstruct(actorForm, Authority.SPONSOR);
-				sponsor = this.sponsorService.reconstruct(actorForm);
+				sponsor = this.sponsorService.reconstruct(actorForm, binding);
 				sponsor.setUserAccount(ua);
 				this.registerService.saveSponsor(sponsor, binding);
 				result.addObject("alert", "sponsor.edit.correct");
 				result.addObject("actorForm", actorForm);
+			} catch (final ValidationException oops) {
+				result = this.createEditModelAndViewForm(actorForm, null);
 			} catch (final Throwable e) {
 				if (e.getMessage().contains("username is register"))
 					result.addObject("alert", "sponsor.edit.usernameIsUsed");
@@ -149,6 +152,17 @@ public class SponsorController extends AbstractController {
 		this.actorService.save(principal);
 
 		final ModelAndView result = new ModelAndView("redirect:../j_spring_security_logout");
+		return result;
+	}
+
+	protected ModelAndView createEditModelAndViewForm(final ActorFrom sponsor, final String messageCode) {
+		final ModelAndView result;
+
+		result = new ModelAndView("sponsor/edit");
+		result.addObject("sponsor", sponsor);
+
+		result.addObject("message", messageCode);
+
 		return result;
 	}
 

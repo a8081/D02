@@ -5,11 +5,14 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import javax.validation.ValidationException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.Validator;
 
 import repositories.MemberRepository;
 import security.Authority;
@@ -38,6 +41,9 @@ public class MemberService {
 
 	@Autowired
 	private FinderService		finderService;
+
+	@Autowired
+	private Validator			validator;
 
 
 	public Member create() {
@@ -169,6 +175,10 @@ public class MemberService {
 			account.setPassword(actorForm.getUserAccountpassword());
 			member.setUserAccount(account);
 		}
+
+		this.validator.validate(member, binding);
+		if (binding.hasErrors())
+			throw new ValidationException();
 
 		return member;
 	}
