@@ -1,13 +1,11 @@
 
 package services;
 
-import java.util.ArrayList;
-import java.util.Collection;
+import javax.validation.ConstraintViolationException;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,42 +38,44 @@ public class InceptionRecordServiceTest extends AbstractTest {
 
 	@Test
 	public void driverCreateSave() {
-		final Collection<String> photosVacio = new ArrayList<String>();
-		final Collection<String> photosElementoVacio = new ArrayList<String>();
-		final Collection<String> photos = new ArrayList<String>();
-		photos.add("http://tyniurl.com/dsfrefd.png");
-		photos.add("http://tyniurl.com/dsfes3rfw45d.png");
-		photosElementoVacio.add("");
 		final Object testingData[][] = {
 			{
-				//Correcto
+				//			A: Acme Parade Req. 3 -> Brotherhoods can manage their history
+				//			B: Test Positivo: Brotherhood crea InceptionRecord
+				//			C: 100% Recorre 46 de las 46 lineas posibles
+				//			D: cobertura de datos=3/27
 				"brotherhood1", "title inception recor 1", "description inception recor 1", null
 			}, {
-				//Crear con usuario distinto a brothethood
+				//			A: Acme Parade Req. 3 -> Brotherhoods can manage their history
+				//			B: Test Negativo: Un member intenta crear una InceptionRecord
+				//			C: 28,26% Recorre 13 de las 46 lineas posibles
+				//			D: cobertura de datos=3/27
 				"member1", "title inception record 1", "description inception recor 1", IllegalArgumentException.class
 			}, {
-				//Title cadena vacia
-				"brotherhood1", "", "descriptionTest", IllegalArgumentException.class
+				//			A: Acme Parade Req. 3 -> Brotherhoods can manage their history
+				//			B: Test Negativo: Brotherhood edita InceptionRecord con title vacio
+				//			C: 97,82% Recorre 45 de las 46 lineas posibles
+				//			D: cobertura de datos=3/27
+				"brotherhood1", "", "descriptionTest", ConstraintViolationException.class
 			}, {
-				//Title null
-				"brotherhood1", null, "description", IllegalArgumentException.class
+				//			A: Acme Parade Req. 3 -> Brotherhoods can manage their history
+				//			B: Test Negativo: Brotherhood crea InceptionRecord con title null
+				//			C: 97,82% Recorre 45 de las 46 lineas posibles
+				//			D: cobertura de datos=3/27
+				"brotherhood1", null, "description", ConstraintViolationException.class
 			}, {
-				//Discription cadena vacia
-				"brotherhood1", "InceptionTest", "", IllegalArgumentException.class
+				//			A: Acme Parade Req. 3 -> Brotherhoods can manage their history
+				//			B: Test Negativo: Brotherhood crea InceptionRecord con description vacio
+				//			C: 97,82% Recorre 45 de 46 lineas posibles
+				//			D: cobertura de datos=3/27
+				"brotherhood1", "InceptionTest", "", ConstraintViolationException.class
 			}, {
-				//Description null
-				"brotherhood1", "InceptionTest", null, IllegalArgumentException.class
+				//			A: Acme Parade Req. 3 -> Brotherhoods can manage their history
+				//			B: Test Negativo: Brotherhood crea InceptionRecord con description null
+				//			C: 97,82% Recorre 45 de 46 lineas posibles
+				//			D: cobertura de datos=3/27
+				"brotherhood1", "InceptionTest", null, ConstraintViolationException.class
 			},
-		//					{
-		//						//Photos null
-		//						"brotherhood1", "InceptionTest", "descrptionTest", IllegalArgumentException.class
-		//					}, {
-		//						//Photos coleccion vacia
-		//						"brotherhood1", "InceptionTest", "descrptionTest", photosVacio, IllegalArgumentException.class
-		//					}, {
-		//						//Photos con elemento con URL vacía
-		//						"brotherhood1", "InceptionTest", "descrptionTest", photosElementoVacio, IllegalArgumentException.class
-		//					},
 		};
 
 		for (int i = 0; i < testingData.length; i++)
@@ -90,7 +90,6 @@ public class InceptionRecordServiceTest extends AbstractTest {
 			final InceptionRecord incRec = this.inceptionRecordService.create();
 			incRec.setTitle(title);
 			incRec.setDescription(description);
-			//			incRec.setPhotos(photos);
 			final InceptionRecord incRecSaved = this.inceptionRecordService.save(incRec);
 			Assert.isTrue(incRecSaved.getId() != 0);
 			this.inceptionRecordService.flush();
@@ -106,43 +105,66 @@ public class InceptionRecordServiceTest extends AbstractTest {
 	public void driverEdit() {
 		final Object testingData[][] = {
 			{
-				//CORRECTO
-				"brotherhood1", null, "title inception recor test", "description inception recor test", null
+				//			A: Acme Parade Req. 3 -> Brotherhoods can manage their history
+				//			B: Test Positivo: Brotherhood edita InceptionRecord
+				//			C: 100% Recorre 68 de las 68 lineas posibles
+				//			D: cobertura de datos=4/54
+				"brotherhood1", false, "title inception recor test", "description inception recor test", null
 			}, {
-				//BROTHERHOOD NO PROPIETARIA
-				"brotherhood2", 2211, "title inception recor test", "description inception recor test", DataIntegrityViolationException.class
+				//			A: Acme Parade Req. 3 -> Brotherhoods can manage their history
+				//			B: Test Negativo: Brotherhood intenta editar Inception que no le pertenece
+				//			C: 89,70% Recorre 61 de las 68 lineas posibles
+				//			D: cobertura de datos=4/54
+				"brotherhood2", true, "title inception recor test", "description inception recor test", IllegalArgumentException.class
 			}, {
-				//ERROR USER
-				"member1", null, "title inception recor test", "description inception recor test", IllegalArgumentException.class
+				//			A: Acme Parade Req. 3 -> Brotherhoods can manage their history
+				//			B: Test Negativo: Un member intenta editar una InceptionRecord
+				//			C: 11,76% Recorre 8 de las 68 lineas posibles
+				//			D: cobertura de datos=4/54
+				"member1", false, "title inception recor test", "description inception recor test", IllegalArgumentException.class
 			}, {
-				//TITLE VACIO
-				"brotherhood1", null, "", "description inception recor test", IllegalArgumentException.class
+				//			A: Acme Parade Req. 3 -> Brotherhoods can manage their history
+				//			B: Test Negativo: Brotherhood edita InceptionRecord con title vacio
+				//			C: 98,52% Recorre 67 de las 68 lineas posibles
+				//			D: cobertura de datos=4/54
+				"brotherhood1", false, "", "description inception recor test", ConstraintViolationException.class
 			}, {
-				//TITLE NULL
-				"brotherhood1", null, null, "description inception recor test", IllegalArgumentException.class
+				//			A: Acme Parade Req. 3 -> Brotherhoods can manage their history
+				//			B: Test Negativo: Brotherhood edita InceptionRecord con title null
+				//			C: 98,52% Recorre 67 de las 68 lineas posibles
+				//			D: cobertura de datos=4/54
+				"brotherhood1", false, null, "description inception recor test", ConstraintViolationException.class
 			}, {
-				//DESCRIPTION VACIO
-				"brotherhood1", null, "title inception recor test", "", IllegalArgumentException.class
+				//			A: Acme Parade Req. 3 -> Brotherhoods can manage their history
+				//			B: Test Negativo: Brotherhood edita InceptionRecord con description vacio
+				//			C: 98,52% Recorre 67 de las 68 lineas posibles
+				//			D: cobertura de datos=4/54
+				"brotherhood1", false, "title inception recor test", "", ConstraintViolationException.class
 			}, {
-				//DESCRIPTION NULL
-				"brotherhood1", null, "title inception recor test", null, IllegalArgumentException.class
+				//			A: Acme Parade Req. 3 -> Brotherhoods can manage their history
+				//			B: Test Negativo: Brotherhood edita InceptionRecord con description null
+				//			C: 98,52% Recorre 67 de las 68 lineas posibles
+				//			D: cobertura de datos=4/54
+				"brotherhood1", false, "title inception recor test", null, ConstraintViolationException.class
 			},
 		};
 		for (int i = 0; i < testingData.length; i++)
-			this.templateEdit((String) testingData[i][0], (Integer) testingData[i][1], (String) testingData[i][2], (String) testingData[i][3], (Class<?>) testingData[i][4]);
+			this.templateEdit((String) testingData[i][0], (Boolean) testingData[i][1], (String) testingData[i][2], (String) testingData[i][3], (Class<?>) testingData[i][4]);
 	}
 
-	private void templateEdit(final String actor, final Integer id, final String title, final String description, final Class<?> expected) {
+	private void templateEdit(final String actor, final Boolean prop, final String title, final String description, final Class<?> expected) {
 		Class<?> caught = null;
 		try {
 			this.authenticate(actor);
 			final Brotherhood principal = this.brotherhoodService.findByPrincipal();
 			final InceptionRecord iR;
 			final History history = principal.getHistory();
-			if (id == null)
+			if (!prop)
 				iR = history.getInceptionRecord();
-			else
+			else {
+				final Integer id = this.getEntityId("inceptionRecord1");
 				iR = this.inceptionRecordService.findOne(id);
+			}
 			iR.setTitle(title);
 			iR.setDescription(description);
 			history.setInceptionRecord(iR);

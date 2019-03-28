@@ -53,18 +53,15 @@ public class LinkRecordService {
 		final Brotherhood me = this.brotherhoodService.findByPrincipal();
 		Assert.notNull(me, "You must be logged in the system");
 		Assert.notNull(linkRecord);
-		Assert.notNull(linkRecord.getTitle());
-		Assert.notNull(linkRecord.getDescription());
-		Assert.isTrue(linkRecord.getTitle() != "");
-		Assert.isTrue(linkRecord.getDescription() != "");
-		Assert.notNull(linkRecord.getLinkedBrotherhood());
-		if (linkRecord.getId() != 0)
-			Assert.isTrue(this.findBrotherhoodByLink(linkRecord.getId()) == me);
+		//Assert.notNull(linkRecord.getLinkedBrotherhood());
+		if (linkRecord.getId() != 0) {
+			final Brotherhood bro = this.findBrotherhoodByLink(linkRecord.getId());
+			Assert.isTrue(bro == me);
+		}
 		final LinkRecord res = this.linkRecordRepository.save(linkRecord);
 		Assert.notNull(this.findOne(res.getId()));
 		return res;
 	}
-
 	public void delete(final LinkRecord linkRecord) {
 		final Brotherhood brotherhood = this.brotherhoodService.findByPrincipal();
 		Assert.notNull(brotherhood, "You must be logged in the system");

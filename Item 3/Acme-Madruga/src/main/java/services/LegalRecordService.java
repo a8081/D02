@@ -56,10 +56,6 @@ public class LegalRecordService {
 		final Brotherhood me = this.brotherhoodService.findByPrincipal();
 		Assert.notNull(me, "You must be logged in the system");
 		Assert.notNull(legalRecord);
-		Assert.notNull(legalRecord.getTitle());
-		Assert.notNull(legalRecord.getDescription());
-		Assert.isTrue(legalRecord.getTitle() != "");
-		Assert.isTrue(legalRecord.getDescription() != "");
 		if (legalRecord.getId() != 0)
 			Assert.isTrue(this.findBrotherhoodByLegal(legalRecord.getId()) == me);
 		final LegalRecord res;

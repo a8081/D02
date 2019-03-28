@@ -1,6 +1,11 @@
 
 package services;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
+import javax.validation.ConstraintViolationException;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,35 +34,59 @@ public class LinkRecordServiceTest extends AbstractTest {
 
 
 	@Test
-	public void test() {
-		Assert.isNull(null);
-	}
-
-	@Test
 	public void driverCreateSave() {
-		final Brotherhood bro = this.brotherhoodService.findOne(2199);
+		final Collection<Brotherhood> bros = this.brotherhoodService.findAll();
+		Brotherhood bro = null;
+		for (final Brotherhood b : bros)
+			if (b.getMiddleName().contains("Triana"))
+				bro = b;
 		final Object testingData[][] = {
 			{
-				//Correcto
-				"brotherhood1", "LinkTest", "descriptionTest", bro, null
+				//			A: Acme Parade Req. 3 -> Brotherhoods can manage their history
+				//			B: Test Positivo: Brotherhood crea LinkRecord
+				//			C: 100% Recorre 46 de las 46 lineas posibles
+				//			D: cobertura de datos=4/27
+				"brotherhood2", "LinkTest", "descriptionTest", bro, null
 			}, {
-				//Crear con usuario distinto a brothethood
+				//			A: Acme Parade Req. 3 -> Brotherhoods can manage their history
+				//			B: Test Negativo: Un member intenta crear una LinkRecord
+				//			C: 27% Recorre 13 de las 46 lineas posibles
+				//			D: cobertura de datos=4/27
 				"member1", "LinkTest", "descriptionTest", bro, IllegalArgumentException.class
 			}, {
-				//Title cadena vacia
-				"brotherhood1", "", "descriptionTest", bro, IllegalArgumentException.class
+				//			A: Acme Parade Req. 3 -> Brotherhoods can manage their history
+				//			B: Test Negativo: Brotherhood edita LinkRecord con title vacio
+				//			C: 97,91% Recorre 47 de las 48 lineas posibles
+				//			D: cobertura de datos=4/27
+
+				"brotherhood2", "", "descriptionTest", bro, ConstraintViolationException.class
 			}, {
-				//Title null
-				"brotherhood1", null, "descriptionTest", bro, IllegalArgumentException.class
+				//			A: Acme Parade Req. 3 -> Brotherhoods can manage their history
+				//			B: Test Negativo: Brotherhood edita LinkRecord con title null
+				//			C: 97,91% Recorre 47 de las 48 lineas posibles
+				//			D: cobertura de datos=4/27
+				"brotherhood2", null, "descriptionTest", bro, ConstraintViolationException.class
 			}, {
-				//Discription cadena vacia
-				"brotherhood1", "LinkTest", "", bro, IllegalArgumentException.class
+				//			A: Acme Parade Req. 3 -> Brotherhoods can manage their history
+				//			B: Test Negativo: Brotherhood edita LinkRecord con description vacio
+				//			C: 97,91% Recorre 47 de las 48 lineas posibles
+				//			D: cobertura de datos=4/27
+
+				"brotherhood2", "LinkTest", "", bro, ConstraintViolationException.class
 			}, {
-				//Description null
-				"brotherhood1", "LinkTest", null, bro, IllegalArgumentException.class
+				//			A: Acme Parade Req. 3 -> Brotherhoods can manage their history
+				//			B: Test Negativo: Brotherhood edita LinkRecord con description null
+				//			C: 97,91% Recorre 47 de las 48 lineas posibles
+				//			D: cobertura de datos=4/27
+
+				"brotherhood2", "LinkTest", null, bro, ConstraintViolationException.class
 			}, {
-				//Brotherhood null
-				"brotherhood1", "LinkTest", "descriptionTest", null, IllegalArgumentException.class
+				//			A: Acme Parade Req. 3 -> Brotherhoods can manage their history
+				//			B: Test Negativo: Brotherhood edita LinkRecord con linkedBrotherhood null
+				//			C: 97,91% Recorre 47 de las 48 lineas posibles
+				//			D: cobertura de datos=4/27
+
+				"brotherhood2", "LinkTest", "descriptionTest", null, ConstraintViolationException.class
 			}
 		};
 
@@ -87,43 +116,62 @@ public class LinkRecordServiceTest extends AbstractTest {
 
 	@Test
 	public void driverEdit() {
-		final Brotherhood bro = this.brotherhoodService.findOne(2199);
+		final Collection<Brotherhood> bros = this.brotherhoodService.findAll();
+		Brotherhood bro = null;
+		for (final Brotherhood b : bros)
+			if (b.getMiddleName().contains("Triana"))
+				bro = b;
 		final Object testingData[][] = {
 			{
-				//Correcto
-				"brotherhood1", 2212, "LinkTest", "descriptionTest", bro, null
+				//			A: Acme Parade Req. 3 -> Brotherhoods can manage their history
+				//			B: Test Positivo: Brotherhood edita LinkRecord
+				//			C: 100% Recorre 65 de las 65 lineas posibles
+				//			D: cobertura de datos=4/27
+				"brotherhood2", "LinkTest", "descriptionTest", bro, null
 			}, {
-				//Usuairo al que no le pertenece esta linkRecord
-				"brotherhood2", 2212, "LinkTest", "descriptionTest", bro, IllegalArgumentException.class
+				//			A: Acme Parade Req. 3 -> Brotherhoods can manage their history
+				//			B: Test Negativo: Un member intenta editar LinkRecord
+				//			C: 12,3% Recorre 8 de las 65 lineas posibles
+				//			D: cobertura de datos=4/27
+				"member1", "LinkTest", "descriptionTest", bro, IllegalArgumentException.class
 			}, {
-				//Crear con usuario distinto a brothethood
-				"member1", 2212, "LinkTest", "descriptionTest", bro, IllegalArgumentException.class
+				//			A: Acme Parade Req. 3 -> Brotherhoods can manage their history
+				//			B: Test Negativo: Brotherhood edita LinkRecord con title vacio
+				//			C: 98,4% Recorre 64 de las 65 lineas posibles
+				//			D: cobertura de datos=4/27
+				"brotherhood2", "", "descriptionTest", bro, ConstraintViolationException.class
 			}, {
-				//Title cadena vacia
-				"brotherhood1", 2212, "", "descriptionTest", bro, IllegalArgumentException.class
+				//			A: Acme Parade Req. 3 -> Brotherhoods can manage their history
+				//			B: Test Negativo: Brotherhood edita LinkRecord con title null
+				//			C: 98,4% Recorre 64 de las 65 lineas posibles
+				//			D: cobertura de datos=4/27
+				"brotherhood2", null, "descriptionTest", bro, ConstraintViolationException.class
 			}, {
-				//Title null
-				"brotherhood1", 2212, null, "descriptionTest", bro, IllegalArgumentException.class
+				//			A: Acme Parade Req. 3 -> Brotherhoods can manage their history
+				//			B: Test Negativo: Brotherhood edita LinkRecord con description vacio
+				//			C: 98,4% Recorre 64 de las 65 lineas posibles
+				//			D: cobertura de datos=4/27
+				"brotherhood2", "LinkTest", "", bro, ConstraintViolationException.class
 			}, {
-				//Discription cadena vacia
-				"brotherhood1", 2212, "LinkTest", "", bro, IllegalArgumentException.class
-			}, {
-				//Description null
-				"brotherhood1", 2212, "LinkTest", null, bro, IllegalArgumentException.class
-			}, {
-				//Brotherhood null
-				"brotherhood1", 2212, "LinkTest", "descriptionTest", null, IllegalArgumentException.class
-			}
+				//			A: Acme Parade Req. 3 -> Brotherhoods can manage their history
+				//			B: Test Negativo: Brotherhood edita LinkRecord con description null
+				//			C: 98,4% Recorre 64 de las 65 lineas posibles
+				//			D: cobertura de datos=4/27
+				"brotherhood2", "LinkTest", null, bro, ConstraintViolationException.class
+			},
+
 		};
 
 		for (int i = 0; i < testingData.length; i++)
-			this.templateEdit((String) testingData[i][0], (Integer) testingData[i][1], (String) testingData[i][2], (String) testingData[i][3], (Brotherhood) testingData[i][4], (Class<?>) testingData[i][5]);
+			this.templateEdit((String) testingData[i][0], (String) testingData[i][1], (String) testingData[i][2], (Brotherhood) testingData[i][3], (Class<?>) testingData[i][4]);
 	}
-	private void templateEdit(final String user, final Integer id, final String title, final String description, final Brotherhood bro, final Class<?> expected) {
+	private void templateEdit(final String user, final String title, final String description, final Brotherhood bro, final Class<?> expected) {
 		Class<?> caught = null;
 		try {
 			this.authenticate(user);
-			final LinkRecord lRec = this.linkRecordService.findOne(id);
+			final Brotherhood principal = this.brotherhoodService.findByPrincipal();
+			final ArrayList<LinkRecord> lRecs = new ArrayList<LinkRecord>(principal.getHistory().getLinkRecords());
+			final LinkRecord lRec = lRecs.get(0);
 			lRec.setTitle(title);
 			lRec.setDescription(description);
 			lRec.setLinkedBrotherhood(bro);
@@ -143,29 +191,31 @@ public class LinkRecordServiceTest extends AbstractTest {
 
 		final Object testingData[][] = {
 			{
-				"brotherhood1", 2212, null
+				//			A: Acme Parade Req. 3 -> Brotherhoods can manage their history
+				//			B: Test Positivo: Brotherhood borra LinkRecord 
+				//			C: 100% Recorre 78 de las 78 lineas posibles
+				//			D: cobertura de datos=1/3
+				"brotherhood2", null
 			}, {
-				"brotherhood2", 2212, IllegalArgumentException.class
-			}, {
-				"brotherhood1", null, IllegalArgumentException.class
-			}, {
-				"member1", null, IllegalArgumentException.class
+				//			A: Acme Parade Req. 3 -> Brotherhoods can manage their history
+				//			B: Test Negativo: Member intenta borrar LinkRecord 
+				//			C: 100% Recorre 8 de las 78 lineas posibles
+				//			D: cobertura de datos=1/3
+				"member1", IllegalArgumentException.class
 			},
 		};
 
 		for (int i = 0; i < testingData.length; i++)
-			this.templateDelete((String) testingData[i][0], (Integer) testingData[i][1], (Class<?>) testingData[i][2]);
+			this.templateDelete((String) testingData[i][0], (Class<?>) testingData[i][1]);
 	}
 
-	private void templateDelete(final String actor, final Integer id, final Class<?> expected) {
+	private void templateDelete(final String actor, final Class<?> expected) {
 		Class<?> caught = null;
 		try {
 			this.authenticate(actor);
-			LinkRecord lRec;
-			if (id != null)
-				lRec = this.linkRecordService.findOne(id);
-			else
-				lRec = new LinkRecord();
+			final Brotherhood principal = this.brotherhoodService.findByPrincipal();
+			final ArrayList<LinkRecord> lRecs = new ArrayList<LinkRecord>(principal.getHistory().getLinkRecords());
+			final LinkRecord lRec = lRecs.get(0);
 			this.linkRecordService.delete(lRec);
 			this.linkRecordService.flush();
 			this.unauthenticate();

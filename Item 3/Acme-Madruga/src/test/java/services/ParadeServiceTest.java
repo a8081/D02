@@ -50,19 +50,47 @@ public class ParadeServiceTest extends AbstractTest {
 	@Test
 	public void createAndSaveDriver() {
 		final Object testingData[][] = {
-			{	// Parade sin titulo
+			{
+				//A: Acme Parade Req -> Manage the parades that are published by the brotherhoods in the area that they co-ordinate.
+				//B: Test Negativo: Brotherhood crea Parade sin titutlo
+				//C: Líneas totales de código = 90 ,Líneas recorrida = 89, Porcentaje = 98,88%.
+				//D: Cobertura de datos = 11/36
 				"brotherhood2", "brotherhood2", null, "Description1", "2019-12-12 20:00", "djehfahwrlfhajsdhfashdflov", "DRAFT", 120, 120, "DEFAULT", null, ConstraintViolationException.class
-			}, {	// Parade con titulo nulo
+			}, {
+				//A: Acme Parade Req -> Manage the parades that are published by the brotherhoods in the area that they co-ordinate.
+				//B: Test Negativo: Brotherhood crea Parade con titulo nulo
+				//C: Líneas totales de código = 90 ,Líneas recorrida = 89 , Porcentaje = 98,88%.
+				//D: Cobertura de datos = 11/36
 				"brotherhood2", "brotherhood2", null, "Description1", "2019-12-12 20:00", "djehfahwrlfhajsdhfashdflov", "DRAFT", 120, 120, "DEFAULT", null, ConstraintViolationException.class
-			}, {	// Parade sin descripcion
+			}, {
+				//A: Acme Parade Req -> Manage the parades that are published by the brotherhoods in the area that they co-ordinate.
+				//B: Test Negativo: Brotherhood crea Parade sin descripcion
+				//C: Líneas totales de código = 90 ,Líneas recorrida = 89 , Porcentaje = 98,88%.
+				//D: Cobertura de datos = 11/36
 				"brotherhood2", "brotherhood2", "Title1", "", "2019-12-12 20:00", "djehfahwrlfhajsdhfashdflov", "DRAFT", 120, 120, "DEFAULT", null, ConstraintViolationException.class
-			}, { 	// Parade sin mode, status ni ticker. No debe fallar ya que se setea en el save
+			}, {
+				//A: Acme Parade Req -> Manage the parades that are published by the brotherhoods in the area that they co-ordinate.
+				//B: Test Positivo: Brotherhood crea Parade sin mode, status ni ticker.
+				//C: Líneas totales de código = 90 ,Líneas recorrida = 90 , Porcentaje = 100%.
+				//D: Cobertura de datos = 11/36
 				"brotherhood2", "brotherhood2", "Title1", "Description1", "2019-12-12 20:00", "", "", 120, 120, "", null, null
-			}, {	// Parade nueva con rejection reason seteada
+			}, {
+				//A: Acme Parade Req -> Manage the parades that are published by the brotherhoods in the area that they co-ordinate.
+				//B: Test Negativo: Brotherhood crea Parade nueva con rejection reason seteada
+				//C: Líneas totales de código = 90 ,Líneas recorrida = 85 , Porcentaje = 94,44%.
+				//D: Cobertura de datos = 11/36
 				"brotherhood2", "brotherhood2", "Title1", "Description1", "2019-12-12 20:00", "", "", 120, 120, "", "RejectionReason1", IllegalArgumentException.class
-			}, {		// Parade correcta
+			}, {
+				//A: Acme Parade Req -> Manage the parades that are published by the brotherhoods in the area that they co-ordinate.
+				//B: Test Positivo: Brotherhood crea Parade correcta
+				//C: Líneas totales de código = 90 ,Líneas recorrida = 90 , Porcentaje = 100%.
+				//D: Cobertura de datos = 11/36
 				"brotherhood1", "brotherhood1", "Title1", "Description1", "2019-12-12 20:00", "djehfahwrlfhajsdhfashdflov", "DRAFT", 120, 120, "DEFAULT", null, null
-			}, {	// Guardar Parade a otra brotherhood 
+			}, {
+				//A: Acme Parade Req -> Manage the parades that are published by the brotherhoods in the area that they co-ordinate.
+				//B: Test Negativo: Brotherhood crea Parade a otra brotherhood
+				//C: Líneas totales de código = 90 ,Líneas recorrida = 84, Porcentaje = 93,33%.
+				//D: Cobertura de datos = 11/36
 				"brotherhood2", "brotherhood1", "Title1", "Description1", "2019-12-12 20:00", "djehfahwrlfhajsdhfashdflov", "DRAFT", 120, 120, "DEFAULT", null, IllegalArgumentException.class
 			}
 		};
@@ -82,21 +110,61 @@ public class ParadeServiceTest extends AbstractTest {
 	@Test
 	public void updateDriver() {
 		final Object testingData[][] = {
-			{		// Parade guardada sin ningun cambio
+			{
+				//A: Acme Parade Req -> An actor who is authenticated as a brotherhood must be able to: 
+				//Manage the paths of their parades, which includes updating.
+				//B: Test Positivo: Brotherhood guarda Parade sin ningun cambio.
+				//C: Líneas totales de código = 85 ,Líneas recorrida = 85, Porcentaje = 100%.
+				//D: Cobertura de datos = 12/36
 				"brotherhood1", "brotherhood1", "Los Javieres", "This is a description of a parade13", "2022-04-26 00:00:00", "203486-QUODF", "DRAFT", 120, 300, "DEFAULT", null, "parade13", null
-			}, {	// Parade con titulo nulo
+			}, {
+				//A: Acme Parade Req -> An actor who is authenticated as a brotherhood must be able to: 
+				//Manage the paths of their parades, which includes updating.
+				//B: Test Negativo: Brotherhood guarda Parade con titulo nulo.
+				//C: Líneas totales de código = 85 ,Líneas recorrida = 84, Porcentaje = 98,82%.
+				//D: Cobertura de datos = 12/36
 				"brotherhood1", "brotherhood1", null, "This is a description of a parade13", "2022-04-26 00:00:00", "203486-QUODF", "DRAFT", 120, 300, "DEFAULT", null, "parade13", ConstraintViolationException.class
-			}, {	// Parade con descripcion vacia
+			}, {
+				//A: Acme Parade Req -> An actor who is authenticated as a brotherhood must be able to: 
+				//Manage the paths of their parades, which includes updating.
+				//B: Test Negativo: Brotherhood guarda Parade con descripcion vacia.
+				//C: Líneas totales de código = 85 ,Líneas recorrida = 84, Porcentaje = 98,82%.
+				//D: Cobertura de datos = 12/36
 				"brotherhood1", "brotherhood1", "Los Javieres", "", "2022-04-26 00:00:00", "203486-QUODF", "DRAFT", 120, 300, "DEFAULT", null, "parade13", ConstraintViolationException.class
-			}, {		// Parade guardada sin status
+			}, {
+				//A: Acme Parade Req -> An actor who is authenticated as a brotherhood must be able to: 
+				//Manage the paths of their parades, which includes updating.
+				//B: Test Negativo: Brotherhood guarda Parade sin status
+				//C: Líneas totales de código = 85 ,Líneas recorrida = 78, Porcentaje = 91,76%.
+				//D: Cobertura de datos = 12/36
 				"brotherhood1", "brotherhood1", "Los Javieres", "This is a description of a parade13", "2022-04-26 00:00:00", "203486-QUODF", "DRAFT", 120, 300, "", null, "parade13", IllegalArgumentException.class
-			}, {		// Parade guardada en draft mode con status accepted
+			}, {
+				//A: Acme Parade Req -> An actor who is authenticated as a brotherhood must be able to: 
+				//Manage the paths of their parades, which includes updating.
+				//B: Test Negativo: Brotherhood guarda Parade en draft mode con status accepted.
+				//C: Líneas totales de código = 85 ,Líneas recorrida = 79, Porcentaje = 92,94%.
+				//D: Cobertura de datos = 12/36
 				"brotherhood1", "brotherhood1", "Los Javieres", "This is a description of a parade13", "2022-04-26 00:00:00", "203486-QUODF", "DRAFT", 120, 300, "ACCEPTED", null, "parade13", IllegalArgumentException.class
-			}, {		// Parade guardada sin mode
+			}, {
+				//A: Acme Parade Req -> An actor who is authenticated as a brotherhood must be able to: 
+				//Manage the paths of their parades, which includes updating.
+				//B: Test Negativo: Brotherhood guarda Parade sin mode.
+				//C: Líneas totales de código = 85 ,Líneas recorrida = 84, Porcentaje = 98,82%.
+				//D: Cobertura de datos = 12/36
 				"brotherhood1", "brotherhood1", "Los Javieres", "This is a description of a parade13", "2022-04-26 00:00:00", "203486-QUODF", "", 120, 300, "DEFAULT", null, "parade13", ConstraintViolationException.class
-			}, {		// Parade guardada sin ticker
+			}, {
+				//A: Acme Parade Req -> An actor who is authenticated as a brotherhood must be able to: 
+				//Manage the paths of their parades, which includes updating.
+				//B: Test Negativo: Brotherhood guarda Parade sin ticker.
+				//C: Líneas totales de código = 85 ,Líneas recorrida = 79, Porcentaje = 92,94%.
+				//D: Cobertura de datos = 12/36
 				"brotherhood1", "brotherhood1", "Los Javieres", "This is a description of a parade13", "2022-04-26 00:00:00", "", "DRAFT", 120, 300, "DEFAULT", null, "parade13", IllegalArgumentException.class
-			}, {		// Parade guardada con ticker modificado
+			}, {
+				//A: Acme Parade Req -> An actor who is authenticated as a brotherhood must be able to: 
+				//Manage the paths of their parades, which includes updating.
+				//B: Test Negativo: Brotherhood guarda Parade con ticker modificado.
+				//C: Líneas totales de código = 85 ,Líneas recorrida = 78, Porcentaje = 91,76%.
+				//D: Cobertura de datos = 12/36
 				"brotherhood1", "brotherhood1", "Los Javieres", "This is a description of a parade13", "2022-04-26 00:00:00", "200006-QUADF", "DRAFT", 120, 300, "DEFAULT", null, "parade13", IllegalArgumentException.class
 			}
 		};
@@ -115,13 +183,29 @@ public class ParadeServiceTest extends AbstractTest {
 	@Test
 	public void toFinalModeDriver() {
 		final Object testingData[][] = {
-			{		// Parade en draft mode con status accepted, to final mode correcto
+			{
+				//A: Acme Parade Req -> Manage the paths of their parades, which includes listing, showing, creating, updat-ing, and deleting them.
+				//B: Test Positivo: Brotherhood tiene una Parade en draft mode con status accepted, to final mode correcto.
+				//C: Líneas totales de código = 89 ,Líneas recorrida = 89, Porcentaje = 100%.
+				//D: Cobertura de datos = 2/7
 				"brotherhood1", "parade13", null
-			}, {		// Poner en modo final una parade que tiene el estado rejected
+			}, {
+				//A: Acme Parade Req -> Manage the paths of their parades, which includes listing, showing, creating, updat-ing, and deleting them.
+				//B: Test Negativo: Brotherhood tiene una Parade en modo final una parade que tiene el estado rejected
+				//C: Líneas totales de código = 89 ,Líneas recorrida = 89, Porcentaje = 100%.
+				//D: Cobertura de datos = 2/7
 				"brotherhood1", "parade2", IllegalArgumentException.class
-			}, {	// To final mode una parade que ya esta en final mode
+			}, {
+				//A: Acme Parade Req -> Manage the paths of their parades, which includes listing, showing, creating, updat-ing, and deleting them.
+				//B: Test Negativo: Brotherhood intenta editar una Parade to final mode cuando ya esta en final mode.
+				//C: Líneas totales de código = 89 ,Líneas recorrida = 78, Porcentaje = 87,64%.
+				//D: Cobertura de datos = 2/7
 				"brotherhood1", "parade11", IllegalArgumentException.class
-			}, {	// No puedes poner en final mode una parade que no es tuya
+			}, {
+				//A: Acme Parade Req -> Manage the paths of their parades, which includes listing, showing, creating, updat-ing, and deleting them.
+				//B: Test Negativo: Brotherhood intenta poner una Parade que no es suya en final mode
+				//C: Líneas totales de código = 89 ,Líneas recorrida = 76, Porcentaje = 85,39%.
+				//D: Cobertura de datos = 2/7
 				"brotherhood2", "parade11", IllegalArgumentException.class
 			}
 		};
@@ -140,13 +224,33 @@ public class ParadeServiceTest extends AbstractTest {
 	@Test
 	public void acceptParadeDriver() {
 		final Object testingData[][] = {
-			{		// Un chapter acepta una parade en final mode con estado submitted, accion correcta
+			{
+				//A: Acme Parade Req.6 -> When a parade is saved in final mode, it must be kept 
+				//in status "submitted" until the corresponding chapter makes a decision on accepting or rejecting it.
+				//B: Test Positivo: Un chapter acepta una parade en final mode con estado submitted, accion correcta
+				//C: Líneas totales de código = 49 ,Líneas recorrida = 49, Porcentaje = 100%.
+				//D: Cobertura de datos =
 				"chapter1", "parade1", null
-			}, {		// Un actor que no es chapter acepta una parade, accion incorrecta
+			}, {
+				//A: Acme Parade Req.6 -> When a parade is saved in final mode, it must be kept 
+				//in status "submitted" until the corresponding chapter makes a decision on accepting or rejecting it.
+				//B: Test Negativo: Un actor que no es chapter acepta una parade, accion incorrecta
+				//C: Líneas totales de código = 49 ,Líneas recorrida = 29, Porcentaje = 59,18%.
+				//D: Cobertura de datos =
 				"brotherhood1", "parade1", IllegalArgumentException.class
-			}, {		// Un chapter acepta una parade en draft mode con estado default, accion incorrecta
+			}, {
+				//A: Acme Parade Req.6 -> When a parade is saved in final mode, it must be kept 
+				//in status "submitted" until the corresponding chapter makes a decision on accepting or rejecting it.
+				//B: Test Negativo: Un chapter acepta una parade en draft mode con estado default, accion incorrecta
+				//C: Líneas totales de código = 49 ,Líneas recorrida = 31, Porcentaje = 63,26%
+				//D: Cobertura de datos =
 				"chapter1", "parade13", IllegalArgumentException.class
-			}, {		// Un chapter acepta una parade en final mode con estado accepted, accion incorrecta
+			}, {
+				//A: Acme Parade Req.6 -> When a parade is saved in final mode, it must be kept 
+				//in status "submitted" until the corresponding chapter makes a decision on accepting or rejecting it.
+				//B: Test Negativo: Un chapter acepta una parade en final mode con estado accepted, accion incorrecta
+				//C: Líneas totales de código = 49 ,Líneas recorrida = 29, Porcentaje = 59,18%.
+				//D: Cobertura de datos =
 				"chapter1", "parade2", IllegalArgumentException.class
 			}
 		};
@@ -165,17 +269,47 @@ public class ParadeServiceTest extends AbstractTest {
 	@Test
 	public void rejectParadeDriver() {
 		final Object testingData[][] = {
-			{		// Un chapter rechaza una parade en final mode con estado submitted, accion correcta
+			{
+				//A: Acme Parade Req.6 -> When a parade is saved in final mode, it must be kept 
+				//in status "submitted" until the corresponding chapter makes a decision on accepting or rejecting it.
+				//B: Test Positivo: Un chapter rechaza una parade en final mode con estado submitted, accion correcta
+				//C: Líneas totales de código = 52 ,Líneas recorrida = 52, Porcentaje = 100%.
+				//D: Cobertura de datos = 3/9
 				"chapter1", "parade1", "My Rejection Reason", null
-			}, {		// Un actor que no es chapter rechaza una parade, accion incorrecta
+			}, {
+				//A: Acme Parade Req.6 -> When a parade is saved in final mode, it must be kept 
+				//in status "submitted" until the corresponding chapter makes a decision on accepting or rejecting it.
+				//B: Test Negativo: Un actor que no es chapter rechaza una parade, accion incorrecta
+				//C: Líneas totales de código = 52 ,Líneas recorrida = 33, Porcentaje = 63,46%.
+				//D: Cobertura de datos = 3/9
 				"brotherhood1", "parade1", "My Rejection Reason", IllegalArgumentException.class
-			}, {		// Un chapter rechaza una parade en draft mode con estado default, accion incorrecta
+			}, {
+				//A: Acme Parade Req.6 -> When a parade is saved in final mode, it must be kept 
+				//in status "submitted" until the corresponding chapter makes a decision on accepting or rejecting it.
+				//B: Test Negativo: Un chapter rechaza una parade en draft mode con estado default, accion incorrecta
+				//C: Líneas totales de código = 52 ,Líneas recorrida = 28, Porcentaje = 53,84%.
+				//D: Cobertura de datos = 3/9
 				"chapter1", "parade13", "My Rejection Reason", IllegalArgumentException.class
-			}, {		// Un chapter rechaza una parade en final mode con estado accepted, accion incorrecta
+			}, {
+				//A: Acme Parade Req.6 -> When a parade is saved in final mode, it must be kept 
+				//in status "submitted" until the corresponding chapter makes a decision on accepting or rejecting it.
+				//B: Test Negativo: Un chapter rechaza una parade en final mode con estado accepted, accion incorrecta
+				//C: Líneas totales de código = 52 ,Líneas recorrida = 44, Porcentaje = 84,61%.
+				//D: Cobertura de datos = 3/9
 				"chapter1", "parade2", "My Rejection Reason", IllegalArgumentException.class
-			}, {		// Un chapter rechaza una parade y no añade rejection reason, accion incorrecta
+			}, {
+				//A: Acme Parade Req.6 -> When a parade is saved in final mode, it must be kept 
+				//in status "submitted" until the corresponding chapter makes a decision on accepting or rejecting it.
+				//B: Test Negativo: Un chapter rechaza una parade y no añade rejection reason, accion incorrecta
+				//C: Líneas totales de código = 52 ,Líneas recorrida = 42, Porcentaje = 80,76%.
+				//D: Cobertura de datos = 3/9
 				"chapter1", "parade1", "", IllegalArgumentException.class
-			}, {		// Un chapter rechaza una parade con rejection reason en null, accion incorrecta
+			}, {
+				//A: Acme Parade Req.6 -> When a parade is saved in final mode, it must be kept 
+				//in status "submitted" until the corresponding chapter makes a decision on accepting or rejecting it.
+				//B: Test Negativo: Un chapter rechaza una parade con rejection reason en null, accion incorrecta
+				//C: Líneas totales de código = 52 ,Líneas recorrida = 37, Porcentaje = 71,15%.
+				//D: Cobertura de datos = 3/9
 				"chapter1", "parade1", null, IllegalArgumentException.class
 			}
 		};
@@ -194,11 +328,23 @@ public class ParadeServiceTest extends AbstractTest {
 	@Test
 	public void copyBrotherhoodParadeDriver() {
 		final Object testingData[][] = {
-			{		// copia correcta
+			{
+				//A: Acme Parade Req -> Make a copy of one of their parades. 
+				//B: Test Positivo: Una Brotherhood hace una copia de una Parade, accion correcta
+				//C: Líneas totales de código = 83 ,Líneas recorrida = 83, Porcentaje = 100%.
+				//D: Cobertura de datos = 2/8
 				"brotherhood1", "parade1", null
-			}, {	// copia incorrecta, brotherhood 2 no es el propietario de la parade 1
+			}, {
+				//A: Acme Parade Req -> Make a copy of one of their parades. 
+				//B: Test Negativo: Una Brotherhood hace una copia de una Parade que no es suya, accion incorrecta
+				//C: Líneas totales de código = 83 ,Líneas recorrida = 51, Porcentaje = 61,44%.
+				//D: Cobertura de datos = 2/8
 				"brotherhood2", "parade1", IllegalArgumentException.class
-			}, {		// copia incorrecta, actores con autoridad distinta a brotherhood no tienen privilegios para copiar parades
+			}, {
+				//A: Acme Parade Req -> Make a copy of one of their parades. 
+				//B: Test Negativo: Un chapter rechaza hace una copia de una Parade, accion incorrecta
+				//C: Líneas totales de código = 83 ,Líneas recorrida = 45, Porcentaje = 54,22%.
+				//D: Cobertura de datos = 2/8
 				"chapter1", "parade1", IllegalArgumentException.class
 			}
 		};
