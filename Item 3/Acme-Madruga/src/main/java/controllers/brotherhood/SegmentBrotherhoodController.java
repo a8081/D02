@@ -224,7 +224,7 @@ public class SegmentBrotherhoodController extends AbstractController {
 			}
 
 		result.addObject("segment", segment); // this.constructPruned(parade));
-
+		result.addObject("paradeId", paradeId);
 		result.addObject("message", messageCode);
 
 		return result;

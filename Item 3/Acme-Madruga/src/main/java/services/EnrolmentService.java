@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.Validator;
 
 import repositories.EnrolmentRepository;
 import security.Authority;
@@ -38,9 +39,9 @@ public class EnrolmentService {
 	@Autowired
 	private MessageService		messageService;
 
+	@org.springframework.beans.factory.annotation.Autowired(required = true)
+	private Validator			validator;
 
-	//@Autowired
-	//private Validator			validator;
 
 	public Enrolment create() {
 		final Enrolment enrolment = new Enrolment();
@@ -201,9 +202,9 @@ public class EnrolmentService {
 	public Enrolment enrole(final int brotherhoodId) {
 		final Brotherhood brotherhood = this.brotherhoodService.findOne(brotherhoodId);
 		final Member member = this.memberService.findByPrincipal();
-		Assert.notNull(brotherhood.getArea(), "No se puede inscribir en una hermandad que no tiene área seleccionada.");
+		Assert.notNull(brotherhood.getArea(), "No se puede inscribir en una hermandad que no tiene ï¿½rea seleccionada.");
 		final Enrolment assertEnrolment = this.enrolmentRepository.enrolmentActive(brotherhood.getUserAccount().getId(), member.getUserAccount().getId());
-		Assert.isNull(assertEnrolment, "No puedes inscribirte más de una vez en la misma hermandad.");
+		Assert.isNull(assertEnrolment, "No puedes inscribirte mï¿½s de una vez en la misma hermandad.");
 		final Enrolment enrolment = this.create();
 
 		final Enrolment retrieved = this.save(enrolment, brotherhoodId);
