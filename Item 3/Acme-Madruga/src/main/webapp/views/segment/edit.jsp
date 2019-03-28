@@ -15,11 +15,16 @@
 	<div class="errorDiv">
 		<ul>
 			<jstl:forEach items="${errors}" var="error">
-			<jstl:if test="${(error.field eq 'destinationCoordinates.longitude') or (error.field eq 'destinationCoordinates.latitude') or (error.field eq 'originCoordinates.longitude') or (error.field eq 'originCoordinates.latitude')}">
+			<jstl:choose>
+			<jstl:when test="${(error.field eq 'destinationCoordinates.longitude') or (error.field eq 'destinationCoordinates.latitude') or (error.field eq 'originCoordinates.longitude') or (error.field eq 'originCoordinates.latitude')}">
 					<li><spring:message code="segment.edit.${error.field}" /> -
 					<jstl:out value="${error.defaultMessage}" /></li>
 			
-			</jstl:if>
+			</jstl:when>
+			<jstl:otherwise>
+				<spring:message code="parade.commit.error"/>
+			</jstl:otherwise>
+			</jstl:choose>
 			</jstl:forEach>
 		</ul>
 	</div>

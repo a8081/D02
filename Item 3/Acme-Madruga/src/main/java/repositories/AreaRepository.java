@@ -17,7 +17,7 @@ public interface AreaRepository extends JpaRepository<Area, Integer> {
 	@Query("select count(b) from Brotherhood b group by area")
 	Collection<Integer> getNumberOfBrotherhoodsPerArea();
 
-	@Query(value = "SELECT MAX(x),MIN(x),AVG(x),STDDEV(x) FROM (SELECT COUNT(*) AS x FROM `acme-parade`.BROTHERHOOD GROUP BY area) AS x", nativeQuery = true)
+	@Query("select max(1.0 + (select count(b) from Brotherhood b where b.area.id=a.id) - 1.0), min(1.0 + (select count(b) from Brotherhood b where b.area.id=a.id) - 1.0), avg(1.0 + (select count(b) from Brotherhood b where b.area.id=a.id) - 1.0), stddev(1.0 + (select count(b) from Brotherhood b where b.area.id=a.id) - 1.0) from Area a")
 	Double[] getStatiticsBrotherhoodPerArea();
 
 	@Query("select count(ab) from Brotherhood b join b.area ab")

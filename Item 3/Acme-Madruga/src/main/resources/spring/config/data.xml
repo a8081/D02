@@ -34,15 +34,6 @@
 		<property name="minPoolSize" value="1" />
 		<property name="maxPoolSize" value="5" />
 	</bean>
-	
-	<!-- 	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"	destroy-method="close">
-		<property name="driverClass" value="com.mysql.jdbc.Driver" />
-		<property name="jdbcUrl" value="jdbc:mysql://brxinlpcf42d8fecwr4d-mysql.services.clever-cloud.com:3306/brxinlpcf42d8fecwr4d" />
-		<property name="user" value="u4uwob78bqsiu9c8" />
-		<property name="password" value="mQsg9lw0gpUYIm64CPfI" />
-		<property name="minPoolSize" value="1" />
-		<property name="maxPoolSize" value="5" />
-	</bean> -->
 
 	<!-- JPA -->
 

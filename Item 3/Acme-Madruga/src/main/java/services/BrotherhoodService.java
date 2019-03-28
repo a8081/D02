@@ -217,24 +217,23 @@ public class BrotherhoodService {
 	}
 
 	public List<Brotherhood> getSmallestBrotherhood() {
-		final Integer[] bs = this.brotherhoodRepository.getSmallestBrotherhood();
+		final Brotherhood[] bs = this.brotherhoodRepository.getSmallestBrotherhood();
 		final List<Brotherhood> result = new ArrayList<Brotherhood>();
 		if (bs.length > 0 || bs != null)
-			for (final Integer id : bs)
-				result.add(this.findOne(id));
+			for (final Brotherhood b : bs)
+				result.add(b);
 		return result;
 	}
 
 	public List<Brotherhood> getLargestBrotherhood() {
-		final Integer[] bs = this.brotherhoodRepository.getLargestBrotherhood();
+		final Brotherhood[] bs = this.brotherhoodRepository.getLargestBrotherhood();
 		Assert.notNull(bs);
 		final List<Brotherhood> result = new ArrayList<Brotherhood>();
 		if (bs.length > 0 || bs != null)
-			for (final Integer id : bs)
-				result.add(this.findOne(id));
+			for (final Brotherhood b : bs)
+				result.add(b);
 		return result;
 	}
-
 	public Brotherhood reconstruct2(final BrotherhoodAreaForm brotherhoodAreaForm, final BindingResult binding) {
 		Brotherhood result;
 		Assert.isTrue(brotherhoodAreaForm.getId() != 0);

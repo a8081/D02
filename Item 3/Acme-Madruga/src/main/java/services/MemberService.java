@@ -184,11 +184,11 @@ public class MemberService {
 	}
 
 	public List<Member> getMembersTenPercent() {
-		final Integer[] members = this.memberRepository.getMembersTenPercent();
+		final Member[] members = this.memberRepository.getMembersTenPercent();
 		final List<Member> result = new ArrayList<Member>();
 		if (members != null || members.length > 0)
-			for (final Integer id : members)
-				result.add(this.findOne(id));
+			for (final Member m : members)
+				result.add(m);
 		return result;
 	}
 

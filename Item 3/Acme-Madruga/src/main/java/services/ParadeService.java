@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Locale;
 
 import org.apache.commons.lang.RandomStringUtils;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -356,8 +357,12 @@ public class ParadeService {
 	}
 
 	public List<Parade> getParadesThirtyDays() {
-		final List<Parade> result = this.paradeRepository.getParadesThirtyDays();
-		Assert.notNull(result);
+		final List<Parade> result = new ArrayList<>();
+		final DateTime now = new DateTime();
+		final Collection<Parade> all = this.findAll();
+		for (final Parade parade : all)
+			if (parade.getMoment().before(now.plusDays(30).toDate()))
+				result.add(parade);
 		return result;
 	}
 
