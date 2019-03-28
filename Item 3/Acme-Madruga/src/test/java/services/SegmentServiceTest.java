@@ -91,11 +91,11 @@ public class SegmentServiceTest extends AbstractTest {
 			}
 		};
 		for (int i = 0; i < testingData.length; i++)
-			this.templateCreateSegment((String) testingData[i][0], (String) testingData[i][1], (String) testingData[i][2], (Double) testingData[i][3], (Double) testingData[i][4], (Double) testingData[i][5], (Double) testingData[i][6],
-				(String) testingData[i][7], (Class<?>) testingData[i][8]);
+			this.templateCreateSegment((String) testingData[i][0], (String) testingData[i][1], (String) testingData[i][2], (String) testingData[i][3], (Double) testingData[i][4], (Double) testingData[i][5], (Double) testingData[i][6],
+				(Double) testingData[i][7], (Class<?>) testingData[i][8]);
 	}
-	private void templateCreateSegment(final String brotherhood, final String parade, final String originTime, final Double originLatitude, final Double originLongitude, final Double destinationLatitude, final Double destinationLongitude,
-		final String destinationTime, final Class<?> expected) {
+	private void templateCreateSegment(final String brotherhood, final String parade, final String originTime, final String destinationTime, final Double originLatitude, final Double originLongitude, final Double destinationLatitude,
+		final Double destinationLongitude, final Class<?> expected) {
 
 		Class<?> caught;
 

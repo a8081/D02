@@ -245,7 +245,7 @@
 		<property value="" name="middleName" />
 		<property value="System" name="surname" />
 		<property value="" name="photo" />
-		<property value="" name="email" />
+		<property value="correo@gmail.com" name="email" />
 		<property value="" name="phone" />
 		<property value="" name="address" />
 		<property value="0.5" name="score" />
