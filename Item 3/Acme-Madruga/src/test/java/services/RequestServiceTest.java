@@ -24,61 +24,12 @@ public class RequestServiceTest extends AbstractTest {
 	@Autowired
 	private RequestService		requestService;
 	@Autowired
-	private ParadeService		paradeService;
-	@Autowired
 	private ActorService		actorService;
-	@Autowired
-	private MemberService		memberService;
 
-	//Repositorys
+	//Repositories
 	@Autowired
 	private RequestRepository	requestRepository;
 
-
-	/*
-	 * @Test
-	 * public void driverSaveByMember() {
-	 * final Object testingData[][] = {
-	 * {
-	 * "member1", "PENDING", null, null, null, null, "parade11", null
-	 * }
-	 * };
-	 * 
-	 * for (int i = 0; i < testingData.length; i++)
-	 * this.templateSaveByMember((String) testingData[i][0], (String) testingData[i][1], (Date) testingData[i][2], (String) testingData[i][3], (Integer) testingData[i][4], (Integer) testingData[i][5], (String) testingData[i][6],
-	 * (Class<?>) testingData[i][7]);
-	 * }
-	 * 
-	 * protected void templateSaveByMember(final String member, final String status, final Date moment, final String explanation, final Integer row, final Integer column, final String parade, final Class<?> expected) {
-	 * 
-	 * Class<?> caught = null;
-	 * 
-	 * try {
-	 * this.authenticate(member);
-	 * final Integer myId = this.actorService.findByPrincipal().getId();
-	 * Request req = this.requestService.create();
-	 * req.setStatus(status);
-	 * req.setMoment(moment);
-	 * req.setExplanation(explanation);
-	 * req.setParade(this.paradeService.findOne(this.getEntityId(parade)));
-	 * req.setMember(this.memberService.findOne(myId));
-	 * req.setRow(row);
-	 * req.setColumn(column);
-	 * 
-	 * req = this.requestService.save(req);
-	 * Assert.isTrue(req.getId() != 0);
-	 * this.unauthenticate();
-	 * 
-	 * this.requestRepository.flush();
-	 * } catch (final Throwable oops) {
-	 * caught = oops.getClass();
-	 * }
-	 * 
-	 * super.checkExceptions(expected, caught);
-	 * }
-	 */
-
-	/******************************************************************************************/
 
 	/**
 	 * 
@@ -128,64 +79,33 @@ public class RequestServiceTest extends AbstractTest {
 			this.templateRequestToParade((String) testingData[i][0], (String) testingData[i][1], (Class<?>) testingData[i][2]);
 	}
 
-	protected void templateRequestToParade(final String member, final String parade, final Class<?> expected) {
-
-		Class<?> caught = null;
-
-		try {
-			this.authenticate(member);
-			final Integer myId = this.actorService.findByPrincipal().getId();
-			final int idParade = this.getEntityId(parade);
-			final Request req = this.requestService.requestToParade(idParade);
-			Assert.isTrue(req.getId() != 0);
-			this.unauthenticate();
-
-			this.requestRepository.flush();
-		} catch (final Throwable oops) {
-			caught = oops.getClass();
-		}
-
-		super.checkExceptions(expected, caught);
-	}
-
-	/***
-	 * UPDATE REQUEST: Use cases
-	 * Brotherhood change status to rejected without giving an explanation -> Error
-	 * Brotherhood change status to accepted without giving a position -> Error
-	 * Brotherhood change status to rejected giving an explanation
-	 * Brotherhood change status to accepted giving a position
-	 * Member modify parade -> error
+	/**
+	 * 
+	 * testingData[0]:
+	 * Acme Madruga - Req 10.6: A brotherhood decided on the request of its processions
+	 * Positive: change status to rejected giving an explanation
+	 * % recorre *** de las 28 líneas posibles
+	 * cobertura de datos =
+	 * 
+	 * testingData[1]:
+	 * Acme Madruga - Req 10.6: A brotherhood decided on the request of its processions
+	 * Negative: change status to accepted without giving a position
+	 * % recorre *** de las 28 líneas posibles
+	 * cobertura de datos =
+	 * 
+	 * testingData[2]:
+	 * Acme Madruga - Req 10.6: A brotherhood decided on the request of its processions
+	 * Negative: change status to rejected without giving an explanation
+	 * % recorre *** de las 28 líneas posibles
+	 * cobertura de datos =
+	 * 
+	 * testingData[3]:
+	 * Acme Madruga - Req 11.1: A member mast be able to manage its requests (except updating them)
+	 * Negative: a member cannot update its requests
+	 * % recorre *** de las 28 líneas posibles
+	 * cobertura de datos =
+	 * 
 	 * **/
-
-	//,{
-	//	"brotherhood1", "request1", "APPROVED", null, 1, 1, null
-	//}
-
-	protected void templateUpdateRequest(final String username, final String request, final String status, final String explanation, final Integer row, final Integer column, final Class<?> expected) {
-
-		Class<?> caught = null;
-
-		try {
-			this.authenticate(username);
-			final Integer myId = this.actorService.findByPrincipal().getId();
-			final int idRequest = this.getEntityId(request);
-			final Request req = this.requestService.findOne(idRequest);
-			req.setExplanation(explanation);
-			req.setRow(row);
-			req.setColumn(column);
-			req.setStatus(status);
-			final Request result = this.requestService.save(req);
-			Assert.isTrue(result.getId() != 0);
-
-			this.requestRepository.flush();
-			this.unauthenticate();
-		} catch (final Throwable oops) {
-			caught = oops.getClass();
-		}
-
-		super.checkExceptions(expected, caught);
-	}
-
 	@Test
 	public void driverUpdateRequest() {
 		final Object testingData[][] = {
@@ -205,12 +125,116 @@ public class RequestServiceTest extends AbstractTest {
 	}
 
 	/**
-	 * DELETE REQUEST: use cases
-	 * Member delete one of his/her request with status PENDING -> error
-	 * Member delete request from other member with status PENDING -> error
-	 * Member delete one of his/her request with status APPROVED -> error
-	 * Brotherhood delete a request -> error
+	 * 
+	 * testingData[0]:
+	 * Acme Madruga - Req 11.1: A member is able to manage her/his requests
+	 * Positive: Member deletes one of her/his requests with status PENDING
+	 * % recorre *** de las 28 líneas posibles
+	 * cobertura de datos =
+	 * 
+	 * testingData[1]:
+	 * Acme Madruga - Req 11.1: A member is able to manage her/his requests
+	 * Negative: Member tries to delete request from other member with status PENDING
+	 * % recorre *** de las 28 líneas posibles
+	 * cobertura de datos =
+	 * 
+	 * testingData[2]:
+	 * Acme Madruga - Req 11.1: A member is able to manage her/his requests
+	 * Negative: Member tries to delete one of his/her request with status APPROVED
+	 * % recorre *** de las 28 líneas posibles
+	 * cobertura de datos = ***
+	 * 
+	 * testingData[3]:
+	 * Acme Madruga - Req 10.6: A brotherhood decided on the request of its processions (but not deleting them)
+	 * Negative: a brotherhood cannot delete its requests
+	 * % recorre *** de las 28 líneas posibles
+	 * cobertura de datos = ***
+	 * 
 	 * **/
+	@Test
+	public void driverDeleteRequest() {
+		final Object testingData[][] = {
+			{
+				"member1", "request1", null
+			}, {
+				"member2", "request1", IllegalArgumentException.class
+			}, {
+				"member2", "request2", IllegalArgumentException.class
+			}, {
+				"brotherhood1", "request2", IllegalArgumentException.class
+			}
+		};
+
+		for (int i = 0; i < testingData.length; i++)
+			this.templateDeleteRequest((String) testingData[i][0], (String) testingData[i][1], (Class<?>) testingData[i][2]);
+	}
+
+	/**
+	 * 
+	 * testingData[0]:
+	 * Acme Madruga - Req 11.1: A member is able to manage her/his requests
+	 * Negative: Member tries to see a request that does not belong to her/him
+	 * % recorre *** de las 28 líneas posibles
+	 * cobertura de datos =
+	 * 
+	 * testingData[1]:
+	 * Acme Madruga - Req 11.1: A member is able to manage her/his requests
+	 * Positive: Member tries to see a request that does belong to her/him
+	 * % recorre *** de las 28 líneas posibles
+	 * cobertura de datos =
+	 * 
+	 * testingData[2]:
+	 * Acme Madruga - Req 10.6: A brotherhood is able to manage its requets
+	 * Negative: Brotherhood tries to see a request that does not belong to any of its parades
+	 * % recorre *** de las 28 líneas posibles
+	 * cobertura de datos = ***
+	 * 
+	 * testingData[3]:
+	 * Acme Madruga - Req 10.6: A brotherhood is able to manage its requets
+	 * Positive: Brotherhood tries to see a request that does belong to any of its parades
+	 * % recorre *** de las 28 líneas posibles
+	 * cobertura de datos = ***
+	 * 
+	 * **/
+	@Test
+	public void driverFindOneRequest() {
+		final Object testingData[][] = {
+			{
+				"member1", "request2", IllegalArgumentException.class
+			}, {
+				"member2", "request2", null
+			}, {
+				"brotherhood1", "request2", IllegalArgumentException.class
+			}, {
+				"brotherhood1", "request1", null
+			}
+		};
+
+		for (int i = 0; i < testingData.length; i++)
+			this.templateFindOneRequest((String) testingData[i][0], (String) testingData[i][1], (Class<?>) testingData[i][2]);
+	}
+
+	//********************************** TEMPLATES ****************************************************//
+
+	protected void templateFindOneRequest(final String username, final String request, final Class<?> expected) {
+
+		Class<?> caught = null;
+
+		try {
+			this.authenticate(username);
+			final Integer myId = this.actorService.findByPrincipal().getId();
+			final int idRequest = this.getEntityId(request);
+			Assert.notNull(this.requestService.findOne(idRequest));
+			this.unauthenticate();
+
+			this.requestRepository.flush();
+		} catch (final Throwable oops) {
+			caught = oops.getClass();
+		}
+
+		super.checkExceptions(expected, caught);
+	}
+
 	protected void templateDeleteRequest(final String username, final String request, final Class<?> expected) {
 
 		Class<?> caught = null;
@@ -231,50 +255,27 @@ public class RequestServiceTest extends AbstractTest {
 		super.checkExceptions(expected, caught);
 	}
 
-	@Test
-	public void driverDeleteRequest() {
-		final Object testingData[][] = {
-			{
-				"member1", "request1", null
-			}, {
-				"member2", "request1", IllegalArgumentException.class
-			}, {
-				"member2", "request2", IllegalArgumentException.class
-			}, {
-				"brotherhood1", "request2", IllegalArgumentException.class
-			}
-		};
+	protected void templateRequestToParade(final String member, final String parade, final Class<?> expected) {
 
-		for (int i = 0; i < testingData.length; i++)
-			this.templateDeleteRequest((String) testingData[i][0], (String) testingData[i][1], (Class<?>) testingData[i][2]);
+		Class<?> caught = null;
+
+		try {
+			this.authenticate(member);
+			final Integer myId = this.actorService.findByPrincipal().getId();
+			final int idParade = this.getEntityId(parade);
+			final Request req = this.requestService.requestToParade(idParade);
+			Assert.isTrue(req.getId() != 0);
+			this.unauthenticate();
+
+			this.requestRepository.flush();
+		} catch (final Throwable oops) {
+			caught = oops.getClass();
+		}
+
+		super.checkExceptions(expected, caught);
 	}
 
-	/**
-	 * FIND ONE REQUEST: use cases
-	 * Member tries to see a request that does not belong to her/him -> error
-	 * Member tries to see a request that does belong to her/him
-	 * Brotherhood tries to see a request that does not belong to any of its parades -> error
-	 * Brotherhood tries to see a request that does belong to any of its parades
-	 * **/
-	@Test
-	public void driverFindOneRequest() {
-		final Object testingData[][] = {
-			{
-				"member1", "request2", IllegalArgumentException.class
-			}, {
-				"member2", "request2", null
-			}, {
-				"brotherhood1", "request2", IllegalArgumentException.class
-			}, {
-				"brotherhood1", "request1", null
-			}
-		};
-
-		for (int i = 0; i < testingData.length; i++)
-			this.templateFindOneRequest((String) testingData[i][0], (String) testingData[i][1], (Class<?>) testingData[i][2]);
-	}
-
-	protected void templateFindOneRequest(final String username, final String request, final Class<?> expected) {
+	protected void templateUpdateRequest(final String username, final String request, final String status, final String explanation, final Integer row, final Integer column, final Class<?> expected) {
 
 		Class<?> caught = null;
 
@@ -282,10 +283,16 @@ public class RequestServiceTest extends AbstractTest {
 			this.authenticate(username);
 			final Integer myId = this.actorService.findByPrincipal().getId();
 			final int idRequest = this.getEntityId(request);
-			Assert.notNull(this.requestService.findOne(idRequest));
-			this.unauthenticate();
+			final Request req = this.requestService.findOne(idRequest);
+			req.setExplanation(explanation);
+			req.setRow(row);
+			req.setColumn(column);
+			req.setStatus(status);
+			final Request result = this.requestService.save(req);
+			Assert.isTrue(result.getId() != 0);
 
 			this.requestRepository.flush();
+			this.unauthenticate();
 		} catch (final Throwable oops) {
 			caught = oops.getClass();
 		}

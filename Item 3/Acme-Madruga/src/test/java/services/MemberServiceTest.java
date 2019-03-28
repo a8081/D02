@@ -64,62 +64,6 @@ public class MemberServiceTest extends AbstractTest {
 
 	/**
 	 * Acme Madruga - Req 8: an actor who is not authenticated must be able register to the system as a member
-	 * Negative: a user not authenticated try to register with a existing username
-	 * % recorre 8 de las 12 líneas posibles
-	 * cobertura de datos =
-	 * **/
-	@Test
-	public void registerExistingUsername() {
-		final Object testingData[][] = {
-
-			{
-				"test2", "test2", "name test 2", "middlename test 2", "surname test 2", "http://phototest2.com", "testem2@gmail.com", "+34654654654", "avd test 2", null
-			}, {
-				"test2", "test2", "name test 3", "middlename test 3", "surname test 3", "http://phototest3.com", "testemail3@gmail.com", "+34654321234", "avd test 3", org.springframework.dao.DataIntegrityViolationException.class
-			}
-		};
-
-		for (int i = 0; i < testingData.length; i++)
-			this.templateSaveNew((String) testingData[i][0], (String) testingData[i][1], (String) testingData[i][2], (String) testingData[i][3], (String) testingData[i][4], (String) testingData[i][5], (String) testingData[i][6],
-				(String) testingData[i][7], (String) testingData[i][8], (Class<?>) testingData[i][9]);
-	}
-
-	protected void templateSaveNew(final String username, final String password, final String name, final String middlename, final String surname, final String photo, final String email, final String phone, final String address, final Class<?> expected) {
-		Class<?> caught = null;
-
-		try {
-			final Member member = this.memberService.create();
-			member.setName(name);
-			member.setMiddleName(middlename);
-			member.setSurname(surname);
-			member.setPhoto(photo);
-			member.setEmail(email);
-			member.setPhone(phone);
-			member.setAddress(address);
-			member.setSpammer(false);
-
-			final Member saved = this.memberService.save(member);
-			//final UserAccount ua = saved.getUserAccount();
-			final UserAccount ua = member.getUserAccount();
-			ua.setUsername(username);
-			final Md5PasswordEncoder encoder = new Md5PasswordEncoder();
-			final String hash = encoder.encodePassword(password, null);
-			ua.setPassword(hash);
-			final UserAccount uaSaved = this.userAccountService.save(ua);
-			final Collection<Member> members = this.memberService.findAll();
-
-			Assert.isTrue(members.contains(saved));
-			this.memberRepository.flush();
-
-		} catch (final Throwable oops) {
-			caught = oops.getClass();
-		}
-
-		super.checkExceptions(expected, caught);
-	}
-
-	/**
-	 * Acme Madruga - Req 8: an actor who is not authenticated must be able register to the system as a member
 	 * Negative: incorrect email pattern
 	 * % recorre 8 de las 12 líneas posibles
 	 * cobertura de datos = 1
@@ -147,6 +91,28 @@ public class MemberServiceTest extends AbstractTest {
 		Assert.isTrue(this.memberService.findAll().contains(saved));
 		this.memberRepository.flush();
 
+	}
+
+	/**
+	 * Acme Madruga - Req 8: an actor who is not authenticated must be able register to the system as a member
+	 * Negative: a user not authenticated try to register with a existing username
+	 * % recorre 8 de las 12 líneas posibles
+	 * cobertura de datos =
+	 * **/
+	@Test
+	public void registerExistingUsername() {
+		final Object testingData[][] = {
+
+			{
+				"test2", "test2", "name test 2", "middlename test 2", "surname test 2", "http://phototest2.com", "testem2@gmail.com", "+34654654654", "avd test 2", null
+			}, {
+				"test2", "test2", "name test 3", "middlename test 3", "surname test 3", "http://phototest3.com", "testemail3@gmail.com", "+34654321234", "avd test 3", org.springframework.dao.DataIntegrityViolationException.class
+			}
+		};
+
+		for (int i = 0; i < testingData.length; i++)
+			this.templateSaveNew((String) testingData[i][0], (String) testingData[i][1], (String) testingData[i][2], (String) testingData[i][3], (String) testingData[i][4], (String) testingData[i][5], (String) testingData[i][6],
+				(String) testingData[i][7], (String) testingData[i][8], (Class<?>) testingData[i][9]);
 	}
 
 	/**
@@ -222,6 +188,42 @@ public class MemberServiceTest extends AbstractTest {
 		this.memberRepository.flush();
 		this.unauthenticate();
 
+	}
+
+	//********************************* TEMPLATES ********************************************//
+
+	protected void templateSaveNew(final String username, final String password, final String name, final String middlename, final String surname, final String photo, final String email, final String phone, final String address, final Class<?> expected) {
+		Class<?> caught = null;
+
+		try {
+			final Member member = this.memberService.create();
+			member.setName(name);
+			member.setMiddleName(middlename);
+			member.setSurname(surname);
+			member.setPhoto(photo);
+			member.setEmail(email);
+			member.setPhone(phone);
+			member.setAddress(address);
+			member.setSpammer(false);
+
+			final Member saved = this.memberService.save(member);
+			//final UserAccount ua = saved.getUserAccount();
+			final UserAccount ua = member.getUserAccount();
+			ua.setUsername(username);
+			final Md5PasswordEncoder encoder = new Md5PasswordEncoder();
+			final String hash = encoder.encodePassword(password, null);
+			ua.setPassword(hash);
+			final UserAccount uaSaved = this.userAccountService.save(ua);
+			final Collection<Member> members = this.memberService.findAll();
+
+			Assert.isTrue(members.contains(saved));
+			this.memberRepository.flush();
+
+		} catch (final Throwable oops) {
+			caught = oops.getClass();
+		}
+
+		super.checkExceptions(expected, caught);
 	}
 
 }
