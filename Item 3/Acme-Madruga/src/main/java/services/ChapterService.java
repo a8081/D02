@@ -36,7 +36,7 @@ public class ChapterService {
 	@Autowired
 	private UserAccountService	userAccountService;
 
-	@Autowired
+	@org.springframework.beans.factory.annotation.Autowired(required = true)
 	private Validator			validator;
 
 	@Autowired
@@ -204,7 +204,7 @@ public class ChapterService {
 		result.setVersion(chapterAreaForm.getVersion());
 		result.setArea(chapterAreaForm.getArea());
 
-		//this.validator.validate(result, binding);
+		this.validator.validate(result, binding);
 
 		return result;
 	}

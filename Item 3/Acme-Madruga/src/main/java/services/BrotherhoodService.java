@@ -37,7 +37,7 @@ public class BrotherhoodService {
 	@Autowired
 	private UserAccountService		userAccountService;
 
-	@Autowired
+	@org.springframework.beans.factory.annotation.Autowired(required = true)
 	private Validator				validator;
 
 	@Autowired
@@ -245,7 +245,7 @@ public class BrotherhoodService {
 		result.setVersion(brotherhoodAreaForm.getVersion());
 		result.setArea(brotherhoodAreaForm.getArea());
 
-		//this.validator.validate(result, binding);
+		this.validator.validate(result, binding);
 
 		return result;
 	}

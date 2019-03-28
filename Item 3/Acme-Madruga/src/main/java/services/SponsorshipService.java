@@ -38,7 +38,7 @@ public class SponsorshipService {
 	@Autowired
 	private MessageService			messageService;
 
-	@Autowired
+	@org.springframework.beans.factory.annotation.Autowired(required = true)
 	private Validator				validator;
 
 

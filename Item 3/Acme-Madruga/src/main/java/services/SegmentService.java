@@ -36,7 +36,7 @@ public class SegmentService {
 	@Autowired
 	private ParadeService			paradeService;
 
-	@Autowired
+	@org.springframework.beans.factory.annotation.Autowired(required = true)
 	private Validator				validator;
 
 

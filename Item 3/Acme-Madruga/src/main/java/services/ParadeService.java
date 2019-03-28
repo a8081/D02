@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.Validator;
 
 import repositories.ParadeRepository;
 import security.Authority;
@@ -59,9 +60,9 @@ public class ParadeService {
 	@Autowired
 	private MessageService		messageService;
 
+	@org.springframework.beans.factory.annotation.Autowired(required = true)
+	private Validator			validator;
 
-	//@Autowired
-	//private Validator			validator;
 
 	public Parade create() {
 		final Parade parade = new Parade();
@@ -349,7 +350,7 @@ public class ParadeService {
 		result.setFloats(pform.getFloats());
 		result.setMoment(pform.getMoment());
 
-		//this.validator.validate(result, binding);
+		this.validator.validate(result, binding);
 
 		return result;
 	}
