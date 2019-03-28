@@ -67,26 +67,21 @@ public class HistoryController extends AbstractController {
 		final ModelAndView res;
 		final Brotherhood brotherhood = this.brotherhoodService.findOne(brotherhoodId);
 		final History history = brotherhood.getHistory();
-		if (!(history == null)) {
-			final InceptionRecord inceptionRecord = history.getInceptionRecord();
-			final Collection<PeriodRecord> periodRecords = history.getPeriodRecords();
-			final Collection<LegalRecord> legalRecords = history.getLegalRecords();
-			final Collection<LinkRecord> linkRecords = history.getLinkRecords();
-			final Collection<MiscellaneousRecord> miscellaneousRecords = history.getMiscellaneousRecords();
+		final InceptionRecord inceptionRecord = history.getInceptionRecord();
+		final Collection<PeriodRecord> periodRecords = history.getPeriodRecords();
+		final Collection<LegalRecord> legalRecords = history.getLegalRecords();
+		final Collection<LinkRecord> linkRecords = history.getLinkRecords();
+		final Collection<MiscellaneousRecord> miscellaneousRecords = history.getMiscellaneousRecords();
 
-			res = new ModelAndView("history/display");
-			res.addObject("brotherhood", brotherhood);
-			res.addObject("buttons", false);
-			res.addObject("history", history);
-			res.addObject("inceptionRecord", inceptionRecord);
-			res.addObject("periodrecords", periodRecords);
-			res.addObject("legalRecord", legalRecords);
-			res.addObject("linkRecords", linkRecords);
-			res.addObject("miscellaneousRecords", miscellaneousRecords);
-		} else {
-			res = new ModelAndView("history/create");
-			res.addObject("history", history);
-		}
+		res = new ModelAndView("history/display");
+		res.addObject("brotherhood", brotherhood);
+		res.addObject("buttons", false);
+		res.addObject("history", history);
+		res.addObject("inceptionRecord", inceptionRecord);
+		res.addObject("periodrecords", periodRecords);
+		res.addObject("legalRecord", legalRecords);
+		res.addObject("linkRecords", linkRecords);
+		res.addObject("miscellaneousRecords", miscellaneousRecords);
 
 		return res;
 	}

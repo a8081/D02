@@ -78,7 +78,9 @@ function deletePersonalData(){
 	<acme:button url="parade/listByBrotherhood.do?brotherhoodId=${brotherhood.id}" name="back" code="brotherhood.processionList"/>
 	<acme:button url="member/listMyMembers.do?brotherhoodId=${brotherhood.id}" name="back" code="brotherhood.memberList"/>
 	<acme:button url="float/listMyFloats.do?brotherhoodId=${brotherhood.id}" name="back" code="brotherhood.floatList"/>
-	<acme:button url="history/listForAnonymous.do?brotherhoodId=${brotherhood.id}" name="back" code="brotherhood.history"/>
+	<jstl:if test="${not empty brotherhood.history}">
+		<acme:button url="history/listForAnonymous.do?brotherhoodId=${brotherhood.id}" name="back" code="brotherhood.history"/>
+	</jstl:if>
 	
 	
 <br>
