@@ -202,6 +202,8 @@ public class SponsorshipService {
 
 		this.validator.validate(sponsorship, binding);
 
+		this.sponsorshipRepository.flush();
+
 		if (binding.hasErrors())
 			throw new ValidationException();
 

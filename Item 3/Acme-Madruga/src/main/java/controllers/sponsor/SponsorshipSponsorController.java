@@ -2,7 +2,6 @@
 package controllers.sponsor;
 
 import java.util.Collection;
-import java.util.Date;
 
 import javax.validation.Valid;
 import javax.validation.ValidationException;
@@ -10,7 +9,6 @@ import javax.validation.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.Assert;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -107,9 +105,6 @@ public class SponsorshipSponsorController extends AbstractController {
 		Sponsorship sponsorship;
 
 		try {
-			final Date fechaActual = new Date();
-			final Integer Año = fechaActual.getYear() - 100;
-			Assert.isTrue(Año <= sponsorshipForm.getExpirationYear(), "El año de expiración debe ser mayor o igual al año actual.");
 			sponsorship = this.sponsorshipService.reconstruct(sponsorshipForm, binding);
 			this.sponsorshipService.save(sponsorship);
 			result = new ModelAndView("redirect:list.do");
