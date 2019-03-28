@@ -57,29 +57,6 @@ public class HistoryService {
 
 	}
 
-	//	public History createForNewBrotherhood() {
-	//		final History history = new History();
-	//
-	//		final InceptionRecord inceptionRecord = this.inceptionRecordService.create();
-	//		final InceptionRecord saved = this.inceptionRecordService.save(inceptionRecord);
-	//		history.setInceptionRecord(saved);
-	//
-	//		final Collection<PeriodRecord> periodRecords = new ArrayList<PeriodRecord>();
-	//		history.setPeriodRecords(periodRecords);
-	//
-	//		final Collection<LegalRecord> legalRecords = new ArrayList<LegalRecord>();
-	//		history.setLegalRecords(legalRecords);
-	//
-	//		final Collection<LinkRecord> linkRecords = new ArrayList<LinkRecord>();
-	//		history.setLinkRecords(linkRecords);
-	//
-	//		final Collection<MiscellaneousRecord> miscellaneousRecords = new ArrayList<MiscellaneousRecord>();
-	//		history.setMiscellaneousRecords(miscellaneousRecords);
-	//
-	//		final History res = this.historyRepository.save(history);
-	//		return res;
-	//	}
-
 	public Collection<History> findAll() {
 		Collection<History> res = new ArrayList<>();
 		res = this.historyRepository.findAll();
@@ -98,7 +75,6 @@ public class HistoryService {
 		Assert.notNull(history);
 		final History res;
 		final Brotherhood brotherhood = this.brotherhoodService.findByPrincipal();
-
 		if (history.getId() != 0)
 			Assert.isTrue(this.brotherhoodService.findBrotherhoodByHistory(history.getId()).equals(brotherhood));
 		res = this.historyRepository.save(history);

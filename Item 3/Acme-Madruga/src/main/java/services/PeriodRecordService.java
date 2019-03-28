@@ -55,10 +55,6 @@ public class PeriodRecordService {
 		final Brotherhood me = this.brotherhoodService.findByPrincipal();
 		Assert.notNull(me, "You must be logged in the system");
 		Assert.notNull(pR);
-		Assert.notNull(pR.getTitle());
-		Assert.notNull(pR.getDescription());
-		Assert.isTrue(pR.getTitle() != "");
-		Assert.isTrue(pR.getDescription() != "");
 		if (pR.getId() != 0)
 			Assert.isTrue(this.findBrotherhoodByPeriod(pR.getId()) == me);
 		final PeriodRecord saved = this.periodRecordRepository.save(pR);

@@ -4,6 +4,8 @@ package services;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import javax.validation.ConstraintViolationException;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import utilities.AbstractTest;
+import domain.Brotherhood;
 import domain.PeriodRecord;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -31,46 +34,70 @@ public class PeriodRecordServiceTest extends AbstractTest {
 
 
 	@Test
-	public void test() {
-		Assert.isNull(null);
-	}
-
-	@Test
-	public void driverCreateSave() {
+	public void driverCreateSave1() {
 		final Collection<String> photosVacio = new ArrayList<String>();
-		final Collection<String> photosElementoVacio = new ArrayList<String>();
 		final Collection<String> photos = new ArrayList<String>();
 		photos.add("http://tyniurl.com/dsfrefd.png");
 		photos.add("http://tyniurl.com/dsfes3rfw45d.png");
-		photosElementoVacio.add("");
 		final Object testingData[][] = {
+
 			{
-				//Correcto
-				"brotherhood1", "PeriodTest", "descriptionTest", 2018, 2023, null, null
+				//			A: Acme Parade Req. 3 -> Brotherhoods can manage their history
+				//			B: Test Positivo: Brotherhood crea PeriodRecord con coleccion de photos vacia
+				//			C: 100% Recorre 48 de las 48 lineas posibles
+				//			D: cobertura de datos=6/72
+				"brotherhood1", "PeriodTest", "descriptionTest", 2018, 2023, photosVacio, null
 			}, {
-				//Crear con usuario distinto a brothethood
-				"member1", "PeriodTest", "descriptionTest", 2018, 2023, null, IllegalArgumentException.class
+				//			A: Acme Parade Req. 3 -> Brotherhoods can manage their history
+				//			B: Test Negativo: Un member intenta crear una PeriodRecord
+				//			C: 31,25% Recorre 15 de las 48 lineas posibles
+				//			D: cobertura de datos=6/72
+				"member1", "PeriodTest", "descriptionTest", 2018, 2023, photosVacio, IllegalArgumentException.class
 			}, {
-				//Title cadena vacia
-				"brotherhood1", "", "descriptionTest", 2018, 2023, null, IllegalArgumentException.class
-			}, {
-				//Title null
-				"brotherhood1", null, "descriptionTest", 2018, 2023, null, IllegalArgumentException.class
-			}, {
-				//Discription cadena vacia
-				"brotherhood1", "PeriodTest", "", 2018, 2023, null, IllegalArgumentException.class
-			}, {
-				//Description null
-				"brotherhood1", "PeriodTest", null, 2018, 2023, null, IllegalArgumentException.class
-			}, {
-				//Photos 
+				//			A: Acme Parade Req. 3 -> Brotherhoods can manage their history
+				//			B: Test Positivo: Brotherhood crea PeriodRecord con coleccion de photos con datos
+				//			C: 100% Recorre 48 de las 48 lineas posibles
+				//			D: cobertura de datos=6/72
 				"brotherhood1", "PeriodTest", "descriptionTest", 2018, 2023, photos, null
-			//	}, {
-			//						//Photos coleccion vacia
-			//						"brotherhood1", "PeriodTest", "descrptionTest", photosVacio, IllegalArgumentException.class
-			//					}, {
-			//						//Photos con elemento con URL vacía
-			//						"brotherhood1", "PeriodTest", "descrptionTest", photosElementoVacio, IllegalArgumentException.class
+			},
+		};
+
+		for (int i = 0; i < testingData.length; i++)
+			this.templateCreateSave((String) testingData[i][0], (String) testingData[i][1], (String) testingData[i][2], (Integer) testingData[i][3], (Integer) testingData[i][4], (Collection<String>) testingData[i][5], (Class<?>) testingData[i][6]);
+	}
+
+	@Test
+	public void driverCreateSave2() {
+		final Collection<String> photosVacio = new ArrayList<String>();
+		final Collection<String> photos = new ArrayList<String>();
+		photos.add("http://tyniurl.com/dsfrefd.png");
+		photos.add("http://tyniurl.com/dsfes3rfw45d.png");
+		final Object testingData[][] = {
+
+			{
+				//			A: Acme Parade Req. 3 -> Brotherhoods can manage their history
+				//			B: Test Negativo: Brotherhood edita PeriodRecord con title vacio
+				//			C: 97,91% Recorre 47 de las 48 lineas posibles
+				//			D: cobertura de datos=6/216
+				"brotherhood1", "", "descriptionTest", 2018, 2023, photosVacio, ConstraintViolationException.class
+			}, {
+				//			A: Acme Parade Req. 3 -> Brotherhoods can manage their history
+				//			B: Test Negativo: Brotherhood edita PeriodRecord con title null
+				//			C: 97,91% Recorre 47 de las 48 lineas posibles
+				//			D: cobertura de datos=6/216
+				"brotherhood1", null, "descriptionTest", 2018, 2023, photosVacio, ConstraintViolationException.class
+			}, {
+				//			A: Acme Parade Req. 3 -> Brotherhoods can manage their history
+				//			B: Test Negativo: Brotherhood crea PeriodRecord con description vacia
+				//			C: 97,91% Recorre 47 de las 48 lineas posibles
+				//			D: cobertura de datos=6/216
+				"brotherhood1", "PeriodTest", "", 2018, 2023, photosVacio, ConstraintViolationException.class
+			}, {
+				//			A: Acme Parade Req. 3 -> Brotherhoods can manage their history
+				//			B: Test Negativo: Brotherhood crea PeriodRecord con description null
+				//			C: 97,91% Recorre 47 de las 48 lineas posibles
+				//			D: cobertura de datos=6/216
+				"brotherhood1", "PeriodTest", null, 2018, 2023, photosVacio, ConstraintViolationException.class
 			},
 		};
 
@@ -90,7 +117,6 @@ public class PeriodRecordServiceTest extends AbstractTest {
 			pRec.setEndYear(endYear);
 			if (photos != null)
 				pRec.setPhotos(photos);
-			//			incRec.setPhotos(photos);
 			final PeriodRecord pRecSaved = this.periodRecordService.save(pRec);
 			Assert.isTrue(pRecSaved.getId() != 0);
 			this.periodRecordService.flush();
@@ -105,56 +131,67 @@ public class PeriodRecordServiceTest extends AbstractTest {
 	@Test
 	public void driverEdit() {
 		final Collection<String> photosVacio = new ArrayList<String>();
-		final Collection<String> photosElementoVacio = new ArrayList<String>();
 		final Collection<String> photos = new ArrayList<String>();
 		photos.add("http://tyniurl.com/dsfrefd.png");
 		photos.add("http://tyniurl.com/dsfes3rfw45d.png");
-		photosElementoVacio.add("");
+
 		final Object testingData[][] = {
 			{
-				//Correcto
-				"brotherhood1", 2213, "PeriodTest", "descriptionTest", 2018, 2023, null, null
+				//			A: Acme Parade Req. 3 -> Brotherhoods can manage their history
+				//			B: Test Positivo: Brotherhood edita PeriodRecord con photos vacio
+				//			C: 100% Recorre 65 de las 65 lineas posibles
+				//			D: cobertura de datos=6/216
+				"brotherhood2", "PeriodTest", "descriptionTest", 2018, 2023, photosVacio, null
 			}, {
-				//Usuario al que no le pertenece este miscellaneousRecord
-				"brotherhood2", 2213, "PeriodTest", "descriptionTest", 2018, 2023, null, IllegalArgumentException.class
+				//			A: Acme Parade Req. 3 -> Brotherhoods can manage their history
+				//			B: Test Positivo: Brotherhood edita PeriodRecord con photos con datos
+				//			C: 100% Recorre 65 de las 65 lineas posibles
+				//			D: cobertura de datos=6/216
+				"brotherhood2", "PeriodTest", "descriptionTest", 2018, 2023, photos, null
 			}, {
-				//Crear con usuario distinto a brothethood
-				"member1", 2213, "PeriodTest", "descriptionTest", 2018, 2023, null, IllegalArgumentException.class
+				//			A: Acme Parade Req. 3 -> Brotherhoods can manage their history
+				//			B: Test Negativo: Un member intenta editar PeriodRecord
+				//			C: 12,30% Recorre 8 de las 65 lineas posibles
+				//			D: cobertura de datos=6/216
+				"member1", "PeriodTest", "descriptionTest", 2018, 2023, null, IllegalArgumentException.class
 			}, {
-				//Title cadena vacia
-				"brotherhood1", 2213, "", "descriptionTest", 2018, 2023, null, IllegalArgumentException.class
+				//			A: Acme Parade Req. 3 -> Brotherhoods can manage their history
+				//			B: Test Negativo: Brotherhood edita PeriodRecord con title vacio
+				//			C: 98,4% Recorre 64 de las 65 lineas posibles
+				//			D: cobertura de datos=6/216
+				"brotherhood2", "", "descriptionTest", 2018, 2023, null, ConstraintViolationException.class
 			}, {
-				//Title null
-				"brotherhood1", 2213, null, "descriptionTest", 2018, 2023, null, IllegalArgumentException.class
+				//			A: Acme Parade Req. 3 -> Brotherhoods can manage their history
+				//			B: Test Negativo: Brotherhood edita PeriodRecord con title vacio
+				//			C: 98,4% Recorre 64 de las 65 lineas posibles
+				//			D: cobertura de datos=6/216
+				"brotherhood2", null, "descriptionTest", 2018, 2023, null, ConstraintViolationException.class
 			}, {
-				//Discription cadena vacia
-				"brotherhood1", 2213, "PeriodTest", "", 2018, 2023, null, IllegalArgumentException.class
+				//			A: Acme Parade Req. 3 -> Brotherhoods can manage their history
+				//			B: Test Negativo: Brotherhood edita PeriodRecord con description vacio
+				//			C: 98,4% Recorre 64 de las 65 lineas posibles
+				//			D: cobertura de datos=6/216
+				"brotherhood2", "PeriodTest", "", 2018, 2023, null, ConstraintViolationException.class
 			}, {
-				//Description null
-				"brotherhood1", 2213, "PeriodTest", null, 2018, 2023, null, IllegalArgumentException.class
-			}, {
-				//Photos 
-				"brotherhood1", 2213, "PeriodTest", "descriptionTest", 2018, 2023, photos, null
-			//	}, {
-			//						//Photos coleccion vacia
-			//						"brotherhood1", "PeriodTest", "descrptionTest", photosVacio, IllegalArgumentException.class
-			//					}, {
-			//						//Photos con elemento con URL vacía
-			//						"brotherhood1", "PeriodTest", "descrptionTest", photosElementoVacio, IllegalArgumentException.class
+				//			A: Acme Parade Req. 3 -> Brotherhoods can manage their history
+				//			B: Test Negativo: Brotherhood edita PeriodRecord con description null
+				//			C: 98,4% Recorre 64 de las 65 lineas posibles
+				//			D: cobertura de datos=6/216
+				"brotherhood2", "PeriodTest", null, 2018, 2023, null, ConstraintViolationException.class
 			},
 		};
 
 		for (int i = 0; i < testingData.length; i++)
-			this.templateEdit((String) testingData[i][0], (Integer) testingData[i][1], (String) testingData[i][2], (String) testingData[i][3], (Integer) testingData[i][4], (Integer) testingData[i][5], (Collection<String>) testingData[i][6],
-				(Class<?>) testingData[i][7]);
+			this.templateEdit((String) testingData[i][0], (String) testingData[i][1], (String) testingData[i][2], (Integer) testingData[i][3], (Integer) testingData[i][4], (Collection<String>) testingData[i][5], (Class<?>) testingData[i][6]);
 
 	}
-
-	private void templateEdit(final String user, final Integer id, final String title, final String description, final Integer startYear, final Integer endYear, final Collection<String> photos, final Class<?> expected) {
+	private void templateEdit(final String user, final String title, final String description, final Integer startYear, final Integer endYear, final Collection<String> photos, final Class<?> expected) {
 		Class<?> caught = null;
 		try {
 			this.authenticate(user);
-			final PeriodRecord bPRec = this.periodRecordService.findOne(id);
+			final Brotherhood bro = this.brotherhoodService.findByPrincipal();
+			final ArrayList<PeriodRecord> pRecs = new ArrayList<PeriodRecord>(bro.getHistory().getPeriodRecords());
+			final PeriodRecord bPRec = pRecs.get(0);
 			bPRec.setTitle(title);
 			bPRec.setDescription(description);
 			bPRec.setStartYear(startYear);
@@ -171,36 +208,38 @@ public class PeriodRecordServiceTest extends AbstractTest {
 		super.checkExceptions(expected, caught);
 
 	}
-
 	@Test
 	public void driverDelete() {
 
 		final Object testingData[][] = {
 			{
-				"brotherhood1", 2213, null
+				//			A: Acme Parade Req. 3 -> Brotherhoods can manage their history
+				//			B: Test Positivo: Brotherhood borra PeriodRecord 
+				//			C: 100% Recorre 78 de las 78 lineas posibles
+				//			D: cobertura de datos=1/3
+				"brotherhood2", null
 			}, {
-				"brotherhood2", 2213, IllegalArgumentException.class
-			}, {
-				"brotherhood1", null, IllegalArgumentException.class
-			}, {
-				"member1", null, IllegalArgumentException.class
+				//			A: Acme Parade Req. 3 -> Brotherhoods can manage their history
+				//			B: Test Negativo: Member intenta borrar PeriodRecord 
+				//			C: 10,25% Recorre 8 de las 78 lineas posibles
+				//			D: cobertura de datos=1/3
+				"member1", IllegalArgumentException.class
 			},
 		};
 
 		for (int i = 0; i < testingData.length; i++)
-			this.templateDelete((String) testingData[i][0], (Integer) testingData[i][1], (Class<?>) testingData[i][2]);
+			this.templateDelete((String) testingData[i][0], (Class<?>) testingData[i][1]);
 	}
 
-	private void templateDelete(final String actor, final Integer id, final Class<?> expected) {
+	private void templateDelete(final String actor, final Class<?> expected) {
 		Class<?> caught = null;
 		try {
 			this.authenticate(actor);
-			PeriodRecord pRec;
-			if (id != null)
-				pRec = this.periodRecordService.findOne(id);
-			else
-				pRec = new PeriodRecord();
-			this.periodRecordService.delete(pRec);
+			final PeriodRecord bPRec;
+			final Brotherhood bro = this.brotherhoodService.findByPrincipal();
+			final ArrayList<PeriodRecord> pRecs = new ArrayList<PeriodRecord>(bro.getHistory().getPeriodRecords());
+			bPRec = pRecs.get(0);
+			this.periodRecordService.delete(bPRec);
 			this.periodRecordService.flush();
 			this.unauthenticate();
 		} catch (final Throwable oops) {
