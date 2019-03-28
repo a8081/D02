@@ -77,6 +77,7 @@ public class Finder extends DomainEntity implements Cloneable {
 		this.parades = parades;
 	}
 
+	@NotNull
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
 	public Date getCreationDate() {

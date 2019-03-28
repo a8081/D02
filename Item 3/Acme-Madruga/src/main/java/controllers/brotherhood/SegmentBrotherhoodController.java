@@ -143,7 +143,7 @@ public class SegmentBrotherhoodController extends AbstractController {
 	// SAVE --------------------------------------------------------
 
 	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "save")
-	public ModelAndView save(@Valid final Segment segment, final HttpServletRequest request, final BindingResult binding) {
+	public ModelAndView save(@Valid final Segment segment, final BindingResult binding, final HttpServletRequest request) {
 		ModelAndView result;
 		String paramParadeId;
 		Integer paradeId;
