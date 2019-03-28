@@ -12,7 +12,6 @@ import javax.persistence.Entity;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -26,7 +25,6 @@ public class Segment extends DomainEntity {
 	private GPS		destinationCoordinates;
 
 
-	
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
 	public Date getOriginTime() {
@@ -37,7 +35,6 @@ public class Segment extends DomainEntity {
 		this.originTime = originTime;
 	}
 
-	
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
 	public Date getDestinationTime() {
@@ -48,7 +45,6 @@ public class Segment extends DomainEntity {
 		this.destinationTime = destinationTime;
 	}
 
-	
 	@Valid
 	public GPS getOriginCoordinates() {
 		return this.originCoordinates;
@@ -58,7 +54,6 @@ public class Segment extends DomainEntity {
 		this.originCoordinates = originCoordinates;
 	}
 
-	
 	@Valid
 	@AttributeOverrides({
 		@AttributeOverride(name = "latitude", column = @Column(name = "destinationLatitude")), @AttributeOverride(name = "longitude", column = @Column(name = "destinationLongitude"))
