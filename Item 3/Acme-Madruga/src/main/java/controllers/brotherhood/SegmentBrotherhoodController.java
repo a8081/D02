@@ -200,7 +200,7 @@ public class SegmentBrotherhoodController extends AbstractController {
 		final Parade parade = this.paradeService.findOne(paradeId);
 		segments = parade.getSegments();
 
-		if (!segments.isEmpty())
+		if (!segments.isEmpty()) {
 			if (segment.getId() == 0) {
 				final Segment lastSegment = segments.get(segments.size() - 1);
 				final Date originTime = lastSegment.getDestinationTime();
@@ -222,9 +222,10 @@ public class SegmentBrotherhoodController extends AbstractController {
 				result.addObject("isLastSegment", isLastSegment);
 
 			}
+		} else
+			result.addObject("paradeId", paradeId);
 
 		result.addObject("segment", segment); // this.constructPruned(parade));
-		result.addObject("paradeId", paradeId);
 		result.addObject("message", messageCode);
 
 		return result;
