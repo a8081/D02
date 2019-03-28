@@ -89,12 +89,15 @@ public class HistoryController extends AbstractController {
 	@RequestMapping(value = "/create", method = RequestMethod.GET)
 	public ModelAndView create() {
 		ModelAndView result;
-		final History history = this.historyService.create();
 		final Brotherhood brotherhood = this.brotherhoodService.findByPrincipal();
-		brotherhood.setHistory(history);
-		this.historyService.save(history);
+		if (brotherhood.getHistory() == null) {
+			final History history = this.historyService.create();
+			brotherhood.setHistory(history);
+			this.historyService.save(history);
+			result = this.list();
+			result.addObject("history", history);
+		}
 		result = this.list();
-		result.addObject("history", history);
 		return result;
 	}
 
