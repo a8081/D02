@@ -153,11 +153,14 @@ public class SegmentBrotherhoodController extends AbstractController {
 
 		if (binding.hasErrors())
 			result = this.createEditModelAndView(segment, paradeId);
-		else {
-			System.out.println(segment);
-			this.segmentService.save(segment, paradeId);
-			result = this.paradeBrotherhoodController.display(paradeId);
-		}
+		else
+			try {
+				System.out.println(segment);
+				this.segmentService.save(segment, paradeId);
+				result = this.paradeBrotherhoodController.display(paradeId);
+			} catch (final Throwable oops) {
+				result = this.createEditModelAndView(segment, paradeId, "general.commit.error");
+			}
 		final String banner = this.configurationParametersService.findBanner();
 		result.addObject("banner", banner);
 
