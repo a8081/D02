@@ -55,6 +55,8 @@
 			<li><a href="dashboard/administrator/statistics.do"><spring:message	code="master.page.dashboard" /></a>
 			</li>
 			
+			<li><a href="administrator/create.do"><spring:message	code="master.page.create.administrator" /></a></li>
+			
 		</security:authorize>
 		
 		<!-- ========================================================================================================= -->

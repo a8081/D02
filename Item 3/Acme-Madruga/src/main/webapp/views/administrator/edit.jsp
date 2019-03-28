@@ -49,7 +49,7 @@
 	        <form:hidden path="termsAndCondicions"/>
 	    </jstl:when>    
 	    <jstl:otherwise>
-			<form:checkbox path="termsAndCondicions"/><spring:message code="edit.accepted"/> <spring:message code="edit.termsAndConditions"/>
+			<form:checkbox path="termsAndCondicions"/><a href="profile/terms.do"><spring:message code="edit.accepted"/> <spring:message code="edit.termsAndConditions"/></a>
 			<br>
 	    </jstl:otherwise>
 	</jstl:choose>
