@@ -31,10 +31,10 @@ public class ChapterServiceTest extends AbstractTest {
 
 		final Object testingData[][] = {
 			{
-				//				A: Acme Parade Req. X Titulo Use Case
+				//				A: Acme Parade. Login
 				//				B: Test Positivo: Un chapter puede loguearse correctamente
 				//				C: % Recorre 8 de la 23 lineas posibles
-				//				D: cobertura de datos=Combinaciones con sentido/numero atributos
+				//				D: cobertura de datos=1/1
 				"chapter1", null
 			}, {
 				//Login usuario no registrado
@@ -68,16 +68,16 @@ public class ChapterServiceTest extends AbstractTest {
 	public void driverCreateAndSaveChapter() {
 		final Object testingData[][] = {
 			{
-				//				A: Acme Parade Req. 7.1 Register to de system as a chapter
+				//				A: Acme Parade Req. 7.1 Register to the system as a chapter
 				//				B: Test Positivo: Creación correcta de un chapter
 				//				C: % Recorre 8 de la 23 lineas posibles
-				//				D: cobertura de datos=Combinaciones con sentido/numero atributos
+				//				D: 7/7
 				"chapter1", "chapter1", "Name chapter 1", "Surname chapter 1", "chapter1@hotmail.es", "+34655398675", "Title chapter 1", null
 			}, {
 				//				A: Acme Parade Req. 7.1 Register to de system as a chapter
 				//				B: Test Negativo: Creación incorrecta de un chapter con telefono inválido
 				//				C: % Recorre 8 de la 23 lineas posibles
-				//				D: cobertura de datos=Combinaciones con sentido/numero atributos
+				//				D: cobertura de datos= 7/7
 				"chapter2", "chapter2", "Name chapter 2", "Surname chapter 2", "chapter2@hotmail.es", "mi telefono", "Title chapter 2", ConstraintViolationException.class
 			}
 		};
@@ -125,37 +125,37 @@ public class ChapterServiceTest extends AbstractTest {
 				// 				A: Acme Madruga Req. 9.2 Edit his o her personal data
 				//				B: Test Positivo: Edición correcta de los datos de un chapter
 				//				C: % Recorre 8 de la 23 lineas posibles
-				//				D: cobertura de datos=Combinaciones con sentido/numero atributos
+				//				D: cobertura de datos=7/7
 				"chapter1", "Name chapter 1", "Surname chapter 1", "chapter1@hotmail.es", "+34655398675", "Title chapter 1", null
 			}, {
 				// 				A: Acme Madruga Req. 9.2 Edit his o her personal data
 				//				B: Test Positivo: Edición correcta de los datos de un chapter con phone vacio
 				//				C: % Recorre 8 de la 23 lineas posibles
-				//				D: cobertura de datos=Combinaciones con sentido/numero atributos
+				//				D: cobertura de datos=7/7
 				"chapter1", "Name chapter 1", "Surname chapter 1", "chapter1@hotmail.es", "", "Title chapter 1", null
 			}, {
 				// 				A: Acme Madruga Req. 9.2 Edit his o her personal data
 				//				B: Test Negativo: Edición incorrecta de los datos de un chapter con mail inválido
 				//				C: % Recorre 8 de la 23 lineas posibles
-				//				D: cobertura de datos=Combinaciones con sentido/numero atributos
+				//				D: cobertura de datos=7/7
 				"chapter1", "Name chapter 1", "Surname chapter 1", "no tengo email", "+34655398675", "Title chapter 1", ConstraintViolationException.class
 			}, {
 				// 				A: Acme Madruga Req. 9.2 Edit his o her personal data
 				//				B: Test Negativo: Edición incorrecta de los datos de un chapter con name vacio
 				//				C: % Recorre 8 de la 23 lineas posibles
-				//				D: cobertura de datos=Combinaciones con sentido/numero atributos
+				//				D: cobertura de datos=7/7
 				"chapter1", "", "Surname chapter 1", "chapter1@hotmail.es", "+34655398675", "Title chapter 1", ConstraintViolationException.class
 			}, {
 				// 				A: Acme Madruga Req. 9.2 Edit his o her personal data
 				//				B: Test Negativo: Edición incorrecta de los datos de un chapter con apellidos vacio
 				//				C: % Recorre 8 de la 23 lineas posibles
-				//				D: cobertura de datos=Combinaciones con sentido/numero atributos
+				//				D: cobertura de datos=7/7
 				"chapter1", "Name chapter 1", "", "chapter1@hotmail.es", "+34655398675", "Title chapter 1", ConstraintViolationException.class
 			}, {
 				// 				A: Acme Madruga Req. 9.2 Edit his o her personal data
 				//				B: Test Negativo: Edición incorrecta de los datos de un chapter con title vacio
 				//				C: % Recorre 8 de la 23 lineas posibles
-				//				D: cobertura de datos=Combinaciones con sentido/numero atributos
+				//				D: cobertura de datos=7/7
 				"chapter1", "Name chapter 1", "Surname chapter 1", "chapter1@hotmail.es", "+34655398675", "", ConstraintViolationException.class
 			}
 		};
