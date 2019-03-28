@@ -21,13 +21,14 @@ public class StringToGPSConverter implements Converter<String, GPS> {
 
 		if (text == null)
 			result = null;
+		else if (text == "")
+			result = null;
 		else
 			try {
 				parts = text.split("\\|");
 				result = new GPS();
 				result.setLatitude(Double.valueOf(URLDecoder.decode(parts[0], "UTF-8")));
 				result.setLongitude(Double.valueOf(URLDecoder.decode(parts[1], "UTF-8")));
-
 			} catch (final Throwable oops) {
 				throw new IllegalArgumentException(oops);
 			}

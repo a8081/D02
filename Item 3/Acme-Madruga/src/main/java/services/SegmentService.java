@@ -75,6 +75,7 @@ public class SegmentService {
 	 * se cree un segmento nuevo
 	 **/
 	public Segment save(final Segment segment, final int idParade) {
+		Assert.notNull(segment);
 		Segment result;
 
 		if (segment.getId() != 0) { //S�lo se puede modificar el �ltimo segment
@@ -96,6 +97,7 @@ public class SegmentService {
 			segment.setOriginCoordinates(lastSegment.getOriginCoordinates());
 
 			Assert.isTrue(segment.getOriginTime().before(segment.getDestinationTime()), "El horario de llegada no puede ser anterior al horario de salida.");
+			Assert.isTrue(this.correctRangeCoordinates(segment));
 			result = this.segmentRepository.save(segment);
 			Assert.notNull(result, "El segmento guardado es nulo");
 
@@ -117,6 +119,7 @@ public class SegmentService {
 				segment.setOriginCoordinates(lastSegment.getDestinationCoordinates());
 			}
 			Assert.isTrue(segment.getOriginTime().before(segment.getDestinationTime()), "El horario de llegada no puede ser anterior al horario de salida.");
+			Assert.isTrue(this.correctRangeCoordinates(segment));
 
 			//Guardar el segment
 			result = this.segmentRepository.save(segment);
@@ -130,6 +133,14 @@ public class SegmentService {
 
 		return result;
 
+	}
+
+	public boolean correctRangeCoordinates(final Segment segment) {
+		final boolean rangeOriginLatitude = segment.getOriginCoordinates().getLatitude() < 90.0 && segment.getOriginCoordinates().getLatitude() > (-90.0);
+		final boolean rangeOriginLongitude = segment.getOriginCoordinates().getLongitude() < (180.0) && segment.getOriginCoordinates().getLongitude() > (-180.0);
+		final boolean rangeDestinationLatitude = segment.getDestinationCoordinates().getLatitude() < 90.0 && segment.getDestinationCoordinates().getLatitude() > (-90.0);
+		final boolean rangeDestinationLongitude = segment.getDestinationCoordinates().getLongitude() < 180.0 && segment.getDestinationCoordinates().getLongitude() > (-180.0);
+		return (rangeOriginLatitude && rangeOriginLongitude && rangeDestinationLatitude && rangeDestinationLongitude);
 	}
 	public void delete(final Segment segment, final int paradeId) {
 
