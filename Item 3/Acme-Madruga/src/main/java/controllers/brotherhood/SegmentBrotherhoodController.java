@@ -143,7 +143,7 @@ public class SegmentBrotherhoodController extends AbstractController {
 	// SAVE --------------------------------------------------------
 
 	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "save")
-	public ModelAndView save(@Valid final Segment segment, final HttpServletRequest request, final BindingResult binding) {
+	public ModelAndView save(@Valid final Segment segment, final BindingResult binding, final HttpServletRequest request) {
 		ModelAndView result;
 		String paramParadeId;
 		Integer paradeId;
@@ -151,22 +151,22 @@ public class SegmentBrotherhoodController extends AbstractController {
 		paramParadeId = request.getParameter("paradeId");
 		paradeId = paramParadeId.isEmpty() ? null : Integer.parseInt(paramParadeId);
 
-		if (binding.hasErrors())
+		if (binding.hasErrors()) {
 			result = this.createEditModelAndView(segment, paradeId);
-		else
+			result.addObject("errors", binding.getAllErrors());
+		} else
 			try {
-				System.out.println(segment);
 				this.segmentService.save(segment, paradeId);
 				result = this.paradeBrotherhoodController.display(paradeId);
 			} catch (final Throwable oops) {
-				result = this.createEditModelAndView(segment, paradeId, "general.commit.error");
+				if (!segment.getOriginTime().before(segment.getDestinationTime()))
+					result = this.createEditModelAndView(segment, paradeId, "segment.time.commit.error");
+				else
+					result = this.createEditModelAndView(segment, paradeId, "general.commit.error");
 			}
-		final String banner = this.configurationParametersService.findBanner();
-		result.addObject("banner", banner);
 
 		return result;
 	}
-
 	// DELETE
 
 	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "delete")
@@ -200,7 +200,7 @@ public class SegmentBrotherhoodController extends AbstractController {
 		final Parade parade = this.paradeService.findOne(paradeId);
 		segments = parade.getSegments();
 
-		if (!segments.isEmpty())
+		if (!segments.isEmpty()) {
 			if (segment.getId() == 0) {
 				final Segment lastSegment = segments.get(segments.size() - 1);
 				final Date originTime = lastSegment.getDestinationTime();
@@ -217,14 +217,17 @@ public class SegmentBrotherhoodController extends AbstractController {
 				final Boolean isLastSegment = segment.equals(lastSegment);
 				result.addObject("segment", segment);
 				result.addObject("lastSegment", lastSegment);
-				result.addObject("suggestOriginTime", originTime);
-				result.addObject("suggestOriginCoordinates", originCoordinates);
+				if (segments.isEmpty() || segments.get(0).getId() != segment.getId()) {
+					result.addObject("suggestOriginTime", originTime);
+					result.addObject("suggestOriginCoordinates", originCoordinates);
+				}
 				result.addObject("isLastSegment", isLastSegment);
 
 			}
+		} else
+			result.addObject("paradeId", paradeId);
 
 		result.addObject("segment", segment); // this.constructPruned(parade));
-		result.addObject("paradeId", paradeId);
 		result.addObject("message", messageCode);
 
 		return result;

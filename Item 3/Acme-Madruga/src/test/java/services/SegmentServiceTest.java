@@ -39,25 +39,53 @@ public class SegmentServiceTest extends AbstractTest {
 
 		final Object testingData[][] = {
 			{
-				// Crear segment correctamente
+				// 				A: Acme Parade - Functional Req. 3.3 Manage the paths of their parades, which includes listing,
+				//				showing, creating, updating, and deleting them.
+				//				B: Test Positivo: Creacion correcta de un segment
+				//				C: % Recorre 8 de la 23 lineas posibles
+				//				D: cobertura de datos=Combinaciones con sentido/numero atributos
 				"brotherhood1", "parade1", "2020/03/16 15:20", "2020/03/16 15:40", null
 			}, {
-				//Crear segment con fecha vacía
+				// 				A: Acme Parade - Functional Req. 3.3 Manage the paths of their parades, which includes listing,
+				//				showing, creating, updating, and deleting them.
+				//				B: Test Negativo: Creacion incorrecta de un segment con fecha vacía
+				//				C: % Recorre 8 de la 23 lineas posibles
+				//				D: cobertura de datos=Combinaciones con sentido/numero atributos
 				"brotherhood1", "parade1", "2020/03/16 15:20", "", ParseException.class
 			}, {
-				//Crear segment con parametro a null
+				// 				A: Acme Parade - Functional Req. 3.3 Manage the paths of their parades, which includes listing,
+				//				showing, creating, updating, and deleting them.
+				//				B: Test Negativo: Creacion incorrecta de un segment con parametro a null
+				//				C: % Recorre 8 de la 23 lineas posibles
+				//				D: cobertura de datos=Combinaciones con sentido/numero atributos
 				"brotherhood1", "parade1", null, "2020/03/16 15:40", NullPointerException.class
 			}, {
-				//Crear segment con Brotherhood vacía
+				// 				A: Acme Parade - Functional Req. 3.3 Manage the paths of their parades, which includes listing,
+				//				showing, creating, updating, and deleting them.
+				//				B: Test Negativo: Creacion incorrecta de un segment con brotherhood vacia
+				//				C: % Recorre 8 de la 23 lineas posibles
+				//				D: cobertura de datos=Combinaciones con sentido/numero atributos
 				"", "parade1", "2020/03/16 15:20", "2020/03/16 15:40", IllegalArgumentException.class
 			}, {
-				// Crear segment con parade vacía
+				// 				A: Acme Parade - Functional Req. 3.3 Manage the paths of their parades, which includes listing,
+				//				showing, creating, updating, and deleting them.
+				//				B: Test Negativo: Creacion incorrecta de un segment con parade vacía
+				//				C: % Recorre 8 de la 23 lineas posibles
+				//				D: cobertura de datos=Combinaciones con sentido/numero atributos
 				"brotherhood1", "", "2020/03/16 15:20", "2020/03/16 15:40", AssertionError.class
 			}, {
-				// Crear segment con parade invalida
+				// 				A: Acme Parade - Functional Req. 3.3 Manage the paths of their parades, which includes listing,
+				//				showing, creating, updating, and deleting them.
+				//				B: Test Negativo: Creacion incorrecta de un segment con parade invalida
+				//				C: % Recorre 8 de la 23 lineas posibles
+				//				D: cobertura de datos=Combinaciones con sentido/numero atributos
 				"brotherhood1", "parade2", "2020/03/16 15:20", "2020/03/16 15:40", IllegalArgumentException.class
 			}, {
-				// Crear segment con fecha destino anterior a fecha origen
+				// 				A: Acme Parade - Functional Req. 3.3 Manage the paths of their parades, which includes listing,
+				//				showing, creating, updating, and deleting them.
+				//				B: Test Negativo: Creacion incorrecta de un segment con fecha destino anterior a fecha origen
+				//				C: % Recorre 8 de la 23 lineas posibles
+				//				D: cobertura de datos=Combinaciones con sentido/numero atributos
 				"brotherhood1", "parade1", "2020/03/16 15:40", "2020/03/16 15:00", IllegalArgumentException.class
 			}
 		};
@@ -108,25 +136,53 @@ public class SegmentServiceTest extends AbstractTest {
 
 		final Object testingData[][] = {
 			{
-				// Guardar segment correctamente
+				// 				A: Acme Parade - Functional Req. 3.3 Manage the paths of their parades, which includes listing,
+				//				showing, creating, updating, and deleting them.
+				//				B: Test Positivo: Guardado correcto de un segment
+				//				C: % Recorre 8 de la 23 lineas posibles
+				//				D: cobertura de datos=Combinaciones con sentido/numero atributos				
 				"brotherhood1", "parade1", "2020/03/16 15:20", "2020/03/16 15:40", 40.89654, 10.23568, 41.89654, 11.23568, null
 			}, {
-				//Guardar segment con fecha vacía
+				// 				A: Acme Parade - Functional Req. 3.3 Manage the paths of their parades, which includes listing,
+				//				showing, creating, updating, and deleting them.
+				//				B: Test Negativo: Guardado incorrecto de un segment con fecha vacia
+				//				C: % Recorre 8 de la 23 lineas posibles
+				//				D: cobertura de datos=Combinaciones con sentido/numero atributos	
 				"brotherhood1", "parade1", "2020/03/16 15:20", "", 42.89654, 12.23568, 41.89654, 11.23568, ParseException.class
 			}, {
-				//Guardar segment con parametro a null
+				// 				A: Acme Parade - Functional Req. 3.3 Manage the paths of their parades, which includes listing,
+				//				showing, creating, updating, and deleting them.
+				//				B: Test Negativo: Guardado incorrecto de un segment con parametro null
+				//				C: % Recorre 8 de la 23 lineas posibles
+				//				D: cobertura de datos=Combinaciones con sentido/numero atributos				
 				"brotherhood1", "parade1", "2020/03/16 15:20", null, 41.89654, 11.23568, 42.89654, 12.23568, NullPointerException.class
 			}, {
-				//Guardar segment con brotherhood vacía
+				// 				A: Acme Parade - Functional Req. 3.3 Manage the paths of their parades, which includes listing,
+				//				showing, creating, updating, and deleting them.
+				//				B: Test Negativo: Guardado incorrecto de un segment con brotherhood vacia
+				//				C: % Recorre 8 de la 23 lineas posibles
+				//				D: cobertura de datos=Combinaciones con sentido/numero atributos
 				"", "parade1", "2020/03/16 15:20", "2020/03/16 15:40", 43.89654, 13.23568, 44.89654, 14.23568, IllegalArgumentException.class
 			}, {
-				//Guardar segment con parade vacía
+				// 				A: Acme Parade - Functional Req. 3.3 Manage the paths of their parades, which includes listing,
+				//				showing, creating, updating, and deleting them.
+				//				B: Test Negativo: Guardado incorrecto de un segment con parade vacia
+				//				C: % Recorre 8 de la 23 lineas posibles
+				//				D: cobertura de datos=Combinaciones con sentido/numero atributos
 				"brotherhood1", "", "2020/03/16 15:20", "2020/03/16 15:40", 45.89654, 15.23568, 46.89654, 16.23568, AssertionError.class
 			}, {
-				// Guardar segment con parade no correspondiente a esa brotherhood
+				// 				A: Acme Parade - Functional Req. 3.3 Manage the paths of their parades, which includes listing,
+				//				showing, creating, updating, and deleting them.
+				//				B: Test Negativo: Guardado incorrecto de un segment con parade no correspondiente a esa brotherhood
+				//				C: % Recorre 8 de la 23 lineas posibles
+				//				D: cobertura de datos=Combinaciones con sentido/numero atributos
 				"brotherhood1", "parade2", "2020/03/16 15:20", "2020/03/16 15:40", 47.89654, 17.23568, 48.89654, 18.23568, IllegalArgumentException.class
 			}, {
-				// Guardar segment con fecha destino anterior a fecha origen
+				// 				A: Acme Parade - Functional Req. 3.3 Manage the paths of their parades, which includes listing,
+				//				showing, creating, updating, and deleting them.
+				//				B: Test Negativo: Guardado incorrecto de un segment con fecha destino anterior a fecha origen
+				//				C: % Recorre 8 de la 23 lineas posibles
+				//				D: cobertura de datos=Combinaciones con sentido/numero atributos
 				"brotherhood1", "parade1", "2020/03/16 15:40", "2020/03/16 15:00", 49.89654, 19.23568, 40.89654, 10.23568, IllegalArgumentException.class
 			}
 
@@ -188,6 +244,11 @@ public class SegmentServiceTest extends AbstractTest {
 
 	/* ========================= Test Delete Segment =========================== */
 
+	// 				A: Acme Parade - Functional Req. 3.3 Manage the paths of their parades, which includes listing,
+	//				showing, creating, updating, and deleting them.
+	//				B: Test Positivo: Borrado correcto de un segment
+	//				C: % Recorre 8 de la 23 lineas posibles
+	//				D: cobertura de datos=Combinaciones con sentido/numero atributos
 	@Test
 	public void testDeleteSegment() {
 		Segment segment;
@@ -201,8 +262,11 @@ public class SegmentServiceTest extends AbstractTest {
 		super.unauthenticate();
 
 	}
-
-	//No se puede borrar un segmento si no es el ultimo del path
+	// 				A: Acme Parade - Functional Req. 3.3 Manage the paths of their parades, which includes listing,
+	//				showing, creating, updating, and deleting them.
+	//				B: Test Negativo: Guardado incorrecto de un segment, No se puede borrar un segmento si no es el ultimo del path
+	//				C: % Recorre 8 de la 23 lineas posibles
+	//				D: cobertura de datos=Combinaciones con sentido/numero atributos
 	@Test(expected = IllegalArgumentException.class)
 	public void testDeleteSegmentInvalid() {
 		Segment segment;
@@ -217,7 +281,11 @@ public class SegmentServiceTest extends AbstractTest {
 
 	}
 
-	//El usuario logueado debe ser la hermandad que tiene la parade a la que corresponde ese segmento
+	// 				A: Acme Parade - Functional Req. 3.3 Manage the paths of their parades, which includes listing,
+	//				showing, creating, updating, and deleting them.
+	//				B: Test Negativo: Guardado incorrecto de un segment, El usuario logueado debe ser la hermandad que tiene la parade a la que corresponde ese segmento
+	//				C: % Recorre 8 de la 23 lineas posibles
+	//				D: cobertura de datos=Combinaciones con sentido/numero atributos	
 	@Test(expected = IllegalArgumentException.class)
 	public void testDeleteLogInvalid() {
 		Segment segment;
