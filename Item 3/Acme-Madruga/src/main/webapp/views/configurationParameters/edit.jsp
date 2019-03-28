@@ -99,6 +99,15 @@
 	<br>
 	<br>
 	
+	<form:label path="creditCardMake">
+		<spring:message code="configurationParameters.creditCardMake" />:
+	</form:label>
+	<br>
+	<form:textarea path="creditCardMake"/>
+	<form:errors cssClass="error" path="creditCardMake" />
+	<br>
+	<br>
+	
 	<input type="submit" name="save"
 		value="<spring:message code="configurationParameters.save" />" />&nbsp; 
 	

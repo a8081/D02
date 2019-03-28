@@ -225,15 +225,16 @@
 		<property name="nameSpanish" value="Vocal" />
 	</bean>
 	
-	<!-- Other domain beans come here -->	
-	
+	<!-- =================================================================== 
+	======= ConfigurationParameters ========= =================================================================== -->
+
 	<bean id="configurationParameters" class="domain.ConfigurationParameters">
 		<property name="sysName" value="Acme Madrugá" />
-		<property name="banner" value="https://tinyurl.com/acme-madruga" />
+		<property name="banner" value="https://i.ibb.co/mB2Rdr2/logo.png" />
 		<property name="welcomeMessageEn"
 			value="Welcome to Acme Madrugá!  The site to organise your parades" />
 		<property name="welcomeMessageEsp"
-			value="¡Bienvenidos a Acme Madrugá!  Tu sitio para organizar parades" />
+			value="¡Bienvenidos a Acme Madrugá!  Tu sitio para organizar procesiones" />
 		<property name="countryPhoneCode" value="+34" />
 		<property name="spamWords">
 			<list>
@@ -282,6 +283,17 @@
 		</property>
 		<property name="maxFinderResults" value="10" />
 		<property name="finderTime" value="1" />
+		<property name="creditCardMake">
+			<list>
+				<value>VISA</value>
+				<value>MCARD</value>
+				<value>AMEX</value>
+				<value>DINNERS</value>
+				<value>FLY</value>
+			</list>
+		</property>
+		<property name="flatFare" value="10.0" />
+		<property name="vat" value="0.21" />
 
 	</bean>
 	
