@@ -51,5 +51,3 @@ div.galleryContainer{
 
 <acme:display code="float.description" value="${f.description}" />
 
-
-

@@ -115,13 +115,14 @@ public class EnrolmentBrotherhoodController extends AbstractController {
 		ModelAndView result;
 
 		final Enrolment enrolment = this.enrolmentService.reconstruct(enrolmentForm, binding);
+		final Brotherhood brotherhood = this.brotherhoodService.findByPrincipal();
 
 		if (binding.hasErrors())
 			result = this.createEditModelAndView(enrolment);
 		else
 			try {
 				this.enrolmentService.save(enrolment, enrolment.getBrotherhood().getId());
-				result = this.memberController.list();
+				result = this.memberController.listMyMembers(brotherhood.getId());
 				final String banner = this.configurationParametersService.findBanner();
 				result.addObject("banner", banner);
 			} catch (final Throwable oops) {

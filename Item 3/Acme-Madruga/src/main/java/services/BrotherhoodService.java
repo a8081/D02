@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import javax.validation.ValidationException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,24 +35,27 @@ public class BrotherhoodService {
 	private ActorService			actorService;
 
 	@Autowired
+	private UserAccountService		userAccountService;
+
+	@org.springframework.beans.factory.annotation.Autowired(required = true)
+	private Validator				validator;
+
+	@Autowired
+	private HistoryService			historyService;
+
+	@Autowired
 	private FolderService			folderService;
 
 	@Autowired
-	private EnrolmentService		enrolmentService;
-
-	@Autowired
-	private UserAccountService		userAccountService;
-
-	@Autowired
-	private Validator				validator;
+	private FloatService			floatService;
 
 
 	public Brotherhood create() {
 		final Brotherhood brotherhood = new Brotherhood();
 		this.actorService.setAuthorityUserAccount(Authority.BROTHERHOOD, brotherhood);
+
 		return brotherhood;
 	}
-
 	public Collection<Brotherhood> findAll() {
 		final Collection<Brotherhood> result = this.brotherhoodRepository.findAll();
 		Assert.notNull(result);
@@ -64,6 +69,18 @@ public class BrotherhoodService {
 		return result;
 	}
 
+	public Brotherhood findByRequestId(final int requestId) {
+		Assert.isTrue(requestId != 0);
+		final Brotherhood member = this.brotherhoodRepository.findByRequestId(requestId);
+		return member;
+	}
+
+	public Brotherhood findByEnrolmentId(final int enrolmentId) {
+		Assert.isTrue(enrolmentId != 0);
+		final Brotherhood member = this.brotherhoodRepository.findByEnrolmentId(enrolmentId);
+		return member;
+	}
+
 	public Brotherhood save(final Brotherhood brotherhood) {
 		Assert.notNull(brotherhood);
 		Brotherhood result;
@@ -71,6 +88,7 @@ public class BrotherhoodService {
 		if (brotherhood.getId() == 0) {
 			this.actorService.setAuthorityUserAccount(Authority.BROTHERHOOD, brotherhood);
 			result = this.brotherhoodRepository.save(brotherhood);
+			this.folderService.setFoldersByDefault(result);
 
 		} else {
 			this.actorService.checkForSpamWords(brotherhood);
@@ -143,7 +161,7 @@ public class BrotherhoodService {
 		return res;
 	}
 
-	public Brotherhood reconstruct(final BrotherhoodForm brotherhoodForm) {
+	public Brotherhood reconstruct(final BrotherhoodForm brotherhoodForm, final BindingResult binding) {
 		Brotherhood brotherhood;
 		if (brotherhoodForm.getId() == 0) {
 			brotherhood = new Brotherhood();
@@ -183,6 +201,11 @@ public class BrotherhoodService {
 			account.setPassword(brotherhoodForm.getUserAccountpassword());
 			brotherhood.setUserAccount(account);
 		}
+
+		this.validator.validate(brotherhood, binding);
+		if (binding.hasErrors())
+			throw new ValidationException();
+
 		return brotherhood;
 
 	}
@@ -194,23 +217,23 @@ public class BrotherhoodService {
 	}
 
 	public List<Brotherhood> getSmallestBrotherhood() {
-		final Integer[] bs = this.brotherhoodRepository.getSmallestBrotherhood();
-		Assert.notNull(bs);
+		final Brotherhood[] bs = this.brotherhoodRepository.getSmallestBrotherhood();
 		final List<Brotherhood> result = new ArrayList<Brotherhood>();
-		for (final Integer id : bs)
-			result.add(this.findOne(id));
+		if (bs.length > 0 || bs != null)
+			for (final Brotherhood b : bs)
+				result.add(b);
 		return result;
 	}
 
 	public List<Brotherhood> getLargestBrotherhood() {
-		final Integer[] bs = this.brotherhoodRepository.getLargestBrotherhood();
+		final Brotherhood[] bs = this.brotherhoodRepository.getLargestBrotherhood();
 		Assert.notNull(bs);
 		final List<Brotherhood> result = new ArrayList<Brotherhood>();
-		for (final Integer id : bs)
-			result.add(this.findOne(id));
+		if (bs.length > 0 || bs != null)
+			for (final Brotherhood b : bs)
+				result.add(b);
 		return result;
 	}
-
 	public Brotherhood reconstruct2(final BrotherhoodAreaForm brotherhoodAreaForm, final BindingResult binding) {
 		Brotherhood result;
 		Assert.isTrue(brotherhoodAreaForm.getId() != 0);
@@ -225,4 +248,23 @@ public class BrotherhoodService {
 
 		return result;
 	}
+
+	public Brotherhood findBrotherhoodByHistory(final int historyId) {
+		Brotherhood res;
+		res = this.brotherhoodRepository.findBrotherhoodByHistory(historyId);
+		Assert.notNull(res);
+		return res;
+	}
+
+	public Brotherhood findBrotherhoodByFloat(final int floatId) {
+		Brotherhood res;
+		res = this.brotherhoodRepository.findBrotherhoodByFloat(floatId);
+		Assert.notNull(res);
+		return res;
+	}
+
+	public void flush() {
+		this.brotherhoodRepository.flush();
+	}
+
 }

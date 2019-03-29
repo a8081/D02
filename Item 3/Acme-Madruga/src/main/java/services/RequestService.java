@@ -18,7 +18,7 @@ import security.Authority;
 import domain.Actor;
 import domain.Brotherhood;
 import domain.Member;
-import domain.Procession;
+import domain.Parade;
 import domain.Request;
 
 @Service
@@ -32,13 +32,16 @@ public class RequestService {
 	private ActorService		actorService;
 
 	@Autowired
-	private ProcessionService	processionService;
+	private ParadeService		paradeService;
 
 	@Autowired
 	private MemberService		memberService;
 
 	@Autowired
 	private BrotherhoodService	brotherhoodService;
+
+	@Autowired
+	private MessageService		messageService;
 
 
 	// ======================= CRUD ================================
@@ -91,7 +94,7 @@ public class RequestService {
 		final Actor principal = this.actorService.findByPrincipal();
 		final Boolean isMember = this.actorService.checkAuthority(principal, Authority.MEMBER);
 		final Boolean isBrotherhood = this.actorService.checkAuthority(principal, Authority.BROTHERHOOD);
-		Assert.isTrue(req.getProcession().getMode().equals("FINAL"));
+		Assert.isTrue(req.getParade().getMode().equals("FINAL"));
 		if (req.getId() == 0) {
 			// Creacion de Request, esta debe estar PENDING
 			// Assert.isTrue(req.getStatus().equals(Request.PENDING), "Request must be create as PENDING");
@@ -99,22 +102,24 @@ public class RequestService {
 			req.setMember(this.memberService.findByPrincipal());
 			final Date moment = new Date(System.currentTimeMillis() - 1);
 			req.setMoment(moment);
-			final boolean hasMemberRequestToProcession = this.requestRepository.hasMemberRequestToProcession(req.getProcession().getId(), req.getMember().getUserAccount().getId());
-			Assert.isTrue(!hasMemberRequestToProcession, "A member cannot request twice to the same procession");
+			final boolean hasMemberRequestToParade = this.requestRepository.hasMemberRequestToParade(req.getParade().getId(), req.getMember().getUserAccount().getId());
+			Assert.isTrue(!hasMemberRequestToParade, "A member cannot request twice to the same parade");
 			Assert.isTrue((req.getRow() == null && req.getColumn() == null && req.getExplanation() == null), "Row, column and explanation attributes only can be set by brotherhood");
 		} else {
 			Assert.isTrue(!isMember, "A member cannot update the request");
 			Assert.isTrue(isBrotherhood, "Only brotherhood can update a Request (to change it's status)");
 			Assert.isTrue(this.requestRepository.checkBrotherhoodAccess(principal.getUserAccount().getId(), req.getId()), "This Brotherhood haven't access to this request");
-			if (req.getStatus().equals("REJECTED"))
+			if (req.getStatus().equals("REJECTED")) {
 				Assert.isTrue(!(req.getExplanation() == "" || req.getExplanation() == null), "If Request is REJECTED must have a explanation");
-			if (req.getStatus().equals("APPROVED")) {
-				Assert.isTrue(!this.processionRequested(req.getProcession().getId()));
+				this.messageService.requestStatusChangedMessage(req);
+			} else if (req.getStatus().equals("APPROVED")) {
+				Assert.isTrue(!this.paradeRequested(req.getParade().getId()));
 				Assert.isTrue((req.getExplanation() == "" || req.getExplanation() == null), "A explanation musn't be written if you approve the request");
-				final boolean rowIsNull = req.getRow() == null || req.getRow() > req.getProcession().getMaxRows();
-				final boolean columnIsNull = req.getColumn() == null || req.getColumn() > req.getProcession().getMaxColumns();
+				final boolean rowIsNull = req.getRow() == null || req.getRow() > req.getParade().getMaxRows();
+				final boolean columnIsNull = req.getColumn() == null || req.getColumn() > req.getParade().getMaxColumns();
 				Assert.isTrue(!(rowIsNull || columnIsNull), "If Request is APPROVED, row and column cannot be null or greater than maximum allowed");
-				Assert.isTrue(this.requestRepository.availableRowColumn(req.getRow(), req.getColumn(), req.getProcession().getId()), "If Request is APPROVED, row and column assigned by brotherhood must be unique");
+				Assert.isTrue(this.requestRepository.availableRowColumn(req.getRow(), req.getColumn(), req.getParade().getId()), "If Request is APPROVED, row and column assigned by brotherhood must be unique");
+				this.messageService.requestStatusChangedMessage(req);
 			}
 		}
 		req = this.requestRepository.save(req);
@@ -123,7 +128,7 @@ public class RequestService {
 
 	public boolean availableRowColumn(final Request req) {
 		Assert.notNull(req);
-		return this.requestRepository.availableRowColumn(req.getRow(), req.getColumn(), req.getProcession().getId());
+		return this.requestRepository.availableRowColumn(req.getRow(), req.getColumn(), req.getParade().getId());
 	}
 
 	public void delete(final Request req) {
@@ -140,20 +145,20 @@ public class RequestService {
 
 	/**
 	 * This method suggest a good position automatically,
-	 * to an approved request to a procession. The system understand
+	 * to an approved request to a parade. The system understand
 	 * a good position as a lower number of row-column.
 	 * 
 	 * @return Tuple implemented as a two elements List of Integer.
 	 * 
 	 * @author a8081
 	 * */
-	public List<Integer> suggestPosition(final Procession procession) {
-		final int processionId = procession.getId();
+	public List<Integer> suggestPosition(final Parade parade) {
+		final int paradeId = parade.getId();
 		boolean availablePosition = false;
 		final List<Integer> res = new ArrayList<>();
-		for (int i = 1; i <= procession.getMaxRows(); i++) {
-			for (int j = 1; j <= procession.getMaxColumns(); j++) {
-				availablePosition = this.requestRepository.availableRowColumn(i, j, processionId);
+		for (int i = 1; i <= parade.getMaxRows(); i++) {
+			for (int j = 1; j <= parade.getMaxColumns(); j++) {
+				availablePosition = this.requestRepository.availableRowColumn(i, j, paradeId);
 				if (availablePosition) {
 					res.add(i);
 					res.add(j);
@@ -169,35 +174,35 @@ public class RequestService {
 		return res;
 	}
 	/**
-	 * This method allow members request to a procession, creating a new Request with principal member
-	 * and procession given as id parameter, as its attributes.
+	 * This method allow members request to a parade, creating a new Request with principal member
+	 * and parade given as id parameter, as its attributes.
 	 * 
 	 * @author a8081
 	 * */
-	public Request requestToProcession(final Integer processionId) {
+	public Request requestToParade(final Integer paradeId) {
 		final Request req = this.create();
-		final Procession procession = this.processionService.findOne(processionId);
-		Assert.isTrue(procession.getMode().equals("FINAL"), "A member cannot access to a procession in draft mode, so he or she cannot request to it");
-		req.setProcession(procession);
+		final Parade parade = this.paradeService.findOne(paradeId);
+		Assert.isTrue(parade.getMode().equals("FINAL"), "A member cannot access to a parade in draft mode, so he or she cannot request to it");
+		req.setParade(parade);
 		final Request retrieved = this.save(req);
 		return retrieved;
 
 	}
 
-	public Collection<Request> findByProcession(final Integer processionId) {
+	public Collection<Request> findByParade(final Integer paradeId) {
 		final int principalId = this.actorService.findByPrincipal().getUserAccount().getId();
-		final Procession p = this.processionService.findOne(processionId);
-		final Collection<Request> cr = this.requestRepository.findByProcesion(processionId);
+		final Parade p = this.paradeService.findOne(paradeId);
+		final Collection<Request> cr = this.requestRepository.findByProcesion(paradeId);
 		Assert.isTrue(p.getBrotherhood().getUserAccount().getId() == principalId, "Access to request denied, principal hasn't enough privilegies");
 		return cr;
 	}
 
-	public Request findByProcessionMember(final Integer processionId) {
-		Assert.isTrue(processionId != 0);
+	public Request findByParadeMember(final Integer paradeId) {
+		Assert.isTrue(paradeId != 0);
 		Request res = null;
 		final Member principal = this.memberService.findByPrincipal();
-		final Procession p = this.processionService.findOne(processionId);
-		final Collection<Request> cr = this.requestRepository.findByProcesion(processionId);
+		this.paradeService.findOne(paradeId);
+		final Collection<Request> cr = this.requestRepository.findByProcesion(paradeId);
 		for (final Request request : cr)
 			if (request.getMember().equals(principal)) {
 				res = request;
@@ -207,13 +212,13 @@ public class RequestService {
 	}
 
 	/**
-	 * Return true if the procession pass as a parameter is already requested (one approved request).
+	 * Return true if the parade pass as a parameter is already requested (one approved request).
 	 * 
 	 * @author a8081
 	 * */
-	public Boolean processionRequested(final Integer processionId) {
-		Assert.isTrue(processionId != 0);
-		final boolean res = this.requestRepository.processionRequested(processionId);
+	public Boolean paradeRequested(final Integer paradeId) {
+		Assert.isTrue(paradeId != 0);
+		final boolean res = this.requestRepository.paradeRequested(paradeId);
 		return res;
 	}
 
@@ -239,39 +244,43 @@ public class RequestService {
 	}
 
 	public Double findPendingRequestRadio() {
-		final Double result = this.requestRepository.findPendingRequestRatio();
-		Assert.notNull(result);
+		Double result = this.requestRepository.findPendingRequestRatio();
+		if (result == null)
+			result = 0.0;
 		return result;
 	}
-
 	public Double findApprovedRequestRadio() {
-		final Double result = this.requestRepository.findApprovedRequestRatio();
-		Assert.notNull(result);
+		Double result = this.requestRepository.findApprovedRequestRatio();
+		if (result == null)
+			result = 0.0;
 		return result;
 	}
 
 	public Double findRejectedRequestRadio() {
-		final Double result = this.requestRepository.findRejectedRequestRatio();
-		Assert.notNull(result);
+		Double result = this.requestRepository.findRejectedRequestRatio();
+		if (result == null)
+			result = 0.0;
 		return result;
 	}
 
-	public Double findPendingRequestByProcessionRadio(final Integer id) {
-		final Double result = this.requestRepository.findPendingRequestByProcessionRatio(id);
-		Assert.notNull(result);
+	public Double findPendingRequestByParadeRadio(final Integer id) {
+		Double result = this.requestRepository.findPendingRequestByParadeRatio(id);
+		if (result == null)
+			result = 0.0;
 		return result;
 	}
 
-	public Double findApprovedRequestByProcessionRadio(final Integer id) {
-		final Double result = this.requestRepository.findApprovedRequestByProcessionRatio(id);
-		System.out.println("BBBBBBBBBBBBBBBBBBBBBBBBA" + result);
-		Assert.notNull(result);
+	public Double findApprovedRequestByParadeRadio(final Integer id) {
+		Double result = this.requestRepository.findApprovedRequestByParadeRatio(id);
+		if (result == null)
+			result = 0.0;
 		return result;
 	}
 
-	public Double findRejectedRequestByProcessionRadio(final Integer id) {
-		final Double result = this.requestRepository.findRejectedRequestByProcessionRatio(id);
-		Assert.notNull(result);
+	public Double findRejectedRequestByParadeRadio(final Integer id) {
+		Double result = this.requestRepository.findRejectedRequestByParadeRatio(id);
+		if (result == null)
+			result = 0.0;
 		return result;
 	}
 

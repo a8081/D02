@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import services.BrotherhoodService;
 import services.FloatService;
+import domain.Brotherhood;
 import domain.Float;
 
 @Controller
@@ -21,7 +23,10 @@ import domain.Float;
 public class FloatController extends AbstractController {
 
 	@Autowired
-	private FloatService	floatService;
+	private FloatService		floatService;
+
+	@Autowired
+	private BrotherhoodService	brotherhoodService;
 
 
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
@@ -29,14 +34,33 @@ public class FloatController extends AbstractController {
 		final ModelAndView result = new ModelAndView("float/list");
 		final Collection<domain.Float> floats = this.floatService.findByBrotherhoodPrincipal();
 		result.addObject("floats", floats);
+		result.addObject("button", false);
+		return result;
+	}
+
+	@RequestMapping(value = "/listMyFloats", method = RequestMethod.GET)
+	public ModelAndView listMyFloats(@RequestParam final int brotherhoodId) {
+		ModelAndView result;
+		final Brotherhood brotherhood = this.brotherhoodService.findOne(brotherhoodId);
+		final Collection<domain.Float> floats = this.floatService.findFloatsByBrotherhood(brotherhood.getUserAccount().getId());
+
+		result = new ModelAndView("float/list");
+		result.addObject("floats", floats);
+		result.addObject("brotherhood", brotherhood);
+		result.addObject("button", true);
+		result.addObject("requestURI", "float/listMyFloats.do");
 		return result;
 	}
 
 	@RequestMapping(value = "/display", method = RequestMethod.GET)
 	public ModelAndView display(@RequestParam final int floatId) {
-		final ModelAndView result = new ModelAndView("float/display");
+		final ModelAndView result;
 		final domain.Float f = this.floatService.findOne(floatId);
+		final Brotherhood brotherhood = this.brotherhoodService.findBrotherhoodByFloat(floatId);
+
+		result = new ModelAndView("float/display");
 		result.addObject("f", f);
+		result.addObject("brotherhood", brotherhood);
 		return result;
 	}
 

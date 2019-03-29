@@ -41,7 +41,7 @@
 			<display:column titleKey="request.status" class="${colorStyle}">
 				<acme:statusChoose status="${row.status}"/>
 			</display:column>
-			<display:column property="procession.title" titleKey="request.procession.title" />
+			<display:column property="parade.title" titleKey="request.parade.title" />
 			<display:column>
 				<acme:link url="request${rolURL}/display.do?requestId=${row.id}" code="request.display"/>
 			</display:column>
@@ -49,7 +49,7 @@
 			<security:authorize access="hasRole('BROTHERHOOD')">
 				<display:column>
 					<jstl:if test="${row.status eq 'PENDING'}">
-						<acme:button url="request/brotherhood/approve.do?requestId=${row.id}&processionId=${row.procession.id}" name="approve" code="request.approve"/>
+						<acme:button url="request/brotherhood/approve.do?requestId=${row.id}&paradeId=${row.parade.id}" name="approve" code="request.approve"/>
 					</jstl:if>
 				</display:column>
 				<display:column>
@@ -65,8 +65,8 @@
 
 <security:authorize access="hasRole('MEMBER')">
 	<jstl:choose>
-		<jstl:when test="${theresProcessionsAvailable}">
-			<acme:button url="procession/member/list.do" name="more" code="request.more"/>
+		<jstl:when test="${theresParadesAvailable}">
+			<acme:button url="parade/member/list.do" name="more" code="request.more"/>
 		</jstl:when>
 		<jstl:otherwise>
 			<spring:message code="request.create.no" />

@@ -4,8 +4,10 @@ package controllers;
 import java.util.Collection;
 
 import javax.validation.Valid;
+import javax.validation.ValidationException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -96,11 +98,14 @@ public class MemberController extends AbstractController {
 		member = this.memberService.findOne(memberId);
 
 		if (member != null) {
-			final int principal = this.actorService.findByPrincipal().getId();
 			result = new ModelAndView("member/display");
 			result.addObject("member", member);
-			final boolean displayButtons = principal == member.getId();
-			result.addObject("displayButtons", displayButtons);
+			final Object user = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			if (user != "anonymousUser") {
+				final int principal = this.actorService.findByPrincipal().getId();
+				final boolean displayButtons = principal == member.getId();
+				result.addObject("displayButtons", displayButtons);
+			}
 		} else
 			result = new ModelAndView("redirect:/misc/403.jsp");
 
@@ -121,11 +126,13 @@ public class MemberController extends AbstractController {
 		} else
 			try {
 				final UserAccount ua = this.userAccountService.reconstruct(actorForm, Authority.MEMBER);
-				member = this.memberService.reconstruct(actorForm);
+				member = this.memberService.reconstruct(actorForm, binding);
 				member.setUserAccount(ua);
 				this.registerService.saveMember(member, binding);
 				result.addObject("alert", "member.edit.correct");
 				result.addObject("actorForm", actorForm);
+			} catch (final ValidationException oops) {
+				result = this.createEditModelAndViewForm(actorForm, null);
 			} catch (final Throwable e) {
 				if (e.getMessage().contains("username is register"))
 					result.addObject("alert", "member.edit.usernameIsUsed");
@@ -161,7 +168,31 @@ public class MemberController extends AbstractController {
 		result.addObject("members", members);
 		result.addObject("brotherhood", brotherhood);
 		result.addObject("ok", true);
+		result.addObject("button", false);
 		result.addObject("requetURI", "member/list.do");
+
+		final String banner = this.configurationParametersService.findBanner();
+		result.addObject("banner", banner);
+
+		return result;
+	}
+
+	// LIST MEMBERS BY BROTHERHOOD ---------------------------------------------------------------		
+
+	@RequestMapping(value = "/listMyMembers", method = RequestMethod.GET)
+	public ModelAndView listMyMembers(@RequestParam final int brotherhoodId) {
+		final ModelAndView result;
+		final Brotherhood brotherhood = this.brotherhoodService.findOne(brotherhoodId);
+		final Collection<Member> members;
+
+		members = this.memberService.allMembersByBrotherhood(brotherhood.getUserAccount().getId());
+
+		result = new ModelAndView("member/list");
+		result.addObject("members", members);
+		result.addObject("brotherhood", brotherhood);
+		result.addObject("ok", true);
+		result.addObject("button", true);
+		result.addObject("requetURI", "member/listMyMembers.do");
 
 		final String banner = this.configurationParametersService.findBanner();
 		result.addObject("banner", banner);
@@ -205,6 +236,17 @@ public class MemberController extends AbstractController {
 		this.actorService.save(principal);
 
 		final ModelAndView result = new ModelAndView("redirect:../j_spring_security_logout");
+		return result;
+	}
+
+	protected ModelAndView createEditModelAndViewForm(final ActorFrom actorForm, final String messageCode) {
+		final ModelAndView result;
+
+		result = new ModelAndView("member/edit");
+		result.addObject("actorForm", actorForm);
+
+		result.addObject("message", messageCode);
+
 		return result;
 	}
 

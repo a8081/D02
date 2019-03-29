@@ -39,11 +39,27 @@
 		<value>/views/folder/tiles.xml</value>
 		<value>/views/socialProfile/tiles.xml</value>
 		<value>/views/request/tiles.xml</value>
-		<value>/views/procession/tiles.xml</value>
+		<value>/views/parade/tiles.xml</value>
 		<value>/views/message/tiles.xml</value>
 		<value>/views/member/tiles.xml</value>
 		<value>/views/enrolment/tiles.xml</value>
 		<value>/views/finder/tiles.xml</value>
+		<value>/views/history/tiles.xml</value>
+		<value>/views/inceptionRecord/tiles.xml</value>
+		<value>/views/legalRecord/tiles.xml</value>
+		<value>/views/periodRecord/tiles.xml</value>
+		<value>/views/miscellaneousRecord/tiles.xml</value>
+		<value>/views/linkRecord/tiles.xml</value>
+
+		<value>/views/proclaim/tiles.xml</value>
+
+		<value>/views/segment/tiles.xml</value>
+		
+		<value>/views/sponsor/tiles.xml</value>
+		<value>/views/sponsorship/tiles.xml</value>
+		
+		<value>/views/chapter/tiles.xml</value>
+
 		
 		
 	</util:list>

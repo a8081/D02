@@ -102,6 +102,10 @@
     <td><spring:message code="ratio.brotherhood.area" var="ratioBH" /><jstl:out value="${ratioBH}" /></td>
     <td>${ratioBrotherhoods}</td>
     </tr>
+    <tr >
+    <td><spring:message code="ratio.no.coordinated.area" var="maxBH" /><jstl:out value="${maxBH}" /></td>
+    <td>${ratioNoCoordinatedArea}</td>
+    </tr>
     </table>
     
     <table>
@@ -131,30 +135,106 @@
     <table>
     <spring:message code="dashboard.procession" var="findersH" />
  <caption><jstl:out value="${findersH}" /></caption>
- 	<jstl:forEach items="${processions }" var="procession">
+ 	<jstl:forEach items="${parades }" var="parade">
     <tr >
-    <td><jstl:out value="${procession.title}" /></td>
+    <td><jstl:out value="${parade.title}" /></td>
     <td><spring:url value="dashboard/administrator/statistics.do" var="displayURL">
-				<spring:param name="id" value="${procession.id }"/> <!-- es el par�metro que va a acompa�ar a la url -->
+				<spring:param name="id" value="${parade.id }"/> <!-- es el par�metro que va a acompa�ar a la url -->
 			</spring:url>
 			<a href="${displayURL}"><spring:message code="dashboard.calculate"/></a></td>
     </tr>
     </jstl:forEach>
     <tr >
     <td><spring:message code="requests.approved" var="reqaH" /><jstl:out value="${reqaH}" /></td>
-    <td>${requestsProcessionApproved}</td>
+    <td>${requestsParadeApproved}</td>
     </tr>
      <tr >
     <td><spring:message code="requests.pending" var="reqpH" /><jstl:out value="${reqpH}" /></td>
-    <td>${requestsProcessionPending}</td>
+    <td>${requestsParadePending}</td>
     </tr>
      <tr>
     <td><spring:message code="requests.rejected" var="reqrH" /><jstl:out value="${reqrH}" /></td>
-    <td>${requestsProcessionRejected}</td>
+    <td>${requestsParadeRejected}</td>
     </tr>
     	
        
     </table>
+    
+    <table>
+    <spring:message code="dashboard.histories" var="historiesH" />
+ <caption><jstl:out value="${historiesH}" /></caption>
+    <tr >
+    <td><spring:message code="average.histories" var="averageHH" /><jstl:out value="${averageHH}" /></td>
+    <td>${avgStatisticsRecord}</td>
+    </tr>
+    <tr >
+    <td><spring:message code="min.histories" var="minHH" /><jstl:out value="${minHH}" /></td>
+    <td>${minAvgStatisticsRecord}</td>
+    </tr>
+    <tr >
+    <td><spring:message code="max.histories" var="maxHH" /><jstl:out value="${maxHH}" /></td>
+    <td>${maxAvgStatisticsRecord}</td>
+    </tr>
+    <tr >
+    <td><spring:message code="desviation.histories" var="desHH" /><jstl:out value="${desHH}" /></td>
+    <td>${stddevAvgStatisticsRecord}</td>
+    </tr>
+    <tr >
+    <td><spring:message code="largest.brotherhood.history" var="largestHH" /><jstl:out value="${largestHH}" /></td>
+    <td>${largestBrotherhoodPerHistory}</td>
+    </tr>
+    <tr >
+    <td><spring:message code="brotherhood.history" var="brotherhoodHH" /><jstl:out value="${brotherhoodHH}" /></td>
+    <td>${brotherhoodPerHistory}</td>
+    </tr>
+    
+    <table>
+    
+        <table>
+    <spring:message code="dashboard.chapters" var="chaptersH" />
+ <caption><jstl:out value="${chaptersH}" /></caption>
+    <tr >
+    <td><spring:message code="average.chapter" var="averageCH" /><jstl:out value="${averageCH}" /></td>
+    <td>${avgStatisticsParadesByChapter}</td>
+    </tr>
+    <tr >
+    <td><spring:message code="min.chapter" var="minCH" /><jstl:out value="${minCH}" /></td>
+    <td>${minStatisticsParadesByChapter}</td>
+    </tr>
+    <tr >
+    <td><spring:message code="max.chapter" var="maxCH" /><jstl:out value="${maxCH}" /></td>
+    <td>${maxStatisticsParadesByChapter}</td>
+    </tr>
+    <tr >
+    <td><spring:message code="deviation.chapter" var="desCH" /><jstl:out value="${desCH}" /></td>
+    <td>${stddevStatisticsParadesByChapter}</td>
+    </tr>
+    <tr >
+    <td><spring:message code="ratio.chapter" var="ratioCH" /><jstl:out value="${ratioCH}" /></td>
+    <td>${chapterTenPercent}</td>
+    </tr>
+    <table>
+    
+    <table>
+    <spring:message code="dashboard.parades" var="paradesH" />
+ <caption><jstl:out value="${paradesH}" /></caption>
+    <tr >
+    <td><spring:message code="ratio.parade" var="ratioPH" /><jstl:out value="${ratioPH}" /></td>
+    <td>${ratioDraftFinalParade}</td>
+    </tr>
+    <tr >
+    <td><spring:message code="submitted.parade" var="submittedPH" /><jstl:out value="${submittedPH}" /></td>
+    <td>${submittedParadeRatio}</td>
+    </tr>
+    <tr >
+    <td><spring:message code="accepted.parade" var="acceptedPH" /><jstl:out value="${acceptedPH}" /></td>
+    <td>${acceptedParadeRatio}</td>
+    </tr>
+    <tr >
+    <td><spring:message code="rejected.parade" var="rejectedPH" /><jstl:out value="${rejectedPH}" /></td>
+    <td>${rejectedParadeRatio}</td>
+    </tr>
+    <table>
     
     
     <table>

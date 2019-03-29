@@ -95,6 +95,7 @@ public class FolderService {
 		} else {
 			final Collection<Folder> fs = this.findAllByUserId(a.getUserAccount().getId());
 			Assert.isTrue(fs.contains(f));
+			f.setActor(a);
 			saved = this.folderRepository.save(f);
 		}
 		return saved;
@@ -106,15 +107,15 @@ public class FolderService {
 
 		Folder saved;
 		final boolean bool = this.checkForSpamWords(f);
-
 		if (bool)
 			a.setSpammer(true);
-
 		if (f.getId() == 0) {
 			Assert.isTrue(f.getFather() == null);
 			f.setActor(a);
 			saved = this.folderRepository.save(f);
 		} else {
+			final Folder folder = this.findOne(f.getId());
+			f.setActor(a);
 			final Collection<Folder> fs = this.findAllByUserId(a.getUserAccount().getId());
 			Assert.isTrue(fs.contains(f));
 			saved = this.folderRepository.save(f);
@@ -167,6 +168,7 @@ public class FolderService {
 		inbox.setActor(actor);
 		inbox.setMessages(messages);
 		inbox.setFather(null);
+		this.save(inbox, actor);
 		folders.add(inbox);
 
 		final Folder outbox = this.create();
@@ -175,6 +177,7 @@ public class FolderService {
 		outbox.setActor(actor);
 		outbox.setMessages(messages);
 		outbox.setFather(null);
+		this.save(outbox, actor);
 		folders.add(outbox);
 
 		final Folder trash = this.create();
@@ -183,6 +186,7 @@ public class FolderService {
 		trash.setActor(actor);
 		trash.setMessages(messages);
 		trash.setFather(null);
+		this.save(trash, actor);
 		folders.add(trash);
 
 		final Folder spam = this.create();
@@ -191,6 +195,7 @@ public class FolderService {
 		spam.setActor(actor);
 		spam.setMessages(messages);
 		spam.setFather(null);
+		this.save(spam, actor);
 		folders.add(spam);
 
 		final Folder notification = this.create();
@@ -199,6 +204,7 @@ public class FolderService {
 		notification.setActor(actor);
 		notification.setMessages(messages);
 		notification.setFather(null);
+		this.save(notification, actor);
 		folders.add(notification);
 
 		return folders;

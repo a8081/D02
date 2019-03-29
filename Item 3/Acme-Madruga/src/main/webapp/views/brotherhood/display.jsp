@@ -75,15 +75,17 @@ function deletePersonalData(){
 	</jstl:otherwise>
 </jstl:choose>
 <br>
-	<acme:button url="procession/listByBrotherhood.do?brotherhoodId=${brotherhood.id}" name="processionList" code="brotherhood.processionList"/>
+	<acme:button url="parade/listByBrotherhood.do?brotherhoodId=${brotherhood.id}" name="back" code="brotherhood.processionList"/>
+	<acme:button url="member/listMyMembers.do?brotherhoodId=${brotherhood.id}" name="back" code="brotherhood.memberList"/>
+	<acme:button url="float/listMyFloats.do?brotherhoodId=${brotherhood.id}" name="back" code="brotherhood.floatList"/>
+	<jstl:if test="${not empty brotherhood.history}">
+		<acme:button url="history/listForAnonymous.do?brotherhoodId=${brotherhood.id}" name="back" code="brotherhood.history"/>
+	</jstl:if>
+	
+	
 <br>
 <jstl:if test="${displayButtons}">
 	<button onClick="generatePDF()"><spring:message code="display.getData"/></button>
 	<button onClick="deletePersonalData()"><spring:message code="display.button.deletePersonalData"/></button>
 </jstl:if>
 <br>
-<security:authorize access="hasRole('MEMBER')">
-	<acme:button url="brotherhood/list.do" name="back" code="procession.back.list"/>
-</security:authorize>
-
-

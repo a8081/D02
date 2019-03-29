@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import services.ActorService;
+import services.AdministratorService;
 import services.ConfigurationParametersService;
 import services.FolderService;
 import services.MessageService;
@@ -38,41 +39,11 @@ public class MessageController extends AbstractController {
 	private ActorService					actorService;
 
 	@Autowired
+	private AdministratorService			administratorService;
+
+	@Autowired
 	private ConfigurationParametersService	configurationParametersService;
 
-
-	//	@RequestMapping(value = "/list", method = RequestMethod.GET)
-	//	public ModelAndView list2(@RequestParam final int folderId) {
-	//		final ModelAndView res;
-	//		final Collection<Message> messages;
-	//		final Folder father = this.folderService.findOne(folderId);
-	//		final Collection<Folder> folders = this.folderService.findAll();
-	//		final Collection<Folder> foldersFinal = new ArrayList<>();
-	//		for (final Folder f : folders)
-	//			if (f.getFather() != null && f.getFather().equals(father))
-	//				foldersFinal.add(f);
-	//
-	//		folders.retainAll(foldersFinal);
-	//
-	//		if (folder != null) {
-	//			final int userId = this.actorService.findByPrincipal().getUserAccount().getId();
-	//
-	//			messages = this.messageService.findAllByFolderIdAndUserId(folderId, userId);
-	//
-	//			res = new ModelAndView("message/list");
-	//			res.addObject("m", messages);
-	//			res.addObject("folder", folder);
-	//			res.addObject("father", father);
-	//			res.addObject("folders", foldersFinal);
-	//			res.addObject("requestURI", "message/list.do?folderId=" + folderId);
-	//			final String banner = this.configurationParametersService.find().getBanner();
-	//			res.addObject("banner", banner);
-	//		} else
-	//			res = new ModelAndView("redirect:/misc/403.jsp");
-	//
-	//		return res;
-	//
-	//	}
 
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	public ModelAndView list(@RequestParam final int folderId) {
@@ -156,6 +127,7 @@ public class MessageController extends AbstractController {
 
 		message = this.messageService.create();
 		final Collection<Actor> actors = this.actorService.findAll();
+		actors.remove(this.administratorService.findSystem());
 		message.setRecipients(actors);
 		final Collection<String> priorities = new ArrayList<>();
 
@@ -421,6 +393,7 @@ public class MessageController extends AbstractController {
 
 		final ModelAndView res;
 		final Collection<Actor> recipients = this.actorService.findAll();
+		recipients.remove(this.administratorService.findSystem());
 		final Collection<String> priorities = new ArrayList<>();
 
 		priorities.add("HIGH");

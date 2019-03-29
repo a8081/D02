@@ -35,7 +35,7 @@
     
     <form:hidden path="id"/>
 	<form:hidden path="version"/>
-	<form:hidden path="processions"/>
+	<form:hidden path="parades"/>
 	<form:hidden path="creationDate"/>
 	
 	<form:label path="keyword">
@@ -75,21 +75,21 @@
 	<spring:message code="finder.results" />
 	<br>
 	
-<display:table name="${finder.processions}" id="row" requestURI="/finder/member/edit.do" pagesize="15" class="displaytag">
-	<display:column property="title" titleKey="procession.title" />
+<display:table name="${finder.parades}" id="row" requestURI="/finder/member/edit.do" pagesize="15" class="displaytag">
+	<display:column property="title" titleKey="parade.title" />
 	
-	<display:column property="ticker" titleKey="procession.ticker" />
+	<display:column property="ticker" titleKey="parade.ticker" />
 
-	<acme:dataTableColumn code="procession.moment" property="moment" />
+	<acme:dataTableColumn code="parade.moment" property="moment" />
 	
-	<display:column titleKey="procession.brotherhood">
+	<display:column titleKey="parade.brotherhood">
 		<jstl:out value="${row.brotherhood.title}" />
 		
 	</display:column>
 	
 	<display:column>
-		<acme:link url="procession${rolURL}/display.do?processionId=${row.id}"
-			code="procession.display" />
+		<acme:link url="parade${rolURL}/display.do?paradeId=${row.id}"
+			code="parade.display" />
 	</display:column>
 	
 	

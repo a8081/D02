@@ -37,10 +37,10 @@ public class EnrolmentService {
 	private BrotherhoodService	brotherhoodService;
 
 	@Autowired
-	private Validator			validator;
+	private MessageService		messageService;
 
-	@Autowired
-	private PositionService		positionService;
+	@org.springframework.beans.factory.annotation.Autowired(required = true)
+	private Validator			validator;
 
 
 	public Enrolment create() {
@@ -81,13 +81,18 @@ public class EnrolmentService {
 
 		if (isMember) {
 			if (enrolment.getId() == 0) {
+				final Brotherhood bro = this.brotherhoodService.findOne(brotherhoodId);
+				final Member memberPrincipal = this.memberService.findByPrincipal();
 				Assert.isTrue(!this.brotherhoodService.findAllMyBrotherHoodByMember().contains(enrolment.getBrotherhood()));
+				Assert.isNull(this.enrolmentRepository.enrolmentActive(bro.getUserAccount().getId(), memberPrincipal.getUserAccount().getId()), "A member cannot has more than one active enrolment. Id Member: " + principal.getId() + " - Id Brothehood: "
+					+ brotherhoodId + ".");
 				final Date moment = new Date(System.currentTimeMillis() - 1);
 				enrolment.setMoment(moment);
 				enrolment.setEnrolled(false);
-				enrolment.setMember(this.memberService.findByPrincipal());
+				enrolment.setMember(memberPrincipal);
 				enrolment.setDropOut(null);
-				enrolment.setBrotherhood(this.brotherhoodService.findOne(brotherhoodId));
+				enrolment.setPosition(null);
+				enrolment.setBrotherhood(bro);
 			} else
 				Assert.isTrue(enrolment.getMember() == this.memberService.findByPrincipal());
 			if (enrolment.getDropOut() != null)
@@ -116,47 +121,46 @@ public class EnrolmentService {
 	public void dropOut(final Member member) {
 		Assert.notNull(member);
 		Assert.isTrue(this.memberService.findAll().contains(member));
-		final Actor principal = this.actorService.findByPrincipal();
-		final Boolean isBrotherhood = this.actorService.checkAuthority(principal, Authority.BROTHERHOOD);
+		final Brotherhood principal = this.brotherhoodService.findByPrincipal();
 		Collection<Enrolment> enrolments;
 		Enrolment enrolment;
 
-		if (isBrotherhood) {
-			enrolments = this.enrolmentRepository.findEnrolmentFromBroMember(principal.getUserAccount().getId(), member.getUserAccount().getId());
-			Assert.notNull(enrolments);
-			enrolment = this.enrolmentActive(enrolments);
-			Assert.notNull(enrolment, "No puede expulsar de la hermandad a un miembro que no pertenece a ella.");
-			enrolment.setDropOut(new Date(System.currentTimeMillis() - 1));
-		}
+		enrolments = this.enrolmentRepository.findEnrolmentFromBroMember(principal.getUserAccount().getId(), member.getUserAccount().getId());
+		Assert.notNull(enrolments);
+		enrolment = this.enrolmentRepository.enrolmentActive(principal.getUserAccount().getId(), member.getUserAccount().getId());
+		Assert.notNull(enrolment, "No puede expulsar de la hermandad a un miembro que no pertenece a ella.");
+		enrolment.setDropOut(new Date(System.currentTimeMillis() - 1));
+		this.enrolmentRepository.save(enrolment);
+		this.messageService.memberDropOutMessage(enrolment);
 	}
 
 	/* Un miembro sale de una hermandad */
 	public void leave(final Brotherhood brotherhood) {
 		Assert.notNull(brotherhood);
 		Assert.isTrue(this.brotherhoodService.findAll().contains(brotherhood));
-		final Actor principal = this.actorService.findByPrincipal();
-		final Boolean isMember = this.actorService.checkAuthority(principal, Authority.MEMBER);
+		final Member principal = this.memberService.findByPrincipal();
 		Assert.isTrue(this.brotherhoodService.findAllMyBrotherHoodByMember().contains(brotherhood), "No puede darse de baja de una hermandad a la que no pertenece.");
 		Collection<Enrolment> enrolments;
 		Enrolment enrolment;
 
-		if (isMember) {
-			enrolments = this.enrolmentRepository.findEnrolmentFromBroMember(brotherhood.getUserAccount().getId(), principal.getUserAccount().getId());
-			Assert.notNull(enrolments);
-			enrolment = this.enrolmentActive(enrolments);
-			Assert.notNull(enrolment, "No puede darse de baja de una hermandad a la que no pertenece.");
-			enrolment.setDropOut(new Date(System.currentTimeMillis() - 1));
-		}
+		enrolments = this.enrolmentRepository.findEnrolmentFromBroMember(brotherhood.getUserAccount().getId(), principal.getUserAccount().getId());
+		Assert.notNull(enrolments);
+		enrolment = this.enrolmentActive(brotherhood.getUserAccount().getId(), principal.getUserAccount().getId());
+		Assert.notNull(enrolment, "No puede darse de baja de una hermandad a la que no pertenece.");
+		enrolment.setDropOut(new Date(System.currentTimeMillis() - 1));
+		this.enrolmentRepository.save(enrolment);
 	}
 
 	public Enrolment getEnrolment(final Actor brotherhood, final Actor member) {
-		final Collection<Enrolment> res = this.enrolmentRepository.findEnrolmentFromBroMember(brotherhood.getUserAccount().getId(), member.getUserAccount().getId());
-		final Enrolment enrolment = this.enrolmentActive(res);
-		Assert.notNull(res);
-		//		Assert.notNull(enrolment);
-		//		Assert.notNull(enrolment.getMoment());
-
+		final Enrolment enrolment = this.enrolmentActive(brotherhood.getUserAccount().getId(), member.getUserAccount().getId());
+		Assert.notNull(enrolment);
 		return enrolment;
+	}
+
+	public Collection<Enrolment> getAllEnrolments(final Actor brotherhood, final Actor member) {
+		final Collection<Enrolment> res = this.enrolmentRepository.findEnrolmentFromBroMember(brotherhood.getUserAccount().getId(), member.getUserAccount().getId());
+		Assert.notNull(res);
+		return res;
 	}
 
 	public Collection<Enrolment> findAllByMemberId(final Integer memberUAId) {
@@ -173,13 +177,9 @@ public class EnrolmentService {
 		return res;
 	}
 
-	public Enrolment enrolmentActive(final Collection<Enrolment> enrolments) {
-		Enrolment enrolment = null;
-		for (final Enrolment e : enrolments)
-			if (e.getDropOut() == null) {
-				enrolment = e;
-				break;
-			}
+	private Enrolment enrolmentActive(final Integer broUAId, final Integer memberUAId) {
+		final Enrolment enrolment = this.enrolmentRepository.enrolmentActive(broUAId, memberUAId);
+		Assert.notNull(enrolment);
 		return enrolment;
 	}
 
@@ -194,7 +194,7 @@ public class EnrolmentService {
 		result.setVersion(enrolmentForm.getVersion());
 		result.setPosition(enrolmentForm.getPosition());
 
-		this.validator.validate(result, binding);
+		//this.validator.validate(result, binding);
 
 		return result;
 	}
@@ -202,13 +202,18 @@ public class EnrolmentService {
 	public Enrolment enrole(final int brotherhoodId) {
 		final Brotherhood brotherhood = this.brotherhoodService.findOne(brotherhoodId);
 		final Member member = this.memberService.findByPrincipal();
-		Assert.notNull(brotherhood.getArea(), "No se puede inscribir en una hermandad que no tiene área seleccionada.");
-		Assert.isNull(this.getEnrolment(brotherhood, member), "No puedes inscribirte más de una vez en la misma hermandad.");
+		Assert.notNull(brotherhood.getArea(), "No se puede inscribir en una hermandad que no tiene ï¿½rea seleccionada.");
+		final Enrolment assertEnrolment = this.enrolmentRepository.enrolmentActive(brotherhood.getUserAccount().getId(), member.getUserAccount().getId());
+		Assert.isNull(assertEnrolment, "No puedes inscribirte mï¿½s de una vez en la misma hermandad.");
 		final Enrolment enrolment = this.create();
 
 		final Enrolment retrieved = this.save(enrolment, brotherhoodId);
-
+		this.messageService.brotherhoodEnrolsMessage(enrolment);
 		return retrieved;
+	}
+
+	public void flush() {
+		this.enrolmentRepository.flush();
 	}
 
 }

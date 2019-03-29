@@ -14,38 +14,35 @@ import security.Authority;
 import domain.Actor;
 import domain.Brotherhood;
 import domain.Float;
-import domain.Procession;
+import domain.Parade;
 
 @Service
 @Transactional
 public class FloatService {
 
 	@Autowired
-	private FloatRepository					floatRepository;
+	private FloatRepository		floatRepository;
 
 	@Autowired
-	private ProcessionService				processionService;
+	private ParadeService		paradeService;
 
 	@Autowired
-	private ConfigurationParametersService	configuracionParametersService;
+	private BrotherhoodService	brotherhoodService;
 
 	@Autowired
-	private BrotherhoodService				brotherhoodService;
-
-	@Autowired
-	private ActorService					actorService;
+	private ActorService		actorService;
 
 
 	//Métodos CRUD
 
 	public Float create() {
-		final Float fProcession = new Float();
+		final Float fParade = new Float();
 		final Collection<String> pictures = new ArrayList<>();
 		final Brotherhood bhood = this.brotherhoodService.findByPrincipal();
-		fProcession.setBrotherhood(bhood);
-		fProcession.setPictures(pictures);
-		Assert.notNull(fProcession);
-		return fProcession;
+		fParade.setBrotherhood(bhood);
+		fParade.setPictures(pictures);
+		Assert.notNull(fParade);
+		return fParade;
 	}
 	public Collection<Float> findAll() {
 		final Collection<Float> res = this.floatRepository.findAll();
@@ -88,12 +85,12 @@ public class FloatService {
 		}
 	}
 
-	public Collection<Procession> find(final String fProcession) {
-		final Collection<Procession> res;
+	public Collection<Parade> find(final String titleParade) {
+		final Collection<Parade> res;
 
 		try {
-			final Collection<Procession> aux = this.processionService.findAll();
-			aux.retainAll(this.floatRepository.findForFloat(fProcession));
+			final Collection<Parade> aux = this.paradeService.findAll();
+			aux.retainAll(this.floatRepository.findForFloat(titleParade));
 			//			if (aux.size() > numberOfElementInList)
 			//				res = new ArrayList<>(aux.subList(0, numberOfElementInList));
 			//			else
@@ -125,6 +122,12 @@ public class FloatService {
 		final Actor principal = this.actorService.findByPrincipal();
 		Assert.isTrue(this.actorService.checkAuthority(principal, Authority.BROTHERHOOD), "The principal actor must be a BROTHEHOOD");
 		final Collection<Float> res = this.floatRepository.findByBrotherhood(principal.getUserAccount().getId());
+		Assert.notNull(res);
+		return res;
+	}
+
+	public Collection<Float> findFloatsByBrotherhood(final int brotherhoodUAId) {
+		final Collection<Float> res = this.floatRepository.findByBrotherhood(brotherhoodUAId);
 		Assert.notNull(res);
 		return res;
 	}

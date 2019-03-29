@@ -38,23 +38,24 @@
 				<ul>
 					<li class="arrow"></li>
 					<li><a href="configurationParameters/administrator/edit.do"><spring:message code="master.page.configurationParameters.edit" /></a></li>
+					<li><a href="ban/administrator/list.do"><spring:message	code="master.page.ban" /></a></li>
+					<li><a href="sponsorship/administrator/launchDeactivate.do"><spring:message	code="master.page.administrator.deactivate" /></a></li>
+					<li><a href="dashboard/administrator/dataBreach.do"><spring:message	code="master.page.administrator.data.breach" /></a></li>
 				</ul>
 			</li>
 			
-			<li><a class="fNiv"><a href="position/administrator/list.do"><spring:message	code="master.page.position" /></a></a>
+			<li><a href="position/administrator/list.do"><spring:message	code="master.page.position" /></a>
 				
 			</li>
 			
-			<li><a class="fNiv"><a href="area/administrator/list.do"><spring:message	code="master.page.area" /></a></a>
+			<li><a href="area/administrator/list.do"><spring:message	code="master.page.area" /></a>
 				
 			</li>
 			
-			<li><a class="fNiv"><a href="ban/administrator/list.do"><spring:message	code="master.page.ban" /></a></a>
-				
+			<li><a href="dashboard/administrator/statistics.do"><spring:message	code="master.page.dashboard" /></a>
 			</li>
 			
-			<li><a class="fNiv"><a href="dashboard/administrator/statistics.do"><spring:message	code="master.page.dashboard" /></a></a>
-			</li>
+			<li><a href="administrator/create.do"><spring:message	code="master.page.create.administrator" /></a></li>
 			
 		</security:authorize>
 		
@@ -76,19 +77,27 @@
 				</ul>
 			</li>
 
-		<%-- PROCESSIONS --%>
-			<li><a class="fNiv"><spring:message	code="master.page.procession" /></a>
+		<%-- PARADES --%>
+			<li><a class="fNiv"><spring:message	code="master.page.parades" /></a>
 				<ul>
 					<li class="arrow"></li>
-					<li><a href="procession/list.do"><spring:message code="master.page.all.processions" /></a></li>
-					<li><a href="procession/brotherhood/create.do"><spring:message code="master.page.procession.create" /></a></li>
-					<li><a href="procession/brotherhood/list.do"><spring:message code="master.page.procession.list" /></a></li>
+					<li><a href="parade/list.do"><spring:message code="master.page.all.parade" /></a></li>
+					<li><a href="parade/brotherhood/list.do"><spring:message code="master.page.parade.list" /></a></li>
+					<li><a href="parade/brotherhood/create.do"><spring:message code="master.page.parade.create" /></a></li>
+					<li><a href="parade/brotherhood/listDefault.do"><spring:message code="master.page.parade.default" /></a></li>
+					<li><a href="parade/brotherhood/listAccepted.do"><spring:message code="master.page.parade.accepted" /></a></li>
+					<li><a href="parade/brotherhood/listRejected.do"><spring:message code="master.page.parade.rejected" /></a></li>
+					<li><a href="parade/brotherhood/listSubmitted.do"><spring:message code="master.page.parade.submitted" /></a></li>
 				</ul>
 			</li>
 			
 		<%-- MEMBERS --%>
 			
 			<li><a href="member/list.do"><spring:message code="master.page.member.list" /></a></li>
+			
+		<%-- HISTORY --%>
+		
+			<li><a href="history/list.do"><spring:message code="master.page.history" /></a></li>
 		
 		<%-- REQUESTS --%>
 			
@@ -111,9 +120,9 @@
 		<security:authorize access="hasRole('MEMBER')">
 		
 			
-			<%-- PROCESSIONS --%>
+			<%-- PARADES --%>
 			
-			<li><a href="procession/member/list.do"><spring:message	code="master.page.procession.member.list" /></a>
+			<li><a href="parade/member/list.do"><spring:message	code="master.page.parade.member.list" /></a>
 			
 			<%-- REQUESTS --%>
 						
@@ -137,12 +146,64 @@
 			
 		</security:authorize>
 		
+		<!-- ========================================================================================================= -->
+		<!-- ========================================= CHAPTER =================================================== -->
+		<!-- ========================================================================================================= -->	
+	
+		<security:authorize access="hasRole('CHAPTER')">
+		
+		
+		<%-- PARADES --%>
+		
+		<li><a class="fNiv"><spring:message	code="master.page.parades.chapter.list" /></a>
+				<ul>
+					<li class="arrow"></li>
+					<li><a href="parade/chapter/listAll.do"><spring:message code="master.page.parade.all" /></a></li>
+					<li><a href="parade/chapter/listAccepted.do"><spring:message code="master.page.parade.accepted" /></a></li>
+					<li><a href="parade/chapter/listRejected.do"><spring:message code="master.page.parade.rejected" /></a></li>
+					<li><a href="parade/chapter/listSubmitted.do"><spring:message code="master.page.parade.submitted" /></a></li>
+				</ul>
+			</li>
+		
+		<li><a href="proclaim/chapter/list.do"><spring:message code="master.page.parade.proclaims" /></a></li>
+		
+		</security:authorize>
+		
+		<!-- ========================================================================================================= -->
+		<!-- ========================================= SPONSOR =================================================== -->
+		<!-- ========================================================================================================= -->	
+	
+		<security:authorize access="hasRole('SPONSOR')">
+		
+		<%-- PARADES --%>
+		
+		<li><a href="parade/sponsor/list.do"><spring:message code="master.page.parade.sponsor" /></a></li>
+		
+		<%-- SPONSORSHIP --%>
+		
+		<li><a href="sponsorship/sponsor/list.do"><spring:message code="master.page.sponsor.sponsorship" /></a></li>
+		
+		</security:authorize>
+		
+		<!-- ========================================================================================================= -->
+		<!-- ========================================== ANONYMOUS ==================================================== -->
+		<!-- ========================================================================================================= -->	
+	
+		
 		<security:authorize access="isAnonymous()">
 			<li><a class="fNiv" href="security/login.do"><spring:message code="master.page.login" /></a></li>
-			<li><a class="fNiv" href="procession/list.do"><spring:message code="master.page.all.processions" /></a></li>
+			<li><a class="fNiv" href="brotherhood/listAll.do"><spring:message code="master.page.all.brotherhood" /></a></li>
 			<li><a class="fNiv" href="brotherhood/create.do"><spring:message code="master.page.brotherhood.register" /></a></li>
 			<li><a class="fNiv" href="member/create.do"><spring:message code="master.page.member.register" /></a></li>
+			<li><a class="fNiv" href="sponsor/create.do"><spring:message code="master.page.sponsor.register" /></a></li>
+			<li><a class="fNiv" href="chapter/create.do"><spring:message code="master.page.chapter.register" /></a></li>
 		</security:authorize>
+		
+		
+		<!-- ========================================================================================================= -->
+		<!-- ======================================== AUTHENTICATED ================================================== -->
+		<!-- ========================================================================================================= -->	
+	
 		
 		<security:authorize access="isAuthenticated()">
 			<li>
@@ -160,6 +221,14 @@
 					<security:authorize access="hasRole('MEMBER')">
 					<li><a href="member/edit.do"><spring:message code="master.page.member.edit" /></a></li>
 					<li><a href="member/display.do"><spring:message code="master.page.member.display" /></a></li>
+					</security:authorize>
+					<security:authorize access="hasRole('SPONSOR')">
+					<li><a href="sponsor/edit.do"><spring:message code="master.page.sponsor.edit" /></a></li>
+					<li><a href="sponsor/display.do"><spring:message code="master.page.sponsor.display" /></a></li>
+					</security:authorize>
+					<security:authorize access="hasRole('CHAPTER')">
+					<li><a href="chapter/edit.do"><spring:message code="master.page.chapter.edit" /></a></li>
+					<li><a href="chapter/display.do"><spring:message code="master.page.chapter.display" /></a></li>
 					</security:authorize>
 					<security:authorize access="hasRole('BROTHERHOOD')">
 					<li><a href="brotherhood/edit.do"><spring:message code="master.page.brotherhood.edit" /></a></li>

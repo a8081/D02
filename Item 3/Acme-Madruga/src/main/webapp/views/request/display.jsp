@@ -33,7 +33,7 @@
 	<jstl:set var="middlename" value=" ${request.member.middleName}" />
 </jstl:if>
 
-<acme:display code="request.procession.title" value="${request.procession.title}"/>
+<acme:display code="request.parade.title" value="${request.parade.title}"/>
 <acme:display code="request.member.name" value="${request.member.name}${middlename} ${request.member.surname}"/>
 
 <jstl:choose>

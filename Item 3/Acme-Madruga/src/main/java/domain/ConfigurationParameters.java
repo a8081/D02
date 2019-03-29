@@ -7,6 +7,7 @@ import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.validation.constraints.Digits;
 import javax.validation.constraints.Pattern;
 
 import org.hibernate.validator.constraints.NotBlank;
@@ -30,6 +31,10 @@ public class ConfigurationParameters extends DomainEntity {
 	private int					maxFinderResults;
 	private int					finderTime;
 
+	private Collection<String>	creditCardMake;
+	private double				flatFare;
+	private double				vat;
+
 
 	@NotBlank
 	public String getSysName() {
@@ -40,6 +45,7 @@ public class ConfigurationParameters extends DomainEntity {
 		this.sysName = sysName;
 	}
 
+	@NotBlank
 	@URL
 	public String getBanner() {
 		return this.banner;
@@ -123,6 +129,35 @@ public class ConfigurationParameters extends DomainEntity {
 
 	public void setFinderTime(final int finderTime) {
 		this.finderTime = finderTime;
+	}
+
+	@ElementCollection
+	@EachNotBlank
+	public Collection<String> getCreditCardMake() {
+		return this.creditCardMake;
+	}
+
+	public void setCreditCardMake(final Collection<String> creditCardMake) {
+		this.creditCardMake = creditCardMake;
+	}
+
+	@Range(min = 0)
+	public double getFlatFare() {
+		return this.flatFare;
+	}
+
+	public void setFlatFare(final double flatFare) {
+		this.flatFare = flatFare;
+	}
+
+	@Range(min = 0, max = 1)
+	@Digits(integer = 1, fraction = 2)
+	public double getVat() {
+		return this.vat;
+	}
+
+	public void setVat(final double vat) {
+		this.vat = vat;
 	}
 
 }

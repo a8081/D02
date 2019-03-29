@@ -7,7 +7,9 @@ import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Index;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.Valid;
@@ -16,11 +18,15 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Pattern;
 
+import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.SafeHtml;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @Access(AccessType.PROPERTY)
+@Table(indexes = {
+	@Index(columnList = "member, parade, status")
+})
 public class Request extends DomainEntity {
 
 	private String				status;
@@ -37,9 +43,10 @@ public class Request extends DomainEntity {
 
 	//Relation attributes
 	private Member				member;
-	private Procession			procession;
+	private Parade				parade;
 
 
+	@NotBlank
 	@Pattern(regexp = "^(APPROVED|PENDING|REJECTED)$")
 	public String getStatus() {
 		return this.status;
@@ -101,12 +108,12 @@ public class Request extends DomainEntity {
 	}
 	@Valid
 	@ManyToOne(optional = false)
-	public Procession getProcession() {
-		return this.procession;
+	public Parade getParade() {
+		return this.parade;
 	}
 
-	public void setProcession(final Procession procession) {
-		this.procession = procession;
+	public void setParade(final Parade parade) {
+		this.parade = parade;
 	}
 
 }

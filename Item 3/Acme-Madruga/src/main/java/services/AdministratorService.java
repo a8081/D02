@@ -18,18 +18,16 @@ import forms.ActorFrom;
 public class AdministratorService {
 
 	@Autowired
-	private AdministratorRepository						administratorRepository;
+	private AdministratorRepository	administratorRepository;
 
 	@Autowired
-	private ActorService								actorService;
+	private ActorService			actorService;
 
 	@Autowired
-	private FolderService								folderService;
+	private FolderService			folderService;
 
 	@Autowired
-	private UserAccountService							userAccountService;
-	@Autowired
-	private org.springframework.validation.Validator	validator;
+	private UserAccountService		userAccountService;
 
 
 	public Administrator create() {
@@ -80,6 +78,10 @@ public class AdministratorService {
 		return a;
 	}
 
+	public Administrator findSystem() {
+		return this.administratorRepository.findSystem();
+	}
+
 	public Administrator reconstruct(final ActorFrom actorForm) {
 		Administrator admin;
 		if (actorForm.getId() == 0) {
@@ -109,5 +111,9 @@ public class AdministratorService {
 			admin.setUserAccount(account);
 		}
 		return admin;
+	}
+
+	public void flush() {
+		this.administratorRepository.flush();
 	}
 }

@@ -26,9 +26,6 @@ public class ConfigurationParametersService {
 	private ConfigurationParametersRepository	configurationParametersRepository;
 
 	@Autowired
-	private PositionService						positionService;
-
-	@Autowired
 	private AdministratorService				administratorService;
 
 	@Autowired
@@ -68,7 +65,8 @@ public class ConfigurationParametersService {
 		for (final String s : strings)
 			for (final String spamWord : spamWords) {
 				final boolean bool = s.matches(".*" + spamWord + ".*");
-				if (s.contentEquals(spamWord)) {
+				// if (s.contentEquals(spamWord)) {
+				if (bool) {
 					res = true;
 					break;
 				}

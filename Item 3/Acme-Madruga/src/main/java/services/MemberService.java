@@ -5,10 +5,14 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import javax.validation.ValidationException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.Validator;
 
 import repositories.MemberRepository;
 import security.Authority;
@@ -24,25 +28,22 @@ import forms.ActorFrom;
 public class MemberService {
 
 	@Autowired
-	private MemberRepository							memberRepository;
+	private MemberRepository	memberRepository;
 
 	@Autowired
-	private ActorService								actorService;
+	private ActorService		actorService;
 
 	@Autowired
-	private FolderService								folderService;
+	private FolderService		folderService;
 
 	@Autowired
-	private UserAccountService							userAccountService;
+	private UserAccountService	userAccountService;
 
 	@Autowired
-	private org.springframework.validation.Validator	validator;
+	private FinderService		finderService;
 
 	@Autowired
-	private EnrolmentService							enrolmentService;
-
-	@Autowired
-	private FinderService								finderService;
+	private Validator			validator;
 
 
 	public Member create() {
@@ -114,6 +115,18 @@ public class MemberService {
 		return member;
 	}
 
+	public Member findByRequestId(final int requestId) {
+		Assert.isTrue(requestId != 0);
+		final Member member = this.memberRepository.findByRequestId(requestId);
+		return member;
+	}
+
+	public Member findByEnrolmentId(final int enrolmentId) {
+		Assert.isTrue(enrolmentId != 0);
+		final Member member = this.memberRepository.findByEnrolmentId(enrolmentId);
+		return member;
+	}
+
 	public Collection<Member> allMembersFromBrotherhood() {
 		final Actor principal = this.actorService.findByPrincipal();
 		Assert.isTrue(this.actorService.checkAuthority(principal, Authority.BROTHERHOOD));
@@ -121,7 +134,12 @@ public class MemberService {
 		return all;
 	}
 
-	public Member reconstruct(final ActorFrom actorForm) {
+	public Collection<Member> allMembersByBrotherhood(final int brotherhoodUAId) {
+		final Collection<Member> all = this.memberRepository.allMembersFromBrotherhood(brotherhoodUAId);
+		return all;
+	}
+
+	public Member reconstruct(final ActorFrom actorForm, final BindingResult binding) {
 		Member member;
 		if (actorForm.getId() == 0) {
 			member = this.create();
@@ -157,12 +175,20 @@ public class MemberService {
 			account.setPassword(actorForm.getUserAccountpassword());
 			member.setUserAccount(account);
 		}
+
+		this.validator.validate(member, binding);
+		if (binding.hasErrors())
+			throw new ValidationException();
+
 		return member;
 	}
 
 	public List<Member> getMembersTenPercent() {
-		final List<Member> result = this.memberRepository.getMembersTenPercent();
-		Assert.notNull(result);
+		final Member[] members = this.memberRepository.getMembersTenPercent();
+		final List<Member> result = new ArrayList<Member>();
+		if (members != null || members.length > 0)
+			for (final Member m : members)
+				result.add(m);
 		return result;
 	}
 

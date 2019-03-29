@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import services.ProcessionService;
+import services.ParadeService;
 import services.RequestService;
 import controllers.AbstractController;
 import domain.Request;
@@ -23,10 +23,10 @@ import domain.Request;
 public class RequestMemberController extends AbstractController {
 
 	@Autowired
-	private RequestService		requestService;
+	private RequestService	requestService;
 
 	@Autowired
-	private ProcessionService	processionService;
+	private ParadeService	paradeService;
 
 
 	// Listing --------------------------------------------------------
@@ -44,7 +44,7 @@ public class RequestMemberController extends AbstractController {
 		result.addObject("lang", lang);
 		result.addObject("requests", requests);
 		result.addObject("rol", rol);
-		result.addObject("theresProcessionsAvailable", !this.processionService.processionsAvailable().isEmpty());
+		result.addObject("theresParadesAvailable", !this.paradeService.paradesAvailable().isEmpty());
 		result.addObject("requestURI", "request/member/list.do");
 
 		return result;
@@ -53,10 +53,10 @@ public class RequestMemberController extends AbstractController {
 	// Creation --------------------------------------------------------
 
 	@RequestMapping(value = "/create", method = RequestMethod.GET)
-	public ModelAndView create(@RequestParam final Integer processionId) {
+	public ModelAndView create(@RequestParam final Integer paradeId) {
 		ModelAndView result;
 		try {
-			this.requestService.requestToProcession(processionId);
+			this.requestService.requestToParade(paradeId);
 			result = new ModelAndView("redirect:/request/member/list.do");
 		} catch (final Throwable oops) {
 			String errorMessage = "request.create.error";
@@ -89,13 +89,13 @@ public class RequestMemberController extends AbstractController {
 		return result;
 	}
 
-	@RequestMapping(value = "/displayByProcession", method = RequestMethod.GET)
-	public ModelAndView displayByProcession(@RequestParam final int processionId) {
+	@RequestMapping(value = "/displayByParade", method = RequestMethod.GET)
+	public ModelAndView displayByParade(@RequestParam final int paradeId) {
 		ModelAndView result;
 		Request request;
 
 		// only members can use this method
-		request = this.requestService.findByProcessionMember(processionId);
+		request = this.requestService.findByParadeMember(paradeId);
 		if (request == null)
 			result = new ModelAndView("redirect:/misc/403.jsp");
 		else {
@@ -118,7 +118,7 @@ public class RequestMemberController extends AbstractController {
 		ModelAndView result;
 
 		try {
-			// service controlled that procession deleted has pending status
+			// service controlled that parade deleted has pending status
 			this.requestService.delete(retrieved);
 			result = new ModelAndView("redirect:/request/member/list.do");
 		} catch (final Throwable oops) {
@@ -142,7 +142,7 @@ public class RequestMemberController extends AbstractController {
 
 		result = new ModelAndView("request/edit");
 		result.addObject("request", request);
-		result.addObject("processionsAvailable", this.processionService.processionsAvailable());
+		result.addObject("paradesAvailable", this.paradeService.paradesAvailable());
 		result.addObject("rol", rol);
 		result.addObject("message", messageCode);
 		// the message code references an error message or null

@@ -12,8 +12,16 @@ import org.springframework.util.Assert;
 
 import repositories.MessageRepository;
 import domain.Actor;
+import domain.Administrator;
+import domain.Brotherhood;
+import domain.Enrolment;
 import domain.Folder;
+import domain.Member;
 import domain.Message;
+import domain.Parade;
+import domain.Request;
+import domain.Sponsor;
+import domain.Sponsorship;
 
 @Service
 @Transactional
@@ -33,6 +41,12 @@ public class MessageService {
 
 	@Autowired
 	private ConfigurationParametersService	configurationParametersService;
+
+	@Autowired
+	private MemberService					memberService;
+
+	@Autowired
+	private BrotherhoodService				brotherhoodService;
 
 
 	public Message create() {
@@ -145,6 +159,7 @@ public class MessageService {
 
 		final Collection<Actor> actors = this.actorService.findAll();
 		final Actor actor = this.actorService.findByPrincipal();
+		actors.remove(this.administratorService.findSystem());
 		actors.remove(actor);
 		m.setRecipients(actors);
 		this.send(m);
@@ -282,6 +297,158 @@ public class MessageService {
 		b.setMessages(bms);
 		this.folderService.save(b, principal);
 		this.folderService.save(a, principal);
+	}
+
+	public void requestStatusChangedMessage(final Request req) {
+		final Message m = new Message();
+		final Collection<String> tags = new ArrayList<>();
+		m.setTags(tags);
+		final Member member = this.memberService.findByRequestId(req.getId());
+		final Brotherhood b = this.brotherhoodService.findByRequestId(req.getId());
+
+		m.setSubject("Request's status changed.\n" + "Cambio de estado de solicitud.");
+		m.setBody("The request's status regarding parade " + req.getParade().getTitle() + ": " + req.getParade().getTicker() + " was changed to " + req.getStatus() + ".\n" + "El estado de la solicitud al desfile " + req.getParade().getTitle() + ": "
+			+ req.getParade().getTicker() + "ha sido cambiado a " + req.getStatus() + ".");
+		m.setPriority("HIGH");
+		m.setSender(this.administratorService.findSystem());
+
+		final Collection<Actor> recipients = new ArrayList<>();
+		recipients.add(member);
+		recipients.add(b);
+		m.setRecipients(recipients);
+
+		this.send(m);
+	}
+
+	public void brotherhoodEnrolsMessage(final Enrolment enrolment) {
+		final Message m = new Message();
+		final Collection<String> tags = new ArrayList<>();
+		m.setTags(tags);
+		final Member member = this.memberService.findByEnrolmentId(enrolment.getId());
+		final Brotherhood b = this.brotherhoodService.findByEnrolmentId(enrolment.getId());
+
+		m.setSubject("Brotherhood enrols a member.\n" + "Hermandad añade a un miembo.");
+		m.setBody("Brotherhood " + b.getName() + "+ enrols member " + member.getName() + ".\n" + "La hermandad " + b.getName() + "+ añade como miembro a " + member.getName() + ".");
+		m.setPriority("HIGH");
+		m.setSender(this.administratorService.findSystem());
+
+		final Collection<Actor> recipients = new ArrayList<>();
+		recipients.add(member);
+		recipients.add(b);
+		m.setRecipients(recipients);
+
+		this.send(m);
+	}
+
+	public void memberDropOutMessage(final Enrolment enrolment) {
+		final Message m = new Message();
+		final Collection<String> tags = new ArrayList<>();
+		m.setTags(tags);
+		final Member member = this.memberService.findByEnrolmentId(enrolment.getId());
+		final Brotherhood b = this.brotherhoodService.findByEnrolmentId(enrolment.getId());
+
+		m.setSubject("Member drops out of a brotherhood.\n" + "Miembro se va de una hermandad.");
+		m.setBody("Member " + member.getName() + "+ drops out of a " + b.getName() + ".\n" + "El miembro " + member.getName() + "+ se va de la hermandad " + b.getName() + ".");
+		m.setPriority("HIGH");
+		m.setSender(this.administratorService.findSystem());
+
+		final Collection<Actor> recipients = new ArrayList<>();
+		recipients.add(member);
+		recipients.add(b);
+		m.setRecipients(recipients);
+
+		this.send(m);
+	}
+
+	public void processionPublished(final Parade parade) {
+		final Message m = new Message();
+		final Collection<String> tags = new ArrayList<>();
+		m.setTags(tags);
+
+		m.setSubject("Parade is published.\n" + "Desfile publicado.");
+		m.setBody("New parade identified as " + parade.getTitle() + ": " + parade.getTicker() + " has been published by " + parade.getBrotherhood().getName() + ".\n" + "Desfile nuevo identificado por " + parade.getTitle() + ": " + parade.getTicker()
+			+ " ha sido publicado por " + parade.getBrotherhood().getName() + ".");
+		m.setPriority("HIGH");
+		m.setSender(this.administratorService.findSystem());
+
+		final Collection<Actor> recipients = new ArrayList<>();
+		recipients.addAll(this.memberService.findAll());
+		m.setRecipients(recipients);
+
+		this.send(m);
+	}
+
+	public void sponsorshipDisplayedMessage(final Sponsorship sp) {
+		final Message m = new Message();
+		final Collection<String> tags = new ArrayList<>();
+		m.setTags(tags);
+		final Administrator sender = this.administratorService.findSystem();
+		final Sponsor sponsor = sp.getSponsor();
+		final double flatFare = this.configurationParametersService.find().getFlatFare();
+		final double vat = this.configurationParametersService.find().getVat();
+
+		m.setSubject("Sponsorship of " + sp.getParade().getTitle() + ": " + sp.getParade().getTicker() + " displayed.\n" + "Patrocinio de " + sp.getParade().getTitle() + ": " + sp.getParade().getTicker() + " mostrado.");
+		m.setBody("System charge you a flat fare of " + flatFare + " (+" + flatFare * vat + " VAT).\n" + "El sistema le carga una tarifa plana de " + flatFare + " (+" + flatFare * vat + " IVA).");
+		m.setPriority("HIGH");
+		m.setSender(sender);
+
+		final Collection<Actor> recipients = new ArrayList<>();
+		recipients.add(sponsor);
+		m.setRecipients(recipients);
+
+		final Folder outbox = this.folderService.findOutboxByUserId(sender.getUserAccount().getId());
+		final Collection<Message> outboxMessages = outbox.getMessages();
+		final Date moment = new Date(System.currentTimeMillis() - 1000);
+		m.setMoment(moment);
+		Folder inbox;
+		final Message sent = this.save(m);
+
+		outboxMessages.add(sent);
+		outbox.setMessages(outboxMessages);
+
+		for (final Actor r : recipients) {
+			inbox = this.folderService.findInboxByUserId(r.getUserAccount().getId());
+			final Collection<Message> inboxMessages = inbox.getMessages();
+			inboxMessages.add(sent);
+			inbox.setMessages(inboxMessages);
+			this.folderService.save(inbox, r);
+		}
+	}
+
+	public void dataBreachMessage() {
+		final Administrator actor = this.administratorService.findByPrincipal();
+		final Message m = new Message();
+		final Collection<String> tags = new ArrayList<>();
+		m.setTags(tags);
+		final Administrator sender = this.administratorService.findSystem();
+
+		m.setSubject("Data breach - Brecha de datos");
+		m.setBody("There's been a data breach in our system. Due to GDPR we have to notify you.\n" + "Se ha producido una brecha de datos en nuestro sistema. Debido a la GDPR tenemos que notificarles.");
+		m.setPriority("HIGH");
+		m.setSender(sender);
+
+		final Collection<Actor> actors = this.actorService.findAll();
+		actors.remove(this.administratorService.findSystem());
+		actors.remove(actor);
+		m.setRecipients(actors);
+
+		final Folder outbox = this.folderService.findOutboxByUserId(sender.getUserAccount().getId());
+		final Collection<Message> outboxMessages = outbox.getMessages();
+		final Date moment = new Date(System.currentTimeMillis() - 1000);
+		m.setMoment(moment);
+		Folder notificationBox;
+		final Message sent = this.save(m);
+
+		outboxMessages.add(sent);
+		outbox.setMessages(outboxMessages);
+
+		for (final Actor r : actors) {
+			notificationBox = this.folderService.findNotificationboxByUserId(r.getUserAccount().getId());
+			final Collection<Message> inboxMessages = notificationBox.getMessages();
+			inboxMessages.add(sent);
+			notificationBox.setMessages(inboxMessages);
+			this.folderService.save(notificationBox, r);
+		}
 	}
 
 }

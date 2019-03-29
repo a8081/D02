@@ -19,21 +19,36 @@ public interface BrotherhoodRepository extends JpaRepository<Brotherhood, Intege
 	@Query("select count(e) from Enrolment e where e.dropOut=null group by e.member")
 	Collection<Integer> getNumberOfMembersPerBrotherhood();
 
-	@Query(value = "SELECT STDDEV(x),MAX(x),MIN(x),AVG(x) FROM (SELECT COUNT(*) AS x FROM `acme-madruga`.ENROLMENT WHERE ENROLMENT.drop_out IS NULL GROUP BY brotherhood) AS x", nativeQuery = true)
+	@Query("select stddev(1.0 + (select count(e) from Enrolment e where e.brotherhood.id=b.id and e.dropOut=NULL) - 1.0), max(1.0 + (select count(e) from Enrolment e where e.brotherhood.id=b.id and e.dropOut=NULL) - 1.0), min(1.0 + (select count(e) from Enrolment e where e.brotherhood.id=b.id and e.dropOut=NULL) - 1.0), avg(1.0 + (select count(e) from Enrolment e where e.brotherhood.id=b.id and e.dropOut=NULL) - 1.0) from Brotherhood b")
 	Double[] getStatisticsOfMembersPerBrotherhood();
 
 	/** The largest brotherhood is the one with highest number of members **/
-	@Query(
-		value = "SELECT ENROLMENT.brotherhood FROM `acme-madruga`.ENROLMENT LEFT OUTER JOIN BROTHERHOOD ON ENROLMENT.id=BROTHERHOOD.id WHERE ENROLMENT.drop_out IS NULL GROUP BY brotherhood HAVING COUNT(*) = (SELECT MAX(x) FROM (SELECT COUNT(*) AS x FROM `acme-madruga`.ENROLMENT GROUP BY brotherhood)AS T)",
-		nativeQuery = true)
-	Integer[] getLargestBrotherhood();
+	@Query("select g from Brotherhood g where (1.0 + (select count(e) from Enrolment e where e.brotherhood.id=g.id and e.dropOut=NULL) - 1.0)=(select max(1.0 + (select count(en) from Enrolment en where en.brotherhood.id=b.id and en.dropOut=NULL) - 1.0) from Brotherhood b)")
+	Brotherhood[] getLargestBrotherhood();
 
 	/** The smallest brotherhood is the one with lowest number of members **/
-	@Query(
-		value = "SELECT ENROLMENT.brotherhood FROM `acme-madruga`.ENROLMENT LEFT OUTER JOIN BROTHERHOOD ON ENROLMENT.id=BROTHERHOOD.id WHERE ENROLMENT.drop_out IS NULL GROUP BY brotherhood HAVING COUNT(*) = (SELECT MIN(x) FROM (SELECT COUNT(*) AS x FROM `acme-madruga`.ENROLMENT GROUP BY brotherhood)AS T)",
-		nativeQuery = true)
-	Integer[] getSmallestBrotherhood();
+	@Query("select g from Brotherhood g where (1.0 + (select count(e) from Enrolment e where e.brotherhood.id=g.id and e.dropOut=NULL) - 1.0)=(select min(1.0 + (select count(en) from Enrolment en where en.brotherhood.id=b.id and en.dropOut=NULL) - 1.0) from Brotherhood b)")
+	Brotherhood[] getSmallestBrotherhood();
 
 	@Query("select distinct b from Enrolment e join e.brotherhood b where e.member.userAccount.id=?1 and e.dropOut!=null")
 	Collection<Brotherhood> brotherhoodsHasBelonged(Integer memberUAId);
+
+	@Query("select b from Brotherhood b join b.history h where h.id=?1")
+	Brotherhood findBrotherhoodByHistory(int historyId);
+
+	@Query("select p.brotherhood from Parade p where p.id=?1 ")
+	Brotherhood findBrotherhoodByParade(int idParade);
+
+	@Query("select req.parade.brotherhood from Request req where req.id=?1")
+	Brotherhood findByRequestId(int requestId);
+
+	@Query("select e.brotherhood from Enrolment e where e.id=?1")
+	Brotherhood findByEnrolmentId(int enrolmentId);
+
+	@Query("select f.brotherhood from Float f where f.id=?1")
+	Brotherhood findBrotherhoodByFloat(int floatId);
+
+	@Query("select l.linkedBrotherhood from LinkRecord l join l.linkedBrotherhood b where b.id=?1")
+	Collection<Brotherhood> allBrotherhoodsLinkByHistory(int brotherhoodId);
+
 }

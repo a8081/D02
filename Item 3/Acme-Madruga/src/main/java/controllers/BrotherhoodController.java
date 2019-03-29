@@ -5,9 +5,11 @@ import java.util.Collection;
 import java.util.List;
 
 import javax.validation.Valid;
+import javax.validation.ValidationException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.Assert;
 import org.springframework.validation.BindingResult;
@@ -108,11 +110,16 @@ public class BrotherhoodController extends AbstractController {
 		brotherhood = this.brotherhoodService.findOne(brotherhoodId);
 
 		if (brotherhood != null) {
-			final int principal = this.actorService.findByPrincipal().getId();
 			result = new ModelAndView("brotherhood/display");
 			result.addObject("brotherhood", brotherhood);
-			final boolean displayButtons = principal == brotherhood.getId();
-			result.addObject("displayButtons", displayButtons);
+			final Object user = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			if (user != "anonymousUser") {
+				final int principal = this.actorService.findByPrincipal().getId();
+				final boolean displayButtons = principal == brotherhood.getId();
+				result.addObject("displayButtons", displayButtons);
+				result.addObject("user", user);
+			} else
+				result.addObject("user", user);
 		} else
 			result = new ModelAndView("redirect:/misc/403.jsp");
 
@@ -132,13 +139,15 @@ public class BrotherhoodController extends AbstractController {
 		} else
 			try {
 				final UserAccount ua = this.userAccountService.reconstruct(brotherhoodForm, Authority.BROTHERHOOD);
-				brotherhood = this.brotherhoodService.reconstruct(brotherhoodForm);
+				brotherhood = this.brotherhoodService.reconstruct(brotherhoodForm, binding);
 				brotherhood.setUserAccount(ua);
 				this.registerService.saveBrotherhood(brotherhood, binding);
 				result.addObject("alert", "brotherhood.edit.correct");
 				result.addObject("brotherhoodForm", brotherhoodForm);
+			} catch (final ValidationException oops) {
+				result = this.createEditModelAndViewForm(brotherhoodForm, null);
 			} catch (final Throwable e) {
-				if (e.getMessage().contains("username is register"))
+				if (e.getMessage() != null && e.getMessage().contains("username is register"))
 					result.addObject("alert", "brotherhood.edit.usernameIsUsed");
 				result.addObject("errors", binding.getAllErrors());
 				brotherhoodForm.setTermsAndCondicions(false);
@@ -214,7 +223,6 @@ public class BrotherhoodController extends AbstractController {
 	@RequestMapping(value = "/listAll", method = RequestMethod.GET)
 	public ModelAndView listAll() {
 		final ModelAndView result;
-		final Actor actor = this.actorService.findByPrincipal();
 		final Collection<Brotherhood> brotherhoods;
 
 		brotherhoods = this.brotherhoodService.findAll();
@@ -224,7 +232,6 @@ public class BrotherhoodController extends AbstractController {
 		result = new ModelAndView("brotherhood/list");
 		result.addObject("lang", lang);
 		result.addObject("brotherhoods", brotherhoods);
-		result.addObject("actor", actor);
 		result.addObject("requestURI", "brotherhood/listAll.do");
 
 		final String banner = this.configurationParametersService.findBanner();
@@ -262,11 +269,12 @@ public class BrotherhoodController extends AbstractController {
 	@RequestMapping(value = "/dropOut", method = RequestMethod.GET)
 	public ModelAndView dropOut(@RequestParam final int memberId) {
 		final ModelAndView result;
+		final Brotherhood brotherhood = this.brotherhoodService.findByPrincipal();
 		final Member member = this.memberService.findOne(memberId);
 
 		this.enrolmentService.dropOut(member);
 
-		result = this.memberController.list();
+		result = this.memberController.listMyMembers(brotherhood.getUserAccount().getId());
 
 		final String banner = this.configurationParametersService.findBanner();
 		result.addObject("banner", banner);
@@ -334,6 +342,19 @@ public class BrotherhoodController extends AbstractController {
 		result.addObject("message", messageCode);
 		final String banner = this.configurationParametersService.findBanner();
 		result.addObject("banner", banner);
+
+		return result;
+	}
+
+	protected ModelAndView createEditModelAndViewForm(final BrotherhoodForm brotherhood, final String messageCode) {
+		final ModelAndView result;
+		final List<Area> libres = (List<Area>) this.areaService.findAll();
+
+		result = new ModelAndView("brotherhood/edit");
+		result.addObject("brotherhood", brotherhood);
+		result.addObject("areas", libres);
+
+		result.addObject("message", messageCode);
 
 		return result;
 	}

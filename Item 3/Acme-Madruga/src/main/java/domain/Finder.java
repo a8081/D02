@@ -19,12 +19,12 @@ import org.springframework.format.annotation.DateTimeFormat;
 @Access(AccessType.PROPERTY)
 public class Finder extends DomainEntity implements Cloneable {
 
-	private String					keyword;
-	private String					areaName;
-	private Date					minDate;
-	private Date					maxDate;
-	private Date					creationDate;
-	private Collection<Procession>	processions;
+	private String				keyword;
+	private String				areaName;
+	private Date				minDate;
+	private Date				maxDate;
+	private Date				creationDate;
+	private Collection<Parade>	parades;
 
 
 	@NotNull
@@ -69,14 +69,15 @@ public class Finder extends DomainEntity implements Cloneable {
 
 	@NotNull
 	@ManyToMany
-	public Collection<Procession> getProcessions() {
-		return this.processions;
+	public Collection<Parade> getParades() {
+		return this.parades;
 	}
 
-	public void setProcessions(final Collection<Procession> processions) {
-		this.processions = processions;
+	public void setParades(final Collection<Parade> parades) {
+		this.parades = parades;
 	}
 
+	@NotNull
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
 	public Date getCreationDate() {

@@ -24,9 +24,6 @@ public class PositionService {
 	private PositionRepository				positionRepository;
 
 	@Autowired
-	private AdministratorService			administratorService;
-
-	@Autowired
 	private ActorService					actorService;
 
 	@Autowired
