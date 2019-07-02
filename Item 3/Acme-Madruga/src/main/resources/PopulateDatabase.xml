@@ -1313,7 +1313,7 @@
 	<bean id="parade4" class="domain.Parade">
 		<property name="title" value="Nazareno" />
 		<property name="description" value="This is a description of a parade4" />
-		<property name="moment" value="2019/04/26 00:00" />
+		<property name="moment" value="2019/08/26 00:00" />
 		<property name="ticker" value="200428-DLUBG" />
 		<property name="mode" value="FINAL" />
 		<property name="maxRows" value="120" />
@@ -1407,8 +1407,7 @@
 		<property name="mode" value="FINAL" />
 		<property name="maxRows" value="120" />
 		<property name="maxColumns" value="300" />
-		<property name="status" value="REJECTED" />
-		<property name="rejectionReason" value="No me gusta"/>
+		<property name="status" value="ACCEPTED" />
 		<!-- Relations -->
 		<property name="floats">
 			<list>
@@ -2058,7 +2057,7 @@
 		<property name="holderName" value="Customer 1" />
 		<property name="make" value="VISA" />
 		<property name="number" value="4716477920082572" />
-		<property name="expirationMonth" value="06" />
+		<property name="expirationMonth" value="10" />
 		<property name="expirationYear" value="19" />
 		<property name="cvv" value="163" />
 	</bean>

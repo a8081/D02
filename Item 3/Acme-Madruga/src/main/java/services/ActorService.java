@@ -245,7 +245,8 @@ public class ActorService {
 		if (a.getAddress() != null)
 			words.add(a.getAddress());
 		words.add(a.getEmail());
-		words.add(a.getMiddleName());
+		if (a.getMiddleName() != null)
+			words.add(a.getMiddleName());
 		words.add(a.getName());
 		words.add(a.getSurname());
 

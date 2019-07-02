@@ -138,4 +138,8 @@ public class SponsorService {
 		return sponsor;
 	}
 
+	public void flush() {
+		this.sponsorRepository.flush();
+	}
+
 }
