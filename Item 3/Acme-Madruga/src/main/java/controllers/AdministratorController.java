@@ -59,7 +59,7 @@ public class AdministratorController extends AbstractController {
 		Administrator admin;
 		if (binding.hasErrors()) {
 			result.addObject("errors", binding.getAllErrors());
-			result.addObject("actorForm", actorForm);
+			result.addObject("actorFrom", actorForm);
 		} else
 			try {
 				final UserAccount ua = this.accountService.reconstruct(actorForm, Authority.ADMIN);
@@ -67,12 +67,12 @@ public class AdministratorController extends AbstractController {
 				admin.setUserAccount(ua);
 				this.registerService.saveAdmin(admin, binding);
 				result.addObject("alert", "administartor.edit.correct");
-				result.addObject("actorForm", actorForm);
+				result.addObject("actorFrom", actorForm);
 			} catch (final Throwable e) {
 				if (e.getMessage().contains("username is register"))
 					result.addObject("alert", "administartor.edit.usernameIsUsed");
 				result.addObject("errors", binding.getAllErrors());
-				result.addObject("actorForm", actorForm);
+				result.addObject("actorFrom", actorForm);
 			}
 		return result;
 	}
@@ -84,7 +84,7 @@ public class AdministratorController extends AbstractController {
 		final Administrator admin = this.administratorService.findByPrincipal();
 		final ActorFrom actor = this.registerService.inyect(admin);
 		actor.setTermsAndCondicions(true);
-		result.addObject("actorForm", actor);
+		result.addObject("actorFrom", actor);
 		return result;
 
 	}
@@ -94,7 +94,7 @@ public class AdministratorController extends AbstractController {
 		ModelAndView result = new ModelAndView();
 		final ActorFrom admin = new ActorFrom();
 		result = new ModelAndView("administrator/edit");
-		result.addObject("actorForm", admin);
+		result.addObject("actorFrom", admin);
 		return result;
 	}
 

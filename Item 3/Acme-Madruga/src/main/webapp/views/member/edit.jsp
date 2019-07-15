@@ -18,19 +18,22 @@
 	</script>
 </jstl:if>
 
-	<jstl:if test="${not empty errors}">
-		<div class="errorDiv">
-			<ul>
-				<jstl:forEach items="${errors}" var="error">
+<jstl:if test="${not empty errors}">
+	<div class="errorDiv">
+		<ul>
+			<li><spring:message code="actor.validation"/></li>
+			<jstl:forEach items="${errors}" var="error">
+				<jstl:if test="${error.field eq 'termsAndCondicions'}">
 					<li><spring:message code="member.edit.${error.field}"/> - <jstl:out value="${error.defaultMessage}" /></li>
-				</jstl:forEach>
-			</ul>
-		</div>
-	</jstl:if>
+				</jstl:if>
+			</jstl:forEach>
+		</ul>
+	</div>
+</jstl:if>
 
 
 
-<form:form modelAttribute="actorForm" action="member/edit.do" method="POST">
+<form:form modelAttribute="actorFrom" action="member/edit.do" method="POST">
 	<form:hidden path="id"/>
 	<form:hidden path="version"/>
 	<acme:textbox code="member.edit.userAccountuser" path="userAccountuser" />

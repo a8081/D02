@@ -125,12 +125,18 @@ public class RequestBrotherhoodController extends AbstractController {
 			result = new ModelAndView("redirect:/misc/403.jsp");
 		else {
 			result = this.createEditModelAndView(request);
-			final List<Integer> ls = this.requestService.suggestPosition(this.paradeService.findOne(paradeId));
-			result.addObject("setStatusTo", "APPROVED");
-			result.addObject("suggestedRow", ls.get(0));
-			result.addObject("suggestedColumn", ls.get(1));
+			final boolean available = this.requestService.availableProcessionPositions(request.getParade());
+			if (!request.getStatus().equals("PENDING"))
+				result.addObject("msg", "request.no.pending.error");
+			else if (available)
+				result.addObject("msg", "request.available.error");
+			else {
+				final List<Integer> ls = this.requestService.suggestPosition(this.paradeService.findOne(paradeId));
+				result.addObject("setStatusTo", "APPROVED");
+				result.addObject("suggestedRow", ls.get(0));
+				result.addObject("suggestedColumn", ls.get(1));
+			}
 		}
-
 		return result;
 	}
 

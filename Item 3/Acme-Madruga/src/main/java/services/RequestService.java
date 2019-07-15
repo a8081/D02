@@ -132,6 +132,12 @@ public class RequestService {
 		return this.requestRepository.availableRowColumn(req.getRow(), req.getColumn(), req.getParade().getId());
 	}
 
+	public boolean availableProcessionPositions(final Parade procession) {
+		final int total = procession.getMaxColumns() * procession.getMaxRows();
+		final int totalRequests = this.requestRepository.totalApprovedRequestByProcession(procession.getId());
+		return total < totalRequests;
+	}
+
 	public void delete(final Request req) {
 		final Actor principal = this.actorService.findByPrincipal();
 		final Boolean isMember = this.actorService.checkAuthority(principal, Authority.MEMBER);

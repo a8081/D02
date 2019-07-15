@@ -21,15 +21,17 @@
 <jstl:if test="${not empty errors}">
 	<div class="errorDiv">
 		<ul>
+			<li><spring:message code="actor.validation"/></li>
 			<jstl:forEach items="${errors}" var="error">
-				<li><spring:message code="administrator.edit.${error.field}"/> - <jstl:out value="${error.defaultMessage}" /></li>
+				<jstl:if test="${error.field eq 'termsAndCondicions'}">
+					<li><spring:message code="administrator.edit.${error.field}"/> - <jstl:out value="${error.defaultMessage}" /></li>
+				</jstl:if>
 			</jstl:forEach>
 		</ul>
 	</div>
 </jstl:if>
 
-
-<form:form modelAttribute="actorForm" action="administrator/edit.do" method="POST">
+<form:form modelAttribute="actorFrom" action="administrator/edit.do" method="POST">
 	<form:hidden path="id"/>
 	<form:hidden path="version"/>
 	
