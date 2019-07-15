@@ -19,6 +19,7 @@ import security.UserAccount;
 import services.ActorService;
 import services.AreaService;
 import services.ChapterService;
+import services.FolderService;
 import services.UserAccountService;
 import services.auxiliary.RegisterService;
 import domain.Actor;
@@ -45,6 +46,9 @@ public class ChapterController extends AbstractController {
 
 	@Autowired
 	private AreaService			areaService;
+
+	@Autowired
+	private FolderService		folderService;
 
 
 	// Constructors -----------------------------------------------------------
@@ -124,6 +128,8 @@ public class ChapterController extends AbstractController {
 		ban.setAuthority(Authority.BANNED);
 		principal.getUserAccount().getAuthorities().add(ban);
 		this.actorService.save(principal);
+
+		this.folderService.deleteActorFolders(principal);
 
 		final ModelAndView result = new ModelAndView("redirect:../j_spring_security_logout");
 		return result;

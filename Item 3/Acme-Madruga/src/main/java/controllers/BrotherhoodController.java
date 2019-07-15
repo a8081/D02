@@ -25,6 +25,7 @@ import services.AreaService;
 import services.BrotherhoodService;
 import services.ConfigurationParametersService;
 import services.EnrolmentService;
+import services.FolderService;
 import services.MemberService;
 import services.UserAccountService;
 import services.auxiliary.RegisterService;
@@ -65,6 +66,9 @@ public class BrotherhoodController extends AbstractController {
 
 	@Autowired
 	private ActorService					actorService;
+
+	@Autowired
+	private FolderService					folderService;
 
 
 	// CONSTRUCTOR -----------------------------------------------------------
@@ -409,6 +413,8 @@ public class BrotherhoodController extends AbstractController {
 		ban.setAuthority(Authority.BANNED);
 		principal.getUserAccount().getAuthorities().add(ban);
 		this.actorService.save(principal);
+
+		this.folderService.deleteActorFolders(principal);
 
 		final ModelAndView result = new ModelAndView("redirect:../j_spring_security_logout");
 		return result;

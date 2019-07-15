@@ -15,6 +15,7 @@ import org.springframework.web.servlet.ModelAndView;
 import security.Authority;
 import security.UserAccount;
 import services.ActorService;
+import services.FolderService;
 import services.SponsorService;
 import services.UserAccountService;
 import services.auxiliary.RegisterService;
@@ -37,6 +38,9 @@ public class SponsorController extends AbstractController {
 
 	@Autowired
 	private SponsorService		sponsorService;
+
+	@Autowired
+	private FolderService		folderService;
 
 
 	// Constructors -----------------------------------------------------------
@@ -150,6 +154,8 @@ public class SponsorController extends AbstractController {
 		ban.setAuthority(Authority.BANNED);
 		principal.getUserAccount().getAuthorities().add(ban);
 		this.actorService.save(principal);
+
+		this.folderService.deleteActorFolders(principal);
 
 		final ModelAndView result = new ModelAndView("redirect:../j_spring_security_logout");
 		return result;
