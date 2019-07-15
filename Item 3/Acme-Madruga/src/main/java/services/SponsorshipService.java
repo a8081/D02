@@ -216,7 +216,7 @@ public class SponsorshipService {
 	}
 
 	// ancilliary
-	boolean expiredCreditCard(final CreditCard c) {
+	public boolean expiredCreditCard(final CreditCard c) {
 		boolean res = false;
 		final Date now = new Date();
 		final boolean mesCaducado = c.getExpirationMonth() < (now.getMonth() + 1);

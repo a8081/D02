@@ -66,7 +66,6 @@
 
 	<display:column property="subject" titleKey="message.subject" />
 	<display:column property="sender.name" value="name" titleKey="message.sender" />
-	<display:column property="recipients"  value="name" titleKey="message.recipients"/>
 	<display:column property="priority" titleKey="message.priority" />
 	
 	<display:column>

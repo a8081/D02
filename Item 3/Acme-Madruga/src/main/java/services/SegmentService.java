@@ -84,7 +84,8 @@ public class SegmentService {
 			Assert.isTrue(this.brotherhoodService.findByPrincipal().equals(this.segmentRepository.findBrotherhoodBySegment(segment.getId())), "El usuario logueado debe ser la hermandad que tiene la parade a la que corresponde ese segmento");
 
 			final Parade parade = this.paradeService.findOne(idParade);
-
+			Assert.isTrue(!segment.getDestinationTime().before(parade.getMoment()));
+			Assert.isTrue(!segment.getOriginTime().before(parade.getMoment()));
 			//Comprobamos que el status de la parade tiene que ser DEFAULT para poder modificar un segment.
 			Assert.isTrue(parade.getStatus().equals("DEFAULT"), "No puede modificar un segment de un desfile que tenga su estado distinto a DEFAULT.");
 
@@ -92,7 +93,6 @@ public class SegmentService {
 			final List<Segment> segments = parade.getSegments();
 			final Segment lastSegment = segments.get(segments.size() - 1);
 			Assert.isTrue(segment.equals(lastSegment), "No se puede editar un segmento si no es el �ltimo del path");
-
 			segment.setOriginTime(lastSegment.getOriginTime());
 			segment.setOriginCoordinates(lastSegment.getOriginCoordinates());
 

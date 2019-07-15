@@ -123,6 +123,62 @@ public class MessageService {
 		final boolean containsSpamWords = this.checkForSpamWords(m);
 
 		final Collection<Actor> recipients = m.getRecipients();
+		Folder notification;
+		Folder spambox;
+
+		final Message sent = this.save(m);
+
+		outboxMessages.add(sent);
+		outbox.setMessages(outboxMessages);
+
+		if (containsSpamWords) {
+			sender.setSpammer(true);
+			this.actorService.save(sender);
+
+			for (final Actor r : recipients) {
+				spambox = this.folderService.findSpamboxByUserId(r.getUserAccount().getId());
+				final Collection<Message> spamMessages = spambox.getMessages();
+				spamMessages.add(sent);
+				spambox.setMessages(spamMessages);
+				this.folderService.save(spambox, r);
+			}
+		} else
+			for (final Actor r : recipients) {
+				notification = this.folderService.findNotificationboxByUserId(r.getUserAccount().getId());
+				final Collection<Message> notificationMessages = notification.getMessages();
+				notificationMessages.add(sent);
+				notification.setMessages(notificationMessages);
+				this.folderService.save(notification, r);
+			}
+
+		return sent;
+	}
+
+	public void broadcast(final Message m) {
+		Assert.notNull(m);
+		this.administratorService.findByPrincipal();
+
+		final Collection<Actor> actors = this.actorService.findAll();
+		final Actor actor = this.actorService.findByPrincipal();
+		actors.remove(this.administratorService.findSystem());
+		actors.removeAll(this.actorService.findAllBanned());
+		actors.remove(actor);
+		m.setRecipients(actors);
+		Assert.notNull(m);
+
+		final Actor sender = this.actorService.findByPrincipal();
+		final Folder outbox = this.folderService.findOutboxByUserId(sender.getUserAccount().getId());
+		final Collection<Message> outboxMessages = outbox.getMessages();
+
+		//== Create method set the sender ==
+		//final Actor sender = this.actorService.findByPrincipal();
+		m.setSender(sender);
+		final Date moment = new Date(System.currentTimeMillis() - 1000);
+		m.setMoment(moment);
+
+		final boolean containsSpamWords = this.checkForSpamWords(m);
+
+		final Collection<Actor> recipients = m.getRecipients();
 		Folder inbox;
 		Folder spambox;
 
@@ -151,20 +207,6 @@ public class MessageService {
 				this.folderService.save(inbox, r);
 			}
 
-		return sent;
-	}
-
-	public void broadcast(final Message m) {
-		Assert.notNull(m);
-		this.administratorService.findByPrincipal();
-
-		final Collection<Actor> actors = this.actorService.findAll();
-		final Actor actor = this.actorService.findByPrincipal();
-		actors.remove(this.administratorService.findSystem());
-		actors.removeAll(this.actorService.findAllBanned());
-		actors.remove(actor);
-		m.setRecipients(actors);
-		this.send(m);
 	}
 
 	public boolean checkForSpamWords(final Message m) {
@@ -476,6 +518,48 @@ public class MessageService {
 				this.folderService.save(notificationBox, r);
 			}
 		}
+	}
+
+	public void notificationEnrolment(final Enrolment e) {
+		Assert.notNull(e);
+		final Message m = new Message();
+		final Collection<String> tags = new ArrayList<>();
+		m.setTags(tags);
+		final Administrator sender = this.administratorService.findSystem();
+
+		m.setSubject("Enrolment has finished.\n" + "Inscripcion finalizada.");
+		m.setBody("Enrolment between brotherhood " + e.getBrotherhood() + " and member " + e.getMember() + " has finished.\n" + "Inscripcion entre la hermandad " + e.getBrotherhood() + " y el miembro " + e.getMember() + " ha finalizado.\n");
+		m.setPriority("HIGH");
+		m.setSender(sender);
+
+		final Collection<Actor> recipients = new ArrayList<>();
+		recipients.add(e.getBrotherhood());
+		recipients.add(e.getMember());
+		m.setRecipients(recipients);
+
+		final Folder outbox = this.folderService.findOutboxByUserId(sender.getUserAccount().getId());
+		final Collection<Message> outboxMessages = outbox.getMessages();
+
+		//== Create method set the sender ==
+		//final Actor sender = this.actorService.findByPrincipal();
+		m.setSender(sender);
+		final Date moment = new Date(System.currentTimeMillis() - 1000);
+		m.setMoment(moment);
+
+		Folder inbox;
+
+		final Message sent = this.save(m);
+
+		outboxMessages.add(sent);
+		outbox.setMessages(outboxMessages);
+		for (final Actor r : recipients) {
+			inbox = this.folderService.findNotificationboxByUserId(r.getUserAccount().getId());
+			final Collection<Message> inboxMessages = inbox.getMessages();
+			inboxMessages.add(sent);
+			inbox.setMessages(inboxMessages);
+			this.folderService.save(inbox, r);
+		}
+
 	}
 
 }

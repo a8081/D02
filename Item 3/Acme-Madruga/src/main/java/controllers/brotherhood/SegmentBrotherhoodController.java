@@ -150,6 +150,7 @@ public class SegmentBrotherhoodController extends AbstractController {
 
 		paramParadeId = request.getParameter("paradeId");
 		paradeId = paramParadeId.isEmpty() ? null : Integer.parseInt(paramParadeId);
+		final Parade parade = this.paradeService.findOne(paradeId);
 
 		if (binding.hasErrors()) {
 			result = this.createEditModelAndView(segment, paradeId);
@@ -160,6 +161,8 @@ public class SegmentBrotherhoodController extends AbstractController {
 				result = this.paradeBrotherhoodController.display(paradeId);
 			} catch (final Throwable oops) {
 				if (!segment.getOriginTime().before(segment.getDestinationTime()))
+					result = this.createEditModelAndView(segment, paradeId, "segment.time.commit.error");
+				else if ((segment.getDestinationTime().before(parade.getMoment())) || (segment.getOriginTime().before(parade.getMoment())))
 					result = this.createEditModelAndView(segment, paradeId, "segment.time.commit.error");
 				else
 					result = this.createEditModelAndView(segment, paradeId, "general.commit.error");

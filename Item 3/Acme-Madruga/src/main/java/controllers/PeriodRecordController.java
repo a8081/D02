@@ -69,24 +69,33 @@ public class PeriodRecordController extends AbstractController {
 	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "save")
 	public ModelAndView save(@Valid final PeriodRecord periodRecord, final BindingResult bindingResult) {
 		ModelAndView result;
+		final Date fechaActual = new Date();
+		final Integer anyo = fechaActual.getYear() + 1900;
+
 		if (bindingResult.hasErrors())
 			result = this.createEditModelAndView(periodRecord);
-		else {
-			final Date fechaActual = new Date();
-			final Integer Año = fechaActual.getYear() + 1900;
-			Assert.isTrue(Año <= periodRecord.getStartYear());
-			Assert.isTrue(periodRecord.getStartYear() <= periodRecord.getEndYear(), "El año de inicio debe de ser anterior al año de fin.");
-			if (periodRecord.getId() == 0) {
-				final Brotherhood brotherhood = this.brotherhoodService.findByPrincipal();
-				final History history = brotherhood.getHistory();
-				final Collection<PeriodRecord> pr = history.getPeriodRecords();
-				pr.add(periodRecord);
-				history.setPeriodRecords(pr);
-				this.historyService.save(history);
-			} else
-				this.periodRecordService.save(periodRecord);
-			result = this.historyController.list();
-		}
+		else
+			try {
+				Assert.isTrue(anyo <= periodRecord.getStartYear());
+				Assert.isTrue(periodRecord.getStartYear() <= periodRecord.getEndYear(), "El año de inicio debe de ser anterior al año de fin.");
+				if (periodRecord.getId() == 0) {
+					final Brotherhood brotherhood = this.brotherhoodService.findByPrincipal();
+					final History history = brotherhood.getHistory();
+					final Collection<PeriodRecord> pr = history.getPeriodRecords();
+					pr.add(periodRecord);
+					history.setPeriodRecords(pr);
+					this.historyService.save(history);
+				} else
+					this.periodRecordService.save(periodRecord);
+				result = this.historyController.list();
+			} catch (final Throwable oops) {
+				if (anyo <= periodRecord.getStartYear())
+					result = this.createEditModelAndView(periodRecord, "comprobacion.startYear");
+				else if (periodRecord.getStartYear() <= periodRecord.getEndYear())
+					result = this.createEditModelAndView(periodRecord, "period.date.error");
+				else
+					result = this.createEditModelAndView(periodRecord, "period.commit.error");
+			}
 
 		return result;
 	}

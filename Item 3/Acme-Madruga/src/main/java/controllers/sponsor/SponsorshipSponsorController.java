@@ -2,6 +2,7 @@
 package controllers.sponsor;
 
 import java.util.Collection;
+import java.util.Date;
 
 import javax.validation.Valid;
 import javax.validation.ValidationException;
@@ -112,8 +113,12 @@ public class SponsorshipSponsorController extends AbstractController {
 			result = this.createEditModelAndView(sponsorshipForm);
 		} catch (final Throwable oops) {
 			String errorMessage = "sponsorship.commit.error";
-			if (oops.getMessage().contains("message.error"))
-				errorMessage = oops.getMessage();
+			final Date now = new Date();
+			final boolean mesCaducado = sponsorshipForm.getExpirationMonth() < (now.getMonth() + 1);
+			final boolean mismoAnyo = (sponsorshipForm.getExpirationYear()) == (now.getYear() % 100);
+			final boolean anyoCaducado = (sponsorshipForm.getExpirationYear()) < (now.getYear() % 100);
+			if (anyoCaducado || (mismoAnyo && mesCaducado))
+				errorMessage = "tarjeta.caducada";
 			result = this.createEditModelAndView(sponsorshipForm, errorMessage);
 		}
 		return result;

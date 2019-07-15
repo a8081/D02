@@ -45,6 +45,8 @@ public class EnrolmentService {
 
 	public Enrolment create() {
 		final Enrolment enrolment = new Enrolment();
+		final Date moment = new Date(System.currentTimeMillis() - 1000);
+		enrolment.setMoment(moment);
 		this.memberService.findByPrincipal();
 		return enrolment;
 
@@ -148,6 +150,7 @@ public class EnrolmentService {
 		enrolment = this.enrolmentActive(brotherhood.getUserAccount().getId(), principal.getUserAccount().getId());
 		Assert.notNull(enrolment, "No puede darse de baja de una hermandad a la que no pertenece.");
 		enrolment.setDropOut(new Date(System.currentTimeMillis() - 1));
+		this.messageService.notificationEnrolment(enrolment);
 		this.enrolmentRepository.save(enrolment);
 	}
 
@@ -206,9 +209,10 @@ public class EnrolmentService {
 		final Enrolment assertEnrolment = this.enrolmentRepository.enrolmentActive(brotherhood.getUserAccount().getId(), member.getUserAccount().getId());
 		Assert.isNull(assertEnrolment, "No puedes inscribirte m�s de una vez en la misma hermandad.");
 		final Enrolment enrolment = this.create();
-
+		final Date moment = new Date(System.currentTimeMillis() - 1000);
+		enrolment.setMoment(moment);
 		final Enrolment retrieved = this.save(enrolment, brotherhoodId);
-		this.messageService.brotherhoodEnrolsMessage(enrolment);
+		this.messageService.brotherhoodEnrolsMessage(retrieved);
 		return retrieved;
 	}
 
