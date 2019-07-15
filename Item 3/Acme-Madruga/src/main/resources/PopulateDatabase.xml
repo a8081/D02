@@ -1313,7 +1313,7 @@
 	<bean id="parade4" class="domain.Parade">
 		<property name="title" value="Nazareno" />
 		<property name="description" value="This is a description of a parade4" />
-		<property name="moment" value="2019/04/26 00:00" />
+		<property name="moment" value="2029/04/26 00:00" />
 		<property name="ticker" value="200428-DLUBG" />
 		<property name="mode" value="FINAL" />
 		<property name="maxRows" value="120" />
@@ -1828,12 +1828,12 @@
 		======= ConfigurationParameters ========= =================================================================== -->
 
 	<bean id="configurationParameters" class="domain.ConfigurationParameters">
-		<property name="sysName" value="Acme Madrugá" />
+		<property name="sysName" value="Acme Parade" />
 		<property name="banner" value="https://i.ibb.co/mB2Rdr2/logo.png" />
 		<property name="welcomeMessageEn"
-			value="Welcome to Acme Madrugá!  The site to organise your parades" />
+			value="Welcome to Acme Parade!  The site to organise your parades" />
 		<property name="welcomeMessageEsp"
-			value="¡Bienvenidos a Acme Madrugá!  Tu sitio para organizar procesiones" />
+			value="¡Bienvenidos a Acme Parade!  Tu sitio para organizar procesiones" />
 		<property name="countryPhoneCode" value="+34" />
 		<property name="spamWords">
 			<list>

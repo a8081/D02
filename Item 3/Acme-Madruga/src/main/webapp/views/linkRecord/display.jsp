@@ -14,9 +14,8 @@
 	
 <acme:display code="record.title" value="${linkRecord.title}" />
 <acme:display code="record.description" value="${linkRecord.description}" />
-<acme:display code="record.linkedBrotherhood" value="${linkRecord.linkedBrotherhood.name}" />
-
-
+<spring:message code="record.linkedBrotherhood"/>:
+<a href="brotherhood/displayTabla.do?brotherhoodId=${linkRecord.linkedBrotherhood.id}"><jstl:out value="${linkRecord.linkedBrotherhood.name}" /></a>
 <br>
 <jstl:if test="${buttons}">
 <input type="button" class="btn btn-danger" name="cancel"

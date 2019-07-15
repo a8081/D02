@@ -14,8 +14,15 @@
 	
 <acme:display code="record.title" value="${inceptionRecord.title}" />
 <acme:display code="record.description" value="${inceptionRecord.description}" />
-<acme:display code="record.photos" value="${inceptionRecord.photos}" />
-
+<div class="galleryContainer">
+	<jstl:forEach items="${inceptionRecord.photos}" var="picture" varStatus="loop">
+				<div class="gallery">
+				  <a target="_blank" href="${picture}">
+				    <img src="${picture}" alt="${picture}" width="600" height="400">
+				  </a>
+				</div>
+	</jstl:forEach>
+</div>
 <br>
 
 <jstl:if test="${buttons}">
