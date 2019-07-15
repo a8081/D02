@@ -69,7 +69,7 @@ public class FloatController extends AbstractController {
 	public ModelAndView edit(@RequestParam final int floatId) {
 		final ModelAndView result = new ModelAndView("float/edit");
 		final domain.Float f = this.floatService.findOne(floatId);
-		result.addObject("f", f);
+		result.addObject("float", f);
 		return result;
 	}
 
@@ -84,11 +84,17 @@ public class FloatController extends AbstractController {
 			 */
 			result = new ModelAndView("float/edit");
 			result.addObject("errors", binding.getAllErrors());
-		} else {
-			result = new ModelAndView("float/display");
-			f = this.floatService.save(f);
-		}
-		result.addObject("f", f);
+			result.addObject("float", f);
+		} else
+			try {
+				result = new ModelAndView("float/display");
+				f = this.floatService.save(f);
+				result.addObject("f", f);
+			} catch (final Throwable oops) {
+				result = new ModelAndView("float/edit");
+				result.addObject("message", "commit.error");
+			}
+
 		return result;
 	}
 
@@ -96,7 +102,7 @@ public class FloatController extends AbstractController {
 	public ModelAndView create() {
 		final ModelAndView result = new ModelAndView("float/edit");
 		final Float f = this.floatService.create();
-		result.addObject("f", f);
+		result.addObject("float", f);
 		return result;
 	}
 

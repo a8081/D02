@@ -9,7 +9,7 @@
 
 <%@taglib prefix="acme" tagdir="/WEB-INF/tags"%>
 
-<form:form modelAttribute="f" action="float/edit.do" method="POST">
+<form:form modelAttribute="float" action="float/edit.do" method="POST">
 	<form:hidden path="id"/>
 	<form:hidden path="version"/>
 	<form:hidden path="brotherhood"/>
