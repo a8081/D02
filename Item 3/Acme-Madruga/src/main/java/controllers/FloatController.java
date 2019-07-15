@@ -33,8 +33,9 @@ public class FloatController extends AbstractController {
 	public ModelAndView list() {
 		final ModelAndView result = new ModelAndView("float/list");
 		final Collection<domain.Float> floats = this.floatService.findByBrotherhoodPrincipal();
+		final Collection<domain.Float> selectedFloats = this.floatService.findSelectedByBrotherhoodPrincipal();
 		result.addObject("floats", floats);
-		result.addObject("button", false);
+		result.addObject("selectedFloats", selectedFloats);
 		return result;
 	}
 
@@ -105,9 +106,7 @@ public class FloatController extends AbstractController {
 		final Float f = this.floatService.findOne(floatId);
 		this.floatService.delete(f);
 
-		final ModelAndView result = new ModelAndView("float/list");
-		final Collection<domain.Float> floats = this.floatService.findByBrotherhoodPrincipal();
-		result.addObject("floats", floats);
+		final ModelAndView result = this.list();
 		return result;
 	}
 }

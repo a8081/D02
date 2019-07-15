@@ -105,6 +105,7 @@ public class RequestService {
 			final boolean hasMemberRequestToParade = this.requestRepository.hasMemberRequestToParade(req.getParade().getId(), req.getMember().getUserAccount().getId());
 			Assert.isTrue(!hasMemberRequestToParade, "A member cannot request twice to the same parade");
 			Assert.isTrue((req.getRow() == null && req.getColumn() == null && req.getExplanation() == null), "Row, column and explanation attributes only can be set by brotherhood");
+			Assert.isTrue(this.paradeService.findAllAvailableByMemberId(req.getMember()).contains(req.getParade()));
 		} else {
 			Assert.isTrue(!isMember, "A member cannot update the request");
 			Assert.isTrue(isBrotherhood, "Only brotherhood can update a Request (to change it's status)");

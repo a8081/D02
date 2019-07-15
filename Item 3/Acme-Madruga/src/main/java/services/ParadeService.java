@@ -255,9 +255,15 @@ public class ParadeService {
 	public Collection<Parade> paradesAvailable() {
 		final Member principal = this.memberService.findByPrincipal();
 		final Collection<Parade> memberparades = this.paradeRepository.findAllParadeByBMemberId(principal.getUserAccount().getId());
-		final Collection<Parade> parades = this.findAllFinalMode();
+		final Collection<Parade> parades = this.paradeRepository.findAllAvailableByMemberId(principal.getId());
 		parades.removeAll(memberparades);
 		return parades;
+	}
+
+	public Collection<Parade> findAllAvailableByMemberId(final Member principal) {
+		final Collection<Parade> res = this.paradeRepository.findAllAvailableByMemberId(principal.getId());
+		Assert.notNull(res);
+		return res;
 	}
 
 	/**

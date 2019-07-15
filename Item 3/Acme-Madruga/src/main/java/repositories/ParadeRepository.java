@@ -25,6 +25,9 @@ public interface ParadeRepository extends JpaRepository<Parade, Integer> {
 	@Query("select p from Parade p where p.mode = 'FINAL'")
 	Collection<Parade> findAllFinalMode();
 
+	@Query("select p from Parade p where (p.mode = 'FINAL' AND ((1.0*(select count(e) from Enrolment e where e.member.id=?1 and e.brotherhood.id=p.brotherhood.id and e.enrolled=TRUE))>0))")
+	Collection<Parade> findAllAvailableByMemberId(Integer id);
+
 	@Query("select distinct p from Parade p where p.mode='FINAL' AND (?1='' OR p.description LIKE CONCAT('%',?1,'%') OR p.title LIKE CONCAT('%',?1,'%') OR p.ticker LIKE CONCAT('%',?1,'%')) AND (?4='' OR (?4=p.brotherhood.area.name)) AND ((p.moment>=?2) OR ?2=NULL) AND ((p.moment<=?3) OR ?3=NULL)")
 	Collection<Parade> findParades(String keyword, Date minDate, Date maxDate, String area);
 

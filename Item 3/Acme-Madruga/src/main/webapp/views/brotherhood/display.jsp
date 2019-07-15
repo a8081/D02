@@ -63,7 +63,13 @@ function deletePersonalData(){
 		<spring:message code="actor.spammer.no"/>
 	</jstl:otherwise>
 </jstl:choose>
+<jstl:set var="urlEdited" value="float/listMyFloats.do?brotherhoodId=${brotherhood.id}"/>
+<security:authorize access="hasRole('BROTHERHOOD')">
+	<jstl:set var="urlEdited" value="float/list.do?brotherhoodId=${brotherhood.id}"/>
+</security:authorize>
 <br>
+
+
 
 <jstl:choose>
 	<jstl:when test="${empty brotherhood.area and displayButtons}">
@@ -77,7 +83,7 @@ function deletePersonalData(){
 <br>
 	<acme:button url="parade/listByBrotherhood.do?brotherhoodId=${brotherhood.id}" name="back" code="brotherhood.processionList"/>
 	<acme:button url="member/listMyMembers.do?brotherhoodId=${brotherhood.id}" name="back" code="brotherhood.memberList"/>
-	<acme:button url="float/listMyFloats.do?brotherhoodId=${brotherhood.id}" name="back" code="brotherhood.floatList"/>
+	<acme:button url="${urlEdited}" name="back" code="brotherhood.floatList"/>
 	<jstl:if test="${not empty brotherhood.history}">
 		<acme:button url="history/listForAnonymous.do?brotherhoodId=${brotherhood.id}" name="back" code="brotherhood.history"/>
 	</jstl:if>
