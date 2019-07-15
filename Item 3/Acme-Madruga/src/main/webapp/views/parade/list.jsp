@@ -185,3 +185,6 @@
 
 </jstl:otherwise>
 </jstl:choose>
+<jstl:if test="${not empty msg}">
+		<h3><spring:message code="${msg}"/></h3>
+	</jstl:if>

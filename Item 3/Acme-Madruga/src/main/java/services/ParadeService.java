@@ -482,4 +482,13 @@ public class ParadeService {
 	public void flush() {
 		this.paradeRepository.flush();
 	}
+
+	public Collection<Parade> findAllByArea(final int areaId) {
+		final Chapter principal = this.chapterService.findByPrincipal();
+		final Chapter areaChapter = this.chapterService.findChapterByArea(areaId);
+		Assert.isTrue(principal == areaChapter, "You're not the owner of this area");
+		final Collection<Parade> res = this.paradeRepository.findAllFinalModeByArea(areaId);
+		Assert.notNull(res);
+		return res;
+	}
 }

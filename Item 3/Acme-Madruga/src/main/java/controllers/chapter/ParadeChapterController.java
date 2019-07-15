@@ -45,56 +45,56 @@ public class ParadeChapterController extends AbstractController {
 
 	@RequestMapping(value = "/listAll", method = RequestMethod.GET)
 	public ModelAndView list() {
-		final ModelAndView result;
+		final ModelAndView result = new ModelAndView("parade/list");
 		final Collection<Parade> parades;
+		final Chapter chapter = this.chapterService.findByPrincipal();
+		if (chapter.getArea() != null) {
+			parades = this.paradeService.findAllByArea(chapter.getArea().getId());
 
-		parades = this.paradeService.findAll();
+			String listParades;
+			String rol;
 
-		String listParades;
-		String rol;
+			listParades = "listAll";
+			rol = "chapter";
 
-		listParades = "listAll";
-		rol = "chapter";
+			final String lang = LocaleContextHolder.getLocale().getLanguage();
 
-		final String lang = LocaleContextHolder.getLocale().getLanguage();
+			result.addObject("parades", parades);
 
-		result = new ModelAndView("parade/list");
-		result.addObject("parades", parades);
-
-		result.addObject("lang", lang);
-		result.addObject("requetURI", "parade/chapter/listAll.do");
-		result.addObject("listParades", listParades);
-		result.addObject("rol", rol);
-
+			result.addObject("lang", lang);
+			result.addObject("requetURI", "parade/chapter/listAll.do");
+			result.addObject("listParades", listParades);
+			result.addObject("rol", rol);
+		} else
+			result.addObject("msg", "no.area");
 		return result;
 	}
-
 	// LIST ACCEPTED --------------------------------------------------------
 
 	@RequestMapping(value = "/listAccepted", method = RequestMethod.GET)
 	public ModelAndView listAccepted() {
-		final ModelAndView result;
+		final ModelAndView result = new ModelAndView("parade/list");
 		final Chapter chapter = this.chapterService.findByPrincipal();
 		final Collection<Parade> parades;
+		if (chapter.getArea() != null) {
+			parades = this.paradeService.findAllFinalModeAccepted(chapter.getArea().getId());
 
-		parades = this.paradeService.findAllFinalModeAccepted(chapter.getArea().getId());
+			String listParades;
+			String rol;
 
-		String listParades;
-		String rol;
+			listParades = "listAccepted";
+			rol = "chapter";
 
-		listParades = "listAccepted";
-		rol = "chapter";
+			final String lang = LocaleContextHolder.getLocale().getLanguage();
 
-		final String lang = LocaleContextHolder.getLocale().getLanguage();
+			result.addObject("parades", parades);
 
-		result = new ModelAndView("parade/list");
-		result.addObject("parades", parades);
-
-		result.addObject("lang", lang);
-		result.addObject("requetURI", "parade/chapter/listAccepted.do");
-		result.addObject("listParades", listParades);
-		result.addObject("rol", rol);
-
+			result.addObject("lang", lang);
+			result.addObject("requetURI", "parade/chapter/listAccepted.do");
+			result.addObject("listParades", listParades);
+			result.addObject("rol", rol);
+		} else
+			result.addObject("msg", "no.area");
 		return result;
 	}
 
@@ -102,28 +102,28 @@ public class ParadeChapterController extends AbstractController {
 
 	@RequestMapping(value = "/listRejected", method = RequestMethod.GET)
 	public ModelAndView listRejected() {
-		final ModelAndView result;
+		final ModelAndView result = new ModelAndView("parade/list");
 		final Chapter chapter = this.chapterService.findByPrincipal();
 		final Collection<Parade> parades;
+		if (chapter.getArea() != null) {
+			parades = this.paradeService.findAllFinalModeRejected(chapter.getArea().getId());
 
-		parades = this.paradeService.findAllFinalModeRejected(chapter.getArea().getId());
+			String listParades;
+			String rol;
 
-		String listParades;
-		String rol;
+			listParades = "listRejected";
+			rol = "chapter";
 
-		listParades = "listRejected";
-		rol = "chapter";
+			final String lang = LocaleContextHolder.getLocale().getLanguage();
 
-		final String lang = LocaleContextHolder.getLocale().getLanguage();
+			result.addObject("parades", parades);
 
-		result = new ModelAndView("parade/list");
-		result.addObject("parades", parades);
-
-		result.addObject("lang", lang);
-		result.addObject("requetURI", "parade/chapter/listRejected.do");
-		result.addObject("listParades", listParades);
-		result.addObject("rol", rol);
-
+			result.addObject("lang", lang);
+			result.addObject("requetURI", "parade/chapter/listRejected.do");
+			result.addObject("listParades", listParades);
+			result.addObject("rol", rol);
+		} else
+			result.addObject("msg", "no.area");
 		return result;
 	}
 
@@ -131,27 +131,27 @@ public class ParadeChapterController extends AbstractController {
 
 	@RequestMapping(value = "/listSubmitted", method = RequestMethod.GET)
 	public ModelAndView listSubmitted() {
-		final ModelAndView result;
+		final ModelAndView result = new ModelAndView("parade/list");
 		final Chapter chapter = this.chapterService.findByPrincipal();
 		final Collection<Parade> parades;
+		if (chapter.getArea() != null) {
+			parades = this.paradeService.findAllFinalModeSubmitted(chapter.getArea().getId());
 
-		parades = this.paradeService.findAllFinalModeSubmitted(chapter.getArea().getId());
+			String listParades;
+			String rol;
 
-		String listParades;
-		String rol;
+			listParades = "listRejected";
+			rol = "chapter";
+			final String lang = LocaleContextHolder.getLocale().getLanguage();
 
-		listParades = "listRejected";
-		rol = "chapter";
-		final String lang = LocaleContextHolder.getLocale().getLanguage();
+			result.addObject("parades", parades);
 
-		result = new ModelAndView("parade/list");
-		result.addObject("parades", parades);
-
-		result.addObject("lang", lang);
-		result.addObject("requetURI", "parade/chapter/listSubmitted.do");
-		result.addObject("listParades", listParades);
-		result.addObject("rol", rol);
-
+			result.addObject("lang", lang);
+			result.addObject("requetURI", "parade/chapter/listSubmitted.do");
+			result.addObject("listParades", listParades);
+			result.addObject("rol", rol);
+		} else
+			result.addObject("msg", "no.area");
 		return result;
 	}
 
