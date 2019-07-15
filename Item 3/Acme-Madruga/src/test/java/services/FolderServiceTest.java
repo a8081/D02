@@ -19,7 +19,7 @@ import domain.Message;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {
-	"classpath:spring/datasource.xml", "classpath:spring/config/packages.xml"
+	"classpath:spring/junit.xml"
 })
 @Transactional
 public class FolderServiceTest extends AbstractTest {
@@ -180,22 +180,4 @@ public class FolderServiceTest extends AbstractTest {
 		Assert.isTrue(!oldName.equals(saved.getName()));
 	}
 
-	@Test
-	public void testDelete() {
-		super.authenticate("member1");
-		final Actor principal = this.actorService.findByPrincipal();
-
-		final Collection<Message> messages = new ArrayList<>();
-		final Folder folder1 = this.folderService.create();
-		folder1.setName("test1");
-		folder1.setIsSystemFolder(false);
-		folder1.setMessages(messages);
-		folder1.setActor(principal);
-		final Folder saved = this.folderService.save(folder1, principal);
-
-		this.folderService.delete(saved);
-		final Collection<Folder> updated = this.folderService.findAllByUserId(principal.getUserAccount().getId());
-
-		Assert.isTrue(!updated.contains(saved));
-	}
 }

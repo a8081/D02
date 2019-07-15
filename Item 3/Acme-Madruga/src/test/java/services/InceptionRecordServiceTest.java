@@ -12,8 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import utilities.AbstractTest;
-import domain.Brotherhood;
-import domain.History;
 import domain.InceptionRecord;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -99,83 +97,5 @@ public class InceptionRecordServiceTest extends AbstractTest {
 		}
 
 		super.checkExceptions(expected, caught);
-	}
-
-	@Test
-	public void driverEdit() {
-		final Object testingData[][] = {
-			{
-				//			A: Acme Parade Req. 3 -> Brotherhoods can manage their history
-				//			B: Test Positivo: Brotherhood edita InceptionRecord
-				//			C: 100% Recorre 68 de las 68 lineas posibles
-				//			D: cobertura de datos=4/54
-				"brotherhood1", false, "title inception recor test", "description inception recor test", null
-			}, {
-				//			A: Acme Parade Req. 3 -> Brotherhoods can manage their history
-				//			B: Test Negativo: Brotherhood intenta editar Inception que no le pertenece
-				//			C: 89,70% Recorre 61 de las 68 lineas posibles
-				//			D: cobertura de datos=4/54
-				"brotherhood2", true, "title inception recor test", "description inception recor test", IllegalArgumentException.class
-			}, {
-				//			A: Acme Parade Req. 3 -> Brotherhoods can manage their history
-				//			B: Test Negativo: Un member intenta editar una InceptionRecord
-				//			C: 11,76% Recorre 8 de las 68 lineas posibles
-				//			D: cobertura de datos=4/54
-				"member1", false, "title inception recor test", "description inception recor test", IllegalArgumentException.class
-			}, {
-				//			A: Acme Parade Req. 3 -> Brotherhoods can manage their history
-				//			B: Test Negativo: Brotherhood edita InceptionRecord con title vacio
-				//			C: 98,52% Recorre 67 de las 68 lineas posibles
-				//			D: cobertura de datos=4/54
-				"brotherhood1", false, "", "description inception recor test", ConstraintViolationException.class
-			}, {
-				//			A: Acme Parade Req. 3 -> Brotherhoods can manage their history
-				//			B: Test Negativo: Brotherhood edita InceptionRecord con title null
-				//			C: 98,52% Recorre 67 de las 68 lineas posibles
-				//			D: cobertura de datos=4/54
-				"brotherhood1", false, null, "description inception recor test", ConstraintViolationException.class
-			}, {
-				//			A: Acme Parade Req. 3 -> Brotherhoods can manage their history
-				//			B: Test Negativo: Brotherhood edita InceptionRecord con description vacio
-				//			C: 98,52% Recorre 67 de las 68 lineas posibles
-				//			D: cobertura de datos=4/54
-				"brotherhood1", false, "title inception recor test", "", ConstraintViolationException.class
-			}, {
-				//			A: Acme Parade Req. 3 -> Brotherhoods can manage their history
-				//			B: Test Negativo: Brotherhood edita InceptionRecord con description null
-				//			C: 98,52% Recorre 67 de las 68 lineas posibles
-				//			D: cobertura de datos=4/54
-				"brotherhood1", false, "title inception recor test", null, ConstraintViolationException.class
-			},
-		};
-		for (int i = 0; i < testingData.length; i++)
-			this.templateEdit((String) testingData[i][0], (Boolean) testingData[i][1], (String) testingData[i][2], (String) testingData[i][3], (Class<?>) testingData[i][4]);
-	}
-
-	private void templateEdit(final String actor, final Boolean prop, final String title, final String description, final Class<?> expected) {
-		Class<?> caught = null;
-		try {
-			this.authenticate(actor);
-			final Brotherhood principal = this.brotherhoodService.findByPrincipal();
-			final InceptionRecord iR;
-			final History history = principal.getHistory();
-			if (!prop)
-				iR = history.getInceptionRecord();
-			else {
-				final Integer id = this.getEntityId("inceptionRecord1");
-				iR = this.inceptionRecordService.findOne(id);
-			}
-			iR.setTitle(title);
-			iR.setDescription(description);
-			history.setInceptionRecord(iR);
-			this.inceptionRecordService.save(iR);
-			this.inceptionRecordService.flush();
-			this.unauthenticate();
-		} catch (final Throwable oops) {
-			caught = oops.getClass();
-		}
-
-		super.checkExceptions(expected, caught);
-
 	}
 }

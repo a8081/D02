@@ -18,7 +18,7 @@ import domain.ConfigurationParameters;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {
-	"classpath:spring/datasource.xml", "classpath:spring/config/packages.xml"
+	"classpath:spring/junit.xml"
 })
 @Transactional
 public class ConfigurationParametersServiceTest extends AbstractTest {
@@ -110,25 +110,6 @@ public class ConfigurationParametersServiceTest extends AbstractTest {
 		super.authenticate("admin1");
 		final ConfigurationParameters res = this.configurationParametersService.find();
 		Assert.notNull(res);
-	}
-
-	@Test
-	public void testSave() {
-		super.authenticate("admin1");
-		final ConfigurationParameters conf = this.configurationParametersService.create();
-		final ConfigurationParameters confSaved = this.configurationParametersService.save(conf);
-		Assert.notNull(confSaved);
-		Assert.notNull(confSaved.getBanner());
-		Assert.notNull(confSaved.getCountryPhoneCode());
-		Assert.notEmpty(confSaved.getPositiveWords());
-		Assert.notEmpty(confSaved.getNegativeWords());
-		Assert.notEmpty(confSaved.getSpamWords());
-		Assert.notNull(confSaved.getMaxFinderResults());
-		Assert.notNull(confSaved.getFinderTime());
-		Assert.notNull(confSaved.getWelcomeMessageEn());
-		Assert.notNull(confSaved.getWelcomeMessageEsp());
-		Assert.notNull(confSaved.getSysName());
-
 	}
 
 	@Test
