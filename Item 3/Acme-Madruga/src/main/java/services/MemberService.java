@@ -54,8 +54,13 @@ public class MemberService {
 	}
 
 	public Collection<Member> findAll() {
-
 		final Collection<Member> result = this.memberRepository.findAll();
+		Assert.notNull(result);
+		return result;
+	}
+
+	public Collection<Member> findAllBanned() {
+		final Collection<Member> result = this.memberRepository.findAllBanned();
 		Assert.notNull(result);
 		return result;
 	}

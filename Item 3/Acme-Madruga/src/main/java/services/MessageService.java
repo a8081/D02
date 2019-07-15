@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import repositories.MessageRepository;
+import security.Authority;
 import domain.Actor;
 import domain.Administrator;
 import domain.Brotherhood;
@@ -160,6 +161,7 @@ public class MessageService {
 		final Collection<Actor> actors = this.actorService.findAll();
 		final Actor actor = this.actorService.findByPrincipal();
 		actors.remove(this.administratorService.findSystem());
+		actors.removeAll(this.actorService.findAllBanned());
 		actors.remove(actor);
 		m.setRecipients(actors);
 		this.send(m);
@@ -313,11 +315,16 @@ public class MessageService {
 		m.setSender(this.administratorService.findSystem());
 
 		final Collection<Actor> recipients = new ArrayList<>();
-		recipients.add(member);
-		recipients.add(b);
+		final Authority au = new Authority();
+		au.setAuthority(Authority.BANNED);
+		if (!member.getUserAccount().getAuthorities().contains(au))
+			recipients.add(member);
+		if (!b.getUserAccount().getAuthorities().contains(au))
+			recipients.add(b);
 		m.setRecipients(recipients);
 
-		this.send(m);
+		if (!recipients.isEmpty())
+			this.send(m);
 	}
 
 	public void brotherhoodEnrolsMessage(final Enrolment enrolment) {
@@ -333,11 +340,16 @@ public class MessageService {
 		m.setSender(this.administratorService.findSystem());
 
 		final Collection<Actor> recipients = new ArrayList<>();
-		recipients.add(member);
-		recipients.add(b);
+		final Authority au = new Authority();
+		au.setAuthority(Authority.BANNED);
+		if (!member.getUserAccount().getAuthorities().contains(au))
+			recipients.add(member);
+		if (!b.getUserAccount().getAuthorities().contains(au))
+			recipients.add(b);
 		m.setRecipients(recipients);
 
-		this.send(m);
+		if (!recipients.isEmpty())
+			this.send(m);
 	}
 
 	public void memberDropOutMessage(final Enrolment enrolment) {
@@ -353,11 +365,15 @@ public class MessageService {
 		m.setSender(this.administratorService.findSystem());
 
 		final Collection<Actor> recipients = new ArrayList<>();
-		recipients.add(member);
-		recipients.add(b);
+		final Authority au = new Authority();
+		au.setAuthority(Authority.BANNED);
+		if (!member.getUserAccount().getAuthorities().contains(au))
+			recipients.add(member);
+		if (!b.getUserAccount().getAuthorities().contains(au))
+			recipients.add(b);
 		m.setRecipients(recipients);
-
-		this.send(m);
+		if (!recipients.isEmpty())
+			this.send(m);
 	}
 
 	public void processionPublished(final Parade parade) {
@@ -373,9 +389,11 @@ public class MessageService {
 
 		final Collection<Actor> recipients = new ArrayList<>();
 		recipients.addAll(this.memberService.findAll());
+		recipients.removeAll(this.memberService.findAllBanned());
 		m.setRecipients(recipients);
 
-		this.send(m);
+		if (!recipients.isEmpty())
+			this.send(m);
 	}
 
 	public void sponsorshipDisplayedMessage(final Sponsorship sp) {
@@ -393,28 +411,34 @@ public class MessageService {
 		m.setSender(sender);
 
 		final Collection<Actor> recipients = new ArrayList<>();
-		recipients.add(sponsor);
+		final Authority au = new Authority();
+		au.setAuthority(Authority.BANNED);
+		if (!sponsor.getUserAccount().getAuthorities().contains(au))
+			recipients.add(sponsor);
 		m.setRecipients(recipients);
 
-		final Folder outbox = this.folderService.findOutboxByUserId(sender.getUserAccount().getId());
-		final Collection<Message> outboxMessages = outbox.getMessages();
-		final Date moment = new Date(System.currentTimeMillis() - 1000);
-		m.setMoment(moment);
-		Folder inbox;
-		final Message sent = this.save(m);
+		if (!recipients.isEmpty()) {
 
-		outboxMessages.add(sent);
-		outbox.setMessages(outboxMessages);
+			final Folder outbox = this.folderService.findOutboxByUserId(sender.getUserAccount().getId());
+			final Collection<Message> outboxMessages = outbox.getMessages();
+			final Date moment = new Date(System.currentTimeMillis() - 1000);
+			m.setMoment(moment);
+			Folder inbox;
+			final Message sent = this.save(m);
 
-		for (final Actor r : recipients) {
-			inbox = this.folderService.findInboxByUserId(r.getUserAccount().getId());
-			final Collection<Message> inboxMessages = inbox.getMessages();
-			inboxMessages.add(sent);
-			inbox.setMessages(inboxMessages);
-			this.folderService.save(inbox, r);
+			outboxMessages.add(sent);
+			outbox.setMessages(outboxMessages);
+
+			for (final Actor r : recipients) {
+				inbox = this.folderService.findInboxByUserId(r.getUserAccount().getId());
+				final Collection<Message> inboxMessages = inbox.getMessages();
+				inboxMessages.add(sent);
+				inbox.setMessages(inboxMessages);
+				this.folderService.save(inbox, r);
+			}
 		}
-	}
 
+	}
 	public void dataBreachMessage() {
 		final Administrator actor = this.administratorService.findByPrincipal();
 		final Message m = new Message();
@@ -429,25 +453,28 @@ public class MessageService {
 
 		final Collection<Actor> actors = this.actorService.findAll();
 		actors.remove(this.administratorService.findSystem());
+		actors.removeAll(this.actorService.findAllBanned());
 		actors.remove(actor);
 		m.setRecipients(actors);
 
-		final Folder outbox = this.folderService.findOutboxByUserId(sender.getUserAccount().getId());
-		final Collection<Message> outboxMessages = outbox.getMessages();
-		final Date moment = new Date(System.currentTimeMillis() - 1000);
-		m.setMoment(moment);
-		Folder notificationBox;
-		final Message sent = this.save(m);
+		if (!actors.isEmpty()) {
+			final Folder outbox = this.folderService.findOutboxByUserId(sender.getUserAccount().getId());
+			final Collection<Message> outboxMessages = outbox.getMessages();
+			final Date moment = new Date(System.currentTimeMillis() - 1000);
+			m.setMoment(moment);
+			Folder notificationBox;
+			final Message sent = this.save(m);
 
-		outboxMessages.add(sent);
-		outbox.setMessages(outboxMessages);
+			outboxMessages.add(sent);
+			outbox.setMessages(outboxMessages);
 
-		for (final Actor r : actors) {
-			notificationBox = this.folderService.findNotificationboxByUserId(r.getUserAccount().getId());
-			final Collection<Message> inboxMessages = notificationBox.getMessages();
-			inboxMessages.add(sent);
-			notificationBox.setMessages(inboxMessages);
-			this.folderService.save(notificationBox, r);
+			for (final Actor r : actors) {
+				notificationBox = this.folderService.findNotificationboxByUserId(r.getUserAccount().getId());
+				final Collection<Message> inboxMessages = notificationBox.getMessages();
+				inboxMessages.add(sent);
+				notificationBox.setMessages(inboxMessages);
+				this.folderService.save(notificationBox, r);
+			}
 		}
 	}
 

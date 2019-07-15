@@ -32,4 +32,7 @@ public interface MemberRepository extends JpaRepository<Member, Integer> {
 	@Query("select distinct mt from Member mt where (1.0+(select count(r) from Request r where r.status='APPROVED' and r.member.id=mt.id)-1.0)=(select max(1.0+(select count(r) from Request r where r.status='APPROVED' and r.member.id=mk.id)-1.0) from Member mk)")
 	Member[] getMembersTenPercent();
 
+	@Query("select a from Member a join a.userAccount ua join ua.authorities auth where auth.authority='BANNED'")
+	Collection<Member> findAllBanned();
+
 }

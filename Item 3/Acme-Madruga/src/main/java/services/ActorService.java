@@ -47,6 +47,12 @@ public class ActorService {
 		return result;
 	}
 
+	public Collection<Actor> findAllBanned() {
+		final Collection<Actor> result = this.actorRepository.findAllBanned();
+		Assert.notNull(result);
+		return result;
+	}
+
 	public Actor findOne(final int id) {
 		Assert.isTrue(id != 0);
 		final Actor result = this.actorRepository.findOne(id);
