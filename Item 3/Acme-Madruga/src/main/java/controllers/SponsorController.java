@@ -55,7 +55,7 @@ public class SponsorController extends AbstractController {
 		ModelAndView result = new ModelAndView();
 		final ActorFrom sponsor = new ActorFrom();
 		result = new ModelAndView("sponsor/edit");
-		result.addObject("actorForm", sponsor);
+		result.addObject("actorFrom", sponsor);
 		return result;
 	}
 
@@ -105,7 +105,7 @@ public class SponsorController extends AbstractController {
 		if (binding.hasErrors()) {
 			result.addObject("errors", binding.getAllErrors());
 			actorForm.setTermsAndCondicions(false);
-			result.addObject("actorForm", actorForm);
+			result.addObject("actorFrom", actorForm);
 		} else
 			try {
 				final UserAccount ua = this.userAccountService.reconstruct(actorForm, Authority.SPONSOR);
@@ -113,7 +113,7 @@ public class SponsorController extends AbstractController {
 				sponsor.setUserAccount(ua);
 				this.registerService.saveSponsor(sponsor, binding);
 				result.addObject("alert", "sponsor.edit.correct");
-				result.addObject("actorForm", actorForm);
+				result.addObject("actorFrom", actorForm);
 			} catch (final ValidationException oops) {
 				result = this.createEditModelAndViewForm(actorForm, null);
 			} catch (final Throwable e) {
@@ -121,7 +121,7 @@ public class SponsorController extends AbstractController {
 					result.addObject("alert", "sponsor.edit.usernameIsUsed");
 				result.addObject("errors", binding.getAllErrors());
 				actorForm.setTermsAndCondicions(false);
-				result.addObject("actorForm", actorForm);
+				result.addObject("actorFrom", actorForm);
 			}
 		return result;
 	}
@@ -132,7 +132,7 @@ public class SponsorController extends AbstractController {
 		final Sponsor sponsor = this.sponsorService.findByPrincipal();
 		final ActorFrom actor = this.registerService.inyect(sponsor);
 		actor.setTermsAndCondicions(true);
-		result.addObject("actorForm", actor);
+		result.addObject("actorFrom", actor);
 		return result;
 
 	}
@@ -165,7 +165,7 @@ public class SponsorController extends AbstractController {
 		final ModelAndView result;
 
 		result = new ModelAndView("sponsor/edit");
-		result.addObject("actorForm", sponsor); //actorForm es el model atrtibute del form
+		result.addObject("actorFrom", sponsor); //actorForm es el model atrtibute del form
 
 		result.addObject("message", messageCode);
 

@@ -139,14 +139,12 @@ public class FolderService {
 		final Collection<Folder> folders = this.findAllByFatherId(f.getId());
 		Assert.isTrue(fs.contains(f));
 
-		if (!ms.isEmpty() && !folders.isEmpty()) {
+		if (ms.isEmpty() && !folders.isEmpty())
+			this.deleteAllSon(f);
+		else {
 			this.messageService.deleteAll(ms, f);
-			this.deleteAll(folders);
-		} else if (!ms.isEmpty() && folders.isEmpty())
-			this.messageService.deleteAll(ms, f);
-		else if (ms.isEmpty() && !folders.isEmpty())
-			this.deleteAll(folders);
-
+			this.deleteAllSon(f);
+		}
 		this.folderRepository.delete(f);
 
 	}
@@ -154,9 +152,18 @@ public class FolderService {
 	private void deleteAll(final Collection<Folder> fs) {
 		Assert.notEmpty(fs);
 		this.folderRepository.deleteInBatch(fs);
-
 	}
 
+	private void deleteAllSon(final Folder f) {
+		Assert.notNull(f);
+		for (final Folder son : this.folderRepository.findAllByFatherId(f.getId())) {
+			final Collection<Folder> fsons = this.folderRepository.findAllByFatherId(son.getId());
+			if (!fsons.isEmpty())
+				this.deleteAllSon(son);
+			else
+				this.folderRepository.delete(son);
+		}
+	}
 	public Collection<Folder> setFoldersByDefault(final Actor actor) {
 		final Collection<Folder> folders = new ArrayList<Folder>();
 		final Collection<Message> messages = new ArrayList<Message>();
@@ -205,8 +212,6 @@ public class FolderService {
 		notification.setFather(null);
 		this.save(notification, actor);
 		folders.add(notification);
-
-		this.saveAll(folders);
 
 		return folders;
 	}

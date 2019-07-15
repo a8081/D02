@@ -30,7 +30,7 @@
 
 
 
-<form:form modelAttribute="actorForm" action="sponsor/edit.do" method="POST">
+<form:form modelAttribute="actorFrom" action="sponsor/edit.do" method="POST">
 	<form:hidden path="id"/>
 	<form:hidden path="version"/>
 	<acme:textbox code="sponsor.edit.userAccountuser" path="userAccountuser" />

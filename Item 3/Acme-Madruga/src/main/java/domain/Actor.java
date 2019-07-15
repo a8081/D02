@@ -81,7 +81,6 @@ public class Actor extends DomainEntity {
 		this.photo = photo;
 	}
 
-	@NotBlank
 	@Email
 	@SafeHtml
 	public String getEmail() {
