@@ -40,7 +40,7 @@ public class MiscellaneousRecordServiceTest extends AbstractTest {
 				//			B: Test Positivo: Brotherhood crea MiscellaneousRecord
 				//			C: 100% Recorre 41 de las 41 lineas posibles
 				//			D: cobertura de datos=3/9
-				"brotherhood1", "MiscellaneousTest", "descriptionTest", null
+				"brotherhood2", "MiscellaneousTest", "descriptionTest", null
 			}, {
 				//			A: Acme Parade Req. 3 -> Brotherhoods can manage their history
 				//			B: Test Negativo: Un member intenta crear una MiscellaneousRecord
@@ -53,25 +53,13 @@ public class MiscellaneousRecordServiceTest extends AbstractTest {
 				//			C: 97,5% Recorre 40 de las 41 lineas posibles
 				//			D: cobertura de datos=3/9
 
-				"brotherhood1", "", "descriptionTest", ConstraintViolationException.class
-			}, {
-				//			A: Acme Parade Req. 3 -> Brotherhoods can manage their history
-				//			B: Test Negativo: Brotherhood crea MiscellaneousRecord con title null
-				//			C: 97,5% Recorre 40 de las 41 lineas posibles
-				//			D: cobertura de datos=3/9
-				"brotherhood1", null, "descriptionTest", ConstraintViolationException.class
+				"brotherhood2", "", "descriptionTest", ConstraintViolationException.class
 			}, {
 				//			A: Acme Parade Req. 3 -> Brotherhoods can manage their history
 				//			B: Test Negativo: Brotherhood crea MiscellaneousRecord con description vacio
 				//			C: 97,5% Recorre 40 de las 41 lineas posibles
 				//			D: cobertura de datos=3/9
-				"brotherhood1", "MiscellaneousTest", "", ConstraintViolationException.class
-			}, {
-				//			A: Acme Parade Req. 3 -> Brotherhoods can manage their history
-				//			B: Test Negativo: Brotherhood crea MiscellaneousRecord con description null
-				//			C: 97,5% Recorre 40 de las 41 lineas posibles
-				//			D: cobertura de datos=3/9
-				"brotherhood1", "MiscellaneousTest", null, ConstraintViolationException.class
+				"brotherhood2", "MiscellaneousTest", "", ConstraintViolationException.class
 			},
 		};
 
@@ -121,23 +109,12 @@ public class MiscellaneousRecordServiceTest extends AbstractTest {
 				"brotherhood2", "", "descriptionTest", ConstraintViolationException.class
 			}, {
 				//			A: Acme Parade Req. 3 -> Brotherhoods can manage their history
-				//			B: Test Negativo: Brotherhood edita MiscellaneousRecord con title null
-				//			C: 98,36% Recorre 60 de las 61 lineas posibles
-				//			D: cobertura de datos=3/9
-				"brotherhood2", null, "descriptionTest", ConstraintViolationException.class
-			}, {
-				//			A: Acme Parade Req. 3 -> Brotherhoods can manage their history
 				//			B: Test Negativo: Brotherhood edita MiscellaneousRecord con description vacio
 				//			C: 98,36% Recorre 60 de las 61 lineas posibles
 				//			D: cobertura de datos=3/9
 				"brotherhood2", "MiscellaneousTest", "", ConstraintViolationException.class
-			}, {
-				//			A: Acme Parade Req. 3 -> Brotherhoods can manage their history
-				//			B: Test Negativo: Brotherhood edita MiscellaneousRecord con description null
-				//			C: 98,36% Recorre 60 de 61 lineas posibles
-				//			D: cobertura de datos=3/9
-				"brotherhood2", "MiscellaneousTest", null, ConstraintViolationException.class
 			},
+
 		};
 
 		for (int i = 0; i < testingData.length; i++)

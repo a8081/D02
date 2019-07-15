@@ -78,7 +78,6 @@ public class FinderService {
 	public Finder save(final Finder finder) {
 		final Member member = this.memberService.findByPrincipal();
 		Assert.notNull(finder);
-		Assert.isTrue(finder.getId() != 0);
 		Assert.isTrue(this.finderRepository.findMemberFinder(member.getId()).getId() == finder.getId(), "You're not owner of this finder, you cannot modify it");
 
 		finder.setCreationDate(new Date(System.currentTimeMillis()));

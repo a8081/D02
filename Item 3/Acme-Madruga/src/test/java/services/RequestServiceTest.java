@@ -49,29 +49,9 @@ public class RequestServiceTest extends AbstractTest {
 	public void driverRequestToParade() {  //FUNCIONA
 		final Object testingData[][] = {
 			{
-				"member1", "parade12", IllegalArgumentException.class
+				"member1", "parade2", null
 			}, {
-				"member2", "parade11", null
-			}
-		};
-
-		for (int i = 0; i < testingData.length; i++)
-			this.templateRequestToParade((String) testingData[i][0], (String) testingData[i][1], (Class<?>) testingData[i][2]);
-	}
-
-	/**
-	 * Acme Madruga - Req 7: a member may request to march in a procession
-	 * Negative: a member cannot request twitce to the same parade
-	 * % recorre 11 de las 28 líneas posibles
-	 * cobertura de datos =
-	 * **/
-	@Test
-	public void driverMemberRequestsTwice() {
-		final Object testingData[][] = {
-			{
-				"member1", "parade11", null
-			}, {
-				"member1", "parade11", IllegalArgumentException.class
+				"member2", "parade2", IllegalArgumentException.class
 			}
 		};
 

@@ -4,6 +4,8 @@ package services;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import javax.validation.ConstraintViolationException;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +19,7 @@ import domain.Parade;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {
-	"classpath:spring/datasource.xml", "classpath:spring/config/packages.xml"
+	"classpath:spring/junit.xml"
 })
 @Transactional
 public class FinderServiceTest extends AbstractTest {
@@ -34,16 +36,16 @@ public class FinderServiceTest extends AbstractTest {
 		final Object testingData[][] = {
 			{
 				// Crear chapter correctamente
-				"Esperanza de triana", "Capilla San Jorge", parades, null
+				"member1", "Esperanza de triana", "Capilla San Jorge", parades, null
 			}, {
 				//Crear manager con name incorrecto
-				"Esperanza de triana", "Capilla San Jorge", parades, NullPointerException.class
+				"member1", "", "Capilla San Jorge", parades, ConstraintViolationException.class
 			}
 		};
 		for (int i = 0; i < testingData.length; i++)
-			this.templateCreateAndSave((String) testingData[i][0], (String) testingData[i][1], (Collection<Parade>) testingData[i][2], (Class<?>) testingData[i][8]);
+			this.templateCreateAndSave((String) testingData[i][0], (String) testingData[i][1], (String) testingData[i][2], (Collection<Parade>) testingData[i][3], (Class<?>) testingData[i][4]);
 	}
-	private void templateCreateAndSave(final String keyword, final String areaName, final Collection<Parade> parades, final Class<?> expected) {
+	private void templateCreateAndSave(final String username, final String keyword, final String areaName, final Collection<Parade> parades, final Class<?> expected) {
 
 		Class<?> caught;
 		final Finder finder;
@@ -51,6 +53,7 @@ public class FinderServiceTest extends AbstractTest {
 		caught = null;
 
 		try {
+			this.authenticate(username);
 			finder = this.finderService.create();
 			finder.setKeyword(keyword);
 			finder.setAreaName(areaName);
