@@ -16,8 +16,16 @@
 <acme:display code="record.description" value="${periodRecord.description}" />
 <acme:display code="record.startYear" value="${periodRecord.startYear}" />
 <acme:display code="record.endYear" value="${periodRecord.endYear}" />
-<acme:display code="record.photos" value="${periodRecord.photos}" />
-
+<div class="galleryContainer">
+	<jstl:forEach items="${periodRecord.photos}" var="picture" varStatus="loop">
+				<div class="gallery">
+				  <a target="_blank" href="${picture}">
+				    <img src="${picture}" alt="${picture}" width="600" height="400">
+				  </a>
+				</div>
+	</jstl:forEach>
+</div>
+<br>
 <br>
 <jstl:if test="${buttons}">
 <input type="button" class="btn btn-danger" name="cancel"
