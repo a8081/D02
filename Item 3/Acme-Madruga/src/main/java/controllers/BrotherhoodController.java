@@ -278,7 +278,7 @@ public class BrotherhoodController extends AbstractController {
 
 		this.enrolmentService.dropOut(member);
 
-		result = this.memberController.listMyMembers(brotherhood.getUserAccount().getId());
+		result = this.memberController.listMyMembers(brotherhood.getId());
 
 		final String banner = this.configurationParametersService.findBanner();
 		result.addObject("banner", banner);
