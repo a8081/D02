@@ -165,6 +165,7 @@
 				</ul>
 			</li>
 		
+		<li><a href="area/chapter/list.do"><spring:message code="master.page.parade.areas" /></a></li>
 		<li><a href="proclaim/chapter/list.do"><spring:message code="master.page.parade.proclaims" /></a></li>
 		
 		</security:authorize>

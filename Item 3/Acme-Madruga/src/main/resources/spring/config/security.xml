@@ -94,6 +94,7 @@
 		<security:intercept-url pattern="/position/administrator/**" access="hasRole('ADMIN')" />
 		<security:intercept-url pattern="/sponsorship/administrator/**" access="hasRole('ADMIN')" /> 
 		<security:intercept-url pattern="/area/administrator/**" access="hasRole('ADMIN')" /> 
+		<security:intercept-url pattern="/area/chapter/**" access="hasRole('CHAPTER')" /> 
 		<security:intercept-url pattern="/ban/administrator/**" access="hasRole('ADMIN')" />
 		<security:intercept-url pattern="/dashboard/administrator/**" access="hasRole('ADMIN')" />
 		<security:intercept-url pattern="/folder/list.do" access="hasAnyRole('ADMIN', 'MEMBER', 'BROTHERHOOD', 'SUPER','CHAPTER','SPONSOR')" />

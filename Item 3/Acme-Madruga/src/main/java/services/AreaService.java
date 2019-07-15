@@ -14,6 +14,7 @@ import repositories.AreaRepository;
 import security.Authority;
 import domain.Actor;
 import domain.Area;
+import domain.Chapter;
 
 @Service
 @Transactional
@@ -27,6 +28,9 @@ public class AreaService {
 
 	@Autowired
 	private ActorService			actorService;
+
+	@Autowired
+	private ChapterService			chapterService;
 
 
 	public Area create() {
@@ -67,6 +71,14 @@ public class AreaService {
 		this.areaRepository.delete(area);
 	}
 
+	public void assignAreaToChapter(final Area area, final int idChapter) {
+		Assert.notNull(area);
+		Assert.isTrue(idChapter != 0);
+		final Chapter retrieved = this.chapterService.findOne(idChapter);
+		retrieved.setArea(area);
+		final Chapter chapter = this.chapterService.save(retrieved);
+
+	}
 	/* ========================= OTHER METHODS =========================== */
 
 	public Collection<Area> AllAreasSettled() {
